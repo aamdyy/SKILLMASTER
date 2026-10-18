@@ -1,0 +1,24 @@
+# SKILLMASTER — ce qui ne doit jamais être versionné
+
+# Détails privés de la machine d'Amdy (chemins, réglages, usages, projets).
+# Ces fichiers restent en local, lisibles par les sessions Claude Code.
+docs/local/
+experiments/
+experiments/sm-smoke-reports/
+
+# Caches du collecteur : contenus tiers téléchargés, jamais copiés dans le repo,
+# et sorties brutes du juge
+.cache/
+collector/.cache/
+collector/out/
+
+# Secrets et réglages locaux
+.env
+.env.*
+*.local.json
+.claude/settings.local.json
+
+# Divers
+node_modules/
+.DS_Store
+*.log

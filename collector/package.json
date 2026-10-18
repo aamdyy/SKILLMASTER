@@ -1,0 +1,11 @@
+{
+  "name": "skillmaster-collector",
+  "private": true,
+  "type": "module",
+  "description": "Collecteur et juge de la bibliothèque SKILLMASTER (Node 24, TypeScript sans build, sans dépendance).",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "fetch": "node fetch.ts",
+    "judge": "node judge.ts"
+  }
+}
