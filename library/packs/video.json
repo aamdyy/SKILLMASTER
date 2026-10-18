@@ -1,0 +1,99 @@
+{
+  "type": "video",
+  "genere_le": "2026-10-18T19:08:09.640Z",
+  "proposition_auto": true,
+  "statut": "a_valider_par_amdy",
+  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "recommandes": [
+    {
+      "id": "heygen-com/hyperframes/skills/figma",
+      "nom": "figma",
+      "repo": "heygen-com/hyperframes",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheur net, commandes exactes, garde-fous (token en lecture seule, assets figés, validation visuelle). Limité au framework HyperFrames et à un connecteur optionnel. Dépendances externes non fournies et télémétrie à vérifier."
+    },
+    {
+      "id": "jimliu/baoyu-skills/skills/baoyu-youtube-transcript",
+      "nom": "baoyu-youtube-transcript",
+      "repo": "JimLiu/baoyu-skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis, commandes exactes, cache et formats bien décrits, pièges connus (guillemets zsh). Manques : scripts non lus, consigne d'installer yt-dlp seul, zone grise anti-bot et cookies navigateur."
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-interactivity",
+      "nom": "remotion-interactivity",
+      "repo": "remotion-dev/skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "API Remotion précise et récente (Interactive.create, connected compositions, schémas), exemples vérifiables. Déclencheur implicite seulement : la description est courte et ne dit pas quand l'appliquer. Niche vidéo, pas de contenu visuel imposé."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "heygen-com/hyperframes/skills/music-to-video",
+      "nom": "music-to-video",
+      "repo": "heygen-com/hyperframes",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur net et étapes précises, avec scripts et gates. Mais il dépend de l'écosystème HyperFrames (CLI, catalogue distant), il est très long, et il choisit seul polices et palette. Le mode autonome saute des validations."
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-markup",
+      "nom": "remotion-markup",
+      "repo": "remotion-dev/skills",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Contenu Remotion précis (Interactive.create, effets @remotion/effects, règles fps, pas de CSS transition). Déclencheur vague et renvoi vers des fichiers non fournis : jugement partiel. Chevauche « Remotion Best Practices »."
+    },
+    {
+      "id": "0x0funky/agent-sprite-forge/skills/video2dsprite",
+      "nom": "video2dsprite",
+      "repo": "0x0funky/agent-sprite-forge",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur précis et pipeline très détaillé, avec commandes exactes et contrôles. Niche jeu 2D, hors projets web/iOS/data, et dépendant d'API payantes et de nombreux scripts non audités."
+    },
+    {
+      "id": "coreyhaines31/marketingskills/skills/video",
+      "nom": "video",
+      "repo": "coreyhaines31/marketingskills",
+      "note": 5,
+      "risque_max": "moyen",
+      "raison": "Déclencheur large et très marketing (stratégie, avatars, tarifs). Le volet Remotion/Hyperframes est générique et court. Tableaux de modèles IA et prix datés, sans commandes vérifiables au-delà de l'init. Périmètre fourre-tout."
+    },
+    {
+      "id": "latent-spaces/brag/skills/brag-slim",
+      "nom": "brag-slim",
+      "repo": "latent-spaces/brag",
+      "note": 5,
+      "risque_max": "eleve",
+      "raison": "Déclencheur clair et exclusions de secrets bien posées. Mais le contenu reste surtout créatif et générique (« modern, slick, polished »), sans outil ni version précisés pour le rendu. Niche, et doublon avec /brag."
+    },
+    {
+      "id": "latent-spaces/brag/skills/brag",
+      "nom": "brag",
+      "repo": "latent-spaces/brag",
+      "note": 5,
+      "risque_max": "moyen",
+      "raison": "Déclencheur net et périmètre étroit. Mais le SKILL.md délègue l'essentiel aux références absentes, impose des presets de style sans demander, et le bundle de 288 fichiers (musiques, sfx) a une licence non vérifiée."
+    },
+    {
+      "id": "krillinai/opencreator/skills/krillinai-subtitle",
+      "nom": "krillinai-subtitle",
+      "repo": "krillinai/OpenCreator",
+      "note": 5,
+      "risque_max": "moyen",
+      "raison": "Déclencheur net et commandes exactes, mais dépend d'un CLI externe et d'un fichier de référence absent du skill (cli-contract.md), avec des variables d'environnement non définies. Utile seulement si KrillinAI est installé."
+    },
+    {
+      "id": "krillinai/opencreator/skills/krillinai-cli",
+      "nom": "krillinai-cli",
+      "repo": "krillinai/OpenCreator",
+      "note": 5,
+      "risque_max": "moyen",
+      "raison": "Déclenchement clair et règles d'usage précises (dry-run, manifest, error.kind). Mais c'est le guide d'un outil tiers précis, hors du stack habituel d'Amdy, et le détail est renvoyé à un fichier non lu."
+    }
+  ]
+}

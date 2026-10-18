@@ -1,0 +1,171 @@
+{
+  "type": "android",
+  "genere_le": "2026-10-18T19:08:09.639Z",
+  "proposition_auto": true,
+  "statut": "a_valider_par_amdy",
+  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "recommandes": [
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-brownfield",
+      "nom": "expo-brownfield",
+      "repo": "expo/skills",
+      "note": 8,
+      "risque_max": "moyen",
+      "raison": "Déclencheur précis, périmètre net, critères de choix clairs et règles utiles (ne jamais prebuild un hôte natif). Références externes non lues ; le bloc de feedback envoie des données à un tiers."
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/eas-app-stores",
+      "nom": "eas-app-stores",
+      "repo": "expo/skills",
+      "note": 8,
+      "risque_max": "moyen",
+      "raison": "Déclencheur précis, périmètre net, pièges réels (appVersionSource remote, vérification de CFBundleVersion, statut non confirmé après soumission). Références non lues ici. Feedback via npx externe à surveiller."
+    },
+    {
+      "id": "chrisbanes/skills/skills/compose-performance",
+      "nom": "compose-performance",
+      "repo": "chrisbanes/skills",
+      "note": 8,
+      "risque_max": "moyen",
+      "raison": "Déclencheur précis et vocabulaire technique juste. Méthode rigoureuse (un axe à la fois, faux pistes, mesure avant/après). Références non lues, donc note prudente."
+    },
+    {
+      "id": "affaan-m/ecc/skills/kotlin-coroutines-flows",
+      "nom": "kotlin-coroutines-flows",
+      "repo": "affaan-m/ECC",
+      "note": 7,
+      "risque_max": null,
+      "raison": "Déclencheur net et exemples utiles (WhileSubscribed, SharedFlow d'effets, retry). Faiblesses : exemple cold flow inutile, Dispatchers.Main affirmé multiplateforme à tort, peu de pièges KMP réels."
+    },
+    {
+      "id": "vercel-labs/agent-skills/skills/react-native-skills",
+      "nom": "vercel-react-native-skills",
+      "repo": "vercel-labs/agent-skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs clairs et règles spécifiques, actionnables (FlashList, Gesture.Tap, expo-image, navigateurs natifs). Jugé sur l'index seul : les fichiers rules/ ne sont pas lus. Aucune licence."
+    },
+    {
+      "id": "google/skills/skills/ads/google-mobile-ads-android-migrate-to-next-gen",
+      "nom": "google-mobile-ads-android-migrate-to-next-gen",
+      "repo": "google/skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Source officielle google/skills, tables d'imports et de méthodes précises, pièges réels (init avant tout appel, callbacks sur thread de fond). Périmètre net mais ponctuel. Seulement 24000 car. lus sur 39588 : note provisoire."
+    },
+    {
+      "id": "callstackincubator/agent-skills/skills/react-native-best-practices",
+      "nom": "react-native-best-practices",
+      "repo": "callstackincubator/agent-skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis et priorisés, commandes de profilage et de bundle exactes, pièges réels (FlashList v2, alignement 16 Ko). Limite : beaucoup de rappels généraux, et dépend d'un outil tiers non vérifié (agent-device). 43 références non lues."
+    },
+    {
+      "id": "chrisbanes/skills/skills/kotlin-concurrency-and-flow",
+      "nom": "kotlin-concurrency-and-flow",
+      "repo": "chrisbanes/skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis, procédure concrète et pièges réels (Channel vs SharedFlow, BUFFERED plutôt qu'UNLIMITED, ne pas ajouter de scope inutile). Périmètre net. Limité par des renvois vers d'autres skills non vérifiés et références non lues."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "awslabs/agent-plugins/plugins/aws-amplify/skills/amplify-workflow",
+      "nom": "amplify-workflow",
+      "repo": "awslabs/agent-plugins",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis et patterns Gen2 versionnés, bonne valeur ajoutée. Seul SKILL.md jugé : les 16 références ne sont pas lues. Checklist sécurité générique, consigne « toujours utiliser » trop large."
+    },
+    {
+      "id": "athevon/genjutsu/skills/_jutsu/compose-motion",
+      "nom": "compose-motion",
+      "repo": "AThevon/genjutsu",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheur net et API Compose modernes avec exemples de code, anti-patterns utiles et règles de spring. Points faibles : phrase tronquée sur la vérification de version, dépendances relatives non fournies, anti-pattern LaunchedEffect(true) imprécis."
+    },
+    {
+      "id": "affaan-m/ecc/skills/accessibility",
+      "nom": "accessibility",
+      "repo": "affaan-m/ECC",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur clair et périmètre net. Tableau de correspondance Web/iOS/Android et exemples utiles. Mais beaucoup de généralités (POUR, checklist), une erreur sur Android (stateDescription présenté comme hint) et peu de commandes d'audit concrètes."
+    },
+    {
+      "id": "simoneavogadro/android-reverse-engineering-skill/plugins/android-reverse-engineering/skills/android-reverse-engineering",
+      "nom": "android-reverse-engineering",
+      "repo": "SimoneAvogadro/android-reverse-engineering-skill",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et workflow concret avec commandes exactes et pièges réels (split APK, Kotlin, frameworks non natifs). Cible l'analyse d'apps tierces, peu utile pour ses propres projets. Scripts non lus en détail."
+    },
+    {
+      "id": "appeeky/aso-skills/skills/app-preview-video",
+      "nom": "app-preview-video",
+      "repo": "appeeky/aso-skills",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis et specs utiles (durée, nombre, règles de rejet Apple). Mais beaucoup de chiffres de conversion non sourcés, du marketing ciblé store, et une logique hors code. Utile seulement pour une fiche store."
+    },
+    {
+      "id": "callstackincubator/agent-skills/skills/assess-react-native-migration",
+      "nom": "assess-react-native-migration",
+      "repo": "callstackincubator/agent-skills",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur précis et périmètre net, méthode solide (inventaire de plateformes, critères de passage, étiquetage des preuves). Niche pour Amdy, format de réponse très rigide, dépend d'un autre skill externe non fourni."
+    },
+    {
+      "id": "hamen/material-3-skill/skills/material-3",
+      "nom": "material-3",
+      "repo": "hamen/material-3-skill",
+      "note": 6,
+      "risque_max": "eleve",
+      "raison": "Référence MD3 Compose-first, déclencheurs clairs. Mais beaucoup de tables de tokens déjà connues de Claude, SKILL.md tronqué (24 000 sur 31 218 car.), affirmations non sourcées (I/O 2026), web en maintenance."
+    },
+    {
+      "id": "maxrave-dev/kotlin-footguns/skills/desktop-and-build-footguns",
+      "nom": "desktop-and-build-footguns",
+      "repo": "maxrave-dev/kotlin-footguns",
+      "note": 6,
+      "risque_max": null,
+      "raison": "Déclencheurs précis et index bien structuré, avec pièges réels. Mais le périmètre est surtout desktop JVM Compose, hors des projets d'Amdy ; seules les parties Gradle/R8 touchent Android. Fiches non lues."
+    },
+    {
+      "id": "maxrave-dev/kotlin-footguns/skills/footgun-scan",
+      "nom": "footgun-scan",
+      "repo": "maxrave-dev/kotlin-footguns",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "À vérifier."
+    },
+    {
+      "id": "athevon/genjutsu/skills/_jutsu/compose-graphics",
+      "nom": "compose-graphics",
+      "repo": "AThevon/genjutsu",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Contenu technique et daté (vérifié 2026-09). Déclencheur net, recettes AGSL utiles. Pénalités : code approximatif (particules, morphing), renvois à des fichiers absents (VERSIONS.md, compose-motion), niche Android."
+    },
+    {
+      "id": "morluto/rea/.agents/skills/reverse-engineer-anything",
+      "nom": "reverse-engineer-anything",
+      "repo": "morluto/rea",
+      "note": 5,
+      "risque_max": "moyen",
+      "raison": "Contenu détaillé, déclencheur net et routage précis par type de cible. Mais hors besoin courant de vos projets, et il dépend d'un serveur MCP tiers installé via npx @latest non épinglé. Ajout ciblé seulement."
+    },
+    {
+      "id": "coreyhaines31/marketingskills/skills/aso",
+      "nom": "aso",
+      "repo": "coreyhaines31/marketingskills",
+      "note": 5,
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et contenu structuré avec limites de caractères utiles. Mais c'est du marketing ASO plus que du code, des statistiques de conversion non sourcées, et les specs sont dans des fichiers non relus. Utile ponctuellement."
+    }
+  ]
+}

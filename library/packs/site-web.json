@@ -1,0 +1,147 @@
+{
+  "type": "site-web",
+  "genere_le": "2026-10-18T19:08:09.637Z",
+  "proposition_auto": true,
+  "statut": "a_valider_par_amdy",
+  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "recommandes": [
+    {
+      "id": "addyosmani/agent-skills/skills/constraint-driven-development",
+      "nom": "constraint-driven-development",
+      "repo": "addyosmani/agent-skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis, process en étapes avec commandes exactes et seuils justifiés, garde-fou sur le diff. Périmètre net. Pénalisé par la dépendance à des commandes de phase (/build, /ship) et à un fichier de référence non relu."
+    },
+    {
+      "id": "vercel-labs/agent-skills/skills/react-best-practices",
+      "nom": "vercel-react-best-practices",
+      "repo": "vercel-labs/agent-skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Règles concrètes, priorisées par impact, avec un fichier par règle. Ne fait aucun choix visuel. Note bridée : plusieurs règles citées (server-*, certaines rerender-*) n'ont pas de fichier listé, et la licence diverge."
+    },
+    {
+      "id": "greensock/gsap-skills/skills/gsap-plugins",
+      "nom": "gsap-plugins",
+      "repo": "greensock/gsap-skills",
+      "note": 7,
+      "risque_max": null,
+      "raison": "Skill officiel et à jour : licence gratuite après le rachat par Webflow, pas de registre privé, exemples exacts. Vue large mais peu profonde, recoupe gsap-core et gsap-scrolltrigger. Aucun script."
+    },
+    {
+      "id": "greensock/gsap-skills/skills/gsap-react",
+      "nom": "gsap-react",
+      "repo": "greensock/gsap-skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheur précis, source officielle, API récentes (useGSAP, revertOnUpdate, contextSafe) et pièges concrets. Limites : peu de cas avancés (ScrollTrigger en React, StrictMode) et une consigne qui pousse GSAP par défaut."
+    },
+    {
+      "id": "awslabs/agent-plugins/plugins/aws-amplify/skills/amplify-workflow",
+      "nom": "amplify-workflow",
+      "repo": "awslabs/agent-plugins",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis et patterns Gen2 versionnés, bonne valeur ajoutée. Seul SKILL.md jugé : les 16 références ne sont pas lues. Checklist sécurité générique, consigne « toujours utiliser » trop large."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "obra/superpowers/skills/test-driven-development",
+      "nom": "test-driven-development",
+      "repo": "obra/superpowers",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Discipline TDD claire avec règles et commandes de vérification, mais largement générique : Claude connaît déjà le cycle. Ton dogmatique, longue table de rationalisations, pas de spécificités stack. Règle « supprimer » risquée."
+    },
+    {
+      "id": "affaan-m/ecc/skills/accessibility",
+      "nom": "accessibility",
+      "repo": "affaan-m/ECC",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur clair et périmètre net. Tableau de correspondance Web/iOS/Android et exemples utiles. Mais beaucoup de généralités (POUR, checklist), une erreur sur Android (stateDescription présenté comme hint) et peu de commandes d'audit concrètes."
+    },
+    {
+      "id": "affaan-m/ecc/skills/frontend-a11y",
+      "nom": "frontend-a11y",
+      "repo": "affaan-m/ECC",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis et exemples React utiles (label/htmlFor, aria-describedby, focus de modale). Mais largement connu, et le Dropdown (combobox sans aria-activedescendant, Enter mal géré) et la modale sans focus trap sont fautifs."
+    },
+    {
+      "id": "addyosmani/agent-skills/skills/api-and-interface-design",
+      "nom": "api-and-interface-design",
+      "repo": "addyosmani/agent-skills",
+      "note": 6,
+      "risque_max": null,
+      "raison": "Déclencheur net et périmètre clair. Contenu surtout générique (pagination, codes HTTP, PATCH), mais la section idempotence (clé dérivée de l'intention, claim atomique, payload gardé) apporte des pièges réels. Pas de commandes ni de versions récentes."
+    },
+    {
+      "id": "thedotmack/claude-mem/plugin/skills/design-is",
+      "nom": "design-is",
+      "repo": "thedotmack/claude-mem",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Cadre d'audit précis, barème 0-3 et règles de verdict mécaniques, sans choix visuel imposé. Mais процесс lourd (5 sous-agents, 5 fichiers) et dépendances non fournies (/make-plan, /do, /review, agent-browser)."
+    },
+    {
+      "id": "shanraisshan/claude-code-best-practice/.claude/skills/agent-browser",
+      "nom": "agent-browser",
+      "repo": "shanraisshan/claude-code-best-practice",
+      "note": 6,
+      "risque_max": "eleve",
+      "raison": "Commandes exactes et cycle snapshot/refs utile. Mais déclencheurs trop larges, liens vers references/ et templates/ absents, et la sauvegarde de session en clair n'est pas signalée. Solide mais à cadrer."
+    },
+    {
+      "id": "coreyhaines31/marketingskills/skills/seo-audit",
+      "nom": "seo-audit",
+      "repo": "coreyhaines31/marketingskills",
+      "note": 6,
+      "risque_max": null,
+      "raison": "Déclenchement précis et utile. Corps surtout en checklists génériques, mais avec pièges réels (schéma invisible via web_fetch, hreflang, canonicals inter-locales). Références non lues, d'où confiance moyenne."
+    },
+    {
+      "id": "chromedevtools/chrome-devtools-mcp/skills/a11y-debugging",
+      "nom": "a11y-debugging",
+      "repo": "ChromeDevTools/chrome-devtools-mcp",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur net et sujet ciblé. Workflow concret avec noms d'outils MCP et commande jq/node. Valeur réelle mais surtout procédurale ; peu de conventions propres. Fichier de snippets non lu, donc jugement partiel."
+    },
+    {
+      "id": "vercel-labs/agent-skills/skills/composition-patterns",
+      "nom": "vercel-composition-patterns",
+      "repo": "vercel-labs/agent-skills",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis et sujet net. Contenu surtout en index : les règles détaillées (fichiers rules/) n'ont pas été lues. Patterns connus, utiles surtout pour la partie React 19. Licence absente du repo, alors que le frontmatter indique MIT."
+    },
+    {
+      "id": "agricidaniel/claude-seo/skills/seo-agentic",
+      "nom": "seo-agentic",
+      "repo": "AgriciDaniel/claude-seo",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Périmètre net, déclencheurs précis, références datées et règles de sécurité claires (SSRF, UA-matrix sur autorisation). Note bridée : il dépend de scripts absents du paquet (plugin claude-seo) et reste de niche."
+    },
+    {
+      "id": "agricidaniel/claude-seo/skills/seo-cluster",
+      "nom": "seo-cluster",
+      "repo": "AgriciDaniel/claude-seo",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Méthode SERP-overlap concrète, seuils chiffrés et matrice de liens utiles. Mais dépend d'un plugin externe (/seo, scripts claude-seo) absent du skill, description incohérente (« blog-cluster »), et des conseils SEO assez génériques."
+    },
+    {
+      "id": "ibelick/ui-skills/skills/fixing-accessibility",
+      "nom": "fixing-accessibility",
+      "repo": "ibelick/ui-skills",
+      "note": 6,
+      "risque_max": null,
+      "raison": "Déclencheur clair et format de revue utile (violation, extrait, correctif minimal). Mais la plupart des règles sont des bases WCAG que Claude connaît déjà, et il manque des exemples pour les widgets complexes."
+    }
+  ]
+}

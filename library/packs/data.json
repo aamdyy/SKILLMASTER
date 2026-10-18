@@ -1,0 +1,171 @@
+{
+  "type": "data",
+  "genere_le": "2026-10-18T19:08:09.640Z",
+  "proposition_auto": true,
+  "statut": "a_valider_par_amdy",
+  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "recommandes": [
+    {
+      "id": "k-dense-ai/scientific-agent-skills/skills/polars-bio",
+      "nom": "polars-bio",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "note": 8,
+      "risque_max": "eleve",
+      "raison": "Très spécifique, versionné et vérifié : conventions de coordonnées, pièges de 0.36.0 (on_cols, Int16 du depth, SQL join), exemples exécutables. Niche bioinformatique, et la section citation pousse à modifier des manuscrits."
+    },
+    {
+      "id": "k-dense-ai/scientific-agent-skills/skills/aeon",
+      "nom": "aeon",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "note": 8,
+      "risque_max": "eleve",
+      "raison": "Déclencheur net, version épinglée, API vérifiées et pièges documentés (axes, formats, modules expérimentaux). Quelques réserves : beaucoup d'exemples non exécutés, citation à récupérer sur le réseau, Bash/Write autorisés."
+    },
+    {
+      "id": "tt-a1i/archify/archify",
+      "nom": "archify",
+      "repo": "tt-a1i/archify",
+      "note": 7,
+      "risque_max": "eleve",
+      "raison": "Déclencheur précis, types de diagrammes bien définis, schémas et exemples, garde-fous de validation (finalize). Retiré un point : nombreux scripts bin/, réseau possible, et écriture proposée dans les règles globales."
+    },
+    {
+      "id": "cathrynlavery/diagram-design/skills/diagram-design",
+      "nom": "diagram-design",
+      "repo": "cathrynlavery/diagram-design",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et grand périmètre net (diagrammes). Règles de connecteurs vérifiables et garde-fou de style. Pénalisé : long, impose une esthétique éditoriale par défaut, lecture tronquée."
+    },
+    {
+      "id": "jimliu/baoyu-skills/skills/baoyu-youtube-transcript",
+      "nom": "baoyu-youtube-transcript",
+      "repo": "JimLiu/baoyu-skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis, commandes exactes, cache et formats bien décrits, pièges connus (guillemets zsh). Manques : scripts non lus, consigne d'installer yt-dlp seul, zone grise anti-bot et cookies navigateur."
+    },
+    {
+      "id": "google/skills/skills/analytics/google-analytics-data-api-basics",
+      "nom": "google-analytics-data-api-basics",
+      "repo": "google/skills",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis avec exclusions claires, source officielle Google, exemple Python exact et vérifiable. Limité par la part de mise en route générique et par une formulation parfois bancale. Références par langage non vues."
+    },
+    {
+      "id": "teng-lin/notebooklm-py/notebooklm",
+      "nom": "notebooklm",
+      "repo": "teng-lin/notebooklm-py",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheur précis, procédures d'ID, d'attente et d'autorisations très concrètes. Limites : API non officielle, gestion d'identifiants lourde, périmètre de service unique. Scripts du dépôt non vérifiés."
+    },
+    {
+      "id": "eigent-ai/eigent/resources/example-skills/xlsx",
+      "nom": "xlsx",
+      "repo": "eigent-ai/eigent",
+      "note": 7,
+      "risque_max": "moyen",
+      "raison": "Déclencheur précis, avec exclusions claires (Word, Google Sheets, pipeline). Apporte le recalcul LibreOffice et les règles formules-plutôt-que-valeurs. Quelques généralités, polices et couleurs imposées par défaut, licence propriétaire."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "obra/superpowers/skills/test-driven-development",
+      "nom": "test-driven-development",
+      "repo": "obra/superpowers",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Discipline TDD claire avec règles et commandes de vérification, mais largement générique : Claude connaît déjà le cycle. Ton dogmatique, longue table de rationalisations, pas de spécificités stack. Règle « supprimer » risquée."
+    },
+    {
+      "id": "topoteretes/cognee/.agents/skills/cognee-community",
+      "nom": "cognee-community",
+      "repo": "topoteretes/cognee",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur net et tableaux de packages utiles, avec le piège register/multi-tenant bien décrit. Limité à un écosystème de niche, et le bloc bash est mal balisé en python. Partie contribution générique."
+    },
+    {
+      "id": "google/skills/skills/analytics/google-analytics-admin-api-basics",
+      "nom": "google-analytics-admin-api-basics",
+      "repo": "google/skills",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur précis et source officielle Google. Apporte les scopes ADC, la distinction v1beta/v1alpha et l'exemple Python exact. Mais c'est surtout un sommaire de liens, peu de détails sur les autres langages ni sur les méthodes de configuration."
+    },
+    {
+      "id": "eigent-ai/eigent/resources/example-skills/pptx",
+      "nom": "pptx",
+      "repo": "eigent-ai/eigent",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur net et workflows concrets (markitdown, unpack/pack, rendu PDF). Pénalisé : conseils esthétiques génériques, choix de palette imposés, licence propriétaire, scripts non audités."
+    },
+    {
+      "id": "jeffallan/claude-skills/skills/pandas-pro",
+      "nom": "pandas-pro",
+      "repo": "Jeffallan/claude-skills",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis et quelques bons patterns (merge avec validate, observed=True, .copy()). Mais beaucoup de rappels pandas généraux, et l'imputation automatique mode/médiane contredit la consigne « gérer explicitement les NaN »."
+    },
+    {
+      "id": "huggingface/skills/skills/huggingface-gradio",
+      "nom": "huggingface-gradio",
+      "repo": "huggingface/skills",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclenchement clair et signatures détaillées, utiles pour les API récentes (gr.HTML, Timer, api_info). Mais surtout une copie de la doc, sans pièges réels ni conventions propres, et la fin est tronquée."
+    },
+    {
+      "id": "agents365-ai/drawio-skill/skills/drawio-skill",
+      "nom": "drawio-skill",
+      "repo": "Agents365-ai/drawio-skill",
+      "note": 6,
+      "risque_max": "eleve",
+      "raison": "Déclencheur net et procédures précises (CLI, export, validation). Mais périmètre très large (IaC, K8s, Databricks, MCP, CI, PPTX), doublons avec Mermaid, et scripts et outils risqués embarqués. Références non lues."
+    },
+    {
+      "id": "xberg-io/xberg/plugin/skills/xberg-extracting-tables",
+      "nom": "xberg-extracting-tables",
+      "repo": "xberg-io/xberg",
+      "note": 6,
+      "risque_max": "moyen",
+      "raison": "Déclencheur clair et flags CLI précis, limites documentées. Mais niche (un seul outil), pas d'installation ni de vérification de version, dépendance aux modèles ONNX non détaillée, et une formulation ambiguë sur le seuil de confiance."
+    },
+    {
+      "id": "samber/cc-skills-golang/skills/golang-database",
+      "nom": "golang-database",
+      "repo": "samber/cc-skills-golang",
+      "note": 6,
+      "risque_max": "eleve",
+      "raison": "Déclencheur précis et périmètre net. Valeur réelle sur les pièges (ErrNoRows, rows.Close, pool) mais une grande part est générique. Les références détaillées n'ont pas été lues, d'où une confiance moyenne."
+    },
+    {
+      "id": "egonex-ai/understand-anything/understand-anything-plugin/skills/understand-knowledge",
+      "nom": "understand-knowledge",
+      "repo": "Egonex-AI/Understand-Anything",
+      "note": 5,
+      "risque_max": "eleve",
+      "raison": "Déclencheur précis mais niche. Étapes claires et garde rm -rf correcte. Pas de valeur pour les projets code d'Amdy. Scripts Python non lus, donc jugement partiel."
+    },
+    {
+      "id": "coreyhaines31/marketingskills/skills/ab-testing",
+      "nom": "ab-testing",
+      "repo": "coreyhaines31/marketingskills",
+      "note": 5,
+      "risque_max": null,
+      "raison": "Déclencheurs précis et prudence statistique correcte (p-value, IC, peeking). Mais le contenu est surtout marketing générique (ICE, cadence, playbook), peu lié à Claude Code, et les tables de taille d'échantillon sont brutes."
+    },
+    {
+      "id": "sickn33/agentic-awesome-skills/skills/analytics-tracking",
+      "nom": "analytics-tracking",
+      "repo": "sickn33/agentic-awesome-skills",
+      "note": 5,
+      "risque_max": "moyen",
+      "raison": "Déclencheur clair (audit, conversions incohérentes) et bonne discipline de conversion et de dédoublonnage. Mais beaucoup de principes génériques, grille de score aux poids non validés, rien de spécifique à Claude Code."
+    }
+  ]
+}
