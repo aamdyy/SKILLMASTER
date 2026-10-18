@@ -6,8 +6,9 @@
 //
 // Options : --max-skills N (400), --min-stars N (20), --pushed-months N (6),
 //           --max-repos N (400), --with-anthropic-directory (désactivé par défaut).
+import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { CACHE, frontmatter, graphql, log, pool, rawFile, rest, sha256, sleep, writeJson } from './lib.ts'
+import { CACHE, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
 import { scanSkill, type Risk, type SkillFile } from './scan.ts'
 
 const argv = process.argv.slice(2)
@@ -20,6 +21,7 @@ const MIN_STARS = option('min-stars', 20)
 const PUSHED_MONTHS = option('pushed-months', 6)
 const MAX_REPOS = option('max-repos', 400)
 const PER_REPO_FETCH = 15
+const PER_REFERENCE_FETCH = 60
 const PER_REPO_SELECT = 10
 const WITH_DIRECTORY = argv.includes('--with-anthropic-directory')
 
@@ -52,6 +54,13 @@ const PACK_QUERIES: Record<string, string[]> = {
 }
 const TOPICS = ['claude-skills', 'agent-skills', 'claude-code-skills', 'claude-skill', 'claude-code-plugin', 'claude-code-plugins', 'claude-code-marketplace']
 const OFFICIAL = ['anthropics/skills', 'anthropics/claude-plugins-official', 'anthropics/claude-code-playground']
+// Dépôts d'origine des skills qu'Amdy utilise déjà : toujours parcourus, avec un bonus
+// de présélection, pour qu'ils soient comparés aux nouveaux venus.
+const REFERENCES = [
+  'remotion-dev/skills', 'vercel-labs/agent-skills', 'expo/skills', 'greensock/gsap-skills', 'obra/superpowers',
+  'twostraws/SwiftUI-Agent-Skill', 'hamen/material-3-skill', 'nextlevelbuilder/ui-ux-pro-max-skill',
+  'ceorkm/mobile-app-ui-design', 'bencium/bencium-marketplace',
+]
 const AWESOME = ['hesreallyhim/awesome-claude-code', 'ComposioHQ/awesome-claude-skills', 'VoltAgent/awesome-agent-skills', 'travisvn/awesome-claude-skills']
 const SKIP_PATH = /(^|\/)(node_modules|\.git|tests?|__tests__|fixtures|dist|build|vendor)(\/|$)|(^|\/)(ja|ja-JP|zh|zh-CN|zh-TW|ko|ko-KR|es|fr|de|ru|pt|pt-BR|it|tr|vi|i18n|locales?|translations?)(\/|$)|template/i
 
@@ -191,11 +200,12 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
   const tree = await rest<{ tree?: TreeEntry[]; truncated?: boolean }>(`/repos/${repo.name}/git/trees/${repo.sha}?recursive=1`)
   const entries = tree?.tree ?? []
   const skillMds = entries.filter(entry => entry.type === 'blob' && /(^|\/)SKILL\.md$/i.test(entry.path) && !SKIP_PATH.test(entry.path))
+  const isOfficial = repo.name.toLowerCase().startsWith('anthropics/')
+  const isReference = repo.sources.has('reference')
   const ranked = skillMds
     .map(entry => ({ entry, hint: typesOf(entry.path)[0] !== 'autre' ? 0 : 1, depth: entry.path.split('/').length }))
     .sort((a, b) => a.hint - b.hint || a.depth - b.depth || a.entry.path.localeCompare(b.entry.path))
-    .slice(0, PER_REPO_FETCH)
-  const isOfficial = repo.name.toLowerCase().startsWith('anthropics/')
+    .slice(0, isReference ? PER_REFERENCE_FETCH : PER_REPO_FETCH)
   const found = await pool(ranked, 8, async ({ entry }) => {
     const text = await rawFile(repo.name, repo.sha, entry.path)
     if (!text) return null
@@ -210,7 +220,7 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
     const stars = repo.stars
     const fresh = (now.getTime() - new Date(repo.pushedAt).getTime()) / 86_400_000 < 60 ? 1 : 0
     const prescore =
-      Math.log10(stars + 1) * 2 + fresh + (isOfficial ? 3 : 0) + (description.length >= 40 ? 0.5 : -1) - (skillMds.length > 60 ? 1 : 0)
+      Math.log10(stars + 1) * 2 + fresh + (isOfficial ? 3 : 0) + (isReference ? 2 : 0) + (description.length >= 40 ? 0.5 : -1) - (skillMds.length > 60 ? 1 : 0)
     return {
       id: `${repo.name}/${dir || name}`.toLowerCase(),
       repo: repo.name,
@@ -237,12 +247,27 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
   return found.filter((candidate): candidate is Candidate => candidate !== null)
 }
 
+// Noms des skills de la bibliothèque locale d'Amdy (facultatif : vide si le manifeste manque).
+let priorityNames = new Set<string>()
+async function loadPriorityNames() {
+  const manifest = await readJson<{ entrees?: { name: string }[] }>(join(homedir(), '.claude', 'skills-archive', 'MANIFEST.json'), {})
+  priorityNames = new Set((manifest.entrees ?? []).map(entry => entry.name.split(':').pop()!.toLowerCase()))
+}
+
 function select(candidates: Candidate[]) {
   const byHash = new Map<string, Candidate>()
   const byIdentity = new Map<string, Candidate>()
+  const merged = { hash: 0, identity: 0 }
   for (const candidate of candidates.sort((a, b) => b.prescore - a.prescore)) {
     const identity = `${candidate.name.toLowerCase()}|${candidate.description.toLowerCase().slice(0, 120)}`
-    if (byHash.has(candidate.hash) || byIdentity.has(identity)) continue
+    if (byHash.has(candidate.hash)) {
+      merged.hash++
+      continue
+    }
+    if (byIdentity.has(identity)) {
+      merged.identity++
+      continue
+    }
     byHash.set(candidate.hash, candidate)
     byIdentity.set(identity, candidate)
   }
@@ -254,7 +279,14 @@ function select(candidates: Candidate[]) {
     chosen.push(candidate)
     perRepo.set(candidate.repo, (perRepo.get(candidate.repo) ?? 0) + 1)
   }
+  // D'abord les skills qui portent le nom d'un skill déjà utilisé par Amdy, pris dans les
+  // dépôts officiels ou de référence : ils servent d'étalon face aux nouveaux venus.
   for (const candidate of unique) {
+    const isTrusted = candidate.isOfficial || candidate.sources.includes('reference')
+    if (isTrusted && priorityNames.has(candidate.name.toLowerCase()) && chosen.length < MAX_SKILLS) take(candidate)
+  }
+  for (const candidate of unique) {
+    if (chosen.includes(candidate)) continue
     if (chosen.length >= MAX_SKILLS) break
     if ((perRepo.get(candidate.repo) ?? 0) >= PER_REPO_SELECT) continue
     const open = candidate.types.find(type => (perType.get(type) ?? 0) < Math.round((QUOTAS[type] ?? 0) * MAX_SKILLS))
@@ -267,7 +299,7 @@ function select(candidates: Candidate[]) {
     if (chosen.includes(candidate) || (perRepo.get(candidate.repo) ?? 0) >= PER_REPO_SELECT) continue
     take(candidate)
   }
-  return { chosen, unique: unique.length }
+  return { chosen, unique: unique.length, merged }
 }
 
 type HistoryNode = { object: { history: { nodes: { committedDate: string }[] } } | null } | null
@@ -326,21 +358,36 @@ async function main() {
   await officialMarketplace()
   for (const list of AWESOME) await awesomeLinks(list)
   for (const topic of TOPICS) await search(`topic:${topic}`, 2, `topic:${topic}`)
-  for (const [type, queries] of Object.entries(PACK_QUERIES)) for (const query of queries) await search(`${query} in:name,description,readme`, 1, `recherche:${type}`)
+  for (const repo of REFERENCES) discovered(repo, 'reference')
+  // Nom et description seulement : chercher aussi dans les README fait remonter de gros
+  // dépôts qui ne font que mentionner le sujet (remotion-dev/skills était passé sous la barre).
+  for (const [type, queries] of Object.entries(PACK_QUERIES)) for (const query of queries) await search(`${query} in:name,description`, 1, `recherche:${type}`)
   log(`${repos.size} dépôts découverts`)
 
   await metadata()
+  const excluded = { introuvables: 0, forks: 0, archives: 0, sous_seuil_etoiles: 0, push_trop_ancien: 0 }
   const kept = [...repos.values()]
-    .filter(repo => repo.sha && !repo.isArchived && !repo.isFork && (OFFICIAL.includes(repo.name) || (repo.stars >= MIN_STARS && repo.pushedAt >= SINCE)))
+    .filter(repo => {
+      const isOfficial = OFFICIAL.includes(repo.name)
+      if (!repo.sha) return excluded.introuvables++, false
+      if (repo.isFork) return excluded.forks++, false
+      if (repo.isArchived) return excluded.archives++, false
+      if (!isOfficial && repo.stars < MIN_STARS) return excluded.sous_seuil_etoiles++, false
+      if (!isOfficial && repo.pushedAt < SINCE) return excluded.push_trop_ancien++, false
+      return true
+    })
     .sort((a, b) => b.stars - a.stars)
-  const searched = kept.filter(repo => [...repo.sources].some(source => source.startsWith('recherche:') || source === 'officiel' || source === 'marketplace-officielle'))
+  const searched = kept.filter(repo =>
+    [...repo.sources].some(source => source.startsWith('recherche:') || ['officiel', 'marketplace-officielle', 'reference'].includes(source)),
+  )
   const scanned = [...new Set([...searched, ...kept.slice(0, MAX_REPOS)])]
-  log(`${kept.length} dépôts passent les seuils, ${scanned.length} sont parcourus`)
+  log(`${kept.length} dépôts passent les seuils, ${scanned.length} sont parcourus ; écartés :`, excluded)
 
   const candidates = (await pool(scanned, 6, skillsOf)).flat()
   log(`${candidates.length} SKILL.md lus`)
-  const { chosen, unique } = select(candidates)
-  log(`${unique} skills uniques, ${chosen.length} retenus pour le juge`)
+  await loadPriorityNames()
+  const { chosen, unique, merged } = select(candidates)
+  log(`${unique} skills uniques (${merged.hash} copies identiques et ${merged.identity} quasi-copies fusionnées), ${chosen.length} retenus pour le juge`)
 
   await lastCommits(chosen)
   const velocity = await starVelocity([...new Set(chosen.map(skill => skill.repo))])
@@ -351,7 +398,7 @@ async function main() {
   await writeJson(join(CACHE, 'selection.json'), {
     generatedAt: now.toISOString(),
     params: { MAX_SKILLS, MIN_STARS, PUSHED_MONTHS, SINCE, MAX_REPOS, WITH_DIRECTORY },
-    stats: { discovered: repos.size, kept: kept.length, scanned: scanned.length, skillMds: candidates.length, unique, chosen: output.length, perType },
+    stats: { discovered: repos.size, kept: kept.length, excluded, scanned: scanned.length, skillMds: candidates.length, unique, merged, chosen: output.length, perType },
     repoStars: Object.fromEntries(kept.map(repo => [repo.name, repo.stars])),
     skills: output,
   })
