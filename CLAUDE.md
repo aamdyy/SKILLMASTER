@@ -175,6 +175,15 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Priorité à la bibliothèque** : un skill de l'index se charge à sa version épinglée. `~/.claude/skills-archive/` ne sert qu'en secours ou pour les skills hors index.
 - 2026-10-19 : **la version de l'éditeur d'origine gagne toujours la déduplication.** L'ordre de priorité est : officiel `anthropics/`, puis éditeur de confiance, puis dépôt de référence, puis le dépôt le plus ancien. Les dépôts officiels et ceux des éditeurs de confiance sont lus en entier. Quand une copie occupait une place de pack, l'original reprend sa place de tenant et son usage, et la copie est archivée avec la raison « copie de … ». Cas qui a révélé le problème : `xlsx` venait de `eigent-ai/eigent` au lieu de `anthropics/skills`.
   - **Contenu tiers hébergé chez Anthropic** (`anthropics/claude-plugins-community` et les `external_plugins/` de `claude-plugins-official`) : jamais « officiel » ni « éditeur de confiance ». La règle est dans `scripts/scan.ts`, partagée par le collecteur et skill-master.
+- 2026-10-19 : **site de la bibliothèque** (`site/`, Next.js en export statique, déployé sur Vercel). Il lit `library/` au build, en lecture seule, et n'affiche ni l'usage réel d'Amdy ni `profil.json`.
+  - **DA** inspirée d'une maquette fournie par Amdy, sans en reprendre la composition :
+    - fond en dégradé vert profond vers noir, avec une grille fine ;
+    - titres en Plus Jakarta Sans italique, Geist Mono pour les données ;
+    - cartes blanches très arrondies qui flottent ;
+    - boutons en pastille, le vert pour l'action principale, avec un texte vert foncé pour le contraste.
+  - **Sombre uniquement** en v1. Le badge « confiance » est neutre (un bouclier), pour ne pas se confondre avec l'accent vert.
+  - **Motion discrète** : apparition des cartes, léger flottement, survol, et compteurs qui démarrent une fois visibles. Tout est coupé avec `prefers-reduced-motion`.
+  - **Données ajoutées par `publish.ts`** pour le site : `library/history/recap-AAAA-MM-JJ.md` et `last-run.json`. L'Action appelle le deploy hook Vercel (secret `VERCEL_DEPLOY_HOOK`) après chaque tour.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard

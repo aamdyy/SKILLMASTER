@@ -109,6 +109,19 @@ jobs:
           git commit -F /tmp/message.txt
           git push origin HEAD:main
 
+      # Redéploie le site (site/) après chaque tour. Le secret VERCEL_DEPLOY_HOOK est l'URL du
+      # deploy hook du projet Vercel ; sans lui, l'étape ne fait rien.
+      - name: Redéployer le site
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "VERCEL_DEPLOY_HOOK absent : site non redéployé."
+            exit 0
+          fi
+          curl --fail --silent --show-error --max-time 30 -X POST "$HOOK" > /dev/null
+          echo "Redéploiement du site demandé."
+
       - name: Ouvrir une issue si une tête de pack change
         if: needs.scan.outputs.tete_changee == 'true'
         env:

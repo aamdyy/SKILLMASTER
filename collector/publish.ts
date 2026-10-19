@@ -57,7 +57,7 @@ const before = fromHead<{ skills: Skill[] }>('library/skills.json', { skills: []
 const types = (await readdir(join(LIBRARY, 'packs'))).filter(file => file.endsWith('.json')).map(file => file.replace(/\.json$/, '')).sort()
 const packs = await Promise.all(types.map(type => readJson<Pack>(join(LIBRARY, 'packs', `${type}.json`), { type, recommandes: [], ajouts: [] })))
 const previousPacks = types.map(type => fromHead<Pack>(`library/packs/${type}.json`, { type, recommandes: [], ajouts: [] }))
-const run = await readJson<{ duree_min?: number; cout?: { total: number } } | null>(join(CACHE, 'last-run.json'), null)
+const run = await readJson<{ le?: string; duree_min?: number; cout?: { total: number } } | null>(join(CACHE, 'last-run.json'), null)
 const overrides = await readJson<{ jamais?: string[] }>(join(LIBRARY, 'overrides.json'), {})
 // Copies de skills des packs remplacées par la version de l'éditeur d'origine (collector/fetch.ts).
 const alias = (await readJson<{ alias?: Record<string, string> }>(join(CACHE, 'selection.json'), {})).alias ?? {}
@@ -155,6 +155,18 @@ if (archived.length) lines.push(`Archivés : ${archived.slice(0, 12).map(item =>
 lines.push(`Têtes inchangées : ${headChanges.filter(item => !item.moved).map(item => item.pack.type).join(', ') || 'aucune'}.`)
 const recap = `${lines.join('\n')}\n`
 await writeFile(join(LIBRARY, 'RECAP.md'), recap)
+// Historique pour le site : un récapitulatif par tour (un second tour le même jour remplace le
+// premier) et le dernier tour (date, durée, coût), que l'accueil affiche.
+await writeFile(join(LIBRARY, 'history', `recap-${today}.md`), recap)
+await writeJson(join(LIBRARY, 'history', 'last-run.json'), {
+  le: run?.le ?? new Date().toISOString(),
+  duree_min: run?.duree_min ?? null,
+  skills: library.skills.filter(skill => skill.statut !== 'archive').length,
+  cout: run?.cout ?? null,
+  tetes_changees: changed.length,
+  nouveaux: newSkills,
+  archives: archived.length,
+})
 
 if (changed.length) {
   await mkdir(join(ROOT, 'collector', 'out'), { recursive: true })

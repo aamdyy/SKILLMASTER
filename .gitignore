@@ -22,3 +22,9 @@ collector/out/
 node_modules/
 .DS_Store
 *.log
+
+# Site (Next.js) : builds et caches
+site/.next/
+site/out/
+site/*.tsbuildinfo
+site/next-env.d.ts
