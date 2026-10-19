@@ -56,17 +56,22 @@ const types = (await readdir(join(LIBRARY, 'packs'))).filter(file => file.endsWi
 const packs = await Promise.all(types.map(type => readJson<Pack>(join(LIBRARY, 'packs', `${type}.json`), { type, recommandes: [], ajouts: [] })))
 const previousPacks = types.map(type => fromHead<Pack>(`library/packs/${type}.json`, { type, recommandes: [], ajouts: [] }))
 const run = await readJson<{ duree_min?: number; cout?: { total: number } } | null>(join(CACHE, 'last-run.json'), null)
+const overrides = await readJson<{ jamais?: string[] }>(join(LIBRARY, 'overrides.json'), {})
+const never = new Set((overrides.jamais ?? []).map(name => name.toLowerCase()))
 
 // Cycle de vie. L'inactivité se juge au niveau du dépôt : le collecteur écarte déjà les dépôts
 // sans push depuis 6 mois. Un skill qui disparaît du tour alors qu'il comptait (pack ou retours)
-// passe en archive ; un vieux dossier dans un dépôt vivant n'est pas archivé.
+// passe en archive ; un vieux dossier dans un dépôt vivant n'est pas archivé. Un skill de la
+// liste « jamais » d'Amdy est archivé pour cette raison-là, même s'il était déjà archivé.
 const archived: { nom: string; raison: string }[] = []
 const present = new Set(library.skills.map(skill => skill.id))
 for (const old of before.skills) {
   if (present.has(old.id)) continue
   const mattered = Object.keys(old.packs ?? {}).length > 0 || (old.retours_amdy ?? []).length > 0
   if (!mattered) continue
-  const raison = old.statut === 'archive' ? old.raison_statut : 'absent de ce tour (dépôt archivé, sous le seuil, ou skill supprimé)'
+  const raison = never.has(old.nom.toLowerCase())
+    ? 'liste « jamais » d’Amdy (library/overrides.json) : jamais proposé'
+    : old.statut === 'archive' ? old.raison_statut : 'absent de ce tour (dépôt archivé, sous le seuil, ou skill supprimé)'
   library.skills.push({ ...old, statut: 'archive', raison_statut: raison, packs: {} })
   if (old.statut !== 'archive') archived.push({ nom: old.nom, raison: raison ?? '' })
 }
