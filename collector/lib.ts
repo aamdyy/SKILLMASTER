@@ -19,7 +19,26 @@ export const REFERENCES = [
   'twostraws/SwiftUI-Agent-Skill', 'hamen/material-3-skill', 'nextlevelbuilder/ui-ux-pro-max-skill',
   'ceorkm/mobile-app-ui-design', 'bencium/bencium-marketplace',
 ]
-export const isTrustedRepo = (repo: string) =>
+// Mots qui détectent les types de projet ; le juge doit confirmer. « outillage-claude-code »
+// couvre tout ce qui sert à construire avec Claude : plugins, mods, skills, API, Agent SDK, MCP.
+export const KEYWORDS: Record<string, RegExp> = {
+  'site-web': /\b(next\.?js|react|vue|svelte|astro|tailwind|css|front-?end|web ?design|landing|website|shadcn|html|vite|web app|wcag|accessibility|seo|ui components?)\b/i,
+  ios: /\b(swift(ui)?|ios|xcode|iphone|ipad|uikit|app store|testflight|visionos|watchos)\b/i,
+  'app-expo': /\b(expo|react[ -]native|eas)\b/i,
+  android: /\b(android|jetpack compose|kotlin|material ?3|gradle)\b/i,
+  video: /\b(remotion|video|ffmpeg|motion graphics|subtitles?|captions?|youtube|whisper|editing)\b/i,
+  data: /\b(data analysis|pandas|polars|sql|duckdb|notebooks?|jupyter|csv|dataframes?|data ?viz|visuali[sz]ation|analytics|statistics|machine learning|dbt|spreadsheets?|excel)\b/i,
+  'outillage-claude-code': /\b(claude code|claude api|anthropic|messages api|plugins?|mods?|hooks?|mcp|skills?|skill[- ]creator|subagents?|slash commands?|agent sdk|marketplace|claude\.md)\b/i,
+}
+
+export function typesOf(text: string) {
+  const found = Object.entries(KEYWORDS)
+    .filter(([, re]) => re.test(text))
+    .map(([type]) => type)
+  return found.length ? found : ['autre']
+}
+
+export const isTrustedRepo =(repo: string) =>
   repo.toLowerCase().startsWith('anthropics/') || REFERENCES.some(reference => reference.toLowerCase() === repo.toLowerCase())
 
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))

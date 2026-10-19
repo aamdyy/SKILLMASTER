@@ -1,0 +1,35 @@
+{
+  "note": "Profil d'Amdy pour le score de pertinence (0 à 10), séparé de la qualité. Éditable à la main. Calcul : +4 si le skill a un type confirmé parmi les types, +2 par élément de la stack trouvé dans le nom ou la description (6 au plus), −4 par domaine hors sujet trouvé. Le classement en pack combine qualité (avec l'usage) et pertinence selon les poids.",
+  "types": [
+    "site-web",
+    "ios",
+    "app-expo",
+    "android",
+    "video",
+    "data",
+    "outillage-claude-code"
+  ],
+  "stack": {
+    "Next.js": "\\bnext\\.?js\\b",
+    "Expo": "\\b(expo|eas)\\b",
+    "SwiftUI": "\\bswiftui\\b",
+    "Compose": "\\b(jetpack )?compose\\b",
+    "Remotion": "\\bremotion\\b",
+    "Cloudflare": "\\b(cloudflare|wrangler|workers?)\\b",
+    "Python": "\\bpython\\b",
+    "pandas": "\\bpandas\\b",
+    "Jupyter": "\\b(jupyter|notebooks?)\\b",
+    "SQL": "\\bsql\\b",
+    "scikit-learn": "\\b(scikit-learn|sklearn)\\b",
+    "matplotlib": "\\bmatplotlib\\b"
+  },
+  "hors_sujet": [
+    "\\b(genomic|genome|bioinformatics?|protein|molecular|chemistry|clinical)\\b",
+    "\\b(fintech|accounting|ledger|tax|legal|lawyer)\\b",
+    "\\b(feishu|lark|wechat|dingtalk)\\b"
+  ],
+  "poids": {
+    "qualite": 0.6,
+    "pertinence": 0.4
+  }
+}

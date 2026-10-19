@@ -8,7 +8,7 @@
 //           --max-repos N (400), --with-anthropic-directory (désactivé par défaut).
 import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { CACHE, OFFICIAL, REFERENCES, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
+import { CACHE, OFFICIAL, REFERENCES, KEYWORDS, typesOf, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
 import { scanSkill, type Risk, type SkillFile } from './scan.ts'
 
 const argv = process.argv.slice(2)
@@ -30,16 +30,6 @@ const since = new Date(now)
 since.setMonth(since.getMonth() - PUSHED_MONTHS)
 const SINCE = since.toISOString().slice(0, 10)
 
-// Mots qui orientent la présélection ; le juge décide ensuite des vraies catégories.
-const KEYWORDS: Record<string, RegExp> = {
-  'site-web': /\b(next\.?js|react|vue|svelte|astro|tailwind|css|front-?end|web ?design|landing|website|shadcn|html|vite|web app|wcag|accessibility|seo|ui components?)\b/i,
-  ios: /\b(swift(ui)?|ios|xcode|iphone|ipad|uikit|app store|testflight|visionos|watchos)\b/i,
-  'app-expo': /\b(expo|react[ -]native|eas)\b/i,
-  android: /\b(android|jetpack compose|kotlin|material ?3|gradle)\b/i,
-  video: /\b(remotion|video|ffmpeg|motion graphics|subtitles?|captions?|youtube|whisper|editing)\b/i,
-  data: /\b(data analysis|pandas|polars|sql|duckdb|notebooks?|jupyter|csv|dataframes?|data ?viz|visuali[sz]ation|analytics|statistics|machine learning|dbt|spreadsheets?|excel)\b/i,
-  'outillage-claude-code': /\b(claude code|plugins?|hooks?|mcp|skill[- ]creator|subagents?|slash commands?|agent sdk|marketplace|claude\.md)\b/i,
-}
 const QUOTAS: Record<string, number> = {
   'site-web': 0.22, ios: 0.12, 'app-expo': 0.09, android: 0.09, video: 0.11, data: 0.14, 'outillage-claude-code': 0.14, autre: 0.09,
 }
@@ -180,13 +170,6 @@ type Candidate = {
   sources: string[]
   isOfficial: boolean
   skillsInRepo: number
-}
-
-function typesOf(text: string) {
-  const found = Object.entries(KEYWORDS)
-    .filter(([, re]) => re.test(text))
-    .map(([type]) => type)
-  return found.length ? found : ['autre']
 }
 
 async function skillsOf(repo: Repo): Promise<Candidate[]> {

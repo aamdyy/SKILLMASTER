@@ -144,6 +144,12 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - « Recommandé » se décide par pack : les 5 à 8 meilleurs, note ≥ 6. Les épinglages et les exclusions sont dans `library/overrides.json`, où bencium est épinglé en site-web.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
+## Idées pour plus tard
+
+- **Classer les skills par type avec un modèle de décisions typées** (Laya en local, ou Jev par API), à partir du nom et de la description seulement.
+  - **Condition :** à tester seulement si le classement par Haiku reste instable après la v3.1.
+  - **Avant d'adopter :** le mesurer contre Haiku sur une centaine de skills.
+
 ## Décisions encore ouvertes
 
 - Publier l'outil plus tard (repo public, contenu pour sa chaîne) ?

@@ -11,8 +11,9 @@
 import { spawn } from 'node:child_process'
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
-import { CACHE, LIBRARY, isTrustedRepo, isoWeek, log, pool, rawFile, readJson, writeJson } from './lib.ts'
+import { CACHE, LIBRARY, isTrustedRepo, isoWeek, log, pool, rawFile, readJson, typesOf, writeJson } from './lib.ts'
 import { scanSkill, type Gravite, type Risk } from './scan.ts'
+import { rankPack, type Finalist } from './rank.ts'
 import { summarize } from './resume.ts'
 import { loadUsage, usageBonus } from './usage.ts'
 
@@ -24,8 +25,10 @@ const option = (name: string, fallback: number) => {
 const CONCURRENCY = option('concurrency', 5)
 const LIMIT = option('limit', Infinity)
 const FINALISTS = option('finalists', 12)
-const WITH_SONNET = !argv.includes('--no-sonnet')
-const VERSION = 'v2'
+const RANK_RUNS = option('rank-runs', 2)
+// Haiku seul depuis la v3 (Sonnet n'écartait la note que de 0,11 point en moyenne) ; --with-sonnet le réactive.
+const WITH_SONNET = argv.includes('--with-sonnet')
+const VERSION = 'v3'
 const MAX_SKILL_CHARS = 24_000
 const MAX_ANNEX_FILES = 6
 const MAX_ANNEX_CHARS = 5_000
@@ -88,7 +91,7 @@ true si le skill pousse Claude à décider seul de l'esthétique : imposer un st
 - android : Android natif en Kotlin ou Jetpack Compose. PAS React Native ni Expo.
 - video : production ou montage vidéo (Remotion, ffmpeg, sous-titres, motion design vidéo).
 - data : analyse, transformation ou visualisation de données (SQL, pandas, polars, notebooks, dashboards).
-- outillage-claude-code : étendre ou configurer Claude Code et ses agents (skills, plugins, hooks, MCP, sous-agents, workflows d'agents).
+- outillage-claude-code : construire avec Claude : plugins, mods, skills, hooks, MCP, sous-agents, Agent SDK, API Claude (Messages API, SDK Anthropic), workflows d'agents.
 - autre : tout le reste. Un diagramme d'architecture n'est pas « data », Figma n'est pas « video ».
 
 ## Le reste
@@ -237,6 +240,19 @@ async function judge(model: string, skill: Selected, risks: Risk[]): Promise<Jud
   return judged
 }
 
+type Profile = { types: string[]; stack: Record<string, string>; hors_sujet: string[]; poids: { qualite: number; pertinence: number } }
+
+// Pertinence pour Amdy (0 à 10), séparée de la qualité : +4 pour un type confirmé parmi ses types,
+// +2 par élément de sa stack trouvé (6 au plus), −4 par domaine hors sujet (library/profil.json).
+function relevance(profile: Profile, skill: Selected, verdict: Verdict | null, text: string) {
+  void text
+  const haystack = `${skill.name} ${skill.description}`
+  const hasType = (verdict?.categories ?? []).some(category => profile.types.includes(category))
+  const stack = Object.values(profile.stack).filter(source => new RegExp(source, 'i').test(haystack)).length
+  const off = profile.hors_sujet.filter(source => new RegExp(source, 'i').test(haystack)).length
+  return Math.max(0, Math.min(10, (hasType ? 4 : 0) + Math.min(6, stack * 2) - off * 4))
+}
+
 const ORDER: Gravite[] = ['critique', 'eleve', 'moyen', 'info']
 const worst = (risks: Risk[]) => risks.map(risk => risk.gravite).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b))[0] ?? null
 const key = (repo: string, name: string) => `${repo.toLowerCase()}|${name.toLowerCase()}`
@@ -265,7 +281,17 @@ async function main() {
 
   // Le scan v2 est refait ici, sur le texte en cache, pour profiter de ses corrections.
   const scans = new Map<string, Risk[]>()
-  for (const skill of skills) scans.set(skill.id, scanSkill((await rawFile(skill.repo, skill.sha, skill.skillMdPath)) ?? '', skill.files))
+  // La détection des types est refaite ici aussi, avec les mots-clés à jour de lib.ts.
+  const texts = new Map<string, string>()
+  const detectedTypes = new Map<string, string[]>()
+  for (const skill of skills) {
+    const text = (await rawFile(skill.repo, skill.sha, skill.skillMdPath)) ?? ''
+    texts.set(skill.id, text)
+    scans.set(skill.id, scanSkill(text, skill.files))
+    detectedTypes.set(skill.id, typesOf(`${skill.skillMdPath} ${skill.name} ${skill.description} ${text.slice(0, 4_000)}`))
+  }
+  const profile = await readJson<Profile>(join(LIBRARY, 'profil.json'), { types: [], stack: {}, hors_sujet: [], poids: { qualite: 1, pertinence: 0 } })
+  const relevanceOf = (skill: Selected, verdict: Verdict | null) => relevance(profile, skill, verdict, texts.get(skill.id) ?? '')
 
   log(`temps 1 : ${skills.length} skills, Claude Haiku, ${CONCURRENCY} en parallèle`)
   const haiku = await judgeAll('haiku', skills, scans, CONCURRENCY)
@@ -281,12 +307,18 @@ async function main() {
     // Le juge signale, le scan tranche : un risque vu par le juge reste « moyen ».
     ...(verdict?.risques_securite ?? []).map(code => ({ code, gravite: 'moyen' as Gravite, source: 'juge' as const })),
   ]
+  // Un seul type principal par skill : la première catégorie du juge que la détection confirme
+  // (jamais ios ni android pour un skill Expo ou React Native).
+  const primaryType = (skill: Selected, verdict: Verdict | null) => {
+    if (!verdict) return null
+    const detected = detectedTypes.get(skill.id) ?? skill.types
+    const isRn = verdict.categories.includes('app-expo') || detected.includes('app-expo')
+    return verdict.categories.find(category => TYPES.includes(category) && detected.includes(category) && !(NATIVE_TYPES.has(category) && isRn)) ?? null
+  }
   const isEligible = (type: string, skill: Selected, verdict: Verdict | null) => {
     if (pinned(type, skill)) return true
     if (!verdict || never.has(skill.name.toLowerCase()) || excluded(type, skill)) return false
-    const detected = skill.contentTypes ?? skill.types
-    if (!verdict.categories.includes(type) || !detected.includes(type)) return false
-    if (NATIVE_TYPES.has(type) && (verdict.categories.includes('app-expo') || detected.includes('app-expo'))) return false
+    if (primaryType(skill, verdict) !== type) return false
     if (worst(riskOf(skill, verdict)) === 'critique') return false
     return !(VISUAL_TYPES.has(type) && verdict.choix_visuels_autonomes)
   }
@@ -312,7 +344,7 @@ async function main() {
   log(`temps 3 : résumés en français (Sonnet pour les ${sonnet.verdicts.size} finalistes, Haiku pour les autres)`)
   const resumes = new Map<string, string | null>()
   await pool(skills, CONCURRENCY, async skill => {
-    const model = sonnet.verdicts.get(skill.id)?.verdict ? 'sonnet' : 'haiku'
+    const model = WITH_SONNET && sonnet.verdicts.get(skill.id)?.verdict ? 'sonnet' : 'haiku'
     const text = (await rawFile(skill.repo, skill.sha, skill.skillMdPath)) ?? ''
     // Repli sur Haiku si Sonnet ne tient pas le format en trois essais.
     const resume = (await summarize(model, skill.name, skill.description, text)) ?? (model === 'haiku' ? null : await summarize('haiku', skill.name, skill.description, text))
@@ -347,7 +379,7 @@ async function main() {
         resume_fr: resumes.get(skill.id) ?? null,
         description_courte: verdict?.description_courte ?? null,
         categories: verdict?.categories ?? skill.types,
-        types_detectes: skill.contentTypes ?? skill.types,
+        types_detectes: detectedTypes.get(skill.id) ?? skill.types,
         stars: skill.repoStars,
         vitesse_stars_30j: skill.stars30d,
         dernier_commit: skill.lastCommit ?? null,
@@ -357,6 +389,8 @@ async function main() {
         sous_notes: verdict?.sous_notes ?? null,
         note_juge: noteJuge,
         bonus_usage: bonus,
+        pertinence: relevanceOf(skill, verdict),
+        type_principal: primaryType(skill, verdict),
         note_qualite: noteJuge === null ? null : Math.min(10, noteJuge + bonus),
         justification: verdict?.justification ?? fromHaiku?.error ?? null,
         reserves: verdict?.reserves ?? [],
@@ -379,14 +413,33 @@ async function main() {
     }
   })
 
+  // Classement en pack : qualité (usage compris) et pertinence, pondérées par le profil.
+  const packScore = (entry: { note_qualite: number | null; pertinence: number }) =>
+    (entry.note_qualite ?? 0) * profile.poids.qualite + entry.pertinence * profile.poids.pertinence
   for (const type of TYPES) {
     const ranked = entries
       .filter(({ skill, verdict }) => isEligible(type, skill, verdict))
-      .sort((a, b) => Number(pinned(type, b.skill)) - Number(pinned(type, a.skill)) || (b.entry.note_qualite ?? 0) - (a.entry.note_qualite ?? 0) || b.entry.stars - a.entry.stars)
+      .sort((a, b) => Number(pinned(type, b.skill)) - Number(pinned(type, a.skill)) || packScore(b.entry) - packScore(a.entry) || b.entry.stars - a.entry.stars)
+    // Finalistes : les meilleurs au score de pack (note ≥ 5), épinglés compris. Sonnet les range
+    // entre eux ; c'est son ordre qui fixe la tête du pack. Un second tirage mesure la stabilité.
+    const finalists = ranked.filter(item => pinned(type, item.skill) || (item.entry.note_qualite ?? 0) >= 5).slice(0, FINALISTS)
+    const asFinalist = ({ entry }: (typeof entries)[number]): Finalist => ({
+      id: entry.id, nom: entry.nom, repo: entry.repo, resume_fr: entry.resume_fr, description: entry.description_originale,
+      extrait: texts.get(entry.id) ?? '', note: entry.note_qualite,
+    })
+    const runs: ({ ordre: string[]; raison: string } | null)[] = []
+    for (let run = 1; run <= RANK_RUNS; run++) runs.push(finalists.length > 1 ? await rankPack(type, finalists.map(asFinalist), run) : null)
+    const order = runs[0]?.ordre ?? finalists.map(item => item.entry.id)
+    const byId = new Map(ranked.map(item => [item.entry.id, item]))
+    const ordered = [
+      ...finalists.filter(item => pinned(type, item.skill)),
+      ...order.map(id => byId.get(id)!).filter(item => item && !pinned(type, item.skill)),
+      ...ranked.filter(item => !finalists.includes(item)),
+    ]
     const pick = (minNote: number, max: number, isTaken: (id: string) => boolean) => {
       const perRepo = new Map<string, number>() // un plafond par liste : recommandés et ajouts comptent à part
       const picked: typeof entries = []
-      for (const item of ranked) {
+      for (const item of ordered) {
         if (picked.length >= max) break
         const isPinned = pinned(type, item.skill)
         if (isTaken(item.entry.id) || (!isPinned && ((item.entry.note_qualite ?? 0) < minNote || (perRepo.get(item.entry.repo) ?? 0) >= 3))) continue
@@ -398,6 +451,16 @@ async function main() {
     const recommended = pick(6, 8, () => false)
     const chosen = new Set(recommended.map(item => item.entry.id))
     const additions = pick(5, 12, id => chosen.has(id))
+    const head = (ordre: string[] | undefined) => (ordre ?? []).filter(id => chosen.has(id))
+    const stabilite = runs.length > 1 && runs.every(Boolean)
+      ? {
+          tirages: runs.length,
+          tete_identique: JSON.stringify(head(runs[0]?.ordre)) === JSON.stringify(head(runs[1]?.ordre)),
+          tete_tirage_1: head(runs[0]?.ordre).map(id => byId.get(id)?.entry.nom),
+          tete_tirage_2: head(runs[1]?.ordre).map(id => byId.get(id)?.entry.nom),
+          raison_tirage_1: runs[0]?.raison,
+        }
+      : { tirages: runs.filter(Boolean).length, note: 'classement Sonnet indisponible pour ce pack' }
     for (const item of recommended) item.entry.packs[type] = pinned(type, item.skill) ? 'epingle' : 'recommande'
     for (const item of additions) item.entry.packs[type] = 'ajout'
     const brief = ({ entry, skill }: (typeof entries)[number]) => ({
@@ -406,6 +469,8 @@ async function main() {
       repo: entry.repo,
       resume_fr: entry.resume_fr,
       note: entry.note_qualite,
+      pertinence: entry.pertinence,
+      score_pack: Math.round(packScore(entry) * 10) / 10,
       note_juge: entry.note_juge,
       modele: entry.juge.modele,
       bonus_usage: entry.bonus_usage,
@@ -420,10 +485,11 @@ async function main() {
       proposition_auto: true,
       statut: 'a_valider_par_amdy',
       regles:
-        'les 5 à 8 meilleurs du type avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ' +
+        'finalistes choisis au score qualité (usage compris) × poids + pertinence × poids (library/profil.json), puis rangés entre eux par Sonnet (classement comparatif) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ' +
         'ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; ' +
         '3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json',
       moins_de_5_recommandes: recommended.length < 5 || undefined,
+      stabilite,
       recommandes: recommended.map(brief),
       ajouts: additions.map(brief),
     })
