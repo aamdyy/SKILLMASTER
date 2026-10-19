@@ -22,7 +22,7 @@ node collector/calibrate.ts --avant <commit> --min 5
 | Fichier | Rôle |
 |---|---|
 | `fetch.ts` | Découverte (topics, recherches par type, marketplace officielle, listes awesome, dépôts de référence), métadonnées, arbres git, lecture des SKILL.md, déduplication, présélection par type, dernier commit par chemin, étoiles sur 30 jours |
-| `scan.ts` | Risques détectés sans LLM ni exécution. Un motif trouvé dans un bloc de code d'exemple descend d'un cran, et une phrase d'injection citée pour mettre en garde n'est qu'une mention |
+| `scan.ts` | Réexporte le scanner de `plugins/skillmaster/skills/skill-master/scripts/scan.ts`, partagé avec skill-master. Risques détectés sans LLM ni exécution. Un motif trouvé dans un bloc de code d'exemple descend d'un cran, et une phrase d'injection citée pour mettre en garde n'est qu'une mention |
 | `judge.ts` | Grille v2 : 5 sous-notes de 0 à 2 sur le SKILL.md et ses annexes. Types stricts confirmés par la détection, drapeau « choix visuels autonomes » séparé de la note, réserves de qualité séparées des risques de sécurité. Note finale = note du juge + bonus d'usage. Packs : les 5 à 8 meilleurs par type (note ≥ 6), plus les épinglages |
 | `resume.ts` | `resume_fr` : une phrase, 15 mots au plus, « ce qu'il fait → ce qu'il améliore ». Troisième temps du juge (Sonnet pour les finalistes, Haiku pour les autres). `node collector/resume.ts --archive` remplit aussi le manifeste de la bibliothèque locale |
 | `publish.ts` | Après le juge : cycle de vie (archive des skills disparus du tour qui comptaient, `remplace_par`), index léger `library/index/<type>.json` pour skill-master, récapitulatif `library/RECAP.md`, signal « tête changée » pour l'issue |

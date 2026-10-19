@@ -156,6 +156,16 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Cycle de vie au niveau du dépôt :** un skill passe en archive quand il disparaît du tour (dépôt archivé, sans push depuis 6 mois, ou sous le seuil) alors qu'il était dans un pack ou avait des retours. Un vieux dossier dans un dépôt vivant n'est pas archivé.
   - **`library/` sert de cache durable :** verdicts et résumés repris par hash. Un pack dont la finale n'a pas changé garde sa tête sans appel à Sonnet. Une semaine sans nouveauté coûte 0 $.
   - **`skill-master` lira `library/index/<type>.json`** (environ 11 Ko par type), pas `skills.json`.
+- 2026-10-19 : **premier tour de l'Action** (0,70 $, 3 têtes changées). Suites décidées par Amdy :
+  - `library/profil.json` exclut le **calcul distribué** (Dask, Ray, Spark) et ajoute **DuckDB** (SQL local) à la stack data ;
+  - un skill de la liste « jamais » est archivé avec cette raison-là ;
+  - le runner est épinglé sur `ubuntu-24.04`.
+  - Pendant la phase 3, les correctifs nécessaires pour que le workflow tourne se commitent et se poussent sans demander. Tout le reste se demande.
+- 2026-10-19 : **`skill-master` v1.** Il lit les packs dans `library/index/<type>.json` et non plus dans une table écrite à la main. Son outil `scripts/sm.ts` fait deux choses :
+  - `sync` garde une copie en lecture seule de `library/` dans `~/.cache/skillmaster/library/`, téléchargée seulement quand `library/` a changé sur `main` ;
+  - `fetch <id>` télécharge un skill des packs au commit épinglé dans `~/.cache/skillmaster/skills/`, en lecture seule, sans liens, sans binaires et sans fichier de plus de 1 Mo, puis refait le scan de sécurité. Un risque élevé ou critique attend l'accord d'Amdy.
+
+  Le scanner vit dans le plugin (`scripts/scan.ts`), pour que la CI et le Mac fassent le même scan. `collector/scan.ts` le réexporte. Un skill déjà présent dans `~/.claude/skills-archive/` se charge depuis le disque.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard

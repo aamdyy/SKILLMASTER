@@ -143,29 +143,8 @@ export async function rawFile(repo: string, sha: string, path: string): Promise<
   return text
 }
 
-export type Frontmatter = Record<string, string>
-
-// Lecture volontairement simple : clés de premier niveau, valeurs sur une ou plusieurs lignes.
-export function frontmatter(text: string): { fields: Frontmatter; raw: string } {
-  const match = text.match(/^﻿?---\r?\n([\s\S]*?)\r?\n---/)
-  if (!match) return { fields: {}, raw: '' }
-  const raw = match[1] ?? ''
-  const fields: Frontmatter = {}
-  let key = ''
-  for (const line of raw.split(/\r?\n/)) {
-    const head = line.match(/^([A-Za-z][\w-]*):\s?(.*)$/)
-    if (head) {
-      key = head[1] as string
-      fields[key] = (head[2] ?? '').trim()
-    } else if (key) {
-      fields[key] = `${fields[key]} ${line.trim()}`.trim()
-    }
-  }
-  for (const name of Object.keys(fields)) {
-    fields[name] = (fields[name] ?? '').replace(/^["'>|-]+\s*/, '').replace(/["']$/, '').trim()
-  }
-  return { fields, raw }
-}
+// Le frontmatter est lu par le scanner, qui vit dans le plugin pour servir aussi à skill-master.
+export { frontmatter, type Frontmatter } from '../plugins/skillmaster/skills/skill-master/scripts/scan.ts'
 
 export function isoWeek(date: Date) {
   const day = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
