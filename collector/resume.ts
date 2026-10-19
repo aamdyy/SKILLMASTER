@@ -10,7 +10,7 @@ import { spawn } from 'node:child_process'
 import { readFile, writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { CACHE, LIBRARY, frontmatter, isTrustedRepo, log, pool, readJson, sha256, writeJson } from './lib.ts'
+import { CACHE, CLAUDE_MODE, LIBRARY, frontmatter, isTrustedRepo, log, pool, readJson, sha256, writeJson } from './lib.ts'
 
 const VERSION = 'r1'
 export const resumeCost = { usd: 0 }
@@ -41,7 +41,7 @@ function ask(model: string, input: string): Promise<string | undefined> {
   return new Promise(resolve => {
     const child = spawn(
       'claude',
-      ['-p', '--model', model, '--effort', 'low', '--tools', '', '--strict-mcp-config', '--disable-slash-commands', '--no-session-persistence',
+      [...CLAUDE_MODE, '-p', '--model', model, '--effort', 'low', '--tools', '', '--strict-mcp-config', '--disable-slash-commands', '--no-session-persistence',
         '--settings', '{"disableAllHooks":true}', '--system-prompt', SYSTEM, '--output-format', 'json', '--json-schema', JSON.stringify(SCHEMA)],
       { cwd: join(CACHE, 'judge-cwd'), stdio: ['pipe', 'pipe', 'pipe'] },
     )

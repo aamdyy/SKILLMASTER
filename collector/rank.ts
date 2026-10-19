@@ -5,7 +5,7 @@
 // `run` distingue des tirages indépendants (même entrée, cache séparé).
 import { spawn } from 'node:child_process'
 import { join } from 'node:path'
-import { CACHE, readJson, sha256, writeJson } from './lib.ts'
+import { CACHE, CLAUDE_MODE, readJson, sha256, writeJson } from './lib.ts'
 
 export const rankCost = { usd: 0 }
 const VERSION = 'k2'
@@ -71,7 +71,7 @@ function ask(context: Context, input: string): Promise<Ranking | null> {
   return new Promise(resolve => {
     const child = spawn(
       'claude',
-      ['-p', '--model', 'sonnet', '--effort', 'low', '--tools', '', '--strict-mcp-config', '--disable-slash-commands', '--no-session-persistence',
+      [...CLAUDE_MODE, '-p', '--model', 'sonnet', '--effort', 'low', '--tools', '', '--strict-mcp-config', '--disable-slash-commands', '--no-session-persistence',
         '--settings', '{"disableAllHooks":true}', '--system-prompt', system(context), '--output-format', 'json', '--json-schema', JSON.stringify(SCHEMA)],
       { cwd: join(CACHE, 'judge-cwd'), stdio: ['pipe', 'pipe', 'pipe'] },
     )

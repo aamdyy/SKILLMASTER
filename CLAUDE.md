@@ -152,6 +152,10 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
 - 2026-10-19 : **coût réel affiché.** Un verdict en cache compte pour 0 $. Tour complet de 1 500 skills sans changement : 0,66 $ en équivalent, presque tout pour les 21 classements Sonnet. Les notes Haiku et les résumés ne coûtent que pour les skills nouveaux ou modifiés.
 - 2026-10-19 : **ajout SEO garanti en site-web** (`ajout_garanti` dans `library/overrides.json`) : le meilleur skill SEO hors tête reste en ajout, parce qu'Amdy fait aussi des sites clients où le SEO compte.
 - 2026-10-19 : `web-design-guidelines` est épinglé en « ajout » du pack site-web (`epingles_ajout` dans `library/overrides.json`).
+- 2026-10-19 : **phase 3 écrite** (`.github/workflows/weekly-scan.yml`, `collector/publish.ts`).
+  - **Cycle de vie au niveau du dépôt :** un skill passe en archive quand il disparaît du tour (dépôt archivé, sans push depuis 6 mois, ou sous le seuil) alors qu'il était dans un pack ou avait des retours. Un vieux dossier dans un dépôt vivant n'est pas archivé.
+  - **`library/` sert de cache durable :** verdicts et résumés repris par hash. Un pack dont la finale n'a pas changé garde sa tête sans appel à Sonnet. Une semaine sans nouveauté coûte 0 $.
+  - **`skill-master` lira `library/index/<type>.json`** (environ 11 Ko par type), pas `skills.json`.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard

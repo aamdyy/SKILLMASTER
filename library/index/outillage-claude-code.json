@@ -1,0 +1,152 @@
+{
+  "genere_le": "2026-10-19T14:07:33.856Z",
+  "type": "outillage-claude-code",
+  "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
+  "recommandes": [
+    {
+      "id": "anthropics/skills/skills/skill-creator",
+      "nom": "skill-creator",
+      "place": "recommande",
+      "repo": "anthropics/skills",
+      "chemin_skill": "skills/skill-creator",
+      "skill_md": "skills/skill-creator/SKILL.md",
+      "sha_epingle": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "resume_fr": "crée et teste tes skills → des skills fiables, déclenchés au bon moment",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "anthropics/claude-code/plugins/plugin-dev/skills/agent-development",
+      "nom": "Agent Development",
+      "place": "recommande",
+      "repo": "anthropics/claude-code",
+      "chemin_skill": "plugins/plugin-dev/skills/agent-development",
+      "skill_md": "plugins/plugin-dev/skills/agent-development/SKILL.md",
+      "sha_epingle": "ef7bfdca55d906929fe6b782025b93758c325074",
+      "resume_fr": "te guide pour écrire des subagents → déclenchement précis, prompts plus solides",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "anthropics/skills/skills/mcp-builder",
+      "nom": "mcp-builder",
+      "place": "recommande",
+      "repo": "anthropics/skills",
+      "chemin_skill": "skills/mcp-builder",
+      "skill_md": "skills/mcp-builder/SKILL.md",
+      "sha_epingle": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "resume_fr": "te guide pour créer un serveur MCP → outils mieux conçus pour les LLM",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration",
+      "nom": "MCP Integration",
+      "place": "recommande",
+      "repo": "anthropics/claude-code",
+      "chemin_skill": "plugins/plugin-dev/skills/mcp-integration",
+      "skill_md": "plugins/plugin-dev/skills/mcp-integration/SKILL.md",
+      "sha_epingle": "ef7bfdca55d906929fe6b782025b93758c325074",
+      "resume_fr": "explique comment brancher des serveurs MCP dans un plugin → relie les services externes proprement",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "anthropics/skills/skills/claude-api",
+      "nom": "claude-api",
+      "place": "recommande",
+      "repo": "anthropics/skills",
+      "chemin_skill": "skills/claude-api",
+      "skill_md": "skills/claude-api/SKILL.md",
+      "sha_epingle": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "resume_fr": "te donne les bons modèles et paramètres de l'API Claude → évite le code daté",
+      "note": 8,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "addyosmani/agent-skills/skills/constraint-driven-development",
+      "nom": "constraint-driven-development",
+      "place": "recommande",
+      "repo": "addyosmani/agent-skills",
+      "chemin_skill": "skills/constraint-driven-development",
+      "skill_md": "skills/constraint-driven-development/SKILL.md",
+      "sha_epingle": "aeac41d4d005999432bb7312f7ff06383a91d59d",
+      "resume_fr": "surveille les suppressions et tests sautés → Claude ne baisse plus la qualité en silence",
+      "note": 10,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "anthropics/claude-code/plugins/hookify/skills/writing-rules",
+      "nom": "Writing Hookify Rules",
+      "place": "recommande",
+      "repo": "anthropics/claude-code",
+      "chemin_skill": "plugins/hookify/skills/writing-rules",
+      "skill_md": "plugins/hookify/skills/writing-rules/SKILL.md",
+      "sha_epingle": "ef7bfdca55d906929fe6b782025b93758c325074",
+      "resume_fr": "t'aide à écrire des règles hookify pour signaler les commandes risquées → moins d'accidents en session",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "mattpocock/skills/skills/engineering/code-review",
+      "nom": "code-review",
+      "place": "recommande",
+      "repo": "mattpocock/skills",
+      "chemin_skill": "skills/engineering/code-review",
+      "skill_md": "skills/engineering/code-review/SKILL.md",
+      "sha_epingle": "49dd158d1076134a641b33efb035946536778336",
+      "resume_fr": "revoit tes changements aux normes du repo et au ticket → repère les écarts avant fusion",
+      "note": 9,
+      "risque_max": null,
+      "risques": []
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "gaasher/agent-loop-skills/loops/optimize-loop",
+      "nom": "optimize-loop",
+      "place": "ajout",
+      "repo": "gaasher/Agent-Loop-Skills",
+      "chemin_skill": "loops/optimize-loop",
+      "skill_md": "loops/optimize-loop/SKILL.md",
+      "sha_epingle": "f1169e6db0b0f8a83ced3a18562b7c57e14a748a",
+      "resume_fr": "mesure chaque retouche, garde si tests verts → code plus simple ou SQL plus rapide",
+      "note": 8,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "confident-ai/deepeval/skills/deepeval",
+      "nom": "deepeval",
+      "place": "ajout",
+      "repo": "confident-ai/deepeval",
+      "chemin_skill": "skills/deepeval",
+      "skill_md": "skills/deepeval/SKILL.md",
+      "sha_epingle": "727203702cddf68e4f01a6ef95b23d9cb9036654",
+      "resume_fr": "guide une évaluation pytest d'agents IA → repère les échecs et améliore leur fiabilité",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
+      "nom": "cookbook-audit",
+      "place": "ajout",
+      "repo": "anthropics/claude-cookbooks",
+      "chemin_skill": ".claude/skills/cookbook-audit",
+      "skill_md": ".claude/skills/cookbook-audit/SKILL.md",
+      "sha_epingle": "a162e0184e71b60290808a43961a6cbc8060123c",
+      "resume_fr": "note un notebook du Cookbook selon sa grille → améliore la clarté et l'exactitude technique",
+      "note": 6,
+      "risque_max": "moyen",
+      "risques": []
+    }
+  ]
+}

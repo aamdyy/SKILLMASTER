@@ -41,6 +41,9 @@ export function typesOf(text: string) {
 export const isTrustedRepo =(repo: string) =>
   repo.toLowerCase().startsWith('anthropics/') || REFERENCES.some(reference => reference.toLowerCase() === repo.toLowerCase())
 
+// En CI (GitHub Action), `claude` tourne en mode --bare : clé API, ni hooks ni réglages locaux.
+export const CLAUDE_MODE = process.env.SM_CLAUDE_BARE === '1' ? ['--bare'] : []
+
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export function sha256(text: string) {

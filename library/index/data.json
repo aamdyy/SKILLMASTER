@@ -1,0 +1,277 @@
+{
+  "genere_le": "2026-10-19T14:07:33.856Z",
+  "type": "data",
+  "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
+  "recommandes": [
+    {
+      "id": "jeffallan/claude-skills/skills/pandas-pro",
+      "nom": "pandas-pro",
+      "place": "recommande",
+      "repo": "Jeffallan/claude-skills",
+      "chemin_skill": "skills/pandas-pro",
+      "skill_md": "skills/pandas-pro/SKILL.md",
+      "sha_epingle": "36f3fe8052da7c57083783268c6ea3265d075265",
+      "resume_fr": "règles pandas pour nettoyer, joindre et agréger → évite les boucles lentes et les erreurs silencieuses",
+      "note": 8,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "k-dense-ai/scientific-agent-skills/skills/polars",
+      "nom": "polars",
+      "place": "recommande",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "chemin_skill": "skills/polars",
+      "skill_md": "skills/polars/SKILL.md",
+      "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
+      "resume_fr": "te guide sur Polars en lazy et expressions → ETL plus rapides que pandas",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "jeffallan/claude-skills/skills/sql-pro",
+      "nom": "sql-pro",
+      "place": "recommande",
+      "repo": "Jeffallan/claude-skills",
+      "chemin_skill": "skills/sql-pro",
+      "skill_md": "skills/sql-pro/SKILL.md",
+      "sha_epingle": "36f3fe8052da7c57083783268c6ea3265d075265",
+      "resume_fr": "optimise tes requêtes SQL et lit les EXPLAIN → requêtes plus rapides, index mieux placés",
+      "note": 7,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "k-dense-ai/scientific-agent-skills/skills/scientific-visualization",
+      "nom": "scientific-visualization",
+      "place": "recommande",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "chemin_skill": "skills/scientific-visualization",
+      "skill_md": "skills/scientific-visualization/SKILL.md",
+      "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
+      "resume_fr": "crée et audite des figures scientifiques honnêtes → évite les graphiques trompeurs avant publication",
+      "note": 10,
+      "risque_max": "eleve",
+      "risques": [
+        "frontmatter allowed-tools"
+      ]
+    },
+    {
+      "id": "k-dense-ai/scientific-agent-skills/skills/aeon",
+      "nom": "aeon",
+      "place": "recommande",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "chemin_skill": "skills/aeon",
+      "skill_md": "skills/aeon/SKILL.md",
+      "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
+      "resume_fr": "classe, prévoit et détecte les anomalies en séries temporelles → évite les algorithmes faits maison",
+      "note": 9,
+      "risque_max": "eleve",
+      "risques": [
+        "frontmatter allowed-tools"
+      ]
+    },
+    {
+      "id": "eigent-ai/eigent/resources/example-skills/xlsx",
+      "nom": "xlsx",
+      "place": "recommande",
+      "repo": "eigent-ai/eigent",
+      "chemin_skill": "resources/example-skills/xlsx",
+      "skill_md": "resources/example-skills/xlsx/SKILL.md",
+      "sha_epingle": "687ddc84cebb07bcab913b2955ddb74f585f643f",
+      "resume_fr": "crée et modifie tes fichiers Excel et CSV → évite les formules erronées et valeurs figées",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "phuryn/pm-skills/pm-execution/skills/dummy-dataset",
+      "nom": "dummy-dataset",
+      "place": "recommande",
+      "repo": "phuryn/pm-skills",
+      "chemin_skill": "pm-execution/skills/dummy-dataset",
+      "skill_md": "pm-execution/skills/dummy-dataset/SKILL.md",
+      "sha_epingle": "07b34f64ee828df08953f505b7f747aef85ae7c6",
+      "resume_fr": "génère des jeux de données factices réalistes → testes ton code sans vraies données",
+      "note": 6,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "cloudflare/skills/skills/basin",
+      "nom": "basin",
+      "place": "recommande",
+      "repo": "cloudflare/skills",
+      "chemin_skill": "skills/basin",
+      "skill_md": "skills/basin/SKILL.md",
+      "sha_epingle": "86505e44f87d801aa1864a3c4109e9a8ae5c409f",
+      "resume_fr": "guide Basin Pipelines, Catalog et SQL → évite les erreurs sur les tables Iceberg R2",
+      "note": 7,
+      "risque_max": "moyen",
+      "risques": []
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "k-dense-ai/scientific-agent-skills/skills/dask",
+      "nom": "dask",
+      "place": "ajout",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "chemin_skill": "skills/dask",
+      "skill_md": "skills/dask/SKILL.md",
+      "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
+      "resume_fr": "étend pandas et NumPy au-delà de la RAM → traite des fichiers trop gros sans planter",
+      "note": 9,
+      "risque_max": "eleve",
+      "risques": [
+        "frontmatter allowed-tools"
+      ]
+    },
+    {
+      "id": "timescale/pg-aiguide/skills/schema-exploration",
+      "nom": "schema-exploration",
+      "place": "ajout",
+      "repo": "timescale/pg-aiguide",
+      "chemin_skill": "skills/schema-exploration",
+      "skill_md": "skills/schema-exploration/SKILL.md",
+      "sha_epingle": "187be00d317a51210c132010d947f4546ffb5eef",
+      "resume_fr": "explore le schéma avant d'écrire du SQL → évite les requêtes sur de mauvaises tables",
+      "note": 9,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "huggingface/skills/skills/huggingface-trackio",
+      "nom": "huggingface-trackio",
+      "place": "ajout",
+      "repo": "huggingface/skills",
+      "chemin_skill": "skills/huggingface-trackio",
+      "skill_md": "skills/huggingface-trackio/SKILL.md",
+      "sha_epingle": "c3ff942be3e07116b475253f0a8fc4f54682c1a8",
+      "resume_fr": "journalise les métriques d'entraînement et déclenche des alertes → repère vite les runs qui divergent",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "nvidia/skills/skills/accelerated-computing-cudf",
+      "nom": "accelerated-computing-cudf",
+      "place": "ajout",
+      "repo": "NVIDIA/skills",
+      "chemin_skill": "skills/accelerated-computing-cudf",
+      "skill_md": "skills/accelerated-computing-cudf/SKILL.md",
+      "sha_epingle": "4fc9cf6cec785070e0bf5bb4aa6c992f71b1c97e",
+      "resume_fr": "règles NVIDIA cuDF pour accélérer pandas sur GPU → traitements de données plus rapides",
+      "note": 10,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "pydantic/skills/skills/logfire-query",
+      "nom": "logfire-query",
+      "place": "ajout",
+      "repo": "pydantic/skills",
+      "chemin_skill": "skills/logfire-query",
+      "skill_md": "skills/logfire-query/SKILL.md",
+      "sha_epingle": "98f591c0886eb11df0bdd57804419e11439efc93",
+      "resume_fr": "interroge traces, logs et métriques Logfire → trouve plus vite la cause des erreurs",
+      "note": 9,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "datopian/portaljs/skills/portaljs-add-geo",
+      "nom": "portaljs-add-geo",
+      "place": "ajout",
+      "repo": "datopian/portaljs",
+      "chemin_skill": "skills/portaljs-add-geo",
+      "skill_md": "skills/portaljs-add-geo/SKILL.md",
+      "sha_epingle": "8248783a4ef962c09477e9e53538255266723b9d",
+      "resume_fr": "convertit un fichier géo en carte et requêtes spatiales → portail prêt sans serveur",
+      "note": 9,
+      "risque_max": "eleve",
+      "risques": [
+        "frontmatter allowed-tools"
+      ]
+    },
+    {
+      "id": "astronomer/agents/skills/airflow",
+      "nom": "airflow",
+      "place": "ajout",
+      "repo": "astronomer/agents",
+      "chemin_skill": "skills/airflow",
+      "skill_md": "skills/airflow/SKILL.md",
+      "sha_epingle": "486ee63d01f8126c52fbc92c36cd36ec31708dcd",
+      "resume_fr": "lance, relance et diagnostique tes DAG Airflow → moins de temps perdu sur les échecs",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "neondatabase/agent-skills/skills/neon-postgres",
+      "nom": "neon-postgres",
+      "place": "ajout",
+      "repo": "neondatabase/agent-skills",
+      "chemin_skill": "skills/neon-postgres",
+      "skill_md": "skills/neon-postgres/SKILL.md",
+      "sha_epingle": "51c7d594c0568d52a15eede61cc43f9f1227607a",
+      "resume_fr": "guide migrations, branches et requêtes Neon → évite les erreurs de schéma et de connexion",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "microsoft/dataverse-skills/.github/plugins/dataverse/skills/dv-query",
+      "nom": "dv-query",
+      "place": "ajout",
+      "repo": "microsoft/Dataverse-skills",
+      "chemin_skill": ".github/plugins/dataverse/skills/dv-query",
+      "skill_md": ".github/plugins/dataverse/skills/dv-query/SKILL.md",
+      "sha_epingle": "1966192f0bee20216f1b58cf11f8b0c4b0e3edb8",
+      "resume_fr": "interroge et agrège tes données Dataverse → analyses rapides, sans tout télécharger",
+      "note": 8,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
+      "nom": "astropy",
+      "place": "ajout",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "chemin_skill": "skills/astropy",
+      "skill_md": "skills/astropy/SKILL.md",
+      "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
+      "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, WCS → moins d'erreurs d'unités et de conversion",
+      "note": 9,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "awslabs/agent-plugins/plugins/databases-on-aws/skills/dsql",
+      "nom": "dsql",
+      "place": "ajout",
+      "repo": "awslabs/agent-plugins",
+      "chemin_skill": "plugins/databases-on-aws/skills/dsql",
+      "skill_md": "plugins/databases-on-aws/skills/dsql/SKILL.md",
+      "sha_epingle": "fbefb3764e67558fe10ac834dd85db49734aa9b6",
+      "resume_fr": "te donne les limites et erreurs d'Aurora DSQL → évite les blocages inattendus en production",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "mongodb/agent-skills/skills/mongodb-schema-design",
+      "nom": "mongodb-schema-design",
+      "place": "ajout",
+      "repo": "mongodb/agent-skills",
+      "chemin_skill": "skills/mongodb-schema-design",
+      "skill_md": "skills/mongodb-schema-design/SKILL.md",
+      "sha_epingle": "26231c59b980405c33d4981428d71e41486e00b0",
+      "resume_fr": "revoit ton modèle de données MongoDB → évite les schémas qui ralentissent les requêtes",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    }
+  ]
+}

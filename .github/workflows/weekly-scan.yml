@@ -1,0 +1,116 @@
+# SKILLMASTER — mise à jour hebdomadaire de library/ (phase 3).
+# Le lundi à 5 h 17 UTC, ou à la main. Deux jobs : « scan » collecte, juge et prépare library/
+# avec des droits en lecture seule ; « publier » reçoit seulement library/, vérifie qu'aucun
+# autre fichier n'a changé, commite sur main et ouvre une issue si une tête de pack change.
+name: weekly-scan
+
+on:
+  schedule:
+    - cron: '17 5 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: weekly-scan
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    outputs:
+      tete_changee: ${{ steps.publish.outputs.tete_changee }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+
+      # Cache du collecteur et du juge (SKILL.md lus, verdicts, résumés, classements) :
+      # seuls les skills nouveaux ou modifiés sont rejugés d'une semaine à l'autre.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: collector/.cache
+          key: sm-cache-${{ github.run_id }}
+          restore-keys: sm-cache-
+
+      - name: Installer Claude Code (version épinglée)
+        run: npm install --global @anthropic-ai/claude-code@2.1.302
+
+      - name: Collecter
+        env:
+          GITHUB_TOKEN: ${{ secrets.COLLECTOR_TOKEN }}
+        run: node collector/fetch.ts --max-skills 1500 --min-stars 20 --pushed-months 6
+
+      - name: Juger
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SM_CLAUDE_BARE: '1'
+        run: node collector/judge.ts --concurrency 6 --finalists 25 --rank-runs 3
+
+      - name: Cycle de vie, index et récapitulatif
+        id: publish
+        run: node collector/publish.ts >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: library
+          path: |
+            library/
+            collector/out/
+          include-hidden-files: false
+          retention-days: 14
+
+  publier:
+    needs: scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: library
+          path: .
+
+      - name: Vérifier que seul library/ change
+        run: |
+          autres=$(git status --porcelain --untracked-files=all | awk '{print $2}' | grep -v -E '^(library/|collector/out/)' || true)
+          if [ -n "$autres" ]; then
+            echo "Fichiers hors de library/ modifiés, publication refusée :"
+            echo "$autres"
+            exit 1
+          fi
+
+      - name: Commiter et pousser sur main
+        run: |
+          if git diff --quiet -- library/ && [ -z "$(git ls-files --others --exclude-standard library/)" ]; then
+            echo "library/ inchangé : rien à publier."
+            exit 0
+          fi
+          git config user.name "skillmaster-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add library/
+          {
+            echo "Bibliothèque : mise à jour hebdomadaire du $(date -u +%Y-%m-%d)"
+            echo
+            cat library/RECAP.md
+          } > /tmp/message.txt
+          git commit -F /tmp/message.txt
+          git push origin HEAD:main
+
+      - name: Ouvrir une issue si une tête de pack change
+        if: needs.scan.outputs.tete_changee == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue create --title "SKILLMASTER : têtes de pack modifiées ($(date -u +%Y-%m-%d))" --body-file collector/out/issue.md

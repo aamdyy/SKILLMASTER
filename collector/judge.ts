@@ -11,7 +11,7 @@
 import { spawn } from 'node:child_process'
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
-import { CACHE, LIBRARY, ROOT, isTrustedRepo, isoWeek, log, pool, rawFile, readJson, typesOf, writeJson } from './lib.ts'
+import { CACHE, CLAUDE_MODE, LIBRARY, ROOT, isTrustedRepo, isoWeek, log, pool, rawFile, readJson, typesOf, writeJson } from './lib.ts'
 import { scanSkill, type Gravite, type Risk } from './scan.ts'
 import { execFileSync } from 'node:child_process'
 import { MAX_CHANGES, rankCost, rankPack, type Finalist, type Ranking } from './rank.ts'
@@ -30,6 +30,9 @@ const FINALISTS = option('finalists', 25)
 const TENANTS_AT = argv.indexOf('--tenants')
 const TENANTS_REF = TENANTS_AT >= 0 ? argv[TENANTS_AT + 1] : undefined
 const RANK_RUNS = option('rank-runs', 3)
+// Usage figé jusqu'à la phase 4 : repris des retours_amdy de library/skills.json. --usage-live relit ~/.claude.json.
+const USAGE_LIVE = argv.includes('--usage-live')
+const STARTED = Date.now()
 // Haiku seul depuis la v3 (Sonnet n'écartait la note que de 0,11 point en moyenne) ; --with-sonnet le réactive.
 const WITH_SONNET = argv.includes('--with-sonnet')
 const VERSION = 'v3'
@@ -191,7 +194,7 @@ function runClaude(model: string, input: string): Promise<{ verdict: Verdict | n
   return new Promise(resolve => {
     const child = spawn(
       'claude',
-      ['-p', '--model', model, '--effort', 'low', '--tools', '', '--strict-mcp-config', '--disable-slash-commands', '--no-session-persistence',
+      [...CLAUDE_MODE, '-p', '--model', model, '--effort', 'low', '--tools', '', '--strict-mcp-config', '--disable-slash-commands', '--no-session-persistence',
         '--settings', '{"disableAllHooks":true}', '--system-prompt', SYSTEM, '--output-format', 'json', '--json-schema', JSON.stringify(SCHEMA)],
       { cwd: CWD, stdio: ['pipe', 'pipe', 'pipe'] },
     )
@@ -223,9 +226,13 @@ function isValid(verdict: Verdict | null): verdict is Verdict {
   )
 }
 
+// Verdicts déjà publiés dans library/skills.json (même hash, même grille, même modèle) : ils servent
+// de cache durable, utile quand le cache des Actions a expiré.
+const published = new Map<string, Judged>()
+
 async function judge(model: string, skill: Selected, risks: Risk[]): Promise<Judged> {
   const cachePath = join(CACHE, 'judge', `${VERSION}-${model}-${skill.hash}.json`)
-  const cached = await readJson<Judged | null>(cachePath, null)
+  const cached = (await readJson<Judged | null>(cachePath, null)) ?? published.get(`${model}|${skill.hash}`) ?? null
   // Verdict en cache : aucun appel, donc aucun coût (le costUsd stocké est celui d'origine).
   if (cached?.verdict) return { ...cached, costUsd: 0, fromCache: true }
   const text = (await rawFile(skill.repo, skill.sha, skill.skillMdPath)) ?? ''
@@ -294,7 +301,13 @@ async function main() {
   await mkdir(CWD, { recursive: true })
   const overrides = await readJson<Overrides>(join(LIBRARY, 'overrides.json'), {})
   const never = new Set((overrides.jamais ?? []).map(name => name.toLowerCase()))
-  const usage = await loadUsage()
+  const usage = USAGE_LIVE ? await loadUsage() : new Map()
+  type UsageEntry = { type: string; invocations: number; dernier: string | null; releve_le?: string }
+  const frozenUsage = new Map<string, UsageEntry>()
+  for (const entry of (await readJson<{ skills: { id: string; retours_amdy?: UsageEntry[] }[] }>(join(LIBRARY, 'skills.json'), { skills: [] })).skills) {
+    const found = entry.retours_amdy?.find(item => item.type === 'usage')
+    if (found) frozenUsage.set(entry.id, found)
+  }
 
   // Le scan v2 est refait ici, sur le texte en cache, pour profiter de ses corrections.
   const scans = new Map<string, Risk[]>()
@@ -310,6 +323,25 @@ async function main() {
   const profile = await readJson<Profile>(join(LIBRARY, 'profil.json'), { types: [], stack: {}, exclusions: {}, hors_sujet: [], poids: { qualite: 1, pertinence: 0 } })
   const relevanceOf = (skill: Selected, verdict: Verdict | null) => relevance(profile, skill, verdict, texts.get(skill.id) ?? '')
 
+  type Published = {
+    hash_contenu: string; categories: string[]; sous_notes: Verdict['sous_notes'] | null; description_courte: string | null
+    justification: string | null; reserves?: string[]; risques: Risk[]; choix_visuels_autonomes: boolean | null
+    confiance: Verdict['confiance'] | null; resume_fr?: string | null; juge?: { version?: string; modele?: string; le?: string | null }
+  }
+  const publishedResumes = new Map<string, string>()
+  for (const entry of (await readJson<{ skills: Published[] }>(join(LIBRARY, 'skills.json'), { skills: [] })).skills) {
+    if (entry.resume_fr) publishedResumes.set(entry.hash_contenu, entry.resume_fr)
+    if (entry.juge?.version !== VERSION || !entry.sous_notes || entry.choix_visuels_autonomes === null || !entry.confiance) continue
+    published.set(`${entry.juge.modele ?? 'haiku'}|${entry.hash_contenu}`, {
+      verdict: {
+        categories: entry.categories, sous_notes: entry.sous_notes, description_courte: entry.description_courte ?? '',
+        justification: entry.justification ?? '', reserves: entry.reserves ?? [],
+        risques_securite: entry.risques.filter(risk => risk.source === 'juge').map(risk => risk.code),
+        choix_visuels_autonomes: entry.choix_visuels_autonomes, confiance: entry.confiance,
+      },
+      costUsd: 0, judgedAt: entry.juge.le ?? '', model: entry.juge.modele ?? 'haiku', version: VERSION,
+    })
+  }
   log(`temps 1 : ${skills.length} skills, Claude Haiku, ${CONCURRENCY} en parallèle`)
   const haiku = await judgeAll('haiku', skills, scans, CONCURRENCY)
 
@@ -317,7 +349,9 @@ async function main() {
   const pinnedAddition = (type: string, skill: Selected) => (overrides.epingles_ajout?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
   const excluded = (type: string, skill: Selected) => (overrides.exclus?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
   const bonusOf = (skill: Selected) => {
-    const used = isTrustedRepo(skill.repo) ? usage.get(skill.name.toLowerCase()) : undefined
+    const used: { invocations: number; dernier: string | null; releve_le?: string } | undefined = USAGE_LIVE
+      ? (isTrustedRepo(skill.repo) ? usage.get(skill.name.toLowerCase()) : undefined)
+      : frozenUsage.get(skill.id)
     return { used, bonus: used ? usageBonus(used.invocations) : 0 }
   }
   const riskOf = (skill: Selected, verdict: Verdict | null) => [
@@ -365,7 +399,7 @@ async function main() {
     const model = WITH_SONNET && sonnet.verdicts.get(skill.id)?.verdict ? 'sonnet' : 'haiku'
     const text = (await rawFile(skill.repo, skill.sha, skill.skillMdPath)) ?? ''
     // Repli sur Haiku si Sonnet ne tient pas le format en trois essais.
-    const resume = (await summarize(model, skill.name, skill.description, text)) ?? (model === 'haiku' ? null : await summarize('haiku', skill.name, skill.description, text))
+    const resume = publishedResumes.get(skill.hash) ?? (await summarize(model, skill.name, skill.description, text)) ?? (model === 'haiku' ? null : await summarize('haiku', skill.name, skill.description, text))
     resumes.set(skill.id, resume)
     if (resumes.size % 50 === 0 || resumes.size === skills.length) log(`résumés : ${resumes.size}/${skills.length}`)
   })
@@ -419,7 +453,7 @@ async function main() {
         packs: {} as Record<string, 'recommande' | 'ajout' | 'epingle' | 'ajout_epingle'>,
         statut: before?.statut ?? (verdict ? 'nouveau' : 'revue_manuelle'),
         remplace_par: null,
-        retours_amdy: used ? [{ type: 'usage', invocations: used.invocations, dernier: used.dernier, bonus, releve_le: today }] : [],
+        retours_amdy: used ? [{ type: 'usage', invocations: used.invocations, dernier: used.dernier, bonus, releve_le: used.releve_le ?? today }] : [],
         date_ajout: before?.date_ajout ?? today,
         licence: skill.license,
         cout_contexte: skill.description.length,
@@ -432,7 +466,7 @@ async function main() {
   })
 
   // Têtes du tour précédent (tenants) et contexte donné à Sonnet.
-  type PackFile = { recommandes: { id: string }[] }
+  type PackFile = { recommandes: { id: string }[]; ajouts?: { id: string }[]; finalistes?: string[] }
   const previousPacks = new Map<string, PackFile>()
   for (const type of TYPES) {
     let previous: PackFile | null = null
@@ -473,8 +507,13 @@ async function main() {
       extrait: texts.get(entry.id) ?? '', note: entry.note_qualite, tenant: tenantIds.has(entry.id),
     })
     const rankable = finalists.filter(item => !pinned(type, item.skill))
+    // Finale identique au tour précédent : tête et ajouts repris tels quels, sans appel à Sonnet.
+    const previousPack = previousPacks.get(type)
+    const finalistIds = finalists.map(item => item.entry.id).sort()
+    const isUnchanged = !!previousPack?.finalistes && JSON.stringify([...previousPack.finalistes].sort()) === JSON.stringify(finalistIds)
+      && [...previousPack.recommandes, ...(previousPack.ajouts ?? [])].every(item => byId.has(item.id))
     const runs: (Ranking | null)[] = []
-    for (let run = 1; run <= RANK_RUNS; run++) runs.push(rankable.length > 1 ? await rankPack(type, rankable.map(asFinalist), rankContext, run) : null)
+    if (!isUnchanged) for (let run = 1; run <= RANK_RUNS; run++) runs.push(rankable.length > 1 ? await rankPack(type, rankable.map(asFinalist), rankContext, run) : null)
     const done = runs.filter((run): run is Ranking => run !== null)
     const majority = Math.floor(done.length / 2) + 1
     // Décisions retenues à la majorité des tirages : écartés, puis changements (au plus 2).
@@ -495,7 +534,7 @@ async function main() {
       .filter(change => change.raisons.length >= majority && !removed.has(change.entrant) && (byId.get(change.entrant)?.entry.note_qualite ?? 0) >= 6)
       .sort((a, b) => b.raisons.length - a.raisons.length || meanRank(a.entrant) - meanRank(b.entrant))
     const head: string[] = []
-    const changelog: { entrant: string; sortant: string | null; raison: string }[] = []
+    const changelog: { entrant: string; sortant: string | null; raison: string; entrant_id?: string; sortant_id?: string }[] = []
     if (tenants.length) {
       // Avantage au tenant : chacun garde sa place, sauf changement retenu ou tenant écarté.
       const applied = new Set<string>()
@@ -505,9 +544,9 @@ async function main() {
         if (change && changelog.length < MAX_CHANGES) {
           head.push(change.entrant)
           applied.add(change.entrant)
-          changelog.push({ entrant: byId.get(change.entrant)!.entry.nom, sortant: tenant.entry.nom, raison: change.raisons[0]! })
+          changelog.push({ entrant: byId.get(change.entrant)!.entry.nom, sortant: tenant.entry.nom, raison: change.raisons[0]!, entrant_id: change.entrant, sortant_id: id })
         } else if (removed.has(id)) {
-          changelog.push({ entrant: '', sortant: tenant.entry.nom, raison: `écarté : ${removed.get(id)}` })
+          changelog.push({ entrant: '', sortant: tenant.entry.nom, raison: `écarté : ${removed.get(id)}`, sortant_id: id })
         } else {
           head.push(id)
         }
@@ -518,20 +557,23 @@ async function main() {
         if (next) {
           head.push(next)
           freed.entrant = byId.get(next)!.entry.nom
+          freed.entrant_id = next
         }
       }
       for (const lost of lostTenants) {
         const next = order.find(id => !head.includes(id) && !removed.has(id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6)
         if (next && head.length < 8) {
           head.push(next)
-          changelog.push({ entrant: byId.get(next)!.entry.nom, sortant: lost.nom, raison: lost.raison })
+          changelog.push({ entrant: byId.get(next)!.entry.nom, sortant: lost.nom, raison: lost.raison, entrant_id: next, sortant_id: lost.id })
         }
       }
     } else {
       head.push(...order.filter(id => !removed.has(id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6))
     }
     const pins = finalists.filter(item => pinned(type, item.skill))
-    const recommended = [...pins, ...head.map(id => byId.get(id)!)].slice(0, 8)
+    const recommended = isUnchanged
+      ? previousPack!.recommandes.map(item => byId.get(item.id)!)
+      : [...pins, ...head.map(id => byId.get(id)!)].slice(0, 8)
     const chosen = new Set(recommended.map(item => item.entry.id))
     // Ajouts garantis : pour chaque motif (ex. SEO), le meilleur skill correspondant hors de la tête.
     const guaranteed = (overrides.ajout_garanti?.[type] ?? [])
@@ -540,7 +582,7 @@ async function main() {
           && new RegExp(rule.motif, 'i').test(`${item.entry.nom} ${item.entry.description_originale}`)))
       .filter((item): item is (typeof entries)[number] => !!item)
     const forcedAdditions = [...ranked.filter(item => pinnedAddition(type, item.skill)), ...guaranteed.filter(item => !pinnedAddition(type, item.skill))]
-    const additions = [
+    const additions = isUnchanged ? (previousPack!.ajouts ?? []).map(item => byId.get(item.id)!) : [
       ...forcedAdditions,
       ...[...order.map(id => byId.get(id)!), ...ranked.filter(item => !finalists.includes(item))]
         .filter(item => !chosen.has(item.entry.id) && !removed.has(item.entry.id) && !forcedAdditions.includes(item) && item.entry.pertinence >= 6 && (item.entry.note_qualite ?? 0) >= 5),
@@ -581,6 +623,8 @@ async function main() {
         '3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json',
       moins_de_5_recommandes: recommended.length < 5 || undefined,
       tenants_de: TENANTS_REF ?? 'tour précédent',
+      reclasse: !isUnchanged,
+      finalistes: finalistIds,
       changements,
       ecartes,
       stabilite,
@@ -601,6 +645,12 @@ async function main() {
 
   const histogram: Record<string, number> = {}
   for (const entry of output) if (entry.note_qualite !== null) histogram[entry.note_qualite] = (histogram[entry.note_qualite] ?? 0) + 1
+  await writeJson(join(CACHE, 'last-run.json'), {
+    le: new Date().toISOString(),
+    duree_min: Math.round((Date.now() - STARTED) / 60_000),
+    skills: output.length,
+    cout: { total: haiku.cost + sonnet.cost + resumeCost.usd + rankCost.usd, haiku: haiku.cost, resumes: resumeCost.usd, classements: rankCost.usd },
+  })
   log(`terminé : ${output.filter(entry => entry.note_qualite !== null).length} notés, coût équivalent ${(haiku.cost + sonnet.cost + resumeCost.usd + rankCost.usd).toFixed(2)} $ (notes Haiku ${haiku.cost.toFixed(2)}, résumés ${resumeCost.usd.toFixed(2)}, classements Sonnet ${rankCost.usd.toFixed(2)})`)
   log('répartition des notes finales :', histogram)
 }
