@@ -11,8 +11,9 @@ import { execFileSync } from 'node:child_process'
 import { appendFile, mkdir, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { CACHE, LIBRARY, ROOT, readJson, writeJson } from './lib.ts'
+import { BAREME, isTrustedPublisher } from './scan.ts'
 
-type Risk = { code: string; gravite: string }
+type Risk = { code: string; gravite: string; source: string; detail?: string; categorie?: string; gravite_projet?: string }
 type Skill = {
   id: string
   nom: string
@@ -25,6 +26,7 @@ type Skill = {
   note_qualite: number | null
   risques: Risk[]
   risque_max: string | null
+  risque_max_projet?: string | null
   statut: string
   remplace_par: string | null
   retours_amdy?: unknown[]
@@ -57,7 +59,11 @@ const packs = await Promise.all(types.map(type => readJson<Pack>(join(LIBRARY, '
 const previousPacks = types.map(type => fromHead<Pack>(`library/packs/${type}.json`, { type, recommandes: [], ajouts: [] }))
 const run = await readJson<{ duree_min?: number; cout?: { total: number } } | null>(join(CACHE, 'last-run.json'), null)
 const overrides = await readJson<{ jamais?: string[] }>(join(LIBRARY, 'overrides.json'), {})
+// Copies de skills des packs remplacées par la version de l'éditeur d'origine (collector/fetch.ts).
+const alias = (await readJson<{ alias?: Record<string, string> }>(join(CACHE, 'selection.json'), {})).alias ?? {}
 const never = new Set((overrides.jamais ?? []).map(name => name.toLowerCase()))
+const profile = await readJson<{ editeurs_confiance?: string[] }>(join(LIBRARY, 'profil.json'), {})
+const trusted = new Set((profile.editeurs_confiance ?? []).map(owner => owner.toLowerCase()))
 
 // Cycle de vie. L'inactivité se juge au niveau du dépôt : le collecteur écarte déjà les dépôts
 // sans push depuis 6 mois. Un skill qui disparaît du tour alors qu'il comptait (pack ou retours)
@@ -65,14 +71,17 @@ const never = new Set((overrides.jamais ?? []).map(name => name.toLowerCase()))
 // liste « jamais » d'Amdy est archivé pour cette raison-là, même s'il était déjà archivé.
 const archived: { nom: string; raison: string }[] = []
 const present = new Set(library.skills.map(skill => skill.id))
+const byIdNow = new Map(library.skills.map(skill => [skill.id, skill]))
 for (const old of before.skills) {
   if (present.has(old.id)) continue
   const mattered = Object.keys(old.packs ?? {}).length > 0 || (old.retours_amdy ?? []).length > 0
   if (!mattered) continue
+  const origin = alias[old.id] ? byIdNow.get(alias[old.id]!) : undefined
   const raison = never.has(old.nom.toLowerCase())
     ? 'liste « jamais » d’Amdy (library/overrides.json) : jamais proposé'
+    : origin ? `copie de ${origin.repo}/${origin.chemin_skill} : la version de l’éditeur d’origine la remplace`
     : old.statut === 'archive' ? old.raison_statut : 'absent de ce tour (dépôt archivé, sous le seuil, ou skill supprimé)'
-  library.skills.push({ ...old, statut: 'archive', raison_statut: raison, packs: {} })
+  library.skills.push({ ...old, statut: 'archive', raison_statut: raison, packs: {}, ...(origin ? { remplace_par: origin.nom } : {}) })
   if (old.statut !== 'archive') archived.push({ nom: old.nom, raison: raison ?? '' })
 }
 const byId = new Map(library.skills.map(skill => [skill.id, skill]))
@@ -84,14 +93,21 @@ for (const pack of packs) {
 }
 await writeJson(join(LIBRARY, 'skills.json'), library)
 
-// Index léger.
+// Index léger. Il transporte toutes les alertes, notées avec le barème partagé : skill-master
+// refait le scan sur la machine d'Amdy et reprend d'ici les alertes du juge, qu'il ne peut pas refaire.
+const short = (text: string, max: number) => (text.length > max ? `${text.slice(0, max - 1)}…` : text)
 const brief = (item: PackItem, place: string) => {
   const skill = byId.get(item.id)
   return skill
     ? {
         id: skill.id, nom: skill.nom, place, repo: skill.repo, chemin_skill: skill.chemin_skill, skill_md: skill.skill_md,
-        sha_epingle: skill.sha_epingle, resume_fr: skill.resume_fr, note: skill.note_qualite, risque_max: skill.risque_max,
-        risques: skill.risques.filter(risk => risk.gravite === 'critique' || risk.gravite === 'eleve').map(risk => risk.code).slice(0, 3),
+        sha_epingle: skill.sha_epingle, resume_fr: skill.resume_fr, note: skill.note_qualite,
+        editeur_confiance: isTrustedPublisher(skill.repo, skill.chemin_skill, trusted),
+        risque_max: skill.risque_max, risque_max_projet: skill.risque_max_projet ?? skill.risque_max,
+        risques: skill.risques.map(risk => ({
+          gravite: risk.gravite, ...(risk.gravite_projet ? { gravite_projet: risk.gravite_projet } : {}), source: risk.source,
+          ...(risk.categorie ? { categorie: risk.categorie } : {}), code: short(risk.code, 200), ...(risk.detail ? { detail: short(risk.detail, 120) } : {}),
+        })),
       }
     : null
 }
@@ -99,6 +115,7 @@ for (const pack of packs) {
   await writeJson(join(LIBRARY, 'index', `${pack.type}.json`), {
     genere_le: new Date().toISOString(),
     type: pack.type,
+    bareme: BAREME,
     note: 'Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.',
     recommandes: pack.recommandes.map(item => brief(item, 'recommande')).filter(Boolean),
     ajouts: pack.ajouts.map(item => brief(item, 'ajout')).filter(Boolean),
@@ -127,7 +144,9 @@ for (const { pack, moved } of headChanges) {
   if (!moved) continue
   lines.push(`## ${pack.type}`)
   for (const change of pack.changements ?? []) lines.push(`- ${change.sortant ?? '—'} → **${change.entrant || '—'}** : ${change.raison}`)
-  if (!(pack.changements ?? []).length) lines.push('- composition modifiée (épinglage ou règle d’Amdy)')
+  const swaps = (previousPacks[packs.indexOf(pack)]?.recommandes ?? []).filter(item => alias[item.id])
+  for (const item of swaps) lines.push(`- ${item.nom} → **${byIdNow.get(alias[item.id]!)?.nom ?? alias[item.id]}** : version de l’éditeur d’origine à la place d’une copie`)
+  if (!(pack.changements ?? []).length && !swaps.length) lines.push('- composition modifiée (épinglage ou règle d’Amdy)')
   lines.push('')
 }
 const removed = packs.flatMap(pack => (pack.ecartes ?? []).map(item => `${item.nom} (${pack.type})`))

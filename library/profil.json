@@ -42,5 +42,14 @@
     "Snowflake": "\\bsnowflake\\b",
     "calcul distribué (Dask, Ray, Spark)": "\\b(dask|ray|pyspark)\\b|\\b(apache )?spark\\b",
     "data warehouse cloud": "\\b(redshift|synapse|clickhouse|chdb|timescale(db)?|data ?warehouse|dbt)\\b"
-  }
+  },
+  "editeurs_confiance": [
+    "anthropics",
+    "vercel-labs",
+    "expo",
+    "software-mansion-labs",
+    "callstackincubator",
+    "remotion-dev"
+  ],
+  "note_editeurs_confiance": "Propriétaires de dépôt (la partie avant / dans repo). Pour eux, un skill à sa version épinglée et sans risque critique est chargé avec son risque affiché en une ligne, sans question. Amdy valide lui-même chaque ajout."
 }

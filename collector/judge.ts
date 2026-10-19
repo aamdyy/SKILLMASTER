@@ -12,7 +12,8 @@ import { spawn } from 'node:child_process'
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { CACHE, CLAUDE_MODE, LIBRARY, ROOT, isTrustedRepo, isoWeek, log, pool, rawFile, readJson, typesOf, writeJson } from './lib.ts'
-import { scanSkill, type Gravite, type Risk } from './scan.ts'
+import { BAREME, alertGravity, scanSkill, worst, type Categorie, type Risk } from './scan.ts'
+import { alertKey, classifyAlerts, classifyCost } from './classify.ts'
 import { execFileSync } from 'node:child_process'
 import { MAX_CHANGES, rankCost, rankPack, type Finalist, type Ranking } from './rank.ts'
 import { resumeCost, summarize } from './resume.ts'
@@ -275,8 +276,6 @@ function relevance(profile: Profile, skill: Selected, verdict: Verdict | null, t
   return Math.max(0, Math.min(10, (hasType ? 4 : 0) + Math.min(6, stack * 2) - off * 4))
 }
 
-const ORDER: Gravite[] = ['critique', 'eleve', 'moyen', 'info']
-const worst = (risks: Risk[]) => risks.map(risk => risk.gravite).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b))[0] ?? null
 const key = (repo: string, name: string) => `${repo.toLowerCase()}|${name.toLowerCase()}`
 
 async function judgeAll(model: string, skills: Selected[], scans: Map<string, Risk[]>, concurrency: number) {
@@ -295,7 +294,10 @@ async function judgeAll(model: string, skills: Selected[], scans: Map<string, Ri
 }
 
 async function main() {
-  const selection = await readJson<{ skills: Selected[]; repoStars: Record<string, number>; params: unknown }>(join(CACHE, 'selection.json'), { skills: [], repoStars: {}, params: {} })
+  const selection = await readJson<{ skills: Selected[]; repoStars: Record<string, number>; params: unknown; alias?: Record<string, string> }>(join(CACHE, 'selection.json'), { skills: [], repoStars: {}, params: {} })
+  // Copie d'un skill des packs → original de l'éditeur d'origine (collector/fetch.ts).
+  const alias = selection.alias ?? {}
+  const resolveId = (id: string) => alias[id] ?? id
   const skills = selection.skills.slice(0, LIMIT)
   if (!skills.length) throw new Error('selection.json est vide : lance d’abord collector/fetch.ts')
   await mkdir(CWD, { recursive: true })
@@ -306,7 +308,7 @@ async function main() {
   const frozenUsage = new Map<string, UsageEntry>()
   for (const entry of (await readJson<{ skills: { id: string; retours_amdy?: UsageEntry[] }[] }>(join(LIBRARY, 'skills.json'), { skills: [] })).skills) {
     const found = entry.retours_amdy?.find(item => item.type === 'usage')
-    if (found) frozenUsage.set(entry.id, found)
+    if (found) frozenUsage.set(resolveId(entry.id), found)
   }
 
   // Le scan v2 est refait ici, sur le texte en cache, pour profiter de ses corrections.
@@ -329,8 +331,10 @@ async function main() {
     confiance: Verdict['confiance'] | null; resume_fr?: string | null; juge?: { version?: string; modele?: string; le?: string | null }
   }
   const publishedResumes = new Map<string, string>()
-  for (const entry of (await readJson<{ skills: Published[] }>(join(LIBRARY, 'skills.json'), { skills: [] })).skills) {
+  const publishedCategories = new Map<string, Categorie>()
+  for (const entry of (await readJson<{ skills: (Published & { repo: string })[] }>(join(LIBRARY, 'skills.json'), { skills: [] })).skills) {
     if (entry.resume_fr) publishedResumes.set(entry.hash_contenu, entry.resume_fr)
+    for (const risk of entry.risques) if (risk.source === 'juge' && risk.categorie) publishedCategories.set(alertKey(entry.repo, risk.code), risk.categorie)
     if (entry.juge?.version !== VERSION || !entry.sous_notes || entry.choix_visuels_autonomes === null || !entry.confiance) continue
     published.set(`${entry.juge.modele ?? 'haiku'}|${entry.hash_contenu}`, {
       verdict: {
@@ -354,10 +358,17 @@ async function main() {
       : frozenUsage.get(skill.id)
     return { used, bonus: used ? usageBonus(used.invocations) : 0 }
   }
-  const riskOf = (skill: Selected, verdict: Verdict | null) => [
+  // Alertes du juge rangées par catégorie (Haiku, une fois par alerte et par dépôt), puis notées
+  // avec le barème partagé : réseau, exécution ou destruction = élevé. Jamais critique.
+  // Classées après le temps 2 ; avant, une alerte sans catégorie compte « moyen », ce qui ne
+  // change pas l'éligibilité (seul « critique » écarte un skill, et le juge ne l'est jamais).
+  let categoryOf: (repo: string, alert: string) => Categorie | undefined = () => undefined
+  const riskOf = (skill: Selected, verdict: Verdict | null): Risk[] => [
     ...(scans.get(skill.id) ?? []),
-    // Le juge signale, le scan tranche : un risque vu par le juge reste « moyen ».
-    ...(verdict?.risques_securite ?? []).map(code => ({ code, gravite: 'moyen' as Gravite, source: 'juge' as const })),
+    ...(verdict?.risques_securite ?? []).map(code => {
+      const categorie = categoryOf(skill.repo, code)
+      return { code, gravite: alertGravity(categorie), source: 'juge' as const, ...(categorie ? { categorie } : {}) }
+    }),
   ]
   // Un seul type principal par skill : la première catégorie du juge que la détection confirme
   // (jamais ios ni android pour un skill Expo ou React Native).
@@ -390,6 +401,13 @@ async function main() {
     log(`temps 2 : ${finalists.size} finalistes, Claude Sonnet, 3 en parallèle`)
     sonnet = await judgeAll('sonnet', [...finalists.values()], scans, 3)
   }
+
+  const verdictOf = (skill: Selected) => sonnet.verdicts.get(skill.id)?.verdict ?? haiku.verdicts.get(skill.id)?.verdict ?? null
+  categoryOf = (await classifyAlerts(
+    skills.flatMap(skill => (verdictOf(skill)?.risques_securite ?? []).map(alert => ({ repo: skill.repo, alert }))),
+    publishedCategories,
+    CONCURRENCY,
+  )).categoryOf
 
   // Temps 3 : resume_fr, la phrase affichée à chaque proposition. Sonnet pour les finalistes,
   // Haiku pour les autres ; cache séparé, donc rien n'est réécrit sans changement.
@@ -450,6 +468,8 @@ async function main() {
         confiance: verdict?.confiance ?? null,
         risques: risks,
         risque_max: worst(risks),
+        risque_max_projet: worst(risks, 'projet'),
+        bareme: BAREME,
         packs: {} as Record<string, 'recommande' | 'ajout' | 'epingle' | 'ajout_epingle'>,
         statut: before?.statut ?? (verdict ? 'nouveau' : 'revue_manuelle'),
         remplace_par: null,
@@ -475,7 +495,15 @@ async function main() {
         ? (JSON.parse(execFileSync('git', ['-C', ROOT, 'show', `${TENANTS_REF}:library/packs/${type}.json`], { encoding: 'utf8' })) as PackFile)
         : await readJson<PackFile | null>(join(LIBRARY, 'packs', `${type}.json`), null)
     } catch {}
-    if (previous) previousPacks.set(type, previous)
+    // L'original reprend la place de tenant de sa copie.
+    if (previous) {
+      previousPacks.set(type, {
+        ...previous,
+        recommandes: previous.recommandes.map(item => ({ ...item, id: resolveId(item.id) })),
+        ajouts: previous.ajouts?.map(item => ({ ...item, id: resolveId(item.id) })),
+        finalistes: previous.finalistes?.map(resolveId),
+      })
+    }
   }
   const rankContext = { stack: Object.keys(profile.stack), exclusions: Object.keys(profile.exclusions ?? {}) }
   // Classement en pack : qualité (usage compris) et pertinence, pondérées par le profil.
@@ -649,9 +677,9 @@ async function main() {
     le: new Date().toISOString(),
     duree_min: Math.round((Date.now() - STARTED) / 60_000),
     skills: output.length,
-    cout: { total: haiku.cost + sonnet.cost + resumeCost.usd + rankCost.usd, haiku: haiku.cost, resumes: resumeCost.usd, classements: rankCost.usd },
+    cout: { total: haiku.cost + sonnet.cost + resumeCost.usd + rankCost.usd + classifyCost.usd, haiku: haiku.cost, resumes: resumeCost.usd, classements: rankCost.usd, alertes: classifyCost.usd },
   })
-  log(`terminé : ${output.filter(entry => entry.note_qualite !== null).length} notés, coût équivalent ${(haiku.cost + sonnet.cost + resumeCost.usd + rankCost.usd).toFixed(2)} $ (notes Haiku ${haiku.cost.toFixed(2)}, résumés ${resumeCost.usd.toFixed(2)}, classements Sonnet ${rankCost.usd.toFixed(2)})`)
+  log(`terminé : ${output.filter(entry => entry.note_qualite !== null).length} notés, coût équivalent ${(haiku.cost + sonnet.cost + resumeCost.usd + rankCost.usd + classifyCost.usd).toFixed(2)} $ (notes Haiku ${haiku.cost.toFixed(2)}, résumés ${resumeCost.usd.toFixed(2)}, alertes ${classifyCost.usd.toFixed(2)}, classements Sonnet ${rankCost.usd.toFixed(2)})`)
   log('répartition des notes finales :', histogram)
 }
 

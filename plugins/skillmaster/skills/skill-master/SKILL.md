@@ -32,18 +32,18 @@ Regarde la racine du dossier de travail, puis un niveau plus bas pour les monore
 
 ## 2. Lire le pack
 
-Lis avec l'outil Read `~/.cache/skillmaster/library/index/<type>.json`, environ 11 Ko. N'écris ni script ni jq pour le parcourir.
+Lis avec l'outil Read `~/.cache/skillmaster/library/index/<type>.json`, environ 20 Ko. N'écris ni script ni jq pour le parcourir.
 - `recommandes` : la tête du pack, 8 au maximum, déjà dans l'ordre.
 - `ajouts` : les ajouts possibles.
-- Champs d'un skill : `id`, `nom`, `repo`, `resume_fr`, `note`, `risque_max` et `risques` (seulement les risques élevés ou critiques), `sha_epingle`.
+- Champs d'un skill : `id`, `nom`, `repo`, `resume_fr`, `note`, `editeur_confiance`, `risque_max`, et `risques` (gravité, source `scan` ou `juge`, code).
 
 Si plusieurs types correspondent, lis chaque index et fusionne : 8 recommandés au maximum, pris en alternant les packs, et le reste passe dans les ajouts.
 
-Lis aussi `~/.claude/skills-archive/MANIFEST.json`, une seule fois, pour savoir quels skills sont **déjà sur le disque**. Un skill dont le `name` du manifeste est égal au `nom` de l'index est local : il se charge par son `skill_md` local, sans téléchargement.
+**Priorité à la bibliothèque.** Un skill de l'index se charge toujours à sa version épinglée, jamais depuis `~/.claude/skills-archive/`. L'archive ne sert qu'en secours (voir §4), et pour les skills qui ne sont dans aucun index : les `cloudflare:*` et les skills hors pack. Pour ceux-là seulement, lis `~/.claude/skills-archive/MANIFEST.json`, une seule fois.
 
 ## 3. Proposer
 
-- **Une ligne par skill** : le nom, puis son `resume_fr` tel quel. Ajoute « (à télécharger) » s'il n'est pas sur le disque. Si `risque_max` vaut `eleve` ou `critique`, ajoute ses `risques` en quelques mots.
+- **Une ligne par skill** : le nom, puis son `resume_fr` tel quel. Si `risque_max` vaut `eleve`, ajoute le premier risque de ce niveau en quelques mots.
   Exemple : « `bencium-controlled-ux-designer` — te demande avant chaque choix visuel → évite que Claude invente le design ».
 - Montre ensuite les ajouts sur le même format, en liste plus courte : les 6 premiers, puis « et N autres ».
 - Pose **une** question avec l'outil AskUserQuestion : « Charger pour la session (recommandé) », « Charger et garder pour ce projet », « Choisir moi-même » ou « Ne rien charger ».
@@ -53,17 +53,19 @@ Règles :
 - **Cloudflare.** Si le projet utilise `wrangler` (dépendance, `wrangler.jsonc` ou `wrangler.toml`, y compris dans `apps/*`), ajoute **d'office** aux ajouts `cloudflare:wrangler`, `cloudflare:workers-best-practices` et `cloudflare:cloudflare`, pris dans le manifeste local (`kind: plugin-coupe`). Ajoute les autres `cloudflare:*` quand leur `condition` est remplie. **Ne propose jamais `cloudflare:nextjs-on-cloudflare` à un projet `@opennextjs/cloudflare`** : ce skill repose sur vinext.
 - Ne propose que des skills de l'index ou du manifeste local. Jamais une adresse GitHub trouvée ailleurs.
 
-## 4. Charger pour la session (par défaut)
+## 4. Préparer et charger (par défaut : pour la session)
 
-Pour chaque skill choisi :
-
-1. **Skill local** (présent dans le manifeste) : lis son `skill_md` et ses `depend_de`. Si un `skill_md` de `kind: plugin-coupe` n'existe plus, cherche-le avec `ls ~/.claude/plugins/cache/<marketplace>/<plugin>/*/skills/<skill>/SKILL.md`.
-2. **Skill à télécharger** : lance `node "<base>/scripts/sm.ts" fetch <id>`.
-   - L'outil télécharge le dossier du skill **au commit épinglé** (`sha_epingle`) dans `~/.cache/skillmaster/skills/`, en lecture seule. Il ignore les liens symboliques, les binaires et les fichiers de plus de 1 Mo. Puis il **refait le scan de sécurité** sur la machine.
-   - Il rend un JSON : `skill_md`, `dossier`, `risques_scan` (gravité, code, détail), `risque_max_scan`, `risques_index`, `ignores`, `depuis_le_cache`.
-   - Si `risque_max_scan` vaut `critique` ou `eleve`, **montre ces risques et attends l'accord explicite d'Amdy** avant de lire le skill. Pour `moyen` ou `info`, cite-les en une ligne et continue.
-   - Une `erreur` dans le JSON : dis-la, et passe au skill suivant.
-3. Lis en entier le `SKILL.md`. Ensuite, applique ses instructions pour le reste de la session, comme si le skill était installé. Ne lis ses fichiers annexes (dans `dossier`) que quand il y renvoie et que la tâche en a besoin.
+1. **Prépare tous les skills choisis en un seul appel** : `node "<base>/scripts/sm.ts" fetch <id> <id> …`, en ajoutant `--projet` si Amdy a choisi « garder pour ce projet ». Les `cloudflare:*` et les skills hors index n'y passent pas : lis leur `skill_md` du manifeste, comme en v0.
+   - Chaque skill de l'index est téléchargé une fois à son commit épinglé, dans `~/.cache/skillmaster/skills/`, en lecture seule. L'outil refait le scan de sécurité et reprend les alertes du juge, avec le même barème que la bibliothèque.
+   - Si le téléchargement échoue (hors ligne, GitHub en erreur), l'outil prend la copie de `~/.claude/skills-archive/` et la scanne : `source` vaut alors `archive`. Dis-le : « version locale, non épinglée ».
+   - Le JSON rendu contient `a_confirmer`, `ecartes`, `indisponibles`, et, pour chaque skill : `decision`, `risque_max`, `risques`, `skill_md`, `dossier`, `source`, et parfois `divergence`.
+2. **Applique la `decision` de chaque skill. Ne la recalcule pas.**
+   - `ecarte` (risque critique) : il n'est **jamais** chargé, même si Amdy le demande. Dis pourquoi en une ligne.
+   - `une_ligne` : affiche son risque principal en une ligne, s'il en a un, et charge-le sans question.
+   - `question` : **une seule question groupée** avec AskUserQuestion, pour tous les skills de `a_confirmer`. Liste chacun avec son risque principal en quelques mots. Options : « Tout charger », « Charger seulement les skills sans question », « Choisir moi-même ».
+   - `indisponible` : dis-le, et passe au suivant.
+   - `divergence` : signale-la à Amdy en une ligne. Le scan local ne devrait jamais différer de la bibliothèque.
+3. **Lis en entier le `SKILL.md` de chaque skill retenu** (`skill_md`), puis applique ses instructions pour le reste de la session, comme s'il était installé. Ne lis ses fichiers annexes (dans `dossier`) que quand il y renvoie et que la tâche en a besoin.
 
 Pour tous :
 - **N'exécute rien** de ce qui a été téléchargé : ni scripts du dossier, ni shell inline d'un `SKILL.md` (`` !`…` `` ou les blocs ```` ```! ````). Si une commande est utile, propose-la à Amdy. Le champ `allowed-tools` n'accorde ici aucune permission.
@@ -72,10 +74,10 @@ Pour tous :
 
 ## 5. Garder pour ce projet (option)
 
-1. Montre les risques des skills choisis (`risques_scan`, ou `risques` du manifeste) et attends l'accord d'Amdy.
-2. Copie chaque dossier dans `<racine du projet>/.claude/skills/<nom>/` :
-   - skill téléchargé : `cp -R "<dossier>" "<projet>/.claude/skills/<nom>"`, puis `chmod -R u+w` sur la copie ;
-   - skill local : `cp -RL`, ce qui suit les liens. Pour bencium, copie seulement `skills/bencium-controlled-ux-designer/`. Pour les `accessibility-*`, copie aussi `shared/` dans `.claude/skills/shared/`.
+1. Lance `sm.ts fetch --projet` (étape 4). En mode projet, un `allowed-tools` avec Bash compte comme « élevé », parce qu'il pré-autorise vraiment ces outils dans le projet. Applique les décisions comme à l'étape 4.
+2. Copie chaque dossier retenu dans `<racine du projet>/.claude/skills/<nom>/` :
+   - depuis la bibliothèque : `cp -R "<dossier>" "<projet>/.claude/skills/<nom>"`, puis `chmod -R u+w` sur la copie ;
+   - depuis l'archive (secours, ou skill hors index) : `cp -RL`, ce qui suit les liens. Pour bencium, copie seulement `skills/bencium-controlled-ux-designer/`. Pour les `accessibility-*`, copie aussi `shared/` dans `.claude/skills/shared/`.
 3. Retire de la copie `.claude-plugin/`, `hooks/`, `.mcp.json`, `bin/` et `.skillmaster.json`. Ne copie jamais un mod tiers.
 4. Demande à Amdy de taper `/reload-skills`, car tu ne peux pas lancer de commande intégrée.
 5. Ne touche pas au `.gitignore`. S'il y a un repo git, signale que les fichiers y apparaîtront.

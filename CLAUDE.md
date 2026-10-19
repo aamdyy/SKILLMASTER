@@ -166,6 +166,15 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - `fetch <id>` télécharge un skill des packs au commit épinglé dans `~/.cache/skillmaster/skills/`, en lecture seule, sans liens, sans binaires et sans fichier de plus de 1 Mo, puis refait le scan de sécurité. Un risque élevé ou critique attend l'accord d'Amdy.
 
   Le scanner vit dans le plugin (`scripts/scan.ts`), pour que la CI et le Mac fassent le même scan. `collector/scan.ts` le réexporte. Un skill déjà présent dans `~/.claude/skills-archive/` se charge depuis le disque.
+- 2026-10-19 : **barème de risque b1, partagé** par l'index et le scan local (`scripts/scan.ts`).
+  - **Critique** : toujours écarté.
+  - **Élevé** : ce qui peut agir, c'est-à-dire scripts que le `SKILL.md` demande de lancer, hooks, `plugin.json`, `.mcp.json`, binaires, et alertes du juge classées réseau, exécution ou destruction.
+  - **`allowed-tools`** : « info » en session, « élevé » avec Bash quand le skill est gardé pour le projet.
+  - **Alertes du juge** : classées par Haiku (`collector/classify.ts`), une seule fois par alerte identique dans un même dépôt.
+  - **Éditeurs de confiance** (`library/profil.json`) : à version épinglée et sans risque critique, risque affiché en une ligne, sans question. Les autres passent par **une seule question groupée par proposition**. Amdy valide lui-même chaque ajout à cette liste.
+  - **Priorité à la bibliothèque** : un skill de l'index se charge à sa version épinglée. `~/.claude/skills-archive/` ne sert qu'en secours ou pour les skills hors index.
+- 2026-10-19 : **la version de l'éditeur d'origine gagne toujours la déduplication.** L'ordre de priorité est : officiel `anthropics/`, puis éditeur de confiance, puis dépôt de référence, puis le dépôt le plus ancien. Les dépôts officiels et ceux des éditeurs de confiance sont lus en entier. Quand une copie occupait une place de pack, l'original reprend sa place de tenant et son usage, et la copie est archivée avec la raison « copie de … ». Cas qui a révélé le problème : `xlsx` venait de `eigent-ai/eigent` au lieu de `anthropics/skills`.
+  - **Contenu tiers hébergé chez Anthropic** (`anthropics/claude-plugins-community` et les `external_plugins/` de `claude-plugins-official`) : jamais « officiel » ni « éditeur de confiance ». La règle est dans `scripts/scan.ts`, partagée par le collecteur et skill-master.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard

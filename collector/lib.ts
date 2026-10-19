@@ -38,8 +38,8 @@ export function typesOf(text: string) {
   return found.length ? found : ['autre']
 }
 
-export const isTrustedRepo =(repo: string) =>
-  repo.toLowerCase().startsWith('anthropics/') || REFERENCES.some(reference => reference.toLowerCase() === repo.toLowerCase())
+export const isTrustedRepo = (repo: string) =>
+  isFirstParty(repo) || REFERENCES.some(reference => reference.toLowerCase() === repo.toLowerCase())
 
 // En CI (GitHub Action), `claude` tourne en mode --bare : clé API, ni hooks ni réglages locaux.
 export const CLAUDE_MODE = process.env.SM_CLAUDE_BARE === '1' ? ['--bare'] : []
@@ -145,6 +145,7 @@ export async function rawFile(repo: string, sha: string, path: string): Promise<
 
 // Le frontmatter est lu par le scanner, qui vit dans le plugin pour servir aussi à skill-master.
 export { frontmatter, type Frontmatter } from '../plugins/skillmaster/skills/skill-master/scripts/scan.ts'
+import { isFirstParty } from '../plugins/skillmaster/skills/skill-master/scripts/scan.ts'
 
 export function isoWeek(date: Date) {
   const day = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))

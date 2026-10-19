@@ -11,7 +11,7 @@ import { readFile, readdir } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { CACHE, LIBRARY, ROOT, OFFICIAL, REFERENCES, KEYWORDS, typesOf, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
-import { scanSkill, type Risk, type SkillFile } from './scan.ts'
+import { isFirstParty, isTrustedPublisher, scanSkill, type Risk, type SkillFile } from './scan.ts'
 
 const argv = process.argv.slice(2)
 const option = (name: string, fallback: number) => {
@@ -57,6 +57,7 @@ type Repo = {
   sources: Set<string>
   stars: number
   pushedAt: string
+  createdAt: string
   isArchived: boolean
   isFork: boolean
   license: string | null
@@ -69,7 +70,7 @@ const discovered = (name: string, source: string) => {
   const key = name.replace(/\.git$/, '')
   const repo = repos.get(key.toLowerCase())
   if (repo) repo.sources.add(source)
-  else repos.set(key.toLowerCase(), { name: key, sources: new Set([source]), stars: 0, pushedAt: '', isArchived: false, isFork: false, license: null, description: '', sha: '' })
+  else repos.set(key.toLowerCase(), { name: key, sources: new Set([source]), stars: 0, pushedAt: '', createdAt: '', isArchived: false, isFork: false, license: null, description: '', sha: '' })
 }
 
 type SearchPage = { items?: { full_name: string }[] }
@@ -114,6 +115,7 @@ type RepoNode = {
   nameWithOwner: string
   stargazerCount: number
   pushedAt: string
+  createdAt: string
   isArchived: boolean
   isFork: boolean
   description: string | null
@@ -125,7 +127,7 @@ async function metadata() {
   const all = [...repos.values()]
   for (let start = 0; start < all.length; start += 40) {
     const batch = all.slice(start, start + 40)
-    const fields = 'nameWithOwner stargazerCount pushedAt isArchived isFork description licenseInfo { spdxId } defaultBranchRef { target { oid } }'
+    const fields = 'nameWithOwner stargazerCount pushedAt createdAt isArchived isFork description licenseInfo { spdxId } defaultBranchRef { target { oid } }'
     const query = `query { ${batch
       .map((repo, i) => {
         const [owner, name] = repo.name.split('/')
@@ -144,6 +146,7 @@ async function metadata() {
       repo.name = node.nameWithOwner
       repo.stars = node.stargazerCount
       repo.pushedAt = node.pushedAt
+      repo.createdAt = node.createdAt
       repo.isArchived = node.isArchived
       repo.isFork = node.isFork
       repo.description = node.description ?? ''
@@ -171,6 +174,9 @@ type Candidate = {
   risks: Risk[]
   repoStars: number
   repoPushedAt: string
+  repoCreatedAt: string
+  // 0 officiel, 1 éditeur de confiance, 2 dépôt de référence, 3 autre : l'éditeur d'origine gagne la déduplication.
+  origin: number
   license: string | null
   repoDescription: string
   sources: string[]
@@ -182,8 +188,9 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
   const tree = await rest<{ tree?: TreeEntry[]; truncated?: boolean }>(`/repos/${repo.name}/git/trees/${repo.sha}?recursive=1`)
   const entries = tree?.tree ?? []
   const skillMds = entries.filter(entry => entry.type === 'blob' && /(^|\/)SKILL\.md$/i.test(entry.path) && !SKIP_PATH.test(entry.path))
-  const isOfficial = repo.name.toLowerCase().startsWith('anthropics/')
+  const isOfficialRepo = repo.name.toLowerCase().startsWith('anthropics/')
   const isReference = repo.sources.has('reference')
+  const isPublisherRepo = publishers.has(repo.name.split('/')[0]!.toLowerCase())
   const ranked = skillMds
     .map(entry => ({
       entry,
@@ -192,7 +199,7 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
       depth: entry.path.split('/').length,
     }))
     .sort((a, b) => Number(b.isKept) - Number(a.isKept) || a.hint - b.hint || a.depth - b.depth || a.entry.path.localeCompare(b.entry.path))
-    .slice(0, isReference || [...keepIds].some(id => id.startsWith(`${repo.name.toLowerCase()}/`)) ? PER_REFERENCE_FETCH : PER_REPO_FETCH)
+    .slice(0, isOfficialRepo || isPublisherRepo || isReference || [...keepIds].some(id => id.startsWith(`${repo.name.toLowerCase()}/`)) ? PER_REFERENCE_FETCH : PER_REPO_FETCH)
   const found = await pool(ranked, 8, async ({ entry }) => {
     const text = await rawFile(repo.name, repo.sha, entry.path)
     if (!text) return null
@@ -201,6 +208,9 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
       .filter(file => file.type === 'blob' && (dir === '' ? !file.path.includes('/') || file.path === entry.path : file.path.startsWith(`${dir}/`)))
       .map(file => ({ path: dir ? file.path.slice(dir.length + 1) : file.path, mode: file.mode, size: file.size }))
       .slice(0, 400)
+    // Officiel et éditeur de confiance se jugent au chemin : pas de contenu tiers hébergé chez Anthropic.
+    const isOfficial = isFirstParty(repo.name, entry.path)
+    const isPublisher = isTrustedPublisher(repo.name, entry.path, publishers)
     const { fields } = frontmatter(text)
     const name = fields.name || dir.split('/').pop() || repo.name.split('/')[1] || 'skill'
     const description = (fields.description ?? '').slice(0, 1_536)
@@ -225,6 +235,8 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
       risks: scanSkill(text, files),
       repoStars: stars,
       repoPushedAt: repo.pushedAt,
+      repoCreatedAt: repo.createdAt,
+      origin: isOfficial ? 0 : isPublisher ? 1 : isReference ? 2 : 3,
       license: repo.license,
       repoDescription: repo.description,
       sources: [...repo.sources],
@@ -237,6 +249,12 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
 
 // Noms des skills de la bibliothèque locale d'Amdy (facultatif : vide si le manifeste manque).
 let priorityNames = new Set<string>()
+// Éditeurs de confiance d'Amdy (library/profil.json) : lus en entier, et prioritaires sur leurs copies.
+let publishers = new Set<string>()
+async function loadPublishers() {
+  const profile = await readJson<{ editeurs_confiance?: string[] }>(join(LIBRARY, 'profil.json'), {})
+  publishers = new Set((profile.editeurs_confiance ?? []).map(owner => owner.toLowerCase()))
+}
 let keepIds = new Set<string>()
 async function loadKeepIds() {
   const types = (await readdir(join(LIBRARY, 'packs')).catch(() => [] as string[])).filter(file => file.endsWith('.json'))
@@ -259,21 +277,29 @@ function select(candidates: Candidate[]) {
   const byHash = new Map<string, Candidate>()
   const byIdentity = new Map<string, Candidate>()
   const merged = { hash: 0, identity: 0 }
-  // Les skills à garder passent avant leurs copies : c'est leur id qui survit à la déduplication.
-  for (const candidate of candidates.sort((a, b) => Number(keepIds.has(b.id)) - Number(keepIds.has(a.id)) || b.prescore - a.prescore)) {
+  // La version de l'éditeur d'origine gagne toujours : officiel, puis éditeur de confiance, puis
+  // dépôt de référence, puis le dépôt le plus ancien (une copie naît après l'original). À égalité
+  // seulement, un skill des packs passe avant sa copie. `alias` relie une copie écartée à
+  // l'original qui la remplace : le juge transmet sa place de tenant, publish l'archive.
+  const created = (candidate: Candidate) => candidate.repoCreatedAt || '9999'
+  const alias: Record<string, string> = {}
+  // Rang de découverte, pour départager les égalités de présélection comme avant (même dépôt).
+  const position = new Map(candidates.map((candidate, i) => [candidate, i]))
+  for (const candidate of [...candidates].sort((a, b) =>
+    a.origin - b.origin || created(a).localeCompare(created(b)) || Number(keepIds.has(b.id)) - Number(keepIds.has(a.id)) || b.prescore - a.prescore)) {
     const identity = `${candidate.name.toLowerCase()}|${candidate.description.toLowerCase().slice(0, 120)}`
-    if (byHash.has(candidate.hash)) {
-      merged.hash++
-      continue
-    }
-    if (byIdentity.has(identity)) {
-      merged.identity++
+    const winner = byHash.get(candidate.hash) ?? byIdentity.get(identity)
+    if (winner) {
+      byHash.has(candidate.hash) ? merged.hash++ : merged.identity++
+      if (winner.id !== candidate.id) alias[candidate.id] = winner.id
       continue
     }
     byHash.set(candidate.hash, candidate)
     byIdentity.set(identity, candidate)
   }
-  const unique = [...byHash.values()]
+  // La sélection reprend l'ordre de présélection : l'ordre ci-dessus ne sert qu'à choisir l'original.
+  const unique = [...byHash.values()].sort((a, b) =>
+    Number(keepIds.has(b.id)) - Number(keepIds.has(a.id)) || b.prescore - a.prescore || position.get(a)! - position.get(b)!)
   const chosen: Candidate[] = []
   const perRepo = new Map<string, number>()
   const perType = new Map<string, number>()
@@ -283,7 +309,8 @@ function select(candidates: Candidate[]) {
   }
   // D'abord les skills qui portent le nom d'un skill déjà utilisé par Amdy, pris dans les
   // dépôts officiels ou de référence : ils servent d'étalon face aux nouveaux venus.
-  for (const candidate of unique) if (keepIds.has(candidate.id) && chosen.length < MAX_SKILLS) take(candidate)
+  const keptWinners = new Set([...keepIds].map(id => alias[id] ?? id))
+  for (const candidate of unique) if (keptWinners.has(candidate.id) && chosen.length < MAX_SKILLS) take(candidate)
   for (const candidate of unique) {
     if (chosen.includes(candidate)) continue
     const isTrusted = candidate.isOfficial || candidate.sources.includes('reference')
@@ -292,7 +319,7 @@ function select(candidates: Candidate[]) {
   for (const candidate of unique) {
     if (chosen.includes(candidate)) continue
     if (chosen.length >= MAX_SKILLS) break
-    if ((perRepo.get(candidate.repo) ?? 0) >= PER_REPO_SELECT) continue
+    if (candidate.origin > 1 && (perRepo.get(candidate.repo) ?? 0) >= PER_REPO_SELECT) continue
     const open = candidate.types.find(type => (perType.get(type) ?? 0) < Math.round((QUOTAS[type] ?? 0) * MAX_SKILLS))
     if (!open) continue
     perType.set(open, (perType.get(open) ?? 0) + 1)
@@ -300,10 +327,14 @@ function select(candidates: Candidate[]) {
   }
   for (const candidate of unique) {
     if (chosen.length >= MAX_SKILLS) break
-    if (chosen.includes(candidate) || (perRepo.get(candidate.repo) ?? 0) >= PER_REPO_SELECT) continue
+    // Les dépôts officiels et des éditeurs de confiance ne sont pas plafonnés : leurs originaux
+    // (xlsx, docx, pdf…) ne doivent pas laisser la place à des copies.
+    if (chosen.includes(candidate) || (candidate.origin > 1 && (perRepo.get(candidate.repo) ?? 0) >= PER_REPO_SELECT)) continue
     take(candidate)
   }
-  return { chosen, unique: unique.length, merged }
+  // Seules les copies de skills des packs comptent pour la suite.
+  const keptAlias = Object.fromEntries(Object.entries(alias).filter(([id]) => keepIds.has(id)))
+  return { chosen, unique: unique.length, merged, alias: keptAlias }
 }
 
 type HistoryNode = { object: { history: { nodes: { committedDate: string }[] } } | null } | null
@@ -357,6 +388,7 @@ async function starVelocity(repoNames: string[]) {
 
 async function main() {
   await loadKeepIds()
+  await loadPublishers()
   log(`${keepIds.size} skills des packs précédents à garder`)
   log(`seuils : ≥ ${MIN_STARS} étoiles, push depuis le ${SINCE}, ${MAX_SKILLS} skills au plus`)
   if (WITH_DIRECTORY) log('annuaire Anthropic non documenté : demandé, mais pas encore branché dans cette version')
@@ -392,8 +424,9 @@ async function main() {
   const candidates = (await pool(scanned, 6, skillsOf)).flat()
   log(`${candidates.length} SKILL.md lus`)
   await loadPriorityNames()
-  const { chosen, unique, merged } = select(candidates)
+  const { chosen, unique, merged, alias } = select(candidates)
   log(`${unique} skills uniques (${merged.hash} copies identiques et ${merged.identity} quasi-copies fusionnées), ${chosen.length} retenus pour le juge`)
+  for (const [copy, origin] of Object.entries(alias)) log(`copie d'un skill des packs remplacée par l'original : ${copy} → ${origin}`)
 
   await lastCommits(chosen)
   const velocity = await starVelocity([...new Set(chosen.map(skill => skill.repo))])
@@ -406,6 +439,7 @@ async function main() {
     params: { MAX_SKILLS, MIN_STARS, PUSHED_MONTHS, SINCE, MAX_REPOS, WITH_DIRECTORY },
     stats: { discovered: repos.size, kept: kept.length, excluded, scanned: scanned.length, skillMds: candidates.length, unique, merged, chosen: output.length, perType },
     repoStars: Object.fromEntries(kept.map(repo => [repo.name, repo.stars])),
+    alias,
     skills: output,
   })
   log('écrit : collector/.cache/selection.json', perType)

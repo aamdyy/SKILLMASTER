@@ -29,12 +29,61 @@ export function frontmatter(text: string): { fields: Frontmatter; raw: string } 
   return { fields, raw }
 }
 
+// Barème b1 (décidé par Amdy le 2026-10-19), le même pour l'index de la bibliothèque et pour
+// le scan refait sur sa machine :
+//   critique : shell inline au chargement, curl | sh, hooks, contournement des permissions,
+//              injection non citée. Toujours écarté.
+//   élevé    : ce qui peut agir. Scripts ou exécutables que le SKILL.md demande de lancer,
+//              binaires, bin/, plugin.json, .mcp.json, rm -rf, config de Claude Code, secrets,
+//              et les alertes du juge classées réseau, exécution ou destruction.
+//   moyen    : lien symbolique, long bloc base64, alertes du juge sur les données ou une consigne.
+//   info     : allowed-tools seul (élevé avec Bash quand on garde le skill pour le projet),
+//              scripts que rien ne lance, fichier de plus de 1 Mo, mise en garde citée.
+// Un motif trouvé dans un exemple de code descend d'un cran.
+export const BAREME = 'b1'
 export type Gravite = 'critique' | 'eleve' | 'moyen' | 'info'
-export type Risk = { code: string; gravite: Gravite; detail?: string; source: 'scan' | 'juge' }
+export type Categorie = 'reseau' | 'execution' | 'destruction' | 'donnees' | 'consigne' | 'autre'
+export type Mode = 'session' | 'projet'
+export type Risk = {
+  code: string
+  gravite: Gravite
+  detail?: string
+  source: 'scan' | 'juge'
+  categorie?: Categorie
+  // Gravité quand le skill est gardé pour le projet, si elle diffère (allowed-tools avec Bash).
+  gravite_projet?: Gravite
+}
 export type SkillFile = { path: string; mode: string; size?: number }
 
-const ORDER: Gravite[] = ['critique', 'eleve', 'moyen', 'info']
+// Contenu tiers hébergé chez Anthropic : les plugins de la communauté, et les plugins de
+// partenaires de la marketplace officielle (external_plugins/). Jamais « officiel » ni « de confiance ».
+const THIRD_PARTY = [/^anthropics\/claude-plugins-community$/i, /^anthropics\/claude-plugins-official\/external_plugins(\/|$)/i]
+const isThirdParty = (repo: string, path: string) => THIRD_PARTY.some(re => re.test(repo) || re.test(`${repo}/${path}`))
+
+// Officiel : écrit par Anthropic, dans un dépôt anthropics/.
+export const isFirstParty = (repo: string, path = '') => repo.toLowerCase().startsWith('anthropics/') && !isThirdParty(repo, path)
+
+// Éditeur de confiance d'Amdy (library/profil.json), en excluant le contenu tiers hébergé chez lui.
+export const isTrustedPublisher = (repo: string, path: string, publishers: Set<string>) =>
+  publishers.has(repo.split('/')[0]!.toLowerCase()) && !isThirdParty(repo, path)
+
+export const CATEGORIES: Categorie[] = ['reseau', 'execution', 'destruction', 'donnees', 'consigne', 'autre']
+export const ORDER: Gravite[] = ['critique', 'eleve', 'moyen', 'info']
 const lower = (gravite: Gravite): Gravite => ORDER[Math.min(ORDER.indexOf(gravite) + 1, ORDER.length - 1)] as Gravite
+
+// Gravité d'une alerte du juge, d'après la catégorie que Haiku lui a donnée (collector/classify.ts).
+// Sans catégorie (pas encore classée), elle reste « moyen ».
+export function alertGravity(categorie: Categorie | undefined): Gravite {
+  if (categorie === 'reseau' || categorie === 'execution' || categorie === 'destruction') return 'eleve'
+  if (categorie === 'donnees' || categorie === 'consigne' || categorie === undefined) return 'moyen'
+  return 'info'
+}
+
+export const gravityOf = (risk: Risk, mode: Mode = 'session') => (mode === 'projet' ? risk.gravite_projet ?? risk.gravite : risk.gravite)
+
+export function worst(risks: Risk[], mode: Mode = 'session'): Gravite | null {
+  return risks.map(risk => gravityOf(risk, mode)).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b))[0] ?? null
+}
 
 const SCRIPT = /\.(sh|bash|zsh|py|js|mjs|cjs|ts|ps1|rb|pl)$/i
 const BINARY = /\.(exe|dll|so|dylib|bin|jar|wasm|class|app|pkg|dmg)$/i
@@ -52,7 +101,7 @@ const PATTERNS: Pattern[] = [
   { re: /\brm\s+-[a-z]*r[a-z]*f|\brm\s+-[a-z]*f[a-z]*r/gi, code: 'suppression récursive (rm -rf)', gravite: 'eleve' },
   { re: /~\/\.ssh|~\/\.aws|\bid_rsa\b|security find-generic-password/gi, code: 'accès à des secrets locaux', gravite: 'eleve' },
   { re: /(edit|modify|write|update)[^\n]{0,40}(settings\.json|CLAUDE\.md|hooks\.json)/gi, code: 'modifie la configuration de Claude Code', gravite: 'eleve' },
-  { re: /[​-‏‪-‮⁦-⁩]/g, code: 'caractères invisibles ou bidirectionnels', gravite: 'eleve' },
+  { re: /[\u200b-\u200f\u202a-\u202e\u2066-\u2069]/g, code: 'caractères invisibles ou bidirectionnels', gravite: 'eleve' },
   { re: /[A-Za-z0-9+/]{200,}={0,2}/g, code: 'bloc base64 long', gravite: 'moyen' },
   { re: /\beval\s*\(|child_process|subprocess\.[a-z]+\([^)]*shell\s*=\s*True|os\.system\(/gi, code: 'exécution dynamique de code', gravite: 'moyen' },
 ]
@@ -65,20 +114,25 @@ function lineAt(text: string, index: number) {
   return text.slice(text.lastIndexOf('\n', index) + 1, text.indexOf('\n', index) === -1 ? undefined : text.indexOf('\n', index))
 }
 
+// Un script compte comme « lancé » si le SKILL.md cite son chemin ou son nom de fichier.
+const isLaunched = (skillMd: string, path: string) => skillMd.includes(path) || skillMd.includes(path.split('/').pop() ?? path)
+
 export function scanSkill(skillMd: string, files: SkillFile[]): Risk[] {
   const risks = new Map<string, Risk>()
-  const add = (code: string, gravite: Gravite, detail?: string) => {
+  const add = (code: string, gravite: Gravite, detail?: string, gravite_projet?: Gravite) => {
     const before = risks.get(code)
-    if (!before || ORDER.indexOf(gravite) < ORDER.indexOf(before.gravite)) risks.set(code, { code, gravite, detail, source: 'scan' })
+    if (!before || ORDER.indexOf(gravite) < ORDER.indexOf(before.gravite)) {
+      risks.set(code, { code, gravite, source: 'scan', ...(detail ? { detail } : {}), ...(gravite_projet ? { gravite_projet } : {}) })
+    }
   }
 
   const { fields } = frontmatter(skillMd)
   const tools = fields['allowed-tools']
-  if (tools !== undefined) {
-    add('frontmatter allowed-tools', /\bBash\b|\*/.test(tools) ? 'eleve' : 'moyen', tools.slice(0, 80))
-  }
+  // allowed-tools n'accorde rien quand skill-master lit le skill pour la session ; il pré-autorise
+  // vraiment ces outils quand le skill est gardé dans le projet.
+  if (tools !== undefined) add('frontmatter allowed-tools', 'info', tools.slice(0, 80), /\bBash\b|\*/.test(tools) ? 'eleve' : undefined)
   if (fields.hooks !== undefined) add('frontmatter hooks (actifs toute la session)', 'critique')
-  if (fields.shell !== undefined) add(`frontmatter shell: ${fields.shell}`, 'moyen')
+  if (fields.shell !== undefined) add(`frontmatter shell: ${fields.shell}`, 'info')
 
   const blocks = fences(skillMd)
   const inBlock = (index: number) => blocks.some(([start, end]) => index >= start && index < end)
@@ -95,7 +149,8 @@ export function scanSkill(skillMd: string, files: SkillFile[]): Risk[] {
     }
   }
 
-  const scripts: string[] = []
+  const launched: string[] = []
+  const idle: string[] = []
   for (const file of files) {
     const name = file.path
     if (/(^|\/)\.claude-plugin\/plugin\.json$/.test(name)) add('plugin.json : chargé comme plugin', 'eleve')
@@ -104,11 +159,11 @@ export function scanSkill(skillMd: string, files: SkillFile[]): Risk[] {
     if (/(^|\/)bin\//.test(name)) add('dossier bin/', 'eleve')
     if (BINARY.test(name)) add('fichier binaire', 'eleve', name)
     if (file.mode === '120000') add('lien symbolique', 'moyen', name)
-    if (file.mode === '100755') add('fichier exécutable', 'moyen', name)
-    if (SCRIPT.test(name)) scripts.push(name)
+    if (SCRIPT.test(name) || file.mode === '100755') (isLaunched(skillMd, name) ? launched : idle).push(name)
     if ((file.size ?? 0) > 1_000_000) add('fichier de plus de 1 Mo', 'info', name)
   }
-  if (scripts.length) add('scripts embarqués', 'moyen', scripts.slice(0, 5).join(', '))
+  if (launched.length) add('scripts lancés par le SKILL.md', 'eleve', launched.slice(0, 5).join(', '))
+  if (idle.length) add('scripts embarqués, que le SKILL.md ne lance pas', 'info', idle.slice(0, 5).join(', '))
 
   return [...risks.values()].sort((a, b) => ORDER.indexOf(a.gravite) - ORDER.indexOf(b.gravite))
 }
