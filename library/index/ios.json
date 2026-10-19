@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-19T14:07:33.856Z",
+  "genere_le": "2026-10-19T14:53:08.483Z",
   "type": "ios",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
@@ -112,19 +112,6 @@
   ],
   "ajouts": [
     {
-      "id": "athevon/genjutsu/skills/_jutsu/swiftui-graphics",
-      "nom": "swiftui-graphics",
-      "place": "ajout",
-      "repo": "AThevon/genjutsu",
-      "chemin_skill": "skills/_jutsu/swiftui-graphics",
-      "skill_md": "skills/_jutsu/swiftui-graphics/SKILL.md",
-      "sha_epingle": "1f518a71378b15d423389e546e767cffc86e14c3",
-      "resume_fr": "te guide sur shaders Metal et Liquid Glass SwiftUI → effets visuels avancés sans tâtonner",
-      "note": 8,
-      "risque_max": null,
-      "risques": []
-    },
-    {
       "id": "superagents-lab/xcode27-skills/swiftui-specialist",
       "nom": "swiftui-specialist",
       "place": "ajout",
@@ -166,6 +153,19 @@
       ]
     },
     {
+      "id": "prisma-labs-dev/apple-skills/disabled-skills/guide-swiftui-animations",
+      "nom": "guide-swiftui-animations",
+      "place": "ajout",
+      "repo": "Prisma-Labs-Dev/apple-skills",
+      "chemin_skill": "disabled-skills/guide-swiftui-animations",
+      "skill_md": "disabled-skills/guide-swiftui-animations/SKILL.md",
+      "sha_epingle": "498626005e65783ebe8570a103b2335cf397768c",
+      "resume_fr": "guide les animations SwiftUI, transitions et Animatable → mouvements fluides et performants",
+      "note": 9,
+      "risque_max": null,
+      "risques": []
+    },
+    {
       "id": "rgmez/apple-accessibility-skills/skills/swiftui-accessibility-auditor",
       "nom": "swiftui-accessibility-auditor",
       "place": "ajout",
@@ -179,15 +179,41 @@
       "risques": []
     },
     {
-      "id": "prisma-labs-dev/apple-skills/disabled-skills/guide-swiftui-animations",
-      "nom": "guide-swiftui-animations",
+      "id": "flowritescode/fwc-swiftui-skills/skills/swiftui-iphone-duo",
+      "nom": "swiftui-iphone-duo",
       "place": "ajout",
-      "repo": "Prisma-Labs-Dev/apple-skills",
-      "chemin_skill": "disabled-skills/guide-swiftui-animations",
-      "skill_md": "disabled-skills/guide-swiftui-animations/SKILL.md",
-      "sha_epingle": "498626005e65783ebe8570a103b2335cf397768c",
-      "resume_fr": "guide les animations SwiftUI, transitions et Animatable → mouvements fluides et performants",
-      "note": 9,
+      "repo": "FloWritesCode/fwc-swiftui-skills",
+      "chemin_skill": "skills/swiftui-iphone-duo",
+      "skill_md": "skills/swiftui-iphone-duo/SKILL.md",
+      "sha_epingle": "3a6c74be7bf9cbc6b19c2025922f6b364542c000",
+      "resume_fr": "adapte SwiftUI à l'iPhone Duo sans branches d'appareil → une interface qui tient à toute taille",
+      "note": 10,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "superagents-lab/xcode27-skills/swiftui-whats-new-27",
+      "nom": "swiftui-whats-new-27",
+      "place": "ajout",
+      "repo": "superagents-lab/xcode27-skills",
+      "chemin_skill": "swiftui-whats-new-27",
+      "skill_md": "swiftui-whats-new-27/SKILL.md",
+      "sha_epingle": "6f9ff8d5ad6000491cb0f483a776b7062e41cd97",
+      "resume_fr": "corrige les erreurs @State après SDK 27 → évite un faux correctif aux effets cachés",
+      "note": 8,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "charleswiltgen/axiom/axiom-codex/skills/axiom-analyze-swiftui-performance",
+      "nom": "axiom-analyze-swiftui-performance",
+      "place": "ajout",
+      "repo": "CharlesWiltgen/Axiom",
+      "chemin_skill": "axiom-codex/skills/axiom-analyze-swiftui-performance",
+      "skill_md": "axiom-codex/skills/axiom-analyze-swiftui-performance/SKILL.md",
+      "sha_epingle": "3b930bde3dd287b59a1983f325d9cf582422f4eb",
+      "resume_fr": "repère les mauvais réflexes SwiftUI qui font saccader le scroll → fluidité et moins de re-rendus",
+      "note": 8,
       "risque_max": null,
       "risques": []
     },
@@ -205,43 +231,28 @@
       "risques": []
     },
     {
-      "id": "superagents-lab/xcode27-skills/swiftui-whats-new-27",
-      "nom": "swiftui-whats-new-27",
+      "id": "dpearson2699/swift-ios-skills/skills/avkit",
+      "nom": "avkit",
       "place": "ajout",
-      "repo": "superagents-lab/xcode27-skills",
-      "chemin_skill": "swiftui-whats-new-27",
-      "skill_md": "swiftui-whats-new-27/SKILL.md",
-      "sha_epingle": "6f9ff8d5ad6000491cb0f483a776b7062e41cd97",
-      "resume_fr": "corrige les erreurs @State après SDK 27 → évite un faux correctif aux effets cachés",
-      "note": 8,
-      "risque_max": "moyen",
+      "repo": "dpearson2699/swift-ios-skills",
+      "chemin_skill": "skills/avkit",
+      "skill_md": "skills/avkit/SKILL.md",
+      "sha_epingle": "8d90fd121a263355a4fb44fd082af1416a5c1c2a",
+      "resume_fr": "ajoute des lecteurs vidéo natifs, PiP et AirPlay → lecture fiable, sans réinventer les contrôles",
+      "note": 10,
+      "risque_max": null,
       "risques": []
     },
     {
-      "id": "terryc21/workflow-audit/skills/workflow-audit",
-      "nom": "workflow-audit",
+      "id": "athevon/genjutsu/skills/_jutsu/swiftui-graphics",
+      "nom": "swiftui-graphics",
       "place": "ajout",
-      "repo": "Terryc21/workflow-audit",
-      "chemin_skill": "skills/workflow-audit",
-      "skill_md": "skills/workflow-audit/SKILL.md",
-      "sha_epingle": "d66c6303961de00fa6a91ed08b150f5f576f2336",
-      "resume_fr": "trouve les impasses et boutons morts SwiftUI → évite les écrans sans sortie",
-      "note": 9,
-      "risque_max": "eleve",
-      "risques": [
-        "frontmatter allowed-tools"
-      ]
-    },
-    {
-      "id": "flowritescode/fwc-swiftui-skills/skills/swiftui-iphone-duo",
-      "nom": "swiftui-iphone-duo",
-      "place": "ajout",
-      "repo": "FloWritesCode/fwc-swiftui-skills",
-      "chemin_skill": "skills/swiftui-iphone-duo",
-      "skill_md": "skills/swiftui-iphone-duo/SKILL.md",
-      "sha_epingle": "3a6c74be7bf9cbc6b19c2025922f6b364542c000",
-      "resume_fr": "adapte SwiftUI à l'iPhone Duo sans branches d'appareil → une interface qui tient à toute taille",
-      "note": 10,
+      "repo": "AThevon/genjutsu",
+      "chemin_skill": "skills/_jutsu/swiftui-graphics",
+      "skill_md": "skills/_jutsu/swiftui-graphics/SKILL.md",
+      "sha_epingle": "1f518a71378b15d423389e546e767cffc86e14c3",
+      "resume_fr": "te guide sur shaders Metal et Liquid Glass SwiftUI → effets visuels avancés sans tâtonner",
+      "note": 8,
       "risque_max": null,
       "risques": []
     },
@@ -256,19 +267,6 @@
       "resume_fr": "conçoit les intents iOS avant l'UI → évite la logique dupliquée entre Siri et écrans",
       "note": 9,
       "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "dpearson2699/swift-ios-skills/skills/apple-on-device-ai",
-      "nom": "apple-on-device-ai",
-      "place": "ajout",
-      "repo": "dpearson2699/swift-ios-skills",
-      "chemin_skill": "skills/apple-on-device-ai",
-      "skill_md": "skills/apple-on-device-ai/SKILL.md",
-      "sha_epingle": "8d90fd121a263355a4fb44fd082af1416a5c1c2a",
-      "resume_fr": "te guide pour choisir le runtime IA local d'Apple → garde tes données sur l'appareil",
-      "note": 8,
-      "risque_max": "moyen",
       "risques": []
     }
   ]

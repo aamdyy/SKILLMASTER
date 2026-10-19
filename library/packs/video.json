@@ -1,17 +1,62 @@
 {
   "type": "video",
-  "genere_le": "2026-10-19T13:50:04.581Z",
+  "genere_le": "2026-10-19T14:52:14.533Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
   "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
-  "tenants_de": "4b276fe",
-  "changements": [],
-  "ecartes": [],
+  "tenants_de": "tour précédent",
+  "reclasse": true,
+  "finalistes": [
+    "devin-axis/ipollowork/.agents/skills/ipollowork-video-compose",
+    "feitangyuan/onetake/onetake",
+    "heygen-com/hyperframes/skills/faceless-explainer",
+    "heygen-com/hyperframes/skills/music-to-video",
+    "heygen-com/hyperframes/skills/product-launch-video",
+    "jimliu/baoyu-skills/skills/baoyu-youtube-transcript",
+    "kajisho5/ffmpeg-skill/ffmpeg-skill",
+    "nvidia/skills/skills/deepstream-dev",
+    "nvidia/skills/skills/deepstream-sop",
+    "ooiyeefei/ccc/skills/motion-video",
+    "osidemedia/higgsfield-ai-prompt-skill/skills/higgsfield-3d",
+    "remotion-dev/skills/skills/remotion-best-practices",
+    "remotion-dev/skills/skills/remotion-captions",
+    "remotion-dev/skills/skills/remotion-create",
+    "remotion-dev/skills/skills/remotion-docs",
+    "remotion-dev/skills/skills/remotion-interactivity",
+    "remotion-dev/skills/skills/remotion-maps",
+    "remotion-dev/skills/skills/remotion-markup",
+    "remotion-dev/skills/skills/remotion-render",
+    "remotion-dev/skills/skills/remotion-studio",
+    "remotion-dev/skills/skills/remotion-upgrade",
+    "trunghaiy/appshot/skills/appshot-videos",
+    "vincentwei1021/anything2explainer/anything2explainer",
+    "vincentwei1021/video-shotcraft/video-shotcraft",
+    "vincentwei1021/video-talkcraft/video-talkcraft"
+  ],
+  "changements": [
+    {
+      "entrant": "remotion-render",
+      "sortant": "faceless-explainer",
+      "raison": "faceless-explainer repose sur HyperFrames, hors stack. remotion-render couvre l'export Remotion (CLI render/still, vidéo transparente) qu'il utilise.",
+      "entrant_id": "remotion-dev/skills/skills/remotion-render",
+      "sortant_id": "heygen-com/hyperframes/skills/faceless-explainer"
+    }
+  ],
+  "ecartes": [
+    {
+      "nom": "deepstream-dev",
+      "raison": "DeepStream/GStreamer GPU NVIDIA, hors de sa stack"
+    },
+    {
+      "nom": "deepstream-sop",
+      "raison": "Microservice NVIDIA DeepStream, hors de sa stack"
+    }
+  ],
   "stabilite": {
     "tirages": 3,
     "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "La tête du pack revient aux skills Remotion officiels (bonnes pratiques, sous-titres, interactivité) et aux pipelines de promo en Remotion, car Remotion est son moteur vidéo. Les skills HyperFrames passent derrière."
+    "raison_tirage_1": "La tête du pack revient aux skills Remotion officiels et à jour (best-practices, captions, interactivity), plus les skills Remotion de promo produit. Les skills HyperFrames et DeepStream sont hors stack."
   },
   "recommandes": [
     {
@@ -93,17 +138,17 @@
       "raison": "Déclenchement net et workflow précis (analyse de battements, scripts, gates). Règles métier solides. Note amputée par les annexes tronquées, les fichiers manquants (frame-worker, catalogues) et la dépendance à des skills frères."
     },
     {
-      "id": "heygen-com/hyperframes/skills/faceless-explainer",
-      "nom": "faceless-explainer",
-      "repo": "heygen-com/hyperframes",
-      "resume_fr": "transforme un texte en vidéo explicative sans tournage → sujets clairs, visuels créés sur mesure",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
+      "id": "remotion-dev/skills/skills/remotion-render",
+      "nom": "remotion-render",
+      "repo": "remotion-dev/skills",
+      "resume_fr": "exporte vidéos et images Remotion en une commande → évite de chercher les options CLI",
+      "note": 7,
+      "pertinence": 6,
+      "score_pack": 6.6,
+      "note_juge": 7,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill officiel HyperFrames, ciblé et détaillé (étapes, gates, scripts, sous-agents). Pénalisé pour SKILL.md et annexes tronqués, dépendances externes absentes et longueur excessive."
+      "risque_max": null,
+      "raison": "Commandes CLI exactes et réglages transparents utiles, mais description vague (« Export a Remotion video »), pas de licence, et incohérence vp8/vp9 dans l'annexe. Note moyenne, sans risque nouveau."
     },
     {
       "id": "jimliu/baoyu-skills/skills/baoyu-youtube-transcript",
@@ -121,6 +166,19 @@
   ],
   "ajouts": [
     {
+      "id": "remotion-dev/skills/skills/remotion-markup",
+      "nom": "remotion-markup",
+      "repo": "remotion-dev/skills",
+      "resume_fr": "fixe les règles d'animation Remotion en keyframes inline → timings éditables directement dans Studio",
+      "note": 7,
+      "pertinence": 6,
+      "score_pack": 6.6,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill officiel Remotion, précis et utile (API récentes, Studio, effets). Description vague, annexes manquantes ou tronquées, périmètre large. Pas de choix visuels imposés."
+    },
+    {
       "id": "ooiyeefei/ccc/skills/motion-video",
       "nom": "motion-video",
       "repo": "ooiyeefei/ccc",
@@ -132,84 +190,6 @@
       "modele": "haiku",
       "risque_max": "moyen",
       "raison": "Déclenchement précis et savoir-faire réel (horloge par frame, safe zones chiffrées, brand-match). Dépendances externes non fournies et annexes tronquées font perdre un point de qualité."
-    },
-    {
-      "id": "kajisho5/ffmpeg-skill/ffmpeg-skill",
-      "nom": "ffmpeg-skill",
-      "repo": "kajisho5/ffmpeg-skill",
-      "resume_fr": "découpe, recadre et sous-titre tes vidéos en local → exports prêts pour les réseaux sociaux",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill mature (2000 ★, MIT, push récent) : déclencheurs précis, 42 outils aux flags exacts, vérification intégrée. Retenue : SKILL.md tronqué au jugement, ~30 Ko chargés à chaque session."
-    },
-    {
-      "id": "remotion-dev/skills/skills/remotion-render",
-      "nom": "remotion-render",
-      "repo": "remotion-dev/skills",
-      "resume_fr": "exporte vidéos et images Remotion en une commande → évite de chercher les options CLI",
-      "note": 7,
-      "pertinence": 6,
-      "score_pack": 6.6,
-      "note_juge": 7,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Commandes CLI exactes et réglages transparents utiles, mais description vague (« Export a Remotion video »), pas de licence, et incohérence vp8/vp9 dans l'annexe. Note moyenne, sans risque nouveau."
-    },
-    {
-      "id": "remotion-dev/skills/skills/remotion-studio",
-      "nom": "remotion-studio",
-      "repo": "remotion-dev/skills",
-      "resume_fr": "lance l'aperçu Remotion dès le départ → tu vois et pilotes la vidéo en direct",
-      "note": 6,
-      "pertinence": 6,
-      "score_pack": 6,
-      "note_juge": 6,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Sujet net (Remotion Studio) et commandes exactes, mais description très courte, consignes en partie déjà connues et ton impératif sur le navigateur. Pas de risque nouveau. Note moyenne."
-    },
-    {
-      "id": "vincentwei1021/anything2explainer/anything2explainer",
-      "nom": "anything2explainer",
-      "repo": "Vincentwei1021/anything2explainer",
-      "resume_fr": "transforme un sujet en vidéo explicative narrée → évite tournage et montage manuels",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Pipeline très précis et riche en savoir-faire (budgets de frames, QC chiffré, multi-agents), à déclenchement net. Note réduite : texte très dense et long, renvois vers des fichiers absents du jugement."
-    },
-    {
-      "id": "trunghaiy/appshot/skills/appshot-videos",
-      "nom": "appshot-videos",
-      "repo": "trunghaiy/appshot",
-      "resume_fr": "crée des vidéos d'aperçu App Store et Play Store → scènes sur mesure, sans gabarit générique",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Sujet net et déclencheur précis. Savoir-faire réel (886×1920, règles Apple sur l'app visible dès la frame 0, pas de badge dans le CTA). Annexes et fichiers de base absents, longue structure à phases."
-    },
-    {
-      "id": "remotion-dev/skills/skills/remotion-create",
-      "nom": "remotion-create",
-      "repo": "remotion-dev/skills",
-      "resume_fr": "crée un projet Remotion et ouvre le Studio → tu vois la vidéo évoluer en direct",
-      "note": 7,
-      "pertinence": 6,
-      "score_pack": 6.6,
-      "note_juge": 7,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Périmètre net et commandes exactes (create-video, --blank, --no-tailwind, gestion du dossier non vide). Description courte et renvois vers des guides externes non fournis. Note moyenne, sans marketing."
     },
     {
       "id": "vincentwei1021/video-talkcraft/video-talkcraft",
@@ -225,17 +205,69 @@
       "raison": "Déclenchement précis et périmètre net (vidéo explicative à voix off, Remotion). Très concret : commandes, schémas, garde-fous. Note tirée vers le bas par la troncature (24 000 sur 34 835 caractères), des annexes et scripts absents et une densité élevée."
     },
     {
-      "id": "remotion-dev/skills/skills/remotion-markup",
-      "nom": "remotion-markup",
+      "id": "remotion-dev/skills/skills/remotion-create",
+      "nom": "remotion-create",
       "repo": "remotion-dev/skills",
-      "resume_fr": "fixe les règles d'animation Remotion en keyframes inline → timings éditables directement dans Studio",
+      "resume_fr": "crée un projet Remotion et ouvre le Studio → tu vois la vidéo évoluer en direct",
       "note": 7,
       "pertinence": 6,
       "score_pack": 6.6,
       "note_juge": 7,
       "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Skill officiel Remotion, précis et utile (API récentes, Studio, effets). Description vague, annexes manquantes ou tronquées, périmètre large. Pas de choix visuels imposés."
+      "raison": "Périmètre net et commandes exactes (create-video, --blank, --no-tailwind, gestion du dossier non vide). Description courte et renvois vers des guides externes non fournis. Note moyenne, sans marketing."
+    },
+    {
+      "id": "trunghaiy/appshot/skills/appshot-videos",
+      "nom": "appshot-videos",
+      "repo": "trunghaiy/appshot",
+      "resume_fr": "crée des vidéos d'aperçu App Store et Play Store → scènes sur mesure, sans gabarit générique",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Sujet net et déclencheur précis. Savoir-faire réel (886×1920, règles Apple sur l'app visible dès la frame 0, pas de badge dans le CTA). Annexes et fichiers de base absents, longue structure à phases."
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-docs",
+      "nom": "remotion-docs",
+      "repo": "remotion-dev/skills",
+      "resume_fr": "cherche la doc Remotion à jour et la lit en Markdown → évite les API périmées",
+      "note": 7,
+      "pertinence": 6,
+      "score_pack": 6.6,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Périmètre net et commandes exactes (Algolia, suffixe .md), mais description courte, peu de valeur propre, renvoi vers un skill non fourni et absence de licence. Note moyenne."
+    },
+    {
+      "id": "vincentwei1021/anything2explainer/anything2explainer",
+      "nom": "anything2explainer",
+      "repo": "Vincentwei1021/anything2explainer",
+      "resume_fr": "transforme un sujet en vidéo explicative narrée → évite tournage et montage manuels",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Pipeline très précis et riche en savoir-faire (budgets de frames, QC chiffré, multi-agents), à déclenchement net. Note réduite : texte très dense et long, renvois vers des fichiers absents du jugement."
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-studio",
+      "nom": "remotion-studio",
+      "repo": "remotion-dev/skills",
+      "resume_fr": "lance l'aperçu Remotion dès le départ → tu vois et pilotes la vidéo en direct",
+      "note": 6,
+      "pertinence": 6,
+      "score_pack": 6,
+      "note_juge": 6,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Sujet net (Remotion Studio) et commandes exactes, mais description très courte, consignes en partie déjà connues et ton impératif sur le navigateur. Pas de risque nouveau. Note moyenne."
     },
     {
       "id": "remotion-dev/skills/skills/remotion-upgrade",
@@ -251,17 +283,30 @@
       "raison": "Procédure précise et vérifiable : alignement des paquets @remotion/*, versions de mediabunny et zod via @remotion/studio, commandes exactes. Description trop courte pour bien cibler le déclenchement."
     },
     {
-      "id": "remotion-dev/skills/skills/remotion-docs",
-      "nom": "remotion-docs",
-      "repo": "remotion-dev/skills",
-      "resume_fr": "cherche la doc Remotion à jour et la lit en Markdown → évite les API périmées",
-      "note": 7,
+      "id": "kajisho5/ffmpeg-skill/ffmpeg-skill",
+      "nom": "ffmpeg-skill",
+      "repo": "kajisho5/ffmpeg-skill",
+      "resume_fr": "découpe, recadre et sous-titre tes vidéos en local → exports prêts pour les réseaux sociaux",
+      "note": 9,
       "pertinence": 6,
-      "score_pack": 6.6,
-      "note_juge": 7,
+      "score_pack": 7.8,
+      "note_juge": 9,
       "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Périmètre net et commandes exactes (Algolia, suffixe .md), mais description courte, peu de valeur propre, renvoi vers un skill non fourni et absence de licence. Note moyenne."
+      "raison": "Skill mature (2000 ★, MIT, push récent) : déclencheurs précis, 42 outils aux flags exacts, vérification intégrée. Retenue : SKILL.md tronqué au jugement, ~30 Ko chargés à chaque session."
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-maps",
+      "nom": "remotion-maps",
+      "repo": "remotion-dev/skills",
+      "resume_fr": "choisit la technique de carte adaptée au plan → évite les mauvais choix d'API",
+      "note": 8,
+      "pertinence": 6,
+      "score_pack": 7.2,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Pièges réels bien documentés (filter undefined, jumpTo à chaque frame, preserveDrawingBuffer, Cesium) et code concret. Description trop générique, annexes Mapbox et MapLibre tronquées, références manquantes."
     },
     {
       "id": "feitangyuan/onetake/onetake",

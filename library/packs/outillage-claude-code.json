@@ -1,26 +1,48 @@
 {
   "type": "outillage-claude-code",
-  "genere_le": "2026-10-19T13:50:04.584Z",
+  "genere_le": "2026-10-19T14:53:08.001Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
   "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
-  "tenants_de": "4b276fe",
+  "tenants_de": "tour précédent",
+  "reclasse": true,
+  "finalistes": [
+    "addyosmani/agent-skills/skills/constraint-driven-development",
+    "affaan-m/ecc/skills/agent-security-hardening",
+    "anthropics/claude-code/plugins/hookify/skills/writing-rules",
+    "anthropics/claude-code/plugins/plugin-dev/skills/agent-development",
+    "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration",
+    "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
+    "anthropics/skills/skills/claude-api",
+    "anthropics/skills/skills/mcp-builder",
+    "anthropics/skills/skills/skill-creator",
+    "confident-ai/deepeval/skills/deepeval",
+    "confluentinc/agent-skills/skills/confluent-skill-creator",
+    "epicgames/unreal-engine-skills-for-claude-code-plugin/skills/create-toolset",
+    "gaasher/agent-loop-skills/loops/optimize-loop",
+    "googlecloudplatform/data-agent-kit-plugin/skills/bigtable-basics",
+    "mattpocock/skills/skills/engineering/code-review"
+  ],
   "changements": [],
   "ecartes": [
     {
+      "nom": "bigtable-basics",
+      "raison": "Bigtable est une base cloud managée Google, hors de sa stack."
+    },
+    {
       "nom": "confluent-skill-creator",
-      "raison": "Spécifique à Confluent/Kafka/Flink, hors de sa stack."
+      "raison": "Spécifique à Confluent/Kafka, absent de sa stack."
     },
     {
       "nom": "create-toolset",
-      "raison": "Spécifique à Unreal Engine (C++/Blueprints), absent de sa stack."
+      "raison": "Spécifique à Unreal Engine, absent de sa stack."
     }
   ],
   "stabilite": {
     "tirages": 3,
     "meme_composition_sans_tenants": true,
-    "raison_tirage_1": "Les skills Anthropic de construction avec Claude Code (skill-creator, agent-development, claude-api, MCP) sont les plus utiles et restent en tête. Aucun challenger ne les dépasse nettement."
+    "raison_tirage_1": "Les skills génériques d'outillage Claude Code (création de skills, subagents, API Claude) servent directement son flux de travail, tandis que les skills liés à Unreal, Confluent et Bigtable sont hors stack."
   },
   "recommandes": [
     {
@@ -129,6 +151,19 @@
     }
   ],
   "ajouts": [
+    {
+      "id": "affaan-m/ecc/skills/agent-security-hardening",
+      "nom": "agent-security-hardening",
+      "repo": "affaan-m/ECC",
+      "resume_fr": "valide identifiants, chemins et URLs avant chaque action d'agent → bloque fuites et écritures hors périmètre",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et contenu technique concret (validation de chemins Windows, DNS rebinding, redirections). Note réduite : code Python sans annexes, certaines phrases denses et un passage sur la vérification sans commandes."
+    },
     {
       "id": "gaasher/agent-loop-skills/loops/optimize-loop",
       "nom": "optimize-loop",

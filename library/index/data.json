@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-19T14:07:33.856Z",
+  "genere_le": "2026-10-19T14:53:08.481Z",
   "type": "data",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
@@ -99,24 +99,9 @@
       "risques": []
     },
     {
-      "id": "cloudflare/skills/skills/basin",
-      "nom": "basin",
-      "place": "recommande",
-      "repo": "cloudflare/skills",
-      "chemin_skill": "skills/basin",
-      "skill_md": "skills/basin/SKILL.md",
-      "sha_epingle": "86505e44f87d801aa1864a3c4109e9a8ae5c409f",
-      "resume_fr": "guide Basin Pipelines, Catalog et SQL → évite les erreurs sur les tables Iceberg R2",
-      "note": 7,
-      "risque_max": "moyen",
-      "risques": []
-    }
-  ],
-  "ajouts": [
-    {
       "id": "k-dense-ai/scientific-agent-skills/skills/dask",
       "nom": "dask",
-      "place": "ajout",
+      "place": "recommande",
       "repo": "K-Dense-AI/scientific-agent-skills",
       "chemin_skill": "skills/dask",
       "skill_md": "skills/dask/SKILL.md",
@@ -127,7 +112,9 @@
       "risques": [
         "frontmatter allowed-tools"
       ]
-    },
+    }
+  ],
+  "ajouts": [
     {
       "id": "timescale/pg-aiguide/skills/schema-exploration",
       "nom": "schema-exploration",
@@ -142,6 +129,19 @@
       "risques": []
     },
     {
+      "id": "neondatabase/agent-skills/skills/neon-postgres",
+      "nom": "neon-postgres",
+      "place": "ajout",
+      "repo": "neondatabase/agent-skills",
+      "chemin_skill": "skills/neon-postgres",
+      "skill_md": "skills/neon-postgres/SKILL.md",
+      "sha_epingle": "51c7d594c0568d52a15eede61cc43f9f1227607a",
+      "resume_fr": "guide migrations, branches et requêtes Neon → évite les erreurs de schéma et de connexion",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
       "id": "huggingface/skills/skills/huggingface-trackio",
       "nom": "huggingface-trackio",
       "place": "ajout",
@@ -152,32 +152,6 @@
       "resume_fr": "journalise les métriques d'entraînement et déclenche des alertes → repère vite les runs qui divergent",
       "note": 9,
       "risque_max": "moyen",
-      "risques": []
-    },
-    {
-      "id": "nvidia/skills/skills/accelerated-computing-cudf",
-      "nom": "accelerated-computing-cudf",
-      "place": "ajout",
-      "repo": "NVIDIA/skills",
-      "chemin_skill": "skills/accelerated-computing-cudf",
-      "skill_md": "skills/accelerated-computing-cudf/SKILL.md",
-      "sha_epingle": "4fc9cf6cec785070e0bf5bb4aa6c992f71b1c97e",
-      "resume_fr": "règles NVIDIA cuDF pour accélérer pandas sur GPU → traitements de données plus rapides",
-      "note": 10,
-      "risque_max": "moyen",
-      "risques": []
-    },
-    {
-      "id": "pydantic/skills/skills/logfire-query",
-      "nom": "logfire-query",
-      "place": "ajout",
-      "repo": "pydantic/skills",
-      "chemin_skill": "skills/logfire-query",
-      "skill_md": "skills/logfire-query/SKILL.md",
-      "sha_epingle": "98f591c0886eb11df0bdd57804419e11439efc93",
-      "resume_fr": "interroge traces, logs et métriques Logfire → trouve plus vite la cause des erreurs",
-      "note": 9,
-      "risque_max": null,
       "risques": []
     },
     {
@@ -196,42 +170,29 @@
       ]
     },
     {
-      "id": "astronomer/agents/skills/airflow",
-      "nom": "airflow",
+      "id": "pydantic/skills/skills/logfire-query",
+      "nom": "logfire-query",
       "place": "ajout",
-      "repo": "astronomer/agents",
-      "chemin_skill": "skills/airflow",
-      "skill_md": "skills/airflow/SKILL.md",
-      "sha_epingle": "486ee63d01f8126c52fbc92c36cd36ec31708dcd",
-      "resume_fr": "lance, relance et diagnostique tes DAG Airflow → moins de temps perdu sur les échecs",
+      "repo": "pydantic/skills",
+      "chemin_skill": "skills/logfire-query",
+      "skill_md": "skills/logfire-query/SKILL.md",
+      "sha_epingle": "98f591c0886eb11df0bdd57804419e11439efc93",
+      "resume_fr": "interroge traces, logs et métriques Logfire → trouve plus vite la cause des erreurs",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
-    },
-    {
-      "id": "neondatabase/agent-skills/skills/neon-postgres",
-      "nom": "neon-postgres",
-      "place": "ajout",
-      "repo": "neondatabase/agent-skills",
-      "chemin_skill": "skills/neon-postgres",
-      "skill_md": "skills/neon-postgres/SKILL.md",
-      "sha_epingle": "51c7d594c0568d52a15eede61cc43f9f1227607a",
-      "resume_fr": "guide migrations, branches et requêtes Neon → évite les erreurs de schéma et de connexion",
-      "note": 9,
-      "risque_max": "moyen",
-      "risques": []
-    },
-    {
-      "id": "microsoft/dataverse-skills/.github/plugins/dataverse/skills/dv-query",
-      "nom": "dv-query",
-      "place": "ajout",
-      "repo": "microsoft/Dataverse-skills",
-      "chemin_skill": ".github/plugins/dataverse/skills/dv-query",
-      "skill_md": ".github/plugins/dataverse/skills/dv-query/SKILL.md",
-      "sha_epingle": "1966192f0bee20216f1b58cf11f8b0c4b0e3edb8",
-      "resume_fr": "interroge et agrège tes données Dataverse → analyses rapides, sans tout télécharger",
-      "note": 8,
       "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "nvidia/skills/skills/accelerated-computing-cudf",
+      "nom": "accelerated-computing-cudf",
+      "place": "ajout",
+      "repo": "NVIDIA/skills",
+      "chemin_skill": "skills/accelerated-computing-cudf",
+      "skill_md": "skills/accelerated-computing-cudf/SKILL.md",
+      "sha_epingle": "4621bf0967c40a4bfd0045ab29c8958290bb4f9c",
+      "resume_fr": "règles NVIDIA cuDF pour accélérer pandas sur GPU → traitements de données plus rapides",
+      "note": 10,
+      "risque_max": "moyen",
       "risques": []
     },
     {
@@ -245,6 +206,19 @@
       "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, WCS → moins d'erreurs d'unités et de conversion",
       "note": 9,
       "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "astronomer/agents/skills/airflow",
+      "nom": "airflow",
+      "place": "ajout",
+      "repo": "astronomer/agents",
+      "chemin_skill": "skills/airflow",
+      "skill_md": "skills/airflow/SKILL.md",
+      "sha_epingle": "486ee63d01f8126c52fbc92c36cd36ec31708dcd",
+      "resume_fr": "lance, relance et diagnostique tes DAG Airflow → moins de temps perdu sur les échecs",
+      "note": 9,
+      "risque_max": "moyen",
       "risques": []
     },
     {
@@ -267,8 +241,34 @@
       "repo": "mongodb/agent-skills",
       "chemin_skill": "skills/mongodb-schema-design",
       "skill_md": "skills/mongodb-schema-design/SKILL.md",
-      "sha_epingle": "26231c59b980405c33d4981428d71e41486e00b0",
+      "sha_epingle": "2c2c0f291a675bb726260172826a09667c5dbbec",
       "resume_fr": "revoit ton modèle de données MongoDB → évite les schémas qui ralentissent les requêtes",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "microsoft/dataverse-skills/.github/plugins/dataverse/skills/dv-query",
+      "nom": "dv-query",
+      "place": "ajout",
+      "repo": "microsoft/Dataverse-skills",
+      "chemin_skill": ".github/plugins/dataverse/skills/dv-query",
+      "skill_md": ".github/plugins/dataverse/skills/dv-query/SKILL.md",
+      "sha_epingle": "1966192f0bee20216f1b58cf11f8b0c4b0e3edb8",
+      "resume_fr": "interroge et agrège tes données Dataverse → analyses rapides, sans tout télécharger",
+      "note": 8,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "dynatrace/dynatrace-for-ai/skills/dt-app-notebooks",
+      "nom": "dt-app-notebooks",
+      "place": "ajout",
+      "repo": "Dynatrace/dynatrace-for-ai",
+      "chemin_skill": "skills/dt-app-notebooks",
+      "skill_md": "skills/dt-app-notebooks/SKILL.md",
+      "sha_epingle": "4f9aa71f9802aa6db0a4069ae5619eb3392ff411",
+      "resume_fr": "crée et modifie tes notebooks Dynatrace, requêtes DQL validées → évite les requêtes inventées",
       "note": 9,
       "risque_max": "moyen",
       "risques": []

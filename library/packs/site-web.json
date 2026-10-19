@@ -1,23 +1,50 @@
 {
   "type": "site-web",
-  "genere_le": "2026-10-19T13:50:04.576Z",
+  "genere_le": "2026-10-19T14:50:46.579Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
   "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
-  "tenants_de": "4b276fe",
-  "changements": [
+  "tenants_de": "tour précédent",
+  "reclasse": true,
+  "finalistes": [
+    "agricidaniel/claude-seo/skills/seo-drift",
+    "athevon/genjutsu/skills/paint",
+    "awslabs/agent-plugins/plugins/deploy-on-aws/skills/elastic-beanstalk",
+    "bencium/bencium-marketplace/bencium-controlled-ux-designer/skills/bencium-controlled-ux-designer",
+    "chromedevtools/chrome-devtools-mcp/skills/a11y-debugging",
+    "cloudflare/skills/skills/nextjs-on-cloudflare",
+    "cloudflare/skills/skills/turnstile-spin",
+    "composio-community/awesome-claude-plugins/senior-frontend/skills/senior-frontend",
+    "gmickel/flow-next/plugins/flow-next/skills/flow-next-drive",
+    "googlechrome/modern-web-guidance/skills/modern-web-guidance",
+    "greensock/gsap-skills/skills/gsap-react",
+    "huggingface/skills/skills/huggingface-gradio",
+    "jakeschincariol/replica-skill/replica-architect",
+    "jeffallan/claude-skills/skills/nextjs-developer",
+    "jeffallan/claude-skills/skills/react-expert",
+    "jezweb/claude-skills/plugins/cloudflare/skills/vite-flare-starter",
+    "jezweb/claude-skills/plugins/dev-tools/skills/vitest",
+    "molauu/svg-character-animator/svg-character-animator",
+    "plugin87/ux-ui-agent-skills/.claude/skills/token-build",
+    "sangrokjung/claude-forge/skills/cache-components",
+    "textura-agency/next16-claude-starter/.claude/skills/mobile-device-qa",
+    "textura-agency/next16-claude-starter/.claude/skills/optimize-3d-scene",
+    "vercel-labs/agent-skills/skills/composition-patterns",
+    "vercel-labs/agent-skills/skills/react-best-practices",
+    "vercel/vercel-plugin/skills/auth"
+  ],
+  "changements": [],
+  "ecartes": [
     {
-      "entrant": "mobile-device-qa",
-      "sortant": "seo-agentic",
-      "raison": "mobile-device-qa couvre les défauts réels sur iPhone (barre d'URL Safari, menu plein écran dvh et safe area, débordement horizontal, mises en page Figma absolues sur téléphone), ce que ni Lighthouse ni les tests headless ne voient. Il sert à chaque site livré. seo-agentic est très spécialisé (llms.txt, WebMCP, trafic d'agents) et son propre texte dit que WebMCP est optionnel."
+      "nom": "elastic-beanstalk",
+      "raison": "Déploiement AWS, hors stack (Cloudflare)."
     }
   ],
-  "ecartes": [],
   "stabilite": {
     "tirages": 3,
-    "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "Les tenants (pratiques web modernes, performance React/Next.js, accessibilité, animation GSAP) couvrent le mieux la stack Next.js. Aucun challenger n'est nettement meilleur, et aucun tenant n'est écarté."
+    "meme_composition_sans_tenants": true,
+    "raison_tirage_1": "Les bonnes pratiques web modernes et la performance React/Next.js, plus l'accessibilité et le QA mobile, couvrent le mieux un site Next.js construit depuis Figma ; aucune techno absente de sa stack ne justifie un écart."
   },
   "recommandes": [
     {
@@ -141,30 +168,17 @@
       "raison": "Déclenchement clair et sujet net. Mais le skill ne contient que la procédure : les règles sont téléchargées à chaque exécution depuis la branche main, sans version figée. Peu de savoir-faire local, pas de licence."
     },
     {
-      "id": "agricidaniel/claude-seo/skills/seo-agentic",
-      "nom": "seo-agentic",
-      "repo": "AgriciDaniel/claude-seo",
-      "resume_fr": "audite robots.txt, llms.txt, accessibilité et outils WebMCP → site lisible par les agents IA",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill de mainteneur ciblé et précis : règles RFC 9309, Content-Signal, calcul X/N Lighthouse, commandes exactes, dates de vérification. -1 en qualité : scripts absents et annexes tronquées."
-    },
-    {
-      "id": "sangrokjung/claude-forge/skills/cache-components",
-      "nom": "cache-components",
-      "repo": "sangrokjung/claude-forge",
-      "resume_fr": "guide le cache Next.js et le PPR → pages plus rapides, moins de calculs serveur",
-      "note": 9,
+      "id": "jeffallan/claude-skills/skills/nextjs-developer",
+      "nom": "nextjs-developer",
+      "repo": "Jeffallan/claude-skills",
+      "resume_fr": "configure App Router, Server Components et Server Actions → apps Next.js plus rapides, mieux référencées",
+      "note": 7,
       "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
+      "score_pack": 6.6,
+      "note_juge": 7,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Skill précis et bien ciblé sur les API récentes de Cache Components, avec exemples et messages d'erreur. Note amputée : application « proactive » trop large, annexes tronquées, dépôt tiers non officiel."
+      "raison": "Déclenchement et périmètre précis. Valeur limitée : connaissances Next.js de base, et API datées (params non asynchrones, cache fetch par défaut, useFormState, experimental_useOptimistic). Annexe server-components absente."
     },
     {
       "id": "textura-agency/next16-claude-starter/.claude/skills/optimize-3d-scene",
@@ -178,6 +192,19 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Déclenchement précis et périmètre net. Pièges réels et mesures chiffrées (cap fps, DPR, recompilation en cours de scroll). Tronqué à 63 % et dépend de modules et docs absents : confiance basse."
+    },
+    {
+      "id": "sangrokjung/claude-forge/skills/cache-components",
+      "nom": "cache-components",
+      "repo": "sangrokjung/claude-forge",
+      "resume_fr": "guide le cache Next.js et le PPR → pages plus rapides, moins de calculs serveur",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Skill précis et bien ciblé sur les API récentes de Cache Components, avec exemples et messages d'erreur. Note amputée : application « proactive » trop large, annexes tronquées, dépôt tiers non officiel."
     },
     {
       "id": "cloudflare/skills/skills/nextjs-on-cloudflare",
@@ -206,43 +233,30 @@
       "raison": "Skill officiel Cloudflare, précis : siteverify canonique avec contrôle de action et hostname, commandes exactes. Pénalisé en qualité pour sa longueur et sa troncature (SKILL.md, scripts absents), d'où confiance basse."
     },
     {
-      "id": "jeffallan/claude-skills/skills/nextjs-developer",
-      "nom": "nextjs-developer",
+      "id": "jeffallan/claude-skills/skills/react-expert",
+      "nom": "react-expert",
       "repo": "Jeffallan/claude-skills",
-      "resume_fr": "configure App Router, Server Components et Server Actions → apps Next.js plus rapides, mieux référencées",
-      "note": 7,
+      "resume_fr": "crée des composants React typés et guide Server Components → moins de re-rendus, code plus robuste",
+      "note": 8,
       "pertinence": 6,
-      "score_pack": 6.6,
-      "note_juge": 7,
+      "score_pack": 7.2,
+      "note_juge": 8,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement et périmètre précis. Valeur limitée : connaissances Next.js de base, et API datées (params non asynchrones, cache fetch par défaut, useFormState, experimental_useOptimistic). Annexe server-components absente."
+      "raison": "Skill de mainteneur, ciblé et concret, avec exemples de code et déclencheurs clairs. Valeur surtout générique pour Claude. Annexe de tests absente, deux annexes tronquées, incohérences mineures (use server dans un fichier client)."
     },
     {
-      "id": "vercel/vercel-plugin/skills/auth",
-      "nom": "auth",
-      "repo": "vercel/vercel-plugin",
-      "resume_fr": "guide l'auth Clerk, Better Auth ou Auth0 dans Next.js → sécurise connexions et routes protégées",
-      "note": 8,
-      "pertinence": 6,
-      "score_pack": 7.2,
-      "note_juge": 8,
+      "id": "athevon/genjutsu/skills/paint",
+      "nom": "paint",
+      "repo": "AThevon/genjutsu",
+      "resume_fr": "te fait valider la direction visuelle avant de coder → évite les designs génériques",
+      "note": 6,
+      "pertinence": 8,
+      "score_pack": 6.8,
+      "note_juge": 6,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis et contenu très concret (proxy.ts Next 16, pièges Better Auth, PKCE, Clerk Core 3). Périmètre large (cinq fournisseurs), SKILL.md tronqué et annexe absente."
-    },
-    {
-      "id": "jezweb/claude-skills/plugins/cloudflare/skills/vite-flare-starter",
-      "nom": "vite-flare-starter",
-      "repo": "jezweb/claude-skills",
-      "resume_fr": "clone un starter Cloudflare avec auth et base de données → lance un projet en minutes",
-      "note": 8,
-      "pertinence": 6,
-      "score_pack": 7.2,
-      "note_juge": 8,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis et commandes concrètes (wrangler, migrations D1, secrets). Valeur surtout pour qui veut ce template précis. Annexe wrangler absente, setup.sh annoncé mais non fourni, incohérences mineures."
+      "risque_max": "eleve",
+      "raison": "Méthode riche (gates de validation, anti-slop, règles d'animation) mais tronquée à 24 000 car. sur 66 665, dépend de modules _jutsu absents. Périmètre large et déclenchement vague."
     },
     {
       "id": "plugin87/ux-ui-agent-skills/.claude/skills/token-build",
@@ -282,6 +296,19 @@
       "modele": "haiku",
       "risque_max": "moyen",
       "raison": "Déclenchement précis et savoir-faire réel : stratégie TRANSFORM/MORPH par chemin, normalisation, gestion des orphelins et de l'interruption. Lecture partielle seulement (SKILL.md tronqué), d'où confiance moyenne."
+    },
+    {
+      "id": "gmickel/flow-next/plugins/flow-next/skills/flow-next-drive",
+      "nom": "flow-next-drive",
+      "repo": "gmickel/flow-next",
+      "resume_fr": "pilote l'interface comme un vrai utilisateur → repère les erreurs console et requêtes échouées",
+      "note": 5,
+      "pertinence": 6,
+      "score_pack": 5.4,
+      "note_juge": 5,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Processus bien pensé et pièges réels (refs périmées, CDP, console et réseau), mais la description liste des déclencheurs très larges, le périmètre est fourre-tout et de nombreuses annexes citées manquent ou sont tronquées."
     }
   ]
 }

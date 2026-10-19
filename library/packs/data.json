@@ -1,30 +1,70 @@
 {
   "type": "data",
-  "genere_le": "2026-10-19T13:50:04.583Z",
+  "genere_le": "2026-10-19T14:52:50.627Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
   "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
-  "tenants_de": "4b276fe",
-  "changements": [],
+  "tenants_de": "tour précédent",
+  "reclasse": true,
+  "finalistes": [
+    "astronomer/agents/skills/airflow",
+    "awslabs/agent-plugins/plugins/databases-on-aws/skills/dsql",
+    "cloudflare/skills/skills/basin",
+    "data-goblin/power-bi-agentic-development/plugins/dashboards/skills/querying-fabric",
+    "data-goblin/power-bi-agentic-development/plugins/etl/skills/using-duckdb",
+    "data-goblin/power-bi-agentic-development/plugins/fabric-cli/skills/fabric-cli",
+    "datopian/portaljs/skills/portaljs-add-geo",
+    "dynatrace/dynatrace-for-ai/skills/dt-app-notebooks",
+    "dynatrace/dynatrace-for-ai/skills/dt-obs-analytics",
+    "eigent-ai/eigent/resources/example-skills/xlsx",
+    "huggingface/skills/skills/huggingface-trackio",
+    "jeffallan/claude-skills/skills/pandas-pro",
+    "jeffallan/claude-skills/skills/sql-pro",
+    "k-dense-ai/scientific-agent-skills/skills/aeon",
+    "k-dense-ai/scientific-agent-skills/skills/astropy",
+    "k-dense-ai/scientific-agent-skills/skills/dask",
+    "k-dense-ai/scientific-agent-skills/skills/polars",
+    "k-dense-ai/scientific-agent-skills/skills/scientific-visualization",
+    "microsoft/dataverse-skills/.github/plugins/dataverse/skills/dv-query",
+    "mongodb/agent-skills/skills/mongodb-schema-design",
+    "neondatabase/agent-skills/skills/neon-postgres",
+    "nvidia/skills/skills/accelerated-computing-cudf",
+    "phuryn/pm-skills/pm-execution/skills/dummy-dataset",
+    "pydantic/skills/skills/logfire-query",
+    "timescale/pg-aiguide/skills/schema-exploration"
+  ],
+  "changements": [
+    {
+      "entrant": "dask",
+      "sortant": "basin",
+      "raison": "Basin est un entrepôt analytique cloud (Iceberg sur R2) absent de sa stack et écarté. Dask prolonge pandas au-delà de la RAM, ce qui est utile pour sa stack Python.",
+      "entrant_id": "k-dense-ai/scientific-agent-skills/skills/dask",
+      "sortant_id": "cloudflare/skills/skills/basin"
+    }
+  ],
   "ecartes": [
     {
-      "nom": "querying-fabric",
-      "raison": "Microsoft Fabric / Power BI (DAX), techno cloud absente de la stack."
+      "nom": "using-duckdb",
+      "raison": "Cible Fabric/OneLake (data warehouse cloud), absent de sa stack."
     },
     {
-      "nom": "using-duckdb",
-      "raison": "Ciblé sur les lakehouses Fabric / OneLake, techno cloud absente de la stack."
+      "nom": "querying-fabric",
+      "raison": "Microsoft Fabric/Power BI : techno cloud absente de sa stack."
     },
     {
       "nom": "fabric-cli",
-      "raison": "Pilote Microsoft Fabric, plateforme data cloud absente de la stack."
+      "raison": "Microsoft Fabric : plateforme data cloud absente de sa stack."
+    },
+    {
+      "nom": "basin",
+      "raison": "Analytique Iceberg/R2 SQL de type data warehouse cloud, hors de sa stack."
     }
   ],
   "stabilite": {
     "tirages": 3,
-    "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "Aucun tenant n'est écarté et aucun challenger non écarté n'est nettement meilleur, donc la tête reste pandas, visualisation scientifique, polars, SQL, séries temporelles, et les skills Fabric, Dataverse, Dynatrace, AWS, MongoDB et Neon sont écartés."
+    "meme_composition_sans_tenants": true,
+    "raison_tirage_1": "La tête du pack va aux skills pandas, SQL généraliste, visualisation matplotlib et ML Python, qui couvrent sa stack data. Les skills de data warehouse cloud sont écartés."
   },
   "recommandes": [
     {
@@ -119,21 +159,6 @@
       "raison": "Déclenchement clair et sujet net. Mais le contenu est très générique : le gabarit Python est incomplet (générateur vide, placeholders $ROWS non remplis, « auto-increment » non implémenté). Peu de savoir-faire propre à Claude Code."
     },
     {
-      "id": "cloudflare/skills/skills/basin",
-      "nom": "basin",
-      "repo": "cloudflare/skills",
-      "resume_fr": "guide Basin Pipelines, Catalog et SQL → évite les erreurs sur les tables Iceberg R2",
-      "note": 7,
-      "pertinence": 8,
-      "score_pack": 7.4,
-      "note_juge": 7,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Périmètre net et déclenchement précis, avec des pièges utiles (immuabilité, __ingest_ts, validation différée). Mais surtout des liens, des commandes proposées dans une PR non publiée, et des annexes manquantes."
-    }
-  ],
-  "ajouts": [
-    {
       "id": "k-dense-ai/scientific-agent-skills/skills/dask",
       "nom": "dask",
       "repo": "K-Dense-AI/scientific-agent-skills",
@@ -145,7 +170,9 @@
       "modele": "haiku",
       "risque_max": "eleve",
       "raison": "Déclenchement précis et versions datées (dask 2026.8.0, expressions obligatoires). Pièges réels bien détaillés. Qualité réduite par une section de citation qui impose un accès réseau et l'ajout de références non demandées."
-    },
+    }
+  ],
+  "ajouts": [
     {
       "id": "timescale/pg-aiguide/skills/schema-exploration",
       "nom": "schema-exploration",
@@ -158,71 +185,6 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Déclencheur précis et garde-fous solides (lecture seule, échantillonnage soumis à accord, PG18). Requêtes catalogue concrètes. Notée un cran plus bas : plusieurs annexes citées sont absentes ou tronquées."
-    },
-    {
-      "id": "huggingface/skills/skills/huggingface-trackio",
-      "nom": "huggingface-trackio",
-      "repo": "huggingface/skills",
-      "resume_fr": "journalise les métriques d'entraînement et déclenche des alertes → repère vite les runs qui divergent",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill officiel Hugging Face, ciblé et déclencheur précis, avec API et commandes CLI exactes. Note amputée par des annexes tronquées et un exemple avec variable non définie."
-    },
-    {
-      "id": "nvidia/skills/skills/accelerated-computing-cudf",
-      "nom": "accelerated-computing-cudf",
-      "repo": "NVIDIA/skills",
-      "resume_fr": "règles NVIDIA cuDF pour accélérer pandas sur GPU → traitements de données plus rapides",
-      "note": 10,
-      "pertinence": 6,
-      "score_pack": 8.4,
-      "note_juge": 10,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Guide officiel NVIDIA, ciblé et précis : chemins cudf.pandas, cuDF et dask-cuDF, pièges de parité (nulls, tri stable, regex GPU), commandes exactes. Annexes tronquées à la lecture."
-    },
-    {
-      "id": "pydantic/skills/skills/logfire-query",
-      "nom": "logfire-query",
-      "repo": "pydantic/skills",
-      "resume_fr": "interroge traces, logs et métriques Logfire → trouve plus vite la cause des erreurs",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis avec routage explicite vers logfire-ui. Schéma Logfire, limites (14 jours, 10 000 lignes) et exemples SQL concrets. Note amputée par des restes écrits pour Codex et des annexes tronquées."
-    },
-    {
-      "id": "datopian/portaljs/skills/portaljs-add-geo",
-      "nom": "portaljs-add-geo",
-      "repo": "datopian/portaljs",
-      "resume_fr": "convertit un fichier géo en carte et requêtes spatiales → portail prêt sans serveur",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Pipeline géo précis et vérifiable (commandes ogr2ogr, tippecanoe, duckdb, pièges RFC7946 et Hilbert, seuils de taille). Retiré : workflow principal externe non fourni, annexe tronquée, pipeline qui publie les données."
-    },
-    {
-      "id": "astronomer/agents/skills/airflow",
-      "nom": "airflow",
-      "repo": "astronomer/agents",
-      "resume_fr": "lance, relance et diagnostique tes DAG Airflow → moins de temps perdu sur les échecs",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill d'Astronomer, ciblé sur les opérations Airflow avec des commandes `af` exactes et des garde-fous (dry-run avant discover). Note amputée : routes vers des skills frères et un hook absents."
     },
     {
       "id": "neondatabase/agent-skills/skills/neon-postgres",
@@ -238,17 +200,56 @@
       "raison": "Pièges Neon réels (pooler vs direct pour migrations, diagnostics CLI, LFC, Lakebase Search avec SQL précis). Sections fines (autoscaling, replicas) qui renvoient surtout à des liens. Annexes tronquées."
     },
     {
-      "id": "microsoft/dataverse-skills/.github/plugins/dataverse/skills/dv-query",
-      "nom": "dv-query",
-      "repo": "microsoft/Dataverse-skills",
-      "resume_fr": "interroge et agrège tes données Dataverse → analyses rapides, sans tout télécharger",
-      "note": 8,
-      "pertinence": 8,
-      "score_pack": 8,
-      "note_juge": 8,
+      "id": "huggingface/skills/skills/huggingface-trackio",
+      "nom": "huggingface-trackio",
+      "repo": "huggingface/skills",
+      "resume_fr": "journalise les métriques d'entraînement et déclenche des alertes → repère vite les runs qui divergent",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill officiel Hugging Face, ciblé et déclencheur précis, avec API et commandes CLI exactes. Note amputée par des annexes tronquées et un exemple avec variable non définie."
+    },
+    {
+      "id": "datopian/portaljs/skills/portaljs-add-geo",
+      "nom": "portaljs-add-geo",
+      "repo": "datopian/portaljs",
+      "resume_fr": "convertit un fichier géo en carte et requêtes spatiales → portail prêt sans serveur",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Pipeline géo précis et vérifiable (commandes ogr2ogr, tippecanoe, duckdb, pièges RFC7946 et Hilbert, seuils de taille). Retiré : workflow principal externe non fourni, annexe tronquée, pipeline qui publie les données."
+    },
+    {
+      "id": "pydantic/skills/skills/logfire-query",
+      "nom": "logfire-query",
+      "repo": "pydantic/skills",
+      "resume_fr": "interroge traces, logs et métriques Logfire → trouve plus vite la cause des erreurs",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement précis et pièges réels (404 de pluriel SQL, casse des noms, quoting Windows), commandes et code exacts. Périmètre élargi à l'ERP et aux notebooks, texte dense et renvois vers des fichiers absents."
+      "raison": "Déclenchement précis avec routage explicite vers logfire-ui. Schéma Logfire, limites (14 jours, 10 000 lignes) et exemples SQL concrets. Note amputée par des restes écrits pour Codex et des annexes tronquées."
+    },
+    {
+      "id": "nvidia/skills/skills/accelerated-computing-cudf",
+      "nom": "accelerated-computing-cudf",
+      "repo": "NVIDIA/skills",
+      "resume_fr": "règles NVIDIA cuDF pour accélérer pandas sur GPU → traitements de données plus rapides",
+      "note": 10,
+      "pertinence": 6,
+      "score_pack": 8.4,
+      "note_juge": 10,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Guide officiel NVIDIA, ciblé et précis : chemins cudf.pandas, cuDF et dask-cuDF, pièges de parité (nulls, tri stable, regex GPU), commandes exactes. Annexes tronquées à la lecture."
     },
     {
       "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
@@ -262,6 +263,19 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Skill ciblé et précis : pièges réels (z positionnel, WCS 0/1, w0wzCDM, réseau signalé). Note de qualité réduite : texte verbeux, avertissements « illustratifs » répétés, section de citation hors sujet."
+    },
+    {
+      "id": "astronomer/agents/skills/airflow",
+      "nom": "airflow",
+      "repo": "astronomer/agents",
+      "resume_fr": "lance, relance et diagnostique tes DAG Airflow → moins de temps perdu sur les échecs",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill d'Astronomer, ciblé sur les opérations Airflow avec des commandes `af` exactes et des garde-fous (dry-run avant discover). Note amputée : routes vers des skills frères et un hook absents."
     },
     {
       "id": "awslabs/agent-plugins/plugins/databases-on-aws/skills/dsql",
@@ -288,6 +302,32 @@
       "modele": "haiku",
       "risque_max": "moyen",
       "raison": "Déclencheurs précis, pièges réels et commandes vérifiables (hideIndex, $indexStats, explain). Retranché : ton d'agent mal adapté (« je », outils MCP), annexe tronquée, 15 annexes non fournies."
+    },
+    {
+      "id": "microsoft/dataverse-skills/.github/plugins/dataverse/skills/dv-query",
+      "nom": "dv-query",
+      "repo": "microsoft/Dataverse-skills",
+      "resume_fr": "interroge et agrège tes données Dataverse → analyses rapides, sans tout télécharger",
+      "note": 8,
+      "pertinence": 8,
+      "score_pack": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et pièges réels (404 de pluriel SQL, casse des noms, quoting Windows), commandes et code exacts. Périmètre élargi à l'ERP et aux notebooks, texte dense et renvois vers des fichiers absents."
+    },
+    {
+      "id": "dynatrace/dynatrace-for-ai/skills/dt-app-notebooks",
+      "nom": "dt-app-notebooks",
+      "repo": "Dynatrace/dynatrace-for-ai",
+      "resume_fr": "crée et modifie tes notebooks Dynatrace, requêtes DQL validées → évite les requêtes inventées",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill ciblé et précis : workflow dtctl en étapes, règles de mise à jour (relire avant d'écrire), types de visualisation et pièges réels. Note amputée par une annexe tronquée, un JSON commenté invalide et des assets absents."
     }
   ]
 }

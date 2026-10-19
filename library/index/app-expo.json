@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-19T14:07:33.856Z",
+  "genere_le": "2026-10-19T14:53:08.479Z",
   "type": "app-expo",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
@@ -84,14 +84,14 @@
       "risques": []
     },
     {
-      "id": "software-mansion-labs/skills/skills/expo-horizon",
-      "nom": "expo-horizon",
+      "id": "suleimanodetoro/skills/skills/engineer-react-native",
+      "nom": "engineer-react-native",
       "place": "recommande",
-      "repo": "software-mansion-labs/skills",
-      "chemin_skill": "skills/expo-horizon",
-      "skill_md": "skills/expo-horizon/SKILL.md",
-      "sha_epingle": "58afa0a09b01dc47819af8fd48bb062561414108",
-      "resume_fr": "guide l'ajout de Meta Quest à une app Expo → évite les appels GPS non supportés",
+      "repo": "suleimanodetoro/skills",
+      "chemin_skill": "skills/engineer-react-native",
+      "skill_md": "skills/engineer-react-native/SKILL.md",
+      "sha_epingle": "390a7cc2c55c77f27cd28f3c38953e24d3676883",
+      "resume_fr": "cadre les apps React Native iOS et Android → moins de bugs natifs avant publication",
       "note": 9,
       "risque_max": null,
       "risques": []
@@ -112,6 +112,19 @@
   ],
   "ajouts": [
     {
+      "id": "expo/skills/plugins/expo/skills/expo-module",
+      "nom": "expo-module",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/expo-module",
+      "skill_md": "plugins/expo/skills/expo-module/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "guide les modules natifs Expo iOS et Android → évite les erreurs de structure",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
       "id": "expo/skills/plugins/expo/skills/expo-examples",
       "nom": "expo-examples",
       "place": "ajout",
@@ -127,28 +140,45 @@
       ]
     },
     {
-      "id": "expo/skills/plugins/expo/skills/expo-module",
-      "nom": "expo-module",
+      "id": "devsemih/appstore-review-skill/skills/appstore-review",
+      "nom": "appstore-review",
       "place": "ajout",
-      "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-module",
-      "skill_md": "plugins/expo/skills/expo-module/SKILL.md",
-      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
-      "resume_fr": "guide les modules natifs Expo iOS et Android → évite les erreurs de structure",
+      "repo": "devsemih/appstore-review-skill",
+      "chemin_skill": "skills/appstore-review",
+      "skill_md": "skills/appstore-review/SKILL.md",
+      "sha_epingle": "ab77bb701fe9bee863b89db4634efcf6e128798e",
+      "resume_fr": "vérifie ton app iOS avant soumission → moins de rejets à l'App Store",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "risque_max": "eleve",
+      "risques": [
+        "frontmatter allowed-tools"
+      ]
     },
     {
-      "id": "suleimanodetoro/skills/skills/engineer-react-native",
-      "nom": "engineer-react-native",
+      "id": "devsemih/appstore-review-skill/skills/playstore-review",
+      "nom": "playstore-review",
+      "place": "ajout",
+      "repo": "devsemih/appstore-review-skill",
+      "chemin_skill": "skills/playstore-review",
+      "skill_md": "skills/playstore-review/SKILL.md",
+      "sha_epingle": "ab77bb701fe9bee863b89db4634efcf6e128798e",
+      "resume_fr": "vérifie un projet Android avant soumission → évite les rejets et retraits de Google Play",
+      "note": 9,
+      "risque_max": "eleve",
+      "risques": [
+        "frontmatter allowed-tools"
+      ]
+    },
+    {
+      "id": "suleimanodetoro/skills/skills/review-react-native",
+      "nom": "review-react-native",
       "place": "ajout",
       "repo": "suleimanodetoro/skills",
-      "chemin_skill": "skills/engineer-react-native",
-      "skill_md": "skills/engineer-react-native/SKILL.md",
+      "chemin_skill": "skills/review-react-native",
+      "skill_md": "skills/review-react-native/SKILL.md",
       "sha_epingle": "390a7cc2c55c77f27cd28f3c38953e24d3676883",
-      "resume_fr": "cadre les apps React Native iOS et Android → moins de bugs natifs avant publication",
-      "note": 9,
+      "resume_fr": "relit React Native et Expo sans rien modifier → évite les bugs natifs iOS et Android",
+      "note": 8,
       "risque_max": null,
       "risques": []
     },
@@ -181,73 +211,17 @@
       "risques": []
     },
     {
-      "id": "devsemih/appstore-review-skill/skills/appstore-review",
-      "nom": "appstore-review",
+      "id": "software-mansion-labs/skills/skills/pulsar-haptics",
+      "nom": "pulsar-haptics",
       "place": "ajout",
-      "repo": "devsemih/appstore-review-skill",
-      "chemin_skill": "skills/appstore-review",
-      "skill_md": "skills/appstore-review/SKILL.md",
-      "sha_epingle": "ab77bb701fe9bee863b89db4634efcf6e128798e",
-      "resume_fr": "vérifie ton app iOS avant soumission → moins de rejets à l'App Store",
-      "note": 9,
-      "risque_max": "eleve",
-      "risques": [
-        "frontmatter allowed-tools"
-      ]
-    },
-    {
-      "id": "jeffallan/claude-skills/skills/react-native-expert",
-      "nom": "react-native-expert",
-      "place": "ajout",
-      "repo": "Jeffallan/claude-skills",
-      "chemin_skill": "skills/react-native-expert",
-      "skill_md": "skills/react-native-expert/SKILL.md",
-      "sha_epingle": "36f3fe8052da7c57083783268c6ea3265d075265",
-      "resume_fr": "te guide sur FlatList, memo et SafeArea pour apps mobiles → listes fluides, écrans sans coupures",
-      "note": 7,
-      "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/expo-brownfield",
-      "nom": "expo-brownfield",
-      "place": "ajout",
-      "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-brownfield",
-      "skill_md": "plugins/expo/skills/expo-brownfield/SKILL.md",
-      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
-      "resume_fr": "embarque Expo dans une app native existante → garde intactes la navigation et les vues natives",
-      "note": 9,
+      "repo": "software-mansion-labs/skills",
+      "chemin_skill": "skills/pulsar-haptics",
+      "skill_md": "skills/pulsar-haptics/SKILL.md",
+      "sha_epingle": "58afa0a09b01dc47819af8fd48bb062561414108",
+      "resume_fr": "implémente les retours haptiques Pulsar sur le SDK installé → évite les appels d'API inventés",
+      "note": 8,
       "risque_max": "moyen",
       "risques": []
-    },
-    {
-      "id": "suleimanodetoro/skills/skills/review-react-native",
-      "nom": "review-react-native",
-      "place": "ajout",
-      "repo": "suleimanodetoro/skills",
-      "chemin_skill": "skills/review-react-native",
-      "skill_md": "skills/review-react-native/SKILL.md",
-      "sha_epingle": "390a7cc2c55c77f27cd28f3c38953e24d3676883",
-      "resume_fr": "relit React Native et Expo sans rien modifier → évite les bugs natifs iOS et Android",
-      "note": 8,
-      "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "devsemih/appstore-review-skill/skills/playstore-review",
-      "nom": "playstore-review",
-      "place": "ajout",
-      "repo": "devsemih/appstore-review-skill",
-      "chemin_skill": "skills/playstore-review",
-      "skill_md": "skills/playstore-review/SKILL.md",
-      "sha_epingle": "ab77bb701fe9bee863b89db4634efcf6e128798e",
-      "resume_fr": "vérifie un projet Android avant soumission → évite les rejets et retraits de Google Play",
-      "note": 9,
-      "risque_max": "eleve",
-      "risques": [
-        "frontmatter allowed-tools"
-      ]
     },
     {
       "id": "wataru-maeda/react-native-boilerplate/.agents/skills/init-project",
@@ -263,15 +237,41 @@
       "risques": []
     },
     {
-      "id": "software-mansion-labs/skills/skills/pulsar-haptics",
-      "nom": "pulsar-haptics",
+      "id": "sickn33/agentic-awesome-skills/skills/add-app-clip",
+      "nom": "add-app-clip",
       "place": "ajout",
-      "repo": "software-mansion-labs/skills",
-      "chemin_skill": "skills/pulsar-haptics",
-      "skill_md": "skills/pulsar-haptics/SKILL.md",
-      "sha_epingle": "58afa0a09b01dc47819af8fd48bb062561414108",
-      "resume_fr": "implémente les retours haptiques Pulsar sur le SDK installé → évite les appels d'API inventés",
-      "note": 8,
+      "repo": "sickn33/agentic-awesome-skills",
+      "chemin_skill": "skills/add-app-clip",
+      "skill_md": "skills/add-app-clip/SKILL.md",
+      "sha_epingle": "c808e6e480696d243e0668ebbc3499bb8e7e10a4",
+      "resume_fr": "ajoute un App Clip iOS à ton app Expo → lancement via URL, sans installation",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/eas-hosting",
+      "nom": "eas-hosting",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/eas-hosting",
+      "skill_md": "plugins/expo/skills/eas-hosting/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "déploie ton site Expo et ses routes API → mise en ligne sans gérer de serveur",
+      "note": 6,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-brownfield",
+      "nom": "expo-brownfield",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/expo-brownfield",
+      "skill_md": "plugins/expo/skills/expo-brownfield/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "embarque Expo dans une app native existante → garde intactes la navigation et les vues natives",
+      "note": 9,
       "risque_max": "moyen",
       "risques": []
     }

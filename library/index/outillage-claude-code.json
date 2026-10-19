@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-19T14:07:33.856Z",
+  "genere_le": "2026-10-19T14:53:08.483Z",
   "type": "outillage-claude-code",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
@@ -109,6 +109,19 @@
     }
   ],
   "ajouts": [
+    {
+      "id": "affaan-m/ecc/skills/agent-security-hardening",
+      "nom": "agent-security-hardening",
+      "place": "ajout",
+      "repo": "affaan-m/ECC",
+      "chemin_skill": "skills/agent-security-hardening",
+      "skill_md": "skills/agent-security-hardening/SKILL.md",
+      "sha_epingle": "76aaa77df6adc5b889e689007bf99b9a4f74af34",
+      "resume_fr": "valide identifiants, chemins et URLs avant chaque action d'agent → bloque fuites et écritures hors périmètre",
+      "note": 9,
+      "risque_max": null,
+      "risques": []
+    },
     {
       "id": "gaasher/agent-loop-skills/loops/optimize-loop",
       "nom": "optimize-loop",

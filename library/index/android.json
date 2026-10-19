@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-19T14:07:33.855Z",
+  "genere_le": "2026-10-19T14:53:08.478Z",
   "type": "android",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
@@ -141,15 +141,15 @@
       "risques": []
     },
     {
-      "id": "skydoves/compose-performance-skills/audit/auditing-compose-performance",
-      "nom": "auditing-compose-performance",
+      "id": "rcosteira79/android-skills/plugins/android-skills/skills/android-testing",
+      "nom": "android-testing",
       "place": "ajout",
-      "repo": "skydoves/compose-performance-skills",
-      "chemin_skill": "audit/auditing-compose-performance",
-      "skill_md": "audit/auditing-compose-performance/SKILL.md",
-      "sha_epingle": "1b32f81724c0d71fe9ef093ca44697f559fdab6e",
-      "resume_fr": "te fait mesurer avant de corriger → gains de fluidité prouvés par des chiffres",
-      "note": 10,
+      "repo": "rcosteira79/android-skills",
+      "chemin_skill": "plugins/android-skills/skills/android-testing",
+      "skill_md": "plugins/android-skills/skills/android-testing/SKILL.md",
+      "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
+      "resume_fr": "impose des tests rouges avant tout code Android → évite les pièges Compose et KMP",
+      "note": 9,
       "risque_max": null,
       "risques": []
     },
@@ -167,19 +167,6 @@
       "risques": []
     },
     {
-      "id": "sickn33/agentic-awesome-skills/skills/android-jetpack-compose-expert",
-      "nom": "android-jetpack-compose-expert",
-      "place": "ajout",
-      "repo": "sickn33/agentic-awesome-skills",
-      "chemin_skill": "skills/android-jetpack-compose-expert",
-      "skill_md": "skills/android-jetpack-compose-expert/SKILL.md",
-      "sha_epingle": "c808e6e480696d243e0668ebbc3499bb8e7e10a4",
-      "resume_fr": "te guide sur Jetpack Compose : états, navigation, performance → interfaces Android plus fluides",
-      "note": 7,
-      "risque_max": null,
-      "risques": []
-    },
-    {
       "id": "chrisbanes/skills/skills/compose-animations",
       "nom": "compose-animations",
       "place": "ajout",
@@ -193,16 +180,16 @@
       "risques": []
     },
     {
-      "id": "meet-miyani/compose-skill/skills/compose-feature",
-      "nom": "compose-feature",
+      "id": "skydoves/compose-performance-skills/audit/auditing-compose-performance",
+      "nom": "auditing-compose-performance",
       "place": "ajout",
-      "repo": "Meet-Miyani/compose-skill",
-      "chemin_skill": "skills/compose-feature",
-      "skill_md": "skills/compose-feature/SKILL.md",
-      "sha_epingle": "fe2bf99f22afc994555ddf9c5d415d2625693050",
-      "resume_fr": "construit un écran complet, tests inclus → évite les features inachevées et états oubliés",
-      "note": 9,
-      "risque_max": "moyen",
+      "repo": "skydoves/compose-performance-skills",
+      "chemin_skill": "audit/auditing-compose-performance",
+      "skill_md": "audit/auditing-compose-performance/SKILL.md",
+      "sha_epingle": "1b32f81724c0d71fe9ef093ca44697f559fdab6e",
+      "resume_fr": "te fait mesurer avant de corriger → gains de fluidité prouvés par des chiffres",
+      "note": 10,
+      "risque_max": null,
       "risques": []
     },
     {
@@ -235,19 +222,6 @@
       ]
     },
     {
-      "id": "athevon/genjutsu/skills/_jutsu/compose-multiplatform",
-      "nom": "compose-multiplatform",
-      "place": "ajout",
-      "repo": "AThevon/genjutsu",
-      "chemin_skill": "skills/_jutsu/compose-multiplatform",
-      "skill_md": "skills/_jutsu/compose-multiplatform/SKILL.md",
-      "sha_epingle": "1f518a71378b15d423389e546e767cffc86e14c3",
-      "resume_fr": "guide une seule UI Compose sur Android, iOS, desktop, web → moins de code dupliqué",
-      "note": 9,
-      "risque_max": null,
-      "risques": []
-    },
-    {
       "id": "skydoves/compose-performance-skills/measurement/generating-baseline-profiles",
       "nom": "generating-baseline-profiles",
       "place": "ajout",
@@ -261,6 +235,19 @@
       "risques": []
     },
     {
+      "id": "meet-miyani/compose-skill/skills/compose-feature",
+      "nom": "compose-feature",
+      "place": "ajout",
+      "repo": "Meet-Miyani/compose-skill",
+      "chemin_skill": "skills/compose-feature",
+      "skill_md": "skills/compose-feature/SKILL.md",
+      "sha_epingle": "fe2bf99f22afc994555ddf9c5d415d2625693050",
+      "resume_fr": "construit un écran complet, tests inclus → évite les features inachevées et états oubliés",
+      "note": 9,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
       "id": "skydoves/compose-performance-skills/measurement/testing-compose-in-release-mode",
       "nom": "testing-compose-in-release-mode",
       "place": "ajout",
@@ -269,6 +256,19 @@
       "skill_md": "measurement/testing-compose-in-release-mode/SKILL.md",
       "sha_epingle": "1b32f81724c0d71fe9ef093ca44697f559fdab6e",
       "resume_fr": "mesure les performances Compose en build release → évite des chiffres faussés par le mode debug",
+      "note": 9,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "meet-miyani/compose-skill/skills/compose-data",
+      "nom": "compose-data",
+      "place": "ajout",
+      "repo": "Meet-Miyani/compose-skill",
+      "chemin_skill": "skills/compose-data",
+      "skill_md": "skills/compose-data/SKILL.md",
+      "sha_epingle": "fe2bf99f22afc994555ddf9c5d415d2625693050",
+      "resume_fr": "isole DTO, Ktor, Room et Paging → une API qui change ne casse plus l'UI",
       "note": 9,
       "risque_max": null,
       "risques": []

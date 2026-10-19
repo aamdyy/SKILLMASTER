@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-19T14:07:33.856Z",
+  "genere_le": "2026-10-19T14:53:08.484Z",
   "type": "site-web",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
@@ -49,7 +49,7 @@
       "repo": "ChromeDevTools/chrome-devtools-mcp",
       "chemin_skill": "skills/a11y-debugging",
       "skill_md": "skills/a11y-debugging/SKILL.md",
-      "sha_epingle": "37f1fda81b91df7b9ca851e3f5af8d08f50b4846",
+      "sha_epingle": "b1e6e6850dcadc2380aab7da7c9f7dbb00d204fd",
       "resume_fr": "audite l'accessibilité web → repère contrastes, focus clavier et cibles tactiles trop petites",
       "note": 9,
       "risque_max": null,
@@ -125,28 +125,15 @@
       "risques": []
     },
     {
-      "id": "agricidaniel/claude-seo/skills/seo-agentic",
-      "nom": "seo-agentic",
+      "id": "jeffallan/claude-skills/skills/nextjs-developer",
+      "nom": "nextjs-developer",
       "place": "ajout",
-      "repo": "AgriciDaniel/claude-seo",
-      "chemin_skill": "skills/seo-agentic",
-      "skill_md": "skills/seo-agentic/SKILL.md",
-      "sha_epingle": "4b99de2f7de7e7d5247042e5fb5b4ea9368ef734",
-      "resume_fr": "audite robots.txt, llms.txt, accessibilité et outils WebMCP → site lisible par les agents IA",
-      "note": 9,
-      "risque_max": "moyen",
-      "risques": []
-    },
-    {
-      "id": "sangrokjung/claude-forge/skills/cache-components",
-      "nom": "cache-components",
-      "place": "ajout",
-      "repo": "sangrokjung/claude-forge",
-      "chemin_skill": "skills/cache-components",
-      "skill_md": "skills/cache-components/SKILL.md",
-      "sha_epingle": "34d881dc9bdc669aadc3a1e8147a4bd5467ecbe3",
-      "resume_fr": "guide le cache Next.js et le PPR → pages plus rapides, moins de calculs serveur",
-      "note": 9,
+      "repo": "Jeffallan/claude-skills",
+      "chemin_skill": "skills/nextjs-developer",
+      "skill_md": "skills/nextjs-developer/SKILL.md",
+      "sha_epingle": "36f3fe8052da7c57083783268c6ea3265d075265",
+      "resume_fr": "configure App Router, Server Components et Server Actions → apps Next.js plus rapides, mieux référencées",
+      "note": 7,
       "risque_max": null,
       "risques": []
     },
@@ -159,6 +146,19 @@
       "skill_md": ".claude/skills/optimize-3d-scene/SKILL.md",
       "sha_epingle": "4ce3ade04ed0c21f38d9b476e079f02a18273463",
       "resume_fr": "optimise la scène 3D pour mobiles, pause hors écran → moins de saccades au scroll",
+      "note": 9,
+      "risque_max": null,
+      "risques": []
+    },
+    {
+      "id": "sangrokjung/claude-forge/skills/cache-components",
+      "nom": "cache-components",
+      "place": "ajout",
+      "repo": "sangrokjung/claude-forge",
+      "chemin_skill": "skills/cache-components",
+      "skill_md": "skills/cache-components/SKILL.md",
+      "sha_epingle": "34d881dc9bdc669aadc3a1e8147a4bd5467ecbe3",
+      "resume_fr": "guide le cache Next.js et le PPR → pages plus rapides, moins de calculs serveur",
       "note": 9,
       "risque_max": null,
       "risques": []
@@ -190,43 +190,32 @@
       "risques": []
     },
     {
-      "id": "jeffallan/claude-skills/skills/nextjs-developer",
-      "nom": "nextjs-developer",
+      "id": "jeffallan/claude-skills/skills/react-expert",
+      "nom": "react-expert",
       "place": "ajout",
       "repo": "Jeffallan/claude-skills",
-      "chemin_skill": "skills/nextjs-developer",
-      "skill_md": "skills/nextjs-developer/SKILL.md",
+      "chemin_skill": "skills/react-expert",
+      "skill_md": "skills/react-expert/SKILL.md",
       "sha_epingle": "36f3fe8052da7c57083783268c6ea3265d075265",
-      "resume_fr": "configure App Router, Server Components et Server Actions → apps Next.js plus rapides, mieux référencées",
-      "note": 7,
+      "resume_fr": "crée des composants React typés et guide Server Components → moins de re-rendus, code plus robuste",
+      "note": 8,
       "risque_max": null,
       "risques": []
     },
     {
-      "id": "vercel/vercel-plugin/skills/auth",
-      "nom": "auth",
+      "id": "athevon/genjutsu/skills/paint",
+      "nom": "paint",
       "place": "ajout",
-      "repo": "vercel/vercel-plugin",
-      "chemin_skill": "skills/auth",
-      "skill_md": "skills/auth/SKILL.md",
-      "sha_epingle": "0db44088cc0454455f85f46150162716d58acd8c",
-      "resume_fr": "guide l'auth Clerk, Better Auth ou Auth0 dans Next.js → sécurise connexions et routes protégées",
-      "note": 8,
-      "risque_max": "moyen",
-      "risques": []
-    },
-    {
-      "id": "jezweb/claude-skills/plugins/cloudflare/skills/vite-flare-starter",
-      "nom": "vite-flare-starter",
-      "place": "ajout",
-      "repo": "jezweb/claude-skills",
-      "chemin_skill": "plugins/cloudflare/skills/vite-flare-starter",
-      "skill_md": "plugins/cloudflare/skills/vite-flare-starter/SKILL.md",
-      "sha_epingle": "1260fa7439b36b18dbf16648ccc7fb44783f6c23",
-      "resume_fr": "clone un starter Cloudflare avec auth et base de données → lance un projet en minutes",
-      "note": 8,
-      "risque_max": "moyen",
-      "risques": []
+      "repo": "AThevon/genjutsu",
+      "chemin_skill": "skills/paint",
+      "skill_md": "skills/paint/SKILL.md",
+      "sha_epingle": "1f518a71378b15d423389e546e767cffc86e14c3",
+      "resume_fr": "te fait valider la direction visuelle avant de coder → évite les designs génériques",
+      "note": 6,
+      "risque_max": "eleve",
+      "risques": [
+        "frontmatter allowed-tools"
+      ]
     },
     {
       "id": "plugin87/ux-ui-agent-skills/.claude/skills/token-build",
@@ -264,6 +253,19 @@
       "sha_epingle": "5ee1e7845caefe2c9ab51c64a2aa6f386e72ef5b",
       "resume_fr": "anime un personnage SVG entre plusieurs poses → transitions fluides et mouvements de repos",
       "note": 10,
+      "risque_max": "moyen",
+      "risques": []
+    },
+    {
+      "id": "gmickel/flow-next/plugins/flow-next/skills/flow-next-drive",
+      "nom": "flow-next-drive",
+      "place": "ajout",
+      "repo": "gmickel/flow-next",
+      "chemin_skill": "plugins/flow-next/skills/flow-next-drive",
+      "skill_md": "plugins/flow-next/skills/flow-next-drive/SKILL.md",
+      "sha_epingle": "8376ef751cb94429d58843565a1ba119e4e26b59",
+      "resume_fr": "pilote l'interface comme un vrai utilisateur → repère les erreurs console et requêtes échouées",
+      "note": 5,
       "risque_max": "moyen",
       "risques": []
     }

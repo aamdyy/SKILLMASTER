@@ -1,28 +1,45 @@
 {
   "type": "android",
-  "genere_le": "2026-10-19T13:50:04.580Z",
+  "genere_le": "2026-10-19T14:51:52.164Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
   "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
-  "tenants_de": "4b276fe",
-  "changements": [
-    {
-      "entrant": "compose-agent",
-      "sortant": "android-jetpack-compose-expert",
-      "raison": "compose-agent (note 10) cible les erreurs courantes des LLM en Compose : état, effets, Navigation 3, Paging 3, collectAsStateWithLifecycle. L'ancien tenant (note 7) est générique et daté, avec un exemple BOM 2024.02."
-    },
-    {
-      "entrant": "android-debugging",
-      "sortant": "compose-multiplatform",
-      "raison": "Un projet Android natif ne demande pas de partage multiplateforme (expect/actual, cibles iOS, desktop, web), et Compose Multiplatform n'est pas dans sa stack. android-debugging (ANR, R8, fuites mémoire, Logcat/ADB) sert à chaque projet Android."
-    }
+  "tenants_de": "tour précédent",
+  "reclasse": true,
+  "finalistes": [
+    "aldefy/compose-skill/skills/compose-expert",
+    "athevon/genjutsu/skills/_jutsu/compose-motion",
+    "athevon/genjutsu/skills/_jutsu/compose-multiplatform",
+    "chrisbanes/skills/skills/compose-animations",
+    "chrisbanes/skills/skills/compose-component-design",
+    "chrisbanes/skills/skills/compose-focus-navigation",
+    "chrisbanes/skills/skills/compose-performance",
+    "chrisbanes/skills/skills/compose-state-and-effects",
+    "chrisbanes/skills/skills/kotlin-concurrency-and-flow",
+    "hamen/compose_skill/skills/compose-agent",
+    "hamen/compose_skill/skills/jetpack-compose-audit",
+    "hamen/material-3-skill/skills/material-3",
+    "maxrave-dev/kotlin-footguns/skills/footgun-scan",
+    "meet-miyani/compose-skill/skills/compose-data",
+    "meet-miyani/compose-skill/skills/compose-feature",
+    "meet-miyani/compose-skill/skills/compose-ui",
+    "rcosteira79/android-skills/plugins/android-skills/skills/android-debugging",
+    "rcosteira79/android-skills/plugins/android-skills/skills/android-testing",
+    "rcosteira79/android-skills/plugins/android-skills/skills/coil-compose",
+    "skydoves/compose-performance-skills/audit/auditing-compose-performance",
+    "skydoves/compose-performance-skills/hot-reload/preserving-state-across-reloads",
+    "skydoves/compose-performance-skills/hot-reload/understanding-hot-reload-limits",
+    "skydoves/compose-performance-skills/measurement/generating-baseline-profiles",
+    "skydoves/compose-performance-skills/measurement/testing-compose-in-release-mode",
+    "skydoves/compose-performance-skills/modifiers/migrating-to-modifier-node"
   ],
+  "changements": [],
   "ecartes": [],
   "stabilite": {
     "tirages": 3,
     "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "La tête du pack couvre l'essentiel d'un projet Compose natif : règles générales à jour, performance, concurrence, état et effets, API de composants et pièges Kotlin. Aucun skill n'est écarté, car aucun ne touche une techno absente de la stack."
+    "raison_tirage_1": "Les skills Compose généralistes sur l'état, les effets et la performance, utiles à chaque écran Android, dominent le pack, et les tenants restent bien placés."
   },
   "recommandes": [
     {
@@ -158,17 +175,17 @@
       "raison": "Déclencheurs précis et contenu technique dense, avec exemples et pièges réels. Qualité pénalisée : annexes tronquées, la plupart des références absentes, licence non précisée, bannière de migration."
     },
     {
-      "id": "skydoves/compose-performance-skills/audit/auditing-compose-performance",
-      "nom": "auditing-compose-performance",
-      "repo": "skydoves/compose-performance-skills",
-      "resume_fr": "te fait mesurer avant de corriger → gains de fluidité prouvés par des chiffres",
-      "note": 10,
+      "id": "rcosteira79/android-skills/plugins/android-skills/skills/android-testing",
+      "nom": "android-testing",
+      "repo": "rcosteira79/android-skills",
+      "resume_fr": "impose des tests rouges avant tout code Android → évite les pièges Compose et KMP",
+      "note": 9,
       "pertinence": 6,
-      "score_pack": 8.4,
-      "note_juge": 10,
+      "score_pack": 7.8,
+      "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement précis (symptôme large, sprint perf, audit). Méthode concrète : jalons Measure→Verify, exemple Macrobenchmark, versions minimales, gabarit de rapport. Périmètre net Compose. Réserve : 25 skills frères absents."
+      "raison": "Pièges précis et peu connus (StandardTestDispatcher, deux schedulers, noms commonTest rejetés par Kotlin/Native), déclenchement clair. Retenue : renvoie à un fichier absent et contient des détails non vérifiables ici."
     },
     {
       "id": "meet-miyani/compose-skill/skills/compose-ui",
@@ -184,19 +201,6 @@
       "raison": "Déclenchement précis et règles testables (lectures d'état, clés de liste, stabilité, insets). Savoir-faire de mainteneur réel. Note tirée vers le bas par les renvois à des skills frères absents et à des codes internes non expliqués."
     },
     {
-      "id": "sickn33/agentic-awesome-skills/skills/android-jetpack-compose-expert",
-      "nom": "android-jetpack-compose-expert",
-      "repo": "sickn33/agentic-awesome-skills",
-      "resume_fr": "te guide sur Jetpack Compose : états, navigation, performance → interfaces Android plus fluides",
-      "note": 7,
-      "pertinence": 6,
-      "score_pack": 6.6,
-      "note_juge": 7,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis et périmètre net (Android Compose). Contenu surtout générique : des bonnes pratiques connues de Claude, des versions de BOM anciennes (2024.02.01) et des imports manquants dans les exemples."
-    },
-    {
       "id": "chrisbanes/skills/skills/compose-animations",
       "nom": "compose-animations",
       "repo": "chrisbanes/skills",
@@ -210,17 +214,17 @@
       "raison": "Déclenchement précis et pièges réels (identité AnimatedContent, contentKey). Exemples Kotlin vérifiables. Note limitée par la procédure étape 4, touffue, et des renvois vers des skills frères absents."
     },
     {
-      "id": "meet-miyani/compose-skill/skills/compose-feature",
-      "nom": "compose-feature",
-      "repo": "Meet-Miyani/compose-skill",
-      "resume_fr": "construit un écran complet, tests inclus → évite les features inachevées et états oubliés",
-      "note": 9,
+      "id": "skydoves/compose-performance-skills/audit/auditing-compose-performance",
+      "nom": "auditing-compose-performance",
+      "repo": "skydoves/compose-performance-skills",
+      "resume_fr": "te fait mesurer avant de corriger → gains de fluidité prouvés par des chiffres",
+      "note": 10,
       "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
+      "score_pack": 8.4,
+      "note_juge": 10,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill Compose très ciblé, avec règles testables, gabarits et matrice d'états de tests. Note réduite : renvois à compose-architecture et CONTRACT_BRIEF absents, annexes tronquées, jargon de tickets."
+      "risque_max": null,
+      "raison": "Déclenchement précis (symptôme large, sprint perf, audit). Méthode concrète : jalons Measure→Verify, exemple Macrobenchmark, versions minimales, gabarit de rapport. Périmètre net Compose. Réserve : 25 skills frères absents."
     },
     {
       "id": "rcosteira79/android-skills/plugins/android-skills/skills/coil-compose",
@@ -249,19 +253,6 @@
       "raison": "Déclenchement précis et règles Compose ancrées dans la doc officielle, avec un cas Android 12+ très concret. Annexes tronquées et search-playbook absent : qualité notée un cran plus bas."
     },
     {
-      "id": "athevon/genjutsu/skills/_jutsu/compose-multiplatform",
-      "nom": "compose-multiplatform",
-      "repo": "AThevon/genjutsu",
-      "resume_fr": "guide une seule UI Compose sur Android, iOS, desktop, web → moins de code dupliqué",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Cadrage net et pièges réels (onFocusBehavior, safe area, AGSL Android seul). Note freinée par des versions et dates invérifiables, des annexes tronquées et des renvois vers des sous-skills absents."
-    },
-    {
       "id": "skydoves/compose-performance-skills/measurement/generating-baseline-profiles",
       "nom": "generating-baseline-profiles",
       "repo": "skydoves/compose-performance-skills",
@@ -275,6 +266,19 @@
       "raison": "Skill Android Compose ciblé, précis, avec commandes Gradle, code et pièges réels (BaselineProfileMode.Require, mesure en release). Retranché d'un point pour gains cités sans source et annexe tronquée."
     },
     {
+      "id": "meet-miyani/compose-skill/skills/compose-feature",
+      "nom": "compose-feature",
+      "repo": "Meet-Miyani/compose-skill",
+      "resume_fr": "construit un écran complet, tests inclus → évite les features inachevées et états oubliés",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill Compose très ciblé, avec règles testables, gabarits et matrice d'états de tests. Note réduite : renvois à compose-architecture et CONTRACT_BRIEF absents, annexes tronquées, jargon de tickets."
+    },
+    {
       "id": "skydoves/compose-performance-skills/measurement/testing-compose-in-release-mode",
       "nom": "testing-compose-in-release-mode",
       "repo": "skydoves/compose-performance-skills",
@@ -286,6 +290,19 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Déclenchement précis et pièges réels (debug, Live Literals, CompilationMode.None), commandes concrètes. Retrait pour des affirmations non sourcées (gains 75 %/60 %, devirtualisation de ComposerImpl) et des renvois vers des annexes absentes."
+    },
+    {
+      "id": "meet-miyani/compose-skill/skills/compose-data",
+      "nom": "compose-data",
+      "repo": "Meet-Miyani/compose-skill",
+      "resume_fr": "isole DTO, Ktor, Room et Paging → une API qui change ne casse plus l'UI",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis, avec exclusions explicites vers d'autres skills. Règles tranchées et vérifiables (expectSuccess, DTO internal, Instant, greps). Qualité amoindrie : annexes tronquées, références manquantes, identifiants de kit interne."
     }
   ]
 }
