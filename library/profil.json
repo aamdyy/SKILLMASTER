@@ -1,5 +1,5 @@
 {
-  "note": "Profil d'Amdy pour le score de pertinence (0 à 10), séparé de la qualité. Éditable à la main. Calcul : +4 si le skill a un type confirmé parmi les types, +2 par élément de la stack trouvé dans le nom ou la description (6 au plus), −4 par domaine hors sujet trouvé. Le classement en pack combine qualité (avec l'usage) et pertinence selon les poids.",
+  "note": "Profil d'Amdy pour le score de pertinence (0 à 10), séparé de la qualité. Éditable à la main. Calcul sur le nom et la description : 0 si une techno de « exclusions » apparaît ; sinon +4 si le skill a un type confirmé parmi les types, +2 par élément de la stack (6 au plus), −4 par domaine hors sujet. « SQL » veut dire SQL généraliste. Les exclusions sont aussi données à Sonnet, qui écarte tout skill lié à une techno absente de la stack.",
   "types": [
     "site-web",
     "ios",
@@ -19,7 +19,7 @@
     "Python": "\\bpython\\b",
     "pandas": "\\bpandas\\b",
     "Jupyter": "\\b(jupyter|notebooks?)\\b",
-    "SQL": "\\bsql\\b",
+    "SQL": "\\b(sql|postgres(ql)?|sqlite|mysql)\\b",
     "scikit-learn": "\\b(scikit-learn|sklearn)\\b",
     "matplotlib": "\\bmatplotlib\\b"
   },
@@ -31,5 +31,15 @@
   "poids": {
     "qualite": 0.6,
     "pertinence": 0.4
+  },
+  "exclusions": {
+    "Vue/Nuxt": "\\b(vue(\\.?js)?|nuxt)\\b",
+    "Svelte": "\\bsvelte(kit)?\\b",
+    "Angular": "\\bangular\\b",
+    "BigQuery": "\\bbig ?query\\b",
+    "Databricks": "\\bdatabricks\\b",
+    "Snowflake": "\\bsnowflake\\b",
+    "Spark": "\\b(apache )?spark\\b|\\bpyspark\\b",
+    "data warehouse cloud": "\\b(redshift|synapse|clickhouse|chdb|timescale(db)?|data ?warehouse|dbt)\\b"
   }
 }

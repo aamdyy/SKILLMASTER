@@ -13,6 +13,7 @@ import { join } from 'node:path'
 import { CACHE, LIBRARY, frontmatter, isTrustedRepo, log, pool, readJson, sha256, writeJson } from './lib.ts'
 
 const VERSION = 'r1'
+export const resumeCost = { usd: 0 }
 const MAX_WORDS = 15
 const SCHEMA = {
   type: 'object',
@@ -50,7 +51,8 @@ function ask(model: string, input: string): Promise<string | undefined> {
     child.on('close', () => {
       clearTimeout(timer)
       try {
-        const result = JSON.parse(out) as { structured_output?: { resume_fr?: string } }
+        const result = JSON.parse(out) as { structured_output?: { resume_fr?: string }; total_cost_usd?: number }
+        resumeCost.usd += result.total_cost_usd ?? 0
         resolve(result.structured_output?.resume_fr?.trim().replace(/[.。]$/, ''))
       } catch {
         resolve(undefined)

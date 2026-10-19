@@ -142,6 +142,16 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - Le jugement se fait en deux temps : Haiku sur tout, puis Sonnet sur les finalistes de chaque pack.
   - Note finale = note du juge + bonus d'usage (+0,5, +1 ou +1,5, consigné dans `retours_amdy`).
   - « Recommandé » se décide par pack : les 5 à 8 meilleurs, note ≥ 6. Les épinglages et les exclusions sont dans `library/overrides.json`, où bencium est épinglé en site-web.
+- 2026-10-19 : **juge v3.1.** Haiku seul pour noter. Pour chaque pack, Sonnet range les finalistes entre eux, sans note absolue ni ex-aequo, en 3 tirages, et l'ordre final se fait au rang moyen. Il y a un seul type principal par skill, et `outillage-claude-code` couvre tout ce qui sert à « construire avec Claude ». La pertinence vient de `library/profil.json` (types, stack, domaines hors sujet) et se calcule sur le nom et la description.
+- 2026-10-19 : **critère de montée en volume** : ce qui compte, c'est la **composition** des têtes de pack, pas leur ordre exact, puisque `skill-master` les propose comme un ensemble. On monte en volume si les mêmes skills sont en tête sur au moins 6 packs sur 7 entre deux séries. C'était 7 sur 7 en v3.1. La montée est progressive : environ 1 500 skills au tour suivant.
+- 2026-10-19 : **finale élargie et stack stricte.**
+  - La finale compte 25 skills par pack au plus : les épinglés, les tenants, les skills qu'Amdy a utilisés au moins 5 fois, puis les meilleurs dont la pertinence est d'au moins 6.
+  - `library/profil.json` liste des **exclusions** : Vue/Nuxt, Svelte, Angular, BigQuery, Databricks, Snowflake, Spark, et toute techno de data warehouse cloud. Elles mettent la pertinence à 0, et Sonnet écarte tout skill lié à une techno absente de la stack, même s'il est excellent. « SQL » veut dire SQL généraliste.
+- 2026-10-19 : **avantage au tenant** (vaut aussi pour la mise à jour hebdomadaire). Les têtes de pack du tour précédent gardent leur place, sauf si Sonnet juge le challenger nettement meilleur, ou si le tenant est écarté. Il y a **2 changements au plus par pack et par tour**, retenus à la majorité des 3 tirages, et chacun est listé avec sa raison dans le fichier du pack (`changements`).
+- 2026-10-19 : **le collecteur garde toujours les skills des packs du tour précédent** (têtes et ajouts, `--keep-from <commit>` ou `library/packs`). Il lit leurs chemins en premier et leur donne priorité sur leurs copies à la déduplication. Sans ça, l'avantage au tenant n'a pas de sens.
+- 2026-10-19 : **coût réel affiché.** Un verdict en cache compte pour 0 $. Tour complet de 1 500 skills sans changement : 0,66 $ en équivalent, presque tout pour les 21 classements Sonnet. Les notes Haiku et les résumés ne coûtent que pour les skills nouveaux ou modifiés.
+- 2026-10-19 : **ajout SEO garanti en site-web** (`ajout_garanti` dans `library/overrides.json`) : le meilleur skill SEO hors tête reste en ajout, parce qu'Amdy fait aussi des sites clients où le SEO compte.
+- 2026-10-19 : `web-design-guidelines` est épinglé en « ajout » du pack site-web (`epingles_ajout` dans `library/overrides.json`).
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard

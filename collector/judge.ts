@@ -11,10 +11,11 @@
 import { spawn } from 'node:child_process'
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
-import { CACHE, LIBRARY, isTrustedRepo, isoWeek, log, pool, rawFile, readJson, typesOf, writeJson } from './lib.ts'
+import { CACHE, LIBRARY, ROOT, isTrustedRepo, isoWeek, log, pool, rawFile, readJson, typesOf, writeJson } from './lib.ts'
 import { scanSkill, type Gravite, type Risk } from './scan.ts'
-import { rankPack, type Finalist } from './rank.ts'
-import { summarize } from './resume.ts'
+import { execFileSync } from 'node:child_process'
+import { MAX_CHANGES, rankCost, rankPack, type Finalist, type Ranking } from './rank.ts'
+import { resumeCost, summarize } from './resume.ts'
 import { loadUsage, usageBonus } from './usage.ts'
 
 const argv = process.argv.slice(2)
@@ -24,8 +25,11 @@ const option = (name: string, fallback: number) => {
 }
 const CONCURRENCY = option('concurrency', 5)
 const LIMIT = option('limit', Infinity)
-const FINALISTS = option('finalists', 12)
-const RANK_RUNS = option('rank-runs', 2)
+const FINALISTS = option('finalists', 25)
+// Tenants : les têtes de pack d'un commit (--tenants <commit>), sinon les packs actuels de library/.
+const TENANTS_AT = argv.indexOf('--tenants')
+const TENANTS_REF = TENANTS_AT >= 0 ? argv[TENANTS_AT + 1] : undefined
+const RANK_RUNS = option('rank-runs', 3)
 // Haiku seul depuis la v3 (Sonnet n'écartait la note que de 0,11 point en moyenne) ; --with-sonnet le réactive.
 const WITH_SONNET = argv.includes('--with-sonnet')
 const VERSION = 'v3'
@@ -134,9 +138,11 @@ type Verdict = {
   confiance: 'haute' | 'moyenne' | 'basse'
 }
 
-type Judged = { verdict: Verdict | null; error?: string; costUsd: number; judgedAt: string; model: string; version: string }
+type Judged = { verdict: Verdict | null; error?: string; costUsd: number; judgedAt: string; model: string; version: string; fromCache?: boolean }
 type Overrides = {
   epingles?: Record<string, { repo: string; nom: string }[]>
+  epingles_ajout?: Record<string, { repo: string; nom: string }[]>
+  ajout_garanti?: Record<string, { motif: string; raison?: string }[]>
   jamais?: string[]
   exclus?: Record<string, { repo: string; nom: string }[]>
 }
@@ -220,7 +226,8 @@ function isValid(verdict: Verdict | null): verdict is Verdict {
 async function judge(model: string, skill: Selected, risks: Risk[]): Promise<Judged> {
   const cachePath = join(CACHE, 'judge', `${VERSION}-${model}-${skill.hash}.json`)
   const cached = await readJson<Judged | null>(cachePath, null)
-  if (cached?.verdict) return cached
+  // Verdict en cache : aucun appel, donc aucun coût (le costUsd stocké est celui d'origine).
+  if (cached?.verdict) return { ...cached, costUsd: 0, fromCache: true }
   const text = (await rawFile(skill.repo, skill.sha, skill.skillMdPath)) ?? ''
   const input = await prompt(skill, text, risks)
   let last: { verdict: Verdict | null; costUsd: number; error?: string } = { verdict: null, costUsd: 0, error: 'non lancé' }
@@ -240,7 +247,13 @@ async function judge(model: string, skill: Selected, risks: Risk[]): Promise<Jud
   return judged
 }
 
-type Profile = { types: string[]; stack: Record<string, string>; hors_sujet: string[]; poids: { qualite: number; pertinence: number } }
+type Profile = {
+  types: string[]
+  stack: Record<string, string>
+  exclusions: Record<string, string>
+  hors_sujet: string[]
+  poids: { qualite: number; pertinence: number }
+}
 
 // Pertinence pour Amdy (0 à 10), séparée de la qualité : +4 pour un type confirmé parmi ses types,
 // +2 par élément de sa stack trouvé (6 au plus), −4 par domaine hors sujet (library/profil.json).
@@ -249,6 +262,8 @@ function relevance(profile: Profile, skill: Selected, verdict: Verdict | null, t
   const haystack = `${skill.name} ${skill.description}`
   const hasType = (verdict?.categories ?? []).some(category => profile.types.includes(category))
   const stack = Object.values(profile.stack).filter(source => new RegExp(source, 'i').test(haystack)).length
+  // Une techno exclue de la stack (Vue, BigQuery…) annule la pertinence : le skill n'entre pas en finale.
+  if (Object.values(profile.exclusions ?? {}).some(source => new RegExp(source, 'i').test(haystack))) return 0
   const off = profile.hors_sujet.filter(source => new RegExp(source, 'i').test(haystack)).length
   return Math.max(0, Math.min(10, (hasType ? 4 : 0) + Math.min(6, stack * 2) - off * 4))
 }
@@ -260,11 +275,13 @@ const key = (repo: string, name: string) => `${repo.toLowerCase()}|${name.toLowe
 async function judgeAll(model: string, skills: Selected[], scans: Map<string, Risk[]>, concurrency: number) {
   let done = 0
   let cost = 0
+  let calls = 0
   const results = await pool(skills, concurrency, async skill => {
     const judged = await judge(model, skill, scans.get(skill.id) ?? [])
     done++
     cost += judged.costUsd
-    if (done % 25 === 0 || done === skills.length) log(`${model} : ${done}/${skills.length} · coût équivalent ${cost.toFixed(2)} $`)
+    if (!judged.fromCache) calls++
+    if (done % 25 === 0 || done === skills.length) log(`${model} : ${done}/${skills.length} · ${calls} vraiment jugés (le reste en cache) · coût équivalent ${cost.toFixed(2)} $`)
     return [skill.id, judged] as const
   })
   return { verdicts: new Map(results), cost }
@@ -290,13 +307,14 @@ async function main() {
     scans.set(skill.id, scanSkill(text, skill.files))
     detectedTypes.set(skill.id, typesOf(`${skill.skillMdPath} ${skill.name} ${skill.description} ${text.slice(0, 4_000)}`))
   }
-  const profile = await readJson<Profile>(join(LIBRARY, 'profil.json'), { types: [], stack: {}, hors_sujet: [], poids: { qualite: 1, pertinence: 0 } })
+  const profile = await readJson<Profile>(join(LIBRARY, 'profil.json'), { types: [], stack: {}, exclusions: {}, hors_sujet: [], poids: { qualite: 1, pertinence: 0 } })
   const relevanceOf = (skill: Selected, verdict: Verdict | null) => relevance(profile, skill, verdict, texts.get(skill.id) ?? '')
 
   log(`temps 1 : ${skills.length} skills, Claude Haiku, ${CONCURRENCY} en parallèle`)
   const haiku = await judgeAll('haiku', skills, scans, CONCURRENCY)
 
   const pinned = (type: string, skill: Selected) => (overrides.epingles?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
+  const pinnedAddition = (type: string, skill: Selected) => (overrides.epingles_ajout?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
   const excluded = (type: string, skill: Selected) => (overrides.exclus?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
   const bonusOf = (skill: Selected) => {
     const used = isTrustedRepo(skill.repo) ? usage.get(skill.name.toLowerCase()) : undefined
@@ -316,7 +334,7 @@ async function main() {
     return verdict.categories.find(category => TYPES.includes(category) && detected.includes(category) && !(NATIVE_TYPES.has(category) && isRn)) ?? null
   }
   const isEligible = (type: string, skill: Selected, verdict: Verdict | null) => {
-    if (pinned(type, skill)) return true
+    if (pinned(type, skill) || pinnedAddition(type, skill)) return true
     if (!verdict || never.has(skill.name.toLowerCase()) || excluded(type, skill)) return false
     if (primaryType(skill, verdict) !== type) return false
     if (worst(riskOf(skill, verdict)) === 'critique') return false
@@ -398,7 +416,7 @@ async function main() {
         confiance: verdict?.confiance ?? null,
         risques: risks,
         risque_max: worst(risks),
-        packs: {} as Record<string, 'recommande' | 'ajout' | 'epingle'>,
+        packs: {} as Record<string, 'recommande' | 'ajout' | 'epingle' | 'ajout_epingle'>,
         statut: before?.statut ?? (verdict ? 'nouveau' : 'revue_manuelle'),
         remplace_par: null,
         retours_amdy: used ? [{ type: 'usage', invocations: used.invocations, dernier: used.dernier, bonus, releve_le: today }] : [],
@@ -413,6 +431,19 @@ async function main() {
     }
   })
 
+  // Têtes du tour précédent (tenants) et contexte donné à Sonnet.
+  type PackFile = { recommandes: { id: string }[] }
+  const previousPacks = new Map<string, PackFile>()
+  for (const type of TYPES) {
+    let previous: PackFile | null = null
+    try {
+      previous = TENANTS_REF
+        ? (JSON.parse(execFileSync('git', ['-C', ROOT, 'show', `${TENANTS_REF}:library/packs/${type}.json`], { encoding: 'utf8' })) as PackFile)
+        : await readJson<PackFile | null>(join(LIBRARY, 'packs', `${type}.json`), null)
+    } catch {}
+    if (previous) previousPacks.set(type, previous)
+  }
+  const rankContext = { stack: Object.keys(profile.stack), exclusions: Object.keys(profile.exclusions ?? {}) }
   // Classement en pack : qualité (usage compris) et pertinence, pondérées par le profil.
   const packScore = (entry: { note_qualite: number | null; pertinence: number }) =>
     (entry.note_qualite ?? 0) * profile.poids.qualite + entry.pertinence * profile.poids.pertinence
@@ -420,49 +451,109 @@ async function main() {
     const ranked = entries
       .filter(({ skill, verdict }) => isEligible(type, skill, verdict))
       .sort((a, b) => Number(pinned(type, b.skill)) - Number(pinned(type, a.skill)) || packScore(b.entry) - packScore(a.entry) || b.entry.stars - a.entry.stars)
-    // Finalistes : les meilleurs au score de pack (note ≥ 5), épinglés compris. Sonnet les range
-    // entre eux ; c'est son ordre qui fixe la tête du pack. Un second tirage mesure la stabilité.
-    const finalists = ranked.filter(item => pinned(type, item.skill) || (item.entry.note_qualite ?? 0) >= 5).slice(0, FINALISTS)
+    // Tenants : les recommandés du tour précédent (hors épinglés), dans leur ordre.
+    const byId = new Map(ranked.map(item => [item.entry.id, item]))
+    const previousIds = (previousPacks.get(type)?.recommandes ?? []).map(item => item.id)
+    const tenants = previousIds.map(id => byId.get(id)).filter((item): item is (typeof entries)[number] => !!item && !pinned(type, item.skill) && !pinnedAddition(type, item.skill))
+    const lostTenants = previousIds
+      .filter(id => !tenants.some(item => item.entry.id === id) && !entries.some(({ entry, skill }) => entry.id === id && (pinned(type, skill) || pinnedAddition(type, skill))))
+      .map(id => ({ id, nom: entries.find(({ entry }) => entry.id === id)?.entry.nom ?? id, raison: 'plus éligible pour ce type ou absent de la sélection' }))
+    // Finalistes (25 au plus) : épinglés, tenants, skills qu'Amdy a utilisés au moins 5 fois, puis
+    // les meilleurs au score de pack parmi ceux dont la pertinence est d'au moins 6.
+    const heavyUse = (item: (typeof entries)[number]) => (item.entry.retours_amdy[0]?.invocations ?? 0) >= 5
+    const finalists = [...new Set([
+      ...ranked.filter(item => pinned(type, item.skill)),
+      ...tenants,
+      ...ranked.filter(heavyUse),
+      ...ranked.filter(item => item.entry.pertinence >= 6 && (item.entry.note_qualite ?? 0) >= 5),
+    ])].filter(item => !pinnedAddition(type, item.skill)).slice(0, FINALISTS)
+    const tenantIds = new Set(tenants.map(item => item.entry.id))
     const asFinalist = ({ entry }: (typeof entries)[number]): Finalist => ({
       id: entry.id, nom: entry.nom, repo: entry.repo, resume_fr: entry.resume_fr, description: entry.description_originale,
-      extrait: texts.get(entry.id) ?? '', note: entry.note_qualite,
+      extrait: texts.get(entry.id) ?? '', note: entry.note_qualite, tenant: tenantIds.has(entry.id),
     })
-    const runs: ({ ordre: string[]; raison: string } | null)[] = []
-    for (let run = 1; run <= RANK_RUNS; run++) runs.push(finalists.length > 1 ? await rankPack(type, finalists.map(asFinalist), run) : null)
-    const order = runs[0]?.ordre ?? finalists.map(item => item.entry.id)
-    const byId = new Map(ranked.map(item => [item.entry.id, item]))
-    const ordered = [
-      ...finalists.filter(item => pinned(type, item.skill)),
-      ...order.map(id => byId.get(id)!).filter(item => item && !pinned(type, item.skill)),
-      ...ranked.filter(item => !finalists.includes(item)),
-    ]
-    const pick = (minNote: number, max: number, isTaken: (id: string) => boolean) => {
-      const perRepo = new Map<string, number>() // un plafond par liste : recommandés et ajouts comptent à part
-      const picked: typeof entries = []
-      for (const item of ordered) {
-        if (picked.length >= max) break
-        const isPinned = pinned(type, item.skill)
-        if (isTaken(item.entry.id) || (!isPinned && ((item.entry.note_qualite ?? 0) < minNote || (perRepo.get(item.entry.repo) ?? 0) >= 3))) continue
-        perRepo.set(item.entry.repo, (perRepo.get(item.entry.repo) ?? 0) + 1)
-        picked.push(item)
+    const rankable = finalists.filter(item => !pinned(type, item.skill))
+    const runs: (Ranking | null)[] = []
+    for (let run = 1; run <= RANK_RUNS; run++) runs.push(rankable.length > 1 ? await rankPack(type, rankable.map(asFinalist), rankContext, run) : null)
+    const done = runs.filter((run): run is Ranking => run !== null)
+    const majority = Math.floor(done.length / 2) + 1
+    // Décisions retenues à la majorité des tirages : écartés, puis changements (au plus 2).
+    const removedVotes = new Map<string, string[]>()
+    for (const run of done) for (const item of run.ecartes) removedVotes.set(item.id, [...(removedVotes.get(item.id) ?? []), item.raison])
+    const removed = new Map([...removedVotes].filter(([, reasons]) => reasons.length >= majority).map(([id, reasons]) => [id, reasons[0]!]))
+    const changeVotes = new Map<string, { entrant: string; sortant: string; raisons: string[] }>()
+    for (const run of done) {
+      for (const change of run.changements) {
+        const key2 = `${change.entrant}>${change.sortant}`
+        const before = changeVotes.get(key2) ?? { entrant: change.entrant, sortant: change.sortant, raisons: [] }
+        changeVotes.set(key2, { ...before, raisons: [...before.raisons, change.raison] })
       }
-      return picked
     }
-    const recommended = pick(6, 8, () => false)
-    const chosen = new Set(recommended.map(item => item.entry.id))
-    const additions = pick(5, 12, id => chosen.has(id))
-    const head = (ordre: string[] | undefined) => (ordre ?? []).filter(id => chosen.has(id))
-    const stabilite = runs.length > 1 && runs.every(Boolean)
-      ? {
-          tirages: runs.length,
-          tete_identique: JSON.stringify(head(runs[0]?.ordre)) === JSON.stringify(head(runs[1]?.ordre)),
-          tete_tirage_1: head(runs[0]?.ordre).map(id => byId.get(id)?.entry.nom),
-          tete_tirage_2: head(runs[1]?.ordre).map(id => byId.get(id)?.entry.nom),
-          raison_tirage_1: runs[0]?.raison,
+    const meanRank = (id: string) => done.reduce((sum, run) => sum + run.ordre.indexOf(id), 0) / Math.max(1, done.length)
+    const order = rankable.map(item => item.entry.id).sort((a, b) => meanRank(a) - meanRank(b))
+    const changes = [...changeVotes.values()]
+      .filter(change => change.raisons.length >= majority && !removed.has(change.entrant) && (byId.get(change.entrant)?.entry.note_qualite ?? 0) >= 6)
+      .sort((a, b) => b.raisons.length - a.raisons.length || meanRank(a.entrant) - meanRank(b.entrant))
+    const head: string[] = []
+    const changelog: { entrant: string; sortant: string | null; raison: string }[] = []
+    if (tenants.length) {
+      // Avantage au tenant : chacun garde sa place, sauf changement retenu ou tenant écarté.
+      const applied = new Set<string>()
+      for (const tenant of tenants) {
+        const id = tenant.entry.id
+        const change = changes.find(item => item.sortant === id && !applied.has(item.entrant) && !head.includes(item.entrant))
+        if (change && changelog.length < MAX_CHANGES) {
+          head.push(change.entrant)
+          applied.add(change.entrant)
+          changelog.push({ entrant: byId.get(change.entrant)!.entry.nom, sortant: tenant.entry.nom, raison: change.raisons[0]! })
+        } else if (removed.has(id)) {
+          changelog.push({ entrant: '', sortant: tenant.entry.nom, raison: `écarté : ${removed.get(id)}` })
+        } else {
+          head.push(id)
         }
-      : { tirages: runs.filter(Boolean).length, note: 'classement Sonnet indisponible pour ce pack' }
+      }
+      // Places libérées (tenant écarté ou disparu) : le mieux classé par Sonnet qui n'est pas encore en tête.
+      for (const freed of changelog.filter(item => !item.entrant)) {
+        const next = order.find(id => !head.includes(id) && !removed.has(id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6)
+        if (next) {
+          head.push(next)
+          freed.entrant = byId.get(next)!.entry.nom
+        }
+      }
+      for (const lost of lostTenants) {
+        const next = order.find(id => !head.includes(id) && !removed.has(id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6)
+        if (next && head.length < 8) {
+          head.push(next)
+          changelog.push({ entrant: byId.get(next)!.entry.nom, sortant: lost.nom, raison: lost.raison })
+        }
+      }
+    } else {
+      head.push(...order.filter(id => !removed.has(id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6))
+    }
+    const pins = finalists.filter(item => pinned(type, item.skill))
+    const recommended = [...pins, ...head.map(id => byId.get(id)!)].slice(0, 8)
+    const chosen = new Set(recommended.map(item => item.entry.id))
+    // Ajouts garantis : pour chaque motif (ex. SEO), le meilleur skill correspondant hors de la tête.
+    const guaranteed = (overrides.ajout_garanti?.[type] ?? [])
+      .map(rule => [...order.map(id => byId.get(id)!), ...ranked]
+        .find(item => !chosen.has(item.entry.id) && !removed.has(item.entry.id) && (item.entry.note_qualite ?? 0) >= 6
+          && new RegExp(rule.motif, 'i').test(`${item.entry.nom} ${item.entry.description_originale}`)))
+      .filter((item): item is (typeof entries)[number] => !!item)
+    const forcedAdditions = [...ranked.filter(item => pinnedAddition(type, item.skill)), ...guaranteed.filter(item => !pinnedAddition(type, item.skill))]
+    const additions = [
+      ...forcedAdditions,
+      ...[...order.map(id => byId.get(id)!), ...ranked.filter(item => !finalists.includes(item))]
+        .filter(item => !chosen.has(item.entry.id) && !removed.has(item.entry.id) && !forcedAdditions.includes(item) && item.entry.pertinence >= 6 && (item.entry.note_qualite ?? 0) >= 5),
+    ].slice(0, 12)
+    const headOf = (ordre: string[]) => ordre.filter(id => !removed.has(id)).slice(0, Math.max(1, recommended.length - pins.length))
+    const sets = done.map(run => JSON.stringify(headOf(run.ordre).sort()))
+    const stabilite = done.length > 1
+      ? { tirages: done.length, meme_composition_sans_tenants: sets.every(set => set === sets[0]), raison_tirage_1: done[0]!.raison }
+      : { tirages: done.length, note: 'classement Sonnet indisponible pour ce pack' }
+    const changements = changelog
+    const ecartes = [...removed].map(([id, raison]) => ({ nom: byId.get(id)?.entry.nom ?? id, raison }))
     for (const item of recommended) item.entry.packs[type] = pinned(type, item.skill) ? 'epingle' : 'recommande'
-    for (const item of additions) item.entry.packs[type] = 'ajout'
+    for (const item of additions) item.entry.packs[type] = pinnedAddition(type, item.skill) ? 'ajout_epingle' : 'ajout'
     const brief = ({ entry, skill }: (typeof entries)[number]) => ({
       id: entry.id,
       nom: entry.nom,
@@ -485,10 +576,13 @@ async function main() {
       proposition_auto: true,
       statut: 'a_valider_par_amdy',
       regles:
-        'finalistes choisis au score qualité (usage compris) × poids + pertinence × poids (library/profil.json), puis rangés entre eux par Sonnet (classement comparatif) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ' +
+        'finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ' +
         'ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; ' +
         '3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json',
       moins_de_5_recommandes: recommended.length < 5 || undefined,
+      tenants_de: TENANTS_REF ?? 'tour précédent',
+      changements,
+      ecartes,
       stabilite,
       recommandes: recommended.map(brief),
       ajouts: additions.map(brief),
@@ -507,7 +601,7 @@ async function main() {
 
   const histogram: Record<string, number> = {}
   for (const entry of output) if (entry.note_qualite !== null) histogram[entry.note_qualite] = (histogram[entry.note_qualite] ?? 0) + 1
-  log(`terminé : ${output.filter(entry => entry.note_qualite !== null).length} notés, coût équivalent ${(haiku.cost + sonnet.cost).toFixed(2)} $ (Haiku ${haiku.cost.toFixed(2)}, Sonnet ${sonnet.cost.toFixed(2)})`)
+  log(`terminé : ${output.filter(entry => entry.note_qualite !== null).length} notés, coût équivalent ${(haiku.cost + sonnet.cost + resumeCost.usd + rankCost.usd).toFixed(2)} $ (notes Haiku ${haiku.cost.toFixed(2)}, résumés ${resumeCost.usd.toFixed(2)}, classements Sonnet ${rankCost.usd.toFixed(2)})`)
   log('répartition des notes finales :', histogram)
 }
 

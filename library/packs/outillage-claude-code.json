@@ -1,34 +1,26 @@
 {
   "type": "outillage-claude-code",
-  "genere_le": "2026-10-19T11:27:30.820Z",
+  "genere_le": "2026-10-19T13:50:04.584Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
-  "regles": "finalistes choisis au score qualité (usage compris) × poids + pertinence × poids (library/profil.json), puis rangés entre eux par Sonnet (classement comparatif) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
+  "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
+  "tenants_de": "4b276fe",
+  "changements": [],
+  "ecartes": [
+    {
+      "nom": "confluent-skill-creator",
+      "raison": "Spécifique à Confluent/Kafka/Flink, hors de sa stack."
+    },
+    {
+      "nom": "create-toolset",
+      "raison": "Spécifique à Unreal Engine (C++/Blueprints), absent de sa stack."
+    }
+  ],
   "stabilite": {
-    "tirages": 2,
-    "tete_identique": false,
-    "tete_tirage_1": [
-      "skill-creator",
-      "Agent Development",
-      "mcp-builder",
-      "MCP Integration",
-      "claude-api",
-      "constraint-driven-development",
-      "Writing Hookify Rules",
-      "code-review"
-    ],
-    "tete_tirage_2": [
-      "skill-creator",
-      "mcp-builder",
-      "claude-api",
-      "MCP Integration",
-      "Agent Development",
-      "Writing Hookify Rules",
-      "constraint-driven-development",
-      "code-review"
-    ],
-    "raison_tirage_1": "skill-creator et agent-development servent directement à fabriquer des skills, plugins et subagents pour SKILLMASTER, devant les skills MCP, puis les guides plus périphériques ou liés à Superpowers."
+    "tirages": 3,
+    "meme_composition_sans_tenants": true,
+    "raison_tirage_1": "Les skills Anthropic de construction avec Claude Code (skill-creator, agent-development, claude-api, MCP) sont les plus utiles et restent en tête. Aucun challenger ne les dépasse nettement."
   },
   "recommandes": [
     {
@@ -138,160 +130,43 @@
   ],
   "ajouts": [
     {
-      "id": "anthropics/claude-code/plugins/plugin-dev/skills/plugin-settings",
-      "nom": "Plugin Settings",
-      "repo": "anthropics/claude-code",
-      "resume_fr": "documente les réglages par projet en .local.md → plugins configurables sans polluer git",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Skill officiel de plugin-dev, net et utile pour un plugin Claude Code. Déclenchement précis et exemples concrets. Note amputée par un parsing sed fragile, des affirmations non vérifiées (redémarrage requis) et des annexes manquantes ou tronquées."
-    },
-    {
-      "id": "obra/superpowers/skills/subagent-driven-development",
-      "nom": "subagent-driven-development",
-      "repo": "obra/superpowers",
-      "resume_fr": "fait coder chaque tâche par un sous-agent relu → moins de dérive et de régressions",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Processus d'orchestration solide et précis : ledger de reprise, boucle de correction bornée à 5 tours, choix de modèle, templates de prompts. Note amputée par la troncature (24000 sur 32358 caractères) et par les scripts et skills référencés absents."
-    },
-    {
-      "id": "obra/superpowers/skills/finishing-a-development-branch",
-      "nom": "finishing-a-development-branch",
-      "repo": "obra/superpowers",
-      "resume_fr": "te fait choisir merge, PR ou conservation après tests verts → évite les fusions hasardeuses",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis et garde-fous réels (confirmation « discard » tapée, pas de --force sans accord, worktrees limités à .worktrees/). Commandes exactes. Qualité légèrement gênée par le mélange anglais et le ton propre à un agent."
-    },
-    {
-      "id": "obra/superpowers/skills/diagnosing-superpowers",
-      "nom": "diagnosing-superpowers",
-      "repo": "obra/superpowers",
-      "resume_fr": "relit une session Superpowers ratée → explique les dérives avec preuves, sans deviner",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Workflow précis et cohérent : preuves path:line obligatoires, analystes par dimension, portes d'approbation avant export. Six annexes sur dix-neuf seulement fournies, donc templates et caviardage non vérifiés. Niche pour Amdy."
-    },
-    {
-      "id": "anthropics/claude-code/plugins/plugin-dev/skills/plugin-structure",
-      "nom": "Plugin Structure",
-      "repo": "anthropics/claude-code",
-      "resume_fr": "t'explique l'organisation d'un plugin et son manifest → composants bien détectés au chargement",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Skill officiel Anthropic, ciblé et précis sur la structure des plugins (règles critiques, chemins, découverte). Note amputée par une annexe de référence tronquée et l'absence de licence."
-    },
-    {
-      "id": "juliusbrussee/caveman/skills/caveman-learn",
-      "nom": "caveman-learn",
-      "repo": "JuliusBrussee/caveman",
-      "resume_fr": "mesure où partent les tokens, propose des corrections validées → coûts réduits, économies mesurées",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Procédure précise et testable : porte de gain net en tokens, garde-fou sha256, consentement par édition, réversibilité. Dépend d'un CLI caveman non fourni et d'un contenu dense. Note 9 : bon skill de mainteneur, mais niche."
-    },
-    {
-      "id": "anthropics/claude-plugins-official/plugins/hookify/skills/writing-rules",
-      "nom": "writing-hookify-rules",
-      "repo": "anthropics/claude-plugins-official",
-      "resume_fr": "écris des règles hookify qui signalent les actions risquées → évite les dérapages de Claude",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill officiel Anthropic, ciblé et précis sur la syntaxe hookify, avec pièges regex et conventions. Note réduite car il renvoie à des exemples absents et quelques champs sont mal cadrés."
-    },
-    {
-      "id": "virgiliojr94/book-to-skill/book-to-skill",
-      "nom": "book-to-skill",
-      "repo": "virgiliojr94/book-to-skill",
-      "resume_fr": "transforme un livre en skill structuré → applique les frameworks d'un auteur pendant tes projets",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Déclenchement précis et périmètre net, avec un pipeline d'extraction concret et des garde-fous (confirmation de la source, reprise contrôlée). Note bridée par un SKILL.md tronqué, très long et répétitif sur les chemins multi-agents."
-    },
-    {
-      "id": "nicobailon/visual-explainer/plugins/visual-explainer",
-      "nom": "visual-explainer",
-      "repo": "nicobailon/visual-explainer",
-      "resume_fr": "dessine schémas, plans et revues de code en HTML → compris en dix secondes",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Déclenchement précis et commandes de rendu exactes, savoir-faire réel (kit, pièges, règles de figures). Ménage à faire : annexes tronquées, style imposé, références à des outils non fournis (Pi, MCP, glimpse)."
-    },
-    {
-      "id": "anthropics/claude-plugins-community/html-plan/skills/html-plan",
-      "nom": "html-plan",
-      "repo": "anthropics/claude-plugins-community",
-      "resume_fr": "décrit le plan en page HTML interactive → tu valides les choix avant de coder",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement net, syntaxe et linter concrets, workflow précis. Pénalisé par une prose imposée en ASD-STE100, une annexe blocks.md tronquée et des maquettes d'interface inventées par défaut."
-    },
-    {
-      "id": "mattpocock/skills/skills/engineering/implement-spec",
-      "nom": "implement-spec",
-      "repo": "mattpocock/skills",
-      "resume_fr": "orchestre l'implémentation des tickets d'une spec en parallèle → livraison plus rapide sur une branche d'intégration",
+      "id": "gaasher/agent-loop-skills/loops/optimize-loop",
+      "nom": "optimize-loop",
+      "repo": "gaasher/Agent-Loop-Skills",
+      "resume_fr": "mesure chaque retouche, garde si tests verts → code plus simple ou SQL plus rapide",
       "note": 8,
-      "pertinence": 4,
-      "score_pack": 6.4,
+      "pertinence": 6,
+      "score_pack": 7.2,
       "note_juge": 8,
       "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Workflow d'orchestration de sous-agents au savoir-faire réel (frontière de tickets, worktrees, fusions). Dépend de skills non fournis (tdd, code-review, setup) et d'un issue tracker non défini : précision et qualité limitées."
+      "raison": "Déclenchement précis, avec des exclusions claires. Règles testables (ordre lexicographique, ledger, patience) et conventions concrètes. Idée connue, outils tools/ non fournis, pas vérifiables."
     },
     {
-      "id": "mattpocock/skills/skills/engineering/improve-codebase-architecture",
-      "nom": "improve-codebase-architecture",
-      "repo": "mattpocock/skills",
-      "resume_fr": "repère les modules superficiels et propose des refactors → code plus profond, plus facile à tester",
-      "note": 8,
-      "pertinence": 4,
-      "score_pack": 6.4,
-      "note_juge": 8,
+      "id": "confident-ai/deepeval/skills/deepeval",
+      "nom": "deepeval",
+      "repo": "confident-ai/deepeval",
+      "resume_fr": "guide une évaluation pytest d'agents IA → repère les échecs et améliore leur fiabilité",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
       "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Méthode architecturale distincte (deletion test, seams, adapters), déclenchement clair. Dépend de sous-skills non fournis (codebase-design, grilling, domain-modeling) et d'un GLOSSARY/ADR absents. Annexe tronquée."
+      "raison": "Skill officiel Confident AI, ciblé et précis : commandes exactes, règles claires (deepeval test run, metrics.py). Annexes metrics, pytest, traces et templates absentes ; renvoie à des skills sœurs."
+    },
+    {
+      "id": "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
+      "nom": "cookbook-audit",
+      "repo": "anthropics/claude-cookbooks",
+      "resume_fr": "note un notebook du Cookbook selon sa grille → améliore la clarté et l'exactitude technique",
+      "note": 6,
+      "pertinence": 6,
+      "score_pack": 6,
+      "note_juge": 6,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Sujet net et officiel, mais niche : utile aux contributeurs du cookbook, pas à un usage courant de Claude Code. Déclenchement large, script de validation absent, annexe style_guide tronquée."
     }
   ]
 }

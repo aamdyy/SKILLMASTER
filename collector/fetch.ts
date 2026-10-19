@@ -6,9 +6,11 @@
 //
 // Options : --max-skills N (400), --min-stars N (20), --pushed-months N (6),
 //           --max-repos N (400), --with-anthropic-directory (désactivé par défaut).
+import { execFileSync } from 'node:child_process'
+import { readFile, readdir } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { CACHE, OFFICIAL, REFERENCES, KEYWORDS, typesOf, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
+import { CACHE, LIBRARY, ROOT, OFFICIAL, REFERENCES, KEYWORDS, typesOf, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
 import { scanSkill, type Risk, type SkillFile } from './scan.ts'
 
 const argv = process.argv.slice(2)
@@ -24,6 +26,10 @@ const PER_REPO_FETCH = 15
 const PER_REFERENCE_FETCH = 60
 const PER_REPO_SELECT = 10
 const WITH_DIRECTORY = argv.includes('--with-anthropic-directory')
+// Skills des packs du tour précédent (têtes et ajouts) : toujours retenus, pour que l'avantage
+// au tenant s'applique. --keep-from <commit> les lit dans un commit, sinon dans library/packs.
+const KEEP_AT = argv.indexOf('--keep-from')
+const KEEP_REF = KEEP_AT >= 0 ? argv[KEEP_AT + 1] : undefined
 
 const now = new Date()
 const since = new Date(now)
@@ -179,9 +185,14 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
   const isOfficial = repo.name.toLowerCase().startsWith('anthropics/')
   const isReference = repo.sources.has('reference')
   const ranked = skillMds
-    .map(entry => ({ entry, hint: typesOf(entry.path)[0] !== 'autre' ? 0 : 1, depth: entry.path.split('/').length }))
-    .sort((a, b) => a.hint - b.hint || a.depth - b.depth || a.entry.path.localeCompare(b.entry.path))
-    .slice(0, isReference ? PER_REFERENCE_FETCH : PER_REPO_FETCH)
+    .map(entry => ({
+      entry,
+      isKept: keepIds.has(`${repo.name}/${entry.path.includes('/') ? entry.path.slice(0, entry.path.lastIndexOf('/')) : ''}`.toLowerCase()),
+      hint: typesOf(entry.path)[0] !== 'autre' ? 0 : 1,
+      depth: entry.path.split('/').length,
+    }))
+    .sort((a, b) => Number(b.isKept) - Number(a.isKept) || a.hint - b.hint || a.depth - b.depth || a.entry.path.localeCompare(b.entry.path))
+    .slice(0, isReference || [...keepIds].some(id => id.startsWith(`${repo.name.toLowerCase()}/`)) ? PER_REFERENCE_FETCH : PER_REPO_FETCH)
   const found = await pool(ranked, 8, async ({ entry }) => {
     const text = await rawFile(repo.name, repo.sha, entry.path)
     if (!text) return null
@@ -226,6 +237,19 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
 
 // Noms des skills de la bibliothèque locale d'Amdy (facultatif : vide si le manifeste manque).
 let priorityNames = new Set<string>()
+let keepIds = new Set<string>()
+async function loadKeepIds() {
+  const types = (await readdir(join(LIBRARY, 'packs')).catch(() => [] as string[])).filter(file => file.endsWith('.json'))
+  for (const file of types) {
+    try {
+      const text = KEEP_REF
+        ? execFileSync('git', ['-C', ROOT, 'show', `${KEEP_REF}:library/packs/${file}`], { encoding: 'utf8' })
+        : await readFile(join(LIBRARY, 'packs', file), 'utf8')
+      const pack = JSON.parse(text) as { recommandes?: { id: string }[]; ajouts?: { id: string }[] }
+      for (const item of [...(pack.recommandes ?? []), ...(pack.ajouts ?? [])]) keepIds.add(item.id)
+    } catch {}
+  }
+}
 async function loadPriorityNames() {
   const manifest = await readJson<{ entrees?: { name: string }[] }>(join(homedir(), '.claude', 'skills-archive', 'MANIFEST.json'), {})
   priorityNames = new Set((manifest.entrees ?? []).map(entry => entry.name.split(':').pop()!.toLowerCase()))
@@ -235,7 +259,8 @@ function select(candidates: Candidate[]) {
   const byHash = new Map<string, Candidate>()
   const byIdentity = new Map<string, Candidate>()
   const merged = { hash: 0, identity: 0 }
-  for (const candidate of candidates.sort((a, b) => b.prescore - a.prescore)) {
+  // Les skills à garder passent avant leurs copies : c'est leur id qui survit à la déduplication.
+  for (const candidate of candidates.sort((a, b) => Number(keepIds.has(b.id)) - Number(keepIds.has(a.id)) || b.prescore - a.prescore)) {
     const identity = `${candidate.name.toLowerCase()}|${candidate.description.toLowerCase().slice(0, 120)}`
     if (byHash.has(candidate.hash)) {
       merged.hash++
@@ -258,7 +283,9 @@ function select(candidates: Candidate[]) {
   }
   // D'abord les skills qui portent le nom d'un skill déjà utilisé par Amdy, pris dans les
   // dépôts officiels ou de référence : ils servent d'étalon face aux nouveaux venus.
+  for (const candidate of unique) if (keepIds.has(candidate.id) && chosen.length < MAX_SKILLS) take(candidate)
   for (const candidate of unique) {
+    if (chosen.includes(candidate)) continue
     const isTrusted = candidate.isOfficial || candidate.sources.includes('reference')
     if (isTrusted && priorityNames.has(candidate.name.toLowerCase()) && chosen.length < MAX_SKILLS) take(candidate)
   }
@@ -329,6 +356,8 @@ async function starVelocity(repoNames: string[]) {
 }
 
 async function main() {
+  await loadKeepIds()
+  log(`${keepIds.size} skills des packs précédents à garder`)
   log(`seuils : ≥ ${MIN_STARS} étoiles, push depuis le ${SINCE}, ${MAX_SKILLS} skills au plus`)
   if (WITH_DIRECTORY) log('annuaire Anthropic non documenté : demandé, mais pas encore branché dans cette version')
   for (const repo of OFFICIAL) discovered(repo, 'officiel')
