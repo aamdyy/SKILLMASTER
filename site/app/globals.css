@@ -1,63 +1,41 @@
 @import 'tailwindcss';
 
-/* Sombre uniquement (v1). L'accent vert est la marque ; le risque garde ses propres couleurs et
-   la confiance est neutre (icône), pour ne pas se confondre avec elle. */
+/* Sombre, sobre, esprit plan technique : filets fins, repères aux angles, étiquettes en mono.
+   La couleur porte un sens (risque) ; l'accent vert ne sert qu'aux étiquettes et au logo. */
 :root {
   color-scheme: dark;
-  --bg: #030504;
-  --surface: #0a0e0c;
-  --line: rgb(255 255 255 / 0.08);
-  --line-strong: rgb(255 255 255 / 0.16);
-  --fg: #f2f5f3;
-  --muted: #95a39a;
-  --subtle: #56615a; /* décoratif seulement (flèches, numéros) : contraste insuffisant pour du texte */
+  --bg: #070707;
+  --panel: #0d0d0d;
+  --panel-2: #141414;
+  --line: #1f1f1f;
+  --line-strong: #2c2c2c;
+  --tick: #5a5a5a; /* repères des cadres : décoratifs */
+  --fg: #f2f2f2;
+  --muted: #9a9a9a;
+  --subtle: #5c5c5c; /* décoratif seulement : contraste insuffisant pour du texte */
+  --accent: #86dba5;
 
-  --accent: #35d07f;
-  --accent-ink: #03140a;
-  --green-deep: #0c4a29;
-  --green-mid: #07301b;
-
-  /* Cartes blanches posées sur le fond sombre. */
-  --card: #ffffff;
-  --card-soft: #f2f4f2;
-  --card-line: rgb(3 20 10 / 0.09);
-  --ink: #0b120e;
-  --ink-muted: #56615a;
-
-  /* Risque : sur fond sombre, puis sur carte blanche. */
   --risk-info: #8fa7c7;
   --risk-moyen: #e3a33b;
   --risk-eleve: #ff6b3d;
-  --risk-info-ink: #46658f;
-  --risk-moyen-ink: #8f5d00;
-  --risk-eleve-ink: #c23d12;
 }
 
 @theme inline {
   --color-bg: var(--bg);
-  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
+  --color-tick: var(--tick);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-subtle: var(--subtle);
   --color-accent: var(--accent);
-  --color-accent-ink: var(--accent-ink);
-  --color-card: var(--card);
-  --color-card-soft: var(--card-soft);
-  --color-card-line: var(--card-line);
-  --color-ink: var(--ink);
-  --color-ink-muted: var(--ink-muted);
   --color-risk-info: var(--risk-info);
   --color-risk-moyen: var(--risk-moyen);
   --color-risk-eleve: var(--risk-eleve);
-  --color-risk-info-ink: var(--risk-info-ink);
-  --color-risk-moyen-ink: var(--risk-moyen-ink);
-  --color-risk-eleve-ink: var(--risk-eleve-ink);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-display: var(--font-titre), var(--font-geist-sans), sans-serif;
-  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 24px 48px -16px rgb(0 0 0 / 0.55), 0 2px 6px rgb(0 0 0 / 0.25);
 }
 
 html {
@@ -73,34 +51,52 @@ body {
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--fg);
+  color: var(--bg);
 }
 
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .tabular {
   font-variant-numeric: tabular-nums;
 }
 
-/* Fond vert profond vers noir, avec grille fine qui s'efface vers les bords. */
-.hero-backdrop {
-  mask-image: linear-gradient(to bottom, #000 55%, transparent);
-  background:
-    radial-gradient(120% 90% at 15% 0%, var(--green-deep) 0%, var(--green-mid) 35%, transparent 70%),
-    radial-gradient(80% 60% at 95% 85%, rgb(53 208 127 / 0.18) 0%, transparent 60%),
-    var(--bg);
+/* Filet horizontal qui déborde de la colonne et s'efface aux extrémités. */
+.rule {
+  background: linear-gradient(90deg, transparent, var(--line-strong) 18%, var(--line-strong) 82%, transparent);
 }
-.hero-grid {
-  background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 85% 75% at 50% 35%, #000 40%, transparent 100%);
+
+/* Lueur très légère en haut de page. */
+.top-glow {
+  background: radial-gradient(60% 100% at 50% 0%, rgb(255 255 255 / 0.06), transparent 70%);
+}
+
+/* Boutons : métal clair pour l'action principale, sombre pour la secondaire. */
+.btn-primary {
+  background: linear-gradient(#ededed, #c7c7c7);
+  color: #0a0a0a;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7), 0 1px 2px rgb(0 0 0 / 0.5);
+}
+.btn-primary:hover {
+  background: linear-gradient(#f7f7f7, #d4d4d4);
+}
+.btn-secondary {
+  background: linear-gradient(#232323, #181818);
+  color: var(--fg);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 0 0 1px var(--line-strong);
+}
+.btn-secondary:hover {
+  background: linear-gradient(#2a2a2a, #1d1d1d);
+}
+
+/* Transition de la ligne d'un pack vers la fiche du skill (React <ViewTransition>). */
+::view-transition-group(.morph) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -112,4 +108,86 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Classes de composant : le balisage répété (1 500 fiches, liste de 1 500 lignes) reste léger,
+   car chaque octet du HTML est aussi copié dans les charges de navigation de Next.js. */
+@layer components {
+  /* Repères d'un cadre technique : croix aux 4 angles et tirets au milieu des côtés, dessinés
+     en dégradés sur un seul élément décoratif. */
+  .frame-marks {
+    position: absolute;
+    inset: -5px;
+    pointer-events: none;
+    --t: linear-gradient(var(--tick), var(--tick));
+    background-image: var(--t), var(--t), var(--t), var(--t), var(--t), var(--t), var(--t), var(--t), var(--t), var(--t), var(--t), var(--t);
+    background-repeat: no-repeat;
+    background-size: 9px 1px, 1px 9px, 9px 1px, 1px 9px, 9px 1px, 1px 9px, 9px 1px, 1px 9px, 1px 6px, 1px 6px, 6px 1px, 6px 1px;
+    background-position:
+      0 4px, 4px 0,
+      100% 4px, calc(100% - 4px) 0,
+      0 calc(100% - 4px), 4px 100%,
+      100% calc(100% - 4px), calc(100% - 4px) 100%,
+      50% 5px, 50% calc(100% - 5px),
+      5px 50%, calc(100% - 5px) 50%;
+  }
+  .frame-legend {
+    @apply absolute -top-2 left-4 bg-bg px-1.5 font-mono text-[10.5px] uppercase leading-4 tracking-[0.08em] text-muted;
+  }
+  .caps {
+    @apply font-mono uppercase tracking-[0.06em];
+  }
+  .label-code {
+    @apply font-mono text-[13px] uppercase tracking-[0.08em] text-accent;
+  }
+  .badge {
+    @apply inline-flex h-7 items-center gap-1.5 whitespace-nowrap rounded-md border border-line-strong px-2.5 font-mono text-[11px];
+  }
+  .btn {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-lg px-4 font-mono text-[12.5px] uppercase tracking-[0.06em] transition-[background,transform] duration-150 ease-out motion-safe:active:scale-[0.98];
+  }
+  .section-rule {
+    @apply pointer-events-none absolute left-1/2 top-0 h-px w-[min(1400px,100vw)] -translate-x-1/2;
+    background: linear-gradient(90deg, transparent, var(--line-strong) 18%, var(--line-strong) 82%, transparent);
+  }
+
+  /* Ligne de /skills : seuls l'élément et son lien portent une classe. */
+  .srow {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 88px;
+  }
+  .srow > a {
+    @apply grid gap-x-6 gap-y-1.5 px-1 py-4 transition-colors duration-150 hover:bg-panel md:grid-cols-[minmax(0,17rem)_minmax(0,1fr)_7.5rem] md:px-3;
+  }
+  .srow > a > div {
+    @apply min-w-0;
+  }
+  .srow > a > div > b {
+    @apply block truncate font-mono text-[13.5px] font-normal text-fg;
+  }
+  .srow > a > div > i {
+    @apply block truncate font-mono text-[11px] not-italic text-muted;
+  }
+  .srow > a > p {
+    @apply line-clamp-2 text-sm leading-relaxed text-fg/80 md:line-clamp-1 md:self-center;
+  }
+  .srow > a > span {
+    @apply flex gap-3 font-mono text-[11.5px] md:flex-col md:gap-0.5 md:self-center md:text-right;
+    font-variant-numeric: tabular-nums;
+  }
+  .srow > a > span > :first-child {
+    @apply text-fg;
+  }
+  .srow > a > span > :nth-child(2) {
+    @apply text-muted;
+  }
+  .r-aucun { @apply text-muted; }
+  .r-info { @apply text-risk-info; }
+  .r-moyen { @apply text-risk-moyen; }
+  .r-eleve, .r-critique { @apply text-risk-eleve; }
 }

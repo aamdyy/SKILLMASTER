@@ -1,6 +1,7 @@
 // Lecture et typage de la bibliothèque (../library) au moment du build. Lecture seule :
-// le site ne modifie jamais library/. L'usage réel d'Amdy (retours_amdy, bonus d'usage) et
-// library/profil.json ne sont jamais lus ni exposés.
+// le site ne modifie jamais library/. L'usage réel d'Amdy (retours_amdy, bonus d'usage, note
+// finale qui l'inclut) et library/profil.json ne sont jamais lus ni exposés.
+import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
@@ -10,9 +11,11 @@ const SKILL_MASTER = join(ROOT, 'plugins', 'skillmaster', 'skills', 'skill-maste
 
 export type Gravite = 'critique' | 'eleve' | 'moyen' | 'info'
 export type Risque = { gravite: Gravite; source: 'scan' | 'juge'; categorie?: string; code: string; detail?: string }
+export type SousNotes = Record<'declenchement' | 'valeur_ajoutee' | 'precision' | 'perimetre' | 'qualite', number>
 
 export type Skill = {
   id: string
+  slug: string
   nom: string
   repo: string
   cheminSkill: string
@@ -27,6 +30,7 @@ export type Skill = {
   dernierCommit: string | null
   // Note du juge seule : la note finale contient le bonus d'usage d'Amdy, qui reste privé.
   note: number | null
+  sousNotes: SousNotes | null
   justification: string | null
   reserves: string[]
   risques: Risque[]
@@ -36,6 +40,7 @@ export type Skill = {
   remplacePar: string | null
   raisonStatut: string | null
   officiel: boolean
+  licence: string | null
   dateAjout: string
 }
 
@@ -62,7 +67,7 @@ export const PACKS: { type: string; label: string }[] = [
   { type: 'data', label: 'Data' },
   { type: 'outillage-claude-code', label: 'Construire avec Claude' },
 ]
-export const labelOf = (type: string) => PACKS.find(pack => pack.type === type)?.label ?? type
+export const labelOf = (type: string | null) => (type ? PACKS.find(pack => pack.type === type)?.label ?? type : 'Autre')
 
 const readJson = <T>(path: string): T => JSON.parse(readFileSync(path, 'utf8')) as T
 const once = <T>(load: () => T) => {
@@ -70,17 +75,22 @@ const once = <T>(load: () => T) => {
   return () => (value ??= load())
 }
 
+// Adresse d'une fiche : l'id, sans segment qui commence par un point (certains hébergeurs
+// ignorent les dossiers cachés). « .claude » devient « _claude ».
+const toSlug = (id: string) => id.split('/').map(segment => segment.replace(/^\./, '_')).join('/')
+
 type RawSkill = {
   id: string; nom: string; repo: string; chemin_skill: string; skill_md: string; sha_epingle: string
   resume_fr: string | null; description_courte: string | null; description_originale: string; type_principal: string | null
-  categories: string[]; stars: number; dernier_commit: string | null; note_juge: number | null; justification: string | null
-  reserves?: string[]; risques: Risque[]; risque_max: Gravite | null; packs?: Record<string, string>; statut: string
-  remplace_par: string | null; raison_statut?: string; officiel: boolean; date_ajout: string
+  categories: string[]; stars: number; dernier_commit: string | null; note_juge: number | null; sous_notes: SousNotes | null
+  justification: string | null; reserves?: string[]; risques: Risque[]; risque_max: Gravite | null; packs?: Record<string, string>
+  statut: string; remplace_par: string | null; raison_statut?: string; officiel: boolean; licence: string | null; date_ajout: string
 }
 
-export const getSkills = once((): Skill[] =>
-  readJson<{ skills: RawSkill[] }>(join(LIBRARY, 'skills.json')).skills.map(raw => ({
+export const getSkills = once((): Skill[] => {
+  const skills = readJson<{ skills: RawSkill[] }>(join(LIBRARY, 'skills.json')).skills.map(raw => ({
     id: raw.id,
+    slug: toSlug(raw.id),
     nom: raw.nom,
     repo: raw.repo,
     cheminSkill: raw.chemin_skill,
@@ -94,6 +104,7 @@ export const getSkills = once((): Skill[] =>
     stars: raw.stars,
     dernierCommit: raw.dernier_commit,
     note: raw.note_juge,
+    sousNotes: raw.sous_notes,
     justification: raw.justification,
     reserves: raw.reserves ?? [],
     risques: raw.risques,
@@ -103,11 +114,35 @@ export const getSkills = once((): Skill[] =>
     remplacePar: raw.remplace_par,
     raisonStatut: raw.raison_statut ?? null,
     officiel: raw.officiel,
+    licence: raw.licence,
     dateAjout: raw.date_ajout,
-  })),
-)
+  }))
+  // Une copie archivée et l'original peuvent partager un id : la version vivante passe en premier.
+  skills.sort((a, b) => Number(a.statut === 'archive') - Number(b.statut === 'archive'))
+  const seen = new Map<string, string>()
+  for (const skill of skills) {
+    const owner = seen.get(skill.slug)
+    if (owner && owner !== skill.id) skill.slug = `${skill.slug}-${createHash('sha256').update(skill.id).digest('hex').slice(0, 6)}`
+    seen.set(skill.slug, skill.id)
+  }
+  return skills
+})
 
-export const getSkill = (id: string) => getSkills().find(skill => skill.id === id) ?? null
+// Une fiche par id (la version vivante si l'id existe aussi en archive).
+export const getFiches = once(() => {
+  const byId = new Map<string, Skill>()
+  for (const skill of getSkills()) if (!byId.has(skill.id)) byId.set(skill.id, skill)
+  return [...byId.values()]
+})
+export const getSkill = (id: string) => getFiches().find(skill => skill.id === id) ?? null
+export const getSkillBySlug = (slug: string) => getFiches().find(skill => skill.slug === slug) ?? null
+export const skillHref = (skill: { slug: string }) => `/skills/${skill.slug}/`
+export const skillHrefById = (id: string) => {
+  const skill = getSkill(id)
+  return skill ? skillHref(skill) : '/skills/'
+}
+// Nom utilisé par <ViewTransition> : doit être un identifiant CSS valide.
+export const transitionName = (id: string) => `skill-${createHash('sha256').update(id).digest('hex').slice(0, 12)}`
 
 type RawPackItem = { id: string; nom: string; epingle?: boolean }
 type RawIndexItem = { id: string; editeur_confiance?: boolean }
@@ -137,6 +172,13 @@ export const getPacks = once((): Pack[] =>
 
 export const getPack = (type: string) => getPacks().find(pack => pack.type === type) ?? null
 
+// Éditeurs de confiance, d'après l'index publié (jamais profil.json).
+export const getTrustedIds = once(() => new Set(getPacks().flatMap(pack => [...pack.recommandes, ...pack.ajouts].filter(item => item.confiance).map(item => item.id))))
+
+// Places d'un skill dans les packs : « n° 3 en tête de Site web », « ajout de Data »…
+export const placesOf = (id: string) =>
+  getPacks().flatMap(pack => [...pack.recommandes, ...pack.ajouts].filter(item => item.id === id).map(item => ({ pack, item })))
+
 // Récapitulatifs : un fichier par tour dans library/history/, sinon le dernier RECAP.md.
 const parseRecap = (text: string): Tour => {
   const date = text.match(/^# Récapitulatif SKILLMASTER — (\d{4}-\d{2}-\d{2})/m)?.[1] ?? ''
@@ -160,6 +202,8 @@ export const chiffresDuTour = (tour: Tour) => {
     tetes: /Aucune tête/.test(tour.resume) ? 0 : number(/(\d+) pack/),
     nouveaux: number(/(\d+) skill\(s\) nouveaux/),
     archives: number(/(\d+) archivé/),
+    coutUsd: number(/coût ([\d.]+) \$/),
+    dureeMin: number(/, (\d+) min/),
   }
 }
 
@@ -177,11 +221,9 @@ export const getDernierTour = once((): DernierTour => {
     return { le: run.le, coutUsd: run.cout?.total ?? null, dureeMin: run.duree_min }
   }
   // Avant le premier archivage : la date et le coût se lisent dans RECAP.md.
-  const recap = readFileSync(join(LIBRARY, 'RECAP.md'), 'utf8')
-  const tour = parseRecap(recap)
-  const cout = recap.match(/coût ([\d.]+) \$/)?.[1]
-  const duree = recap.match(/, (\d+) min/)?.[1]
-  return { le: tour.date, coutUsd: cout ? Number(cout) : null, dureeMin: duree ? Number(duree) : null }
+  const tour = parseRecap(readFileSync(join(LIBRARY, 'RECAP.md'), 'utf8'))
+  const chiffres = chiffresDuTour(tour)
+  return { le: tour.date, coutUsd: chiffres.coutUsd, dureeMin: chiffres.dureeMin }
 })
 
 // Critères de détection du type, lus dans le SKILL.md de skill-master (lecture seule).
@@ -200,8 +242,11 @@ export const getDetection = once((): Record<string, string> => {
 export const getStats = once(() => {
   const vivants = getSkills().filter(skill => skill.statut !== 'archive')
   const retenus = new Set(getPacks().flatMap(pack => [...pack.recommandes, ...pack.ajouts].map(item => item.id)))
-  return { analyses: vivants.length, retenus: retenus.size, packs: getPacks().length }
+  return {
+    analyses: vivants.length,
+    retenus: retenus.size,
+    packs: getPacks().length,
+    depots: new Set(vivants.map(skill => skill.repo.toLowerCase())).size,
+    alertes: vivants.reduce((sum, skill) => sum + skill.risques.filter(risk => risk.source === 'juge').length, 0),
+  }
 })
-
-// Les ids contiennent des « / » : la fiche vit sur /skills/<id>/ (route catch-all).
-export const skillHref = (id: string) => `/skills/${id.split('/').map(encodeURIComponent).join('/')}/`

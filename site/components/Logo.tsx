@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-// Logo typographique : un carré plein (vert, la marque), puis « skillmaster » en Geist Mono minuscule.
+// Logo typographique : un carré plein vert, puis « skillmaster » en Geist Mono minuscule.
 export function Logo() {
   return (
     <Link href="/" className="group inline-flex h-11 items-center gap-2.5 font-mono text-[15px] tracking-tight text-fg" aria-label="skillmaster, accueil">
