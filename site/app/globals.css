@@ -89,6 +89,7 @@ body {
 
 /* Fond vert profond vers noir, avec grille fine qui s'efface vers les bords. */
 .hero-backdrop {
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
   background:
     radial-gradient(120% 90% at 15% 0%, var(--green-deep) 0%, var(--green-mid) 35%, transparent 70%),
     radial-gradient(80% 60% at 95% 85%, rgb(53 208 127 / 0.18) 0%, transparent 60%),

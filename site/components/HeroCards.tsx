@@ -4,6 +4,7 @@ import { labelOf, skillHref, type DernierTour, type Pack, type PackSkill, type S
 import { NoteBadge, RiskBadge, TrustBadge } from './Badges'
 import { CursorArrow } from './CursorArrow'
 import { Float } from './motion/Float'
+import { Resume } from './Resume'
 
 type Props = {
   pack: Pack
@@ -15,23 +16,6 @@ type Props = {
 }
 
 const card = 'block rounded-[28px] bg-card text-ink shadow-card transition-transform duration-200 ease-out motion-safe:hover:-translate-y-1'
-
-// « ce qu'il fait → ce qu'il améliore » : la flèche passe en vert.
-function Resume({ text }: { text: string }) {
-  const [does, improves] = text.split('→').map(part => part.trim())
-  return (
-    <p className="font-display text-[1.375rem] font-medium italic leading-[1.2] tracking-[-0.02em]">
-      {does}
-      {improves && (
-        <>
-          {' '}
-          <span aria-hidden className="not-italic text-[#0f9d55]">→</span>
-          <span className="sr-only">, ce qui améliore :</span> {improves}
-        </>
-      )}
-    </p>
-  )
-}
 
 // Cartes blanches qui flottent et se chevauchent sur le fond sombre, avec de vraies données.
 // Mobile : empilées en léger décalage. Desktop : posées en éventail.
@@ -67,7 +51,7 @@ export function HeroCards({ pack, skill, place, tour, chiffres, change }: Props)
               n° {place.rang} · {pack.label}
             </span>
           </div>
-          <div className="mt-5">{skill.resume && <Resume text={skill.resume} />}</div>
+          <div className="mt-5">{skill.resume && <Resume text={skill.resume} className="text-[1.375rem] leading-[1.2]" />}</div>
           <div className="mt-5 flex flex-wrap gap-2">
             <NoteBadge note={skill.note} />
             <RiskBadge gravite={skill.risqueMax} />

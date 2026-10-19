@@ -18,6 +18,12 @@ export const viewport: Viewport = { themeColor: '#030504', colorScheme: 'dark' }
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={`${GeistSans.variable} ${GeistMono.variable} ${display.variable}`}>
+      <head>
+        {/* Sans JavaScript, les éléments qui apparaissent au scroll restent visibles. */}
+        <noscript>
+          <style>{`[style*="opacity:0"]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
       <body className="relative flex flex-col overflow-x-clip">
         {/* Fond vert profond vers noir avec grille fine, en haut de chaque page. */}
         <div aria-hidden className="hero-backdrop pointer-events-none absolute inset-x-0 top-0 -z-10 h-[1100px]">

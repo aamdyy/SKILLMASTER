@@ -44,3 +44,15 @@ export function NoteBadge({ note, surface = 'card' }: { note: number | null; sur
     </span>
   )
 }
+
+export function PinnedBadge({ surface = 'card' }: { surface?: Surface }) {
+  return (
+    <span className={`${base} ${border(surface)} ${surface === 'card' ? 'text-ink' : 'text-fg'}`}>
+      <svg aria-hidden width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.3">
+        <path d="M7.5 1.5 10.5 4.5 8.6 5.6 6.4 7.8l.3 2.2-4.7-4.7 2.2.3 2.2-2.2 1.1-1.9Z" strokeLinejoin="round" />
+        <path d="M3.5 8.5 1.5 10.5" strokeLinecap="round" />
+      </svg>
+      épinglé
+    </span>
+  )
+}

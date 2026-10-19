@@ -119,8 +119,10 @@ export const getPacks = once((): Pack[] =>
     )
     const index = readJson<{ recommandes: RawIndexItem[]; ajouts: RawIndexItem[] }>(join(LIBRARY, 'index', `${type}.json`))
     const trusted = new Set([...index.recommandes, ...index.ajouts].filter(item => item.editeur_confiance).map(item => item.id))
+    // Épinglé en tête (« epingle ») ou en ajout (« ajout_epingle ») : décisions d'Amdy.
+    const pinned = (id: string) => /epingle/.test(getSkill(id)?.packs[type] ?? '')
     const item = (place: PackSkill['place']) => (raw: RawPackItem, i: number): PackSkill => ({
-      id: raw.id, nom: raw.nom, place, rang: i + 1, epingle: !!raw.epingle, confiance: trusted.has(raw.id),
+      id: raw.id, nom: raw.nom, place, rang: i + 1, epingle: !!raw.epingle || pinned(raw.id), confiance: trusted.has(raw.id),
     })
     return {
       type,
