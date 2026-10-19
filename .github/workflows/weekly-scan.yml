@@ -113,4 +113,5 @@ jobs:
         if: needs.scan.outputs.tete_changee == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh issue create --title "SKILLMASTER : têtes de pack modifiées ($(date -u +%Y-%m-%d))" --body-file collector/out/issue.md
+        run: |
+          gh issue create --title "SKILLMASTER : têtes de pack modifiées ($(date -u +%Y-%m-%d))" --body-file collector/out/issue.md
