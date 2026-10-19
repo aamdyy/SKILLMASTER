@@ -15,7 +15,7 @@ Amdy utilise Claude Code pour tous ses projets : sites web, apps iOS, montage vi
    - **partout, y compris dans VS Code, le skill `skill-master`**. Amdy lui dit « va voir SKILLMASTER et prends les skills dont tu as besoin », et il fait la même proposition.
 
    Dans les deux cas, l'outil affiche :
-   - la **sélection recommandée** pour le type de projet détecté sur le moment (8 skills maximum), avec une **liste d'ajouts possibles** ;
+   - la **sélection recommandée** pour le type de projet détecté sur le moment (8 skills maximum), avec une **liste d'ajouts possibles**. Chaque skill y est présenté par son `resume_fr`, une phrase de 15 mots au plus : « ce qu'il fait → ce qu'il améliore » ;
    - un **conseil modèle et effort** : par exemple « Opus 5.5 · xhigh · ultracode ON », avec une phrase qui explique pourquoi.
 3. **Il propose, Amdy valide.** Rien ne s'installe ou ne se change sans accord. Toutes les commandes passent sous le préfixe `/sm` : `/sm check`, `/sm install`, `/sm clean`, `/sm rate` et `/sm status`.
 
@@ -51,7 +51,10 @@ skillmaster/
 
 ### Fiche d'un skill (`skills.json`)
 
-`id`, `repo`, `chemin_skill`, `description_courte`, `categories[]`, `stars`, `vitesse_stars_30j`, `dernier_commit`, `installs` (si dispo), `note_qualite` (0–10), `risques[]`, `statut` (`nouveau` | `en_test` | `valide` | `archive`), `remplace_par`, `retours_amdy[]`, `date_ajout`.
+`id`, `repo`, `chemin_skill`, `resume_fr`, `description_courte`, `categories[]`, `stars`, `vitesse_stars_30j`, `dernier_commit`, `installs` (si dispo), `note_qualite` (0–10), `risques[]`, `statut` (`nouveau` | `en_test` | `valide` | `archive`), `remplace_par`, `retours_amdy[]`, `date_ajout`.
+
+- `resume_fr` est écrit par le juge : une phrase en français, 15 mots au plus, au format « ce qu'il fait → ce qu'il améliore ». Par exemple : « te demande avant chaque choix visuel → évite que Claude invente le design ». Elle s'affiche **partout** où un skill est proposé à Amdy : panneau du mod, question de `skill-master`, demande de note.
+- `retours_amdy[]` reçoit l'usage réel (compteurs d'invocations), les étoiles de `/sm rate` et les signaux automatiques (proposition acceptée ou refusée).
 
 ### Cycle de vie
 
@@ -59,6 +62,9 @@ skillmaster/
 - **en_test** : Amdy l'a installé sur un projet.
 - **valide** : au moins un bon retour, et la note dépasse le seuil.
 - **archive** : plus de commit depuis 6 mois, remplacé par un meilleur skill, ou mauvais retours.
+- **Étoiles et usage décident** : un skill passe en « recommandé » de son pack, ou part en archive, selon les étoiles de `/sm rate`, l'usage réel et les signaux automatiques. Seuils proposés, à confirmer en phase 4 :
+  - recommandé : moyenne ≥ 4 étoiles sur au moins 3 notes ;
+  - archive : moyenne ≤ 2 étoiles sur au moins 2 notes, ou deux refus de suite sans aucune utilisation.
 
 ### Le juge (coût maîtrisé)
 
@@ -107,7 +113,7 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Étape 2 :** collecteur et juge lancés une première fois à la main (plan : `docs/phase-1-etape2-plan-collecteur-juge.md`). Premier `skills.json` et packs par type. Amdy relit les notes et les packs.
 - **Phase 2** : le mod conseiller, le skill `skill-master` et les commandes `/sm`. Test sur un vrai projet.
 - **Phase 3** : GitHub Action hebdomadaire, cycle de vie automatique, mise à jour écrite directement sur `main`.
-- **Phase 4** : boucle de retours (`/sm rate`) qui influence les notes. Page web de la bibliothèque (GitHub Pages) **à partir des maquettes Figma d'Amdy**.
+- **Phase 4** : boucle de retours qui influence les notes. `/sm rate` demande une note sur 5 étoiles en fin de session, pour 3 skills au plus, réellement utilisés pendant la session, et les signaux automatiques comptent aussi. Page web de la bibliothèque (GitHub Pages) **à partir des maquettes Figma d'Amdy**.
 
 ## Décisions prises
 
@@ -121,6 +127,21 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
 - 2026-10-18 : **socle global** = `skill-master` v0 seul, un lien depuis `~/.claude/skills/` vers `plugins/skillmaster/skills/skill-master/`. **Ce lien est à retirer quand le plugin sera installé**, sinon le skill se chargera deux fois.
 - 2026-10-18 : résultats du mod de test. Dans VS Code, les hooks, `/sm`, le Pane et le dialogue marchent, et la surface s'attache après `session.start`. Un mod ne peut pas lancer une commande depuis le hook de sa propre commande : il faut passer par un événement suivant (`turn.complete`). `CLAUDE_CODE_PLUGIN_DIRS` ne se lit que dans l'environnement ou dans `~/.claude/settings.json`, jamais dans les réglages d'un projet.
 - 2026-10-18 : collecteur et juge, premier lancement. Le juge passe par `claude -p --model haiku` sur l'abonnement d'Amdy ; la clé API dédiée (workspace et plafond de dépense) attendra la phase 3. Seuils : au moins 20 étoiles, un push de moins de 6 mois, 300 à 500 skills jugés. L'annuaire non documenté d'Anthropic est une option désactivée par défaut.
+- 2026-10-18 : **pas de notes manuelles.** Amdy ne lit pas les skills, donc il ne les note pas. Le calibrage du juge se fait avec ses **compteurs d'invocations** : ses skills les plus utilisés doivent finir en haut de leur pack. On le vérifie avec `node collector/calibrate.ts --avant <commit>`, qui donne la place de chaque skill avant et après, et son rang d'après la seule note du juge, sans le bonus d'usage.
+- 2026-10-18 : **`/sm rate`** (remplace le 👍/👎 envisagé d'abord).
+  - Une note **sur 5 étoiles**, demandée en fin de session, et seulement pour les skills **réellement utilisés** pendant la session (repérés par l'événement `skill.prompt` ou par un chargement via `skill-master`), **3 au plus** par session. La demande affiche le `resume_fr` de chaque skill.
+  - Les **signaux automatiques** comptent aussi : une proposition acceptée compte en +, deux refus de suite comptent en −.
+  - Étoiles et usage décident ensuite d'archiver un skill ou de le passer en « recommandé » (seuils dans « Cycle de vie »).
+- 2026-10-18 : **`resume_fr`** pour chaque skill, écrit par le juge en troisième temps :
+  - Sonnet pour les finalistes de chaque pack, Haiku pour les autres, avec un cache séparé (`collector/resume.ts`) ;
+  - la bibliothèque locale (`~/.claude/skills-archive/MANIFEST.json`) le reçoit aussi, pour que `skill-master` l'affiche dès la v0.
+- 2026-10-18 : **juge v2.**
+  - La note est la somme de 5 sous-notes de 0 à 2. Le juge lit aussi les annexes du skill, et la règle Figma n'influence pas la note (elle passe par le drapeau seul).
+  - Les réserves de qualité sont séparées des risques de sécurité. Le scan tient compte des blocs de code et des mises en garde.
+  - Les types sont stricts : le juge doit être d'accord avec la détection, et Expo ou React Native n'entrent jamais dans ios ni android.
+  - Le jugement se fait en deux temps : Haiku sur tout, puis Sonnet sur les finalistes de chaque pack.
+  - Note finale = note du juge + bonus d'usage (+0,5, +1 ou +1,5, consigné dans `retours_amdy`).
+  - « Recommandé » se décide par pack : les 5 à 8 meilleurs, note ≥ 6. Les épinglages et les exclusions sont dans `library/overrides.json`, où bencium est épinglé en site-web.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Décisions encore ouvertes

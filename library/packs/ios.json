@@ -1,171 +1,232 @@
 {
   "type": "ios",
-  "genere_le": "2026-10-18T19:08:09.638Z",
+  "genere_le": "2026-10-18T20:02:10.397Z",
+  "version_juge": "v2",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
-  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "regles": "les 5 à 8 meilleurs du type avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "recommandes": [
     {
       "id": "twostraws/swiftui-agent-skill/swiftui-pro",
       "nom": "swiftui-pro",
       "repo": "twostraws/SwiftUI-Agent-Skill",
-      "note": 8,
+      "resume_fr": "relit ton code SwiftUI (API obsolètes, données, navigation, accessibilité) → code plus moderne et maintenable",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
       "risque_max": "eleve",
-      "raison": "Contenu dense et spécifique (API dépréciées, iPhone Duo, Dynamic Type, Swift 6.4), sans choix esthétiques imposés. Déclencheur large, références non relues, et le SKILL.md est dupliqué dans skills/."
+      "raison": "Skill de mainteneur reconnu, ciblé et à jour (iOS 27, Xcode 27). Règles concrètes avec avant/après, pièges réels, références bien découpées. Format de sortie clair."
     },
     {
       "id": "avdlee/swiftui-agent-skill/skills/swiftui-expert-skill",
       "nom": "swiftui-expert-skill",
       "repo": "AvdLee/SwiftUI-Agent-Skill",
-      "note": 8,
+      "resume_fr": "guide l'écriture et la revue de code SwiftUI → apps plus fluides, moins de re-rendus",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Règles précises et API récentes (@Observable, #available, dépréciations), routage vers des références par sujet. Périmètre large (traces Instruments, Document, macOS). Références non vérifiées ici."
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/expo-brownfield",
-      "nom": "expo-brownfield",
-      "repo": "expo/skills",
-      "note": 8,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis, périmètre net, critères de choix clairs et règles utiles (ne jamais prebuild un hôte natif). Références externes non lues ; le bloc de feedback envoie des données à un tiers."
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/eas-app-stores",
-      "nom": "eas-app-stores",
-      "repo": "expo/skills",
-      "note": 8,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis, périmètre net, pièges réels (appVersionSource remote, vérification de CFBundleVersion, statut non confirmé après soumission). Références non lues ici. Feedback via npx externe à surveiller."
+      "raison": "Skill de mainteneur reconnu, ciblé SwiftUI, à jour (Liquid Glass, iOS 26), avec routeur de références, checklist testable et workflows de traces Instruments précis."
     },
     {
       "id": "avdlee/swift-concurrency-agent-skill/skills/swift-concurrency",
       "nom": "swift-concurrency",
       "repo": "AvdLee/Swift-Concurrency-Agent-Skill",
-      "note": 8,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis (diagnostics Swift 6, actors, Sendable). Apporte des règles concrètes et non évidentes : analyse de la préfixe synchrone des Task, @concurrent, tableau de diagnostics. Léger marketing (lien de cours avec UTM) et conseils Xcode 26 spéculatifs."
-    },
-    {
-      "id": "conorluddy/ios-simulator-skill/ios-simulator-skill/skills/ios-simulator-skill",
-      "nom": "ios-simulator-skill",
-      "repo": "conorluddy/ios-simulator-skill",
-      "note": 8,
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis et outillage concret (commandes, variables d'env, gardes --yes). Périmètre large et lourd (30 scripts). SKILL.md tronqué au tiers, scripts non relus. Solide, ajout ciblé."
-    },
-    {
-      "id": "vercel-labs/agent-skills/skills/react-native-skills",
-      "nom": "vercel-react-native-skills",
-      "repo": "vercel-labs/agent-skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs clairs et règles spécifiques, actionnables (FlashList, Gesture.Tap, expo-image, navigateurs natifs). Jugé sur l'index seul : les fichiers rules/ ne sont pas lus. Aucune licence."
-    },
-    {
-      "id": "callstackincubator/agent-skills/skills/react-native-best-practices",
-      "nom": "react-native-best-practices",
-      "repo": "callstackincubator/agent-skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et priorisés, commandes de profilage et de bundle exactes, pièges réels (FlashList v2, alignement 16 Ko). Limite : beaucoup de rappels généraux, et dépend d'un outil tiers non vérifié (agent-device). 43 références non lues."
-    }
-  ],
-  "ajouts": [
-    {
-      "id": "awslabs/agent-plugins/plugins/aws-amplify/skills/amplify-workflow",
-      "nom": "amplify-workflow",
-      "repo": "awslabs/agent-plugins",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et patterns Gen2 versionnés, bonne valeur ajoutée. Seul SKILL.md jugé : les 16 références ne sont pas lues. Checklist sécurité générique, consigne « toujours utiliser » trop large."
-    },
-    {
-      "id": "affaan-m/ecc/skills/accessibility",
-      "nom": "accessibility",
-      "repo": "affaan-m/ECC",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur clair et périmètre net. Tableau de correspondance Web/iOS/Android et exemples utiles. Mais beaucoup de généralités (POUR, checklist), une erreur sur Android (stateDescription présenté comme hint) et peu de commandes d'audit concrètes."
-    },
-    {
-      "id": "shanraisshan/claude-code-best-practice/.claude/skills/agent-browser",
-      "nom": "agent-browser",
-      "repo": "shanraisshan/claude-code-best-practice",
-      "note": 6,
-      "risque_max": "eleve",
-      "raison": "Commandes exactes et cycle snapshot/refs utile. Mais déclencheurs trop larges, liens vers references/ et templates/ absents, et la sauvegarde de session en clair n'est pas signalée. Solide mais à cadrer."
-    },
-    {
-      "id": "everyinc/compound-engineering-plugin/skills/ce-test-xcode",
-      "nom": "ce-test-xcode",
-      "repo": "EveryInc/compound-engineering-plugin",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis, critères de sortie vérifiables, frontières nettes (test sans correction). Mais le corps délègue tout le détail à deux références absentes du contenu fourni : valeur réelle non vérifiable."
-    },
-    {
-      "id": "aws/agent-toolkit-for-aws/skills/core-skills/aws-sdk-swift-usage",
-      "nom": "aws-sdk-swift-usage",
-      "repo": "aws/agent-toolkit-for-aws",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur net et pièges précis (config struct, ordre des paramètres, waiters avec maxWaitTime). Mais court, sans setup Package.swift ni gestion d'erreurs, et des API non vérifiées dans le texte."
-    },
-    {
-      "id": "wondelai/skills/ios-hig-design",
-      "nom": "ios-hig-design",
-      "repo": "wondelai/skills",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs clairs et repères utiles (44pt, NavigationStack, SF Symbols). Mais beaucoup de généralités, une erreur de typo (Title 17pt), liens affiliés Amazon, et les références détaillées n'ont pas été fournies."
-    },
-    {
-      "id": "appeeky/aso-skills/skills/app-preview-video",
-      "nom": "app-preview-video",
-      "repo": "appeeky/aso-skills",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et specs utiles (durée, nombre, règles de rejet Apple). Mais beaucoup de chiffres de conversion non sourcés, du marketing ciblé store, et une logique hors code. Utile seulement pour une fiche store."
-    },
-    {
-      "id": "figma/mcp-server-guide/skills-figquery/figma-swiftui",
-      "nom": "figma-swiftui",
-      "repo": "figma/mcp-server-guide",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et conventions utiles (tokens HIG, SF Symbols par nom, routage par sens). Mais c'est surtout un routeur : les deux guides référencés n'ont pas été fournis, et aucune licence."
-    },
-    {
-      "id": "callstackincubator/agent-skills/skills/assess-react-native-migration",
-      "nom": "assess-react-native-migration",
-      "repo": "callstackincubator/agent-skills",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis et périmètre net, méthode solide (inventaire de plateformes, critères de passage, étiquetage des preuves). Niche pour Amdy, format de réponse très rigide, dépend d'un autre skill externe non fourni."
-    },
-    {
-      "id": "maxrave-dev/kotlin-footguns/skills/remote-api-footguns",
-      "nom": "remote-api-footguns",
-      "repo": "maxrave-dev/kotlin-footguns",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur clair et pièges concrets par référence, mais SKILL.md n'est qu'un index : le fond est dans 17 fichiers non fournis. Périmètre large (websocket, protobuf, sync d'horloge, téléchargement) et spécifique à KMP."
+      "resume_fr": "diagnostique les erreurs de concurrence Swift avant toute correction → évite les @MainActor posés au hasard",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Skill ciblé d'un mainteneur reconnu : déclenchement précis, diagnostics concrets, isolation Swift 6.2 (@concurrent), références routées. À jour et sans marketing excessif."
     },
     {
       "id": "truongduy2611/app-store-preflight-skills/app-store-preflight-skills",
       "nom": "app-store-preflight-skills",
       "repo": "truongduy2611/app-store-preflight-skills",
-      "note": 6,
+      "resume_fr": "scanne ton projet Xcode avant soumission → moins de rejets Apple",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheurs précis et gotchas utiles (SDK iOS 26, privacy manifests transitifs, relais Apple). Mais les fichiers references/ cités sont absents du contenu fourni : les règles ne sont pas livrables."
+      "raison": "Skill ciblé et à jour (sync octobre 2026) avec pièges réels (Chine, manifests, 5.1.2(i), SDK), commandes asc exactes, rapport structuré et revérification après correctif."
     },
     {
-      "id": "chrisbanes/skills/skills/kotlin-api-design",
-      "nom": "kotlin-api-design",
-      "repo": "chrisbanes/skills",
-      "note": 6,
+      "id": "everyinc/compound-engineering-plugin/skills/ce-test-xcode",
+      "nom": "ce-test-xcode",
+      "repo": "EveryInc/compound-engineering-plugin",
+      "resume_fr": "teste ton app iOS sur simulateur avec captures et logs → preuves fiables avant de livrer",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Skill ciblé, précis, avec statuts dérivés des preuves et piège SwiftUI réel. Dépend de XcodeBuildMCP et de ce-debug, et reste surtout un workflow connu."
+    },
+    {
+      "id": "figma/mcp-server-guide/skills-figquery/figma-swiftui",
+      "nom": "figma-swiftui",
+      "repo": "figma/mcp-server-guide",
+      "resume_fr": "convertit un design Figma en SwiftUI, ou ton code SwiftUI en Figma → écrans iOS fidèles",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Skill officiel Figma, routeur net, déclencheurs précis, pièges concrets (SF Symbols, tokens HIG, bezels). Dépend d'autres skills Figma et de longues annexes."
+    },
+    {
+      "id": "affaan-m/ecc/skills/ios-icon-gen",
+      "nom": "ios-icon-gen",
+      "repo": "affaan-m/ECC",
+      "resume_fr": "génère des icônes Xcode depuis SF Symbols ou Iconify → assets iOS prêts, au style cohérent",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclenchement précis et recommandations Kotlin/KMP réelles (catch-all else sur sealed, value classes). Corps court et assez abstrait, références non fournies à juger, lien vers kotlin-control-flow absent du paquet."
+      "raison": "Périmètre net, commandes concrètes et workflow complet. Valeur réelle grâce aux scripts, mais sources non fournies, exemples spécifiques à un projet et contenu en partie connu."
+    },
+    {
+      "id": "conorluddy/ios-simulator-skill/ios-simulator-skill/skills/ios-simulator-skill",
+      "nom": "ios-simulator-skill",
+      "repo": "conorluddy/ios-simulator-skill",
+      "resume_fr": "pilote ton app dans le simulateur iOS par accessibilité → tests plus rapides, moins de tokens",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Description de déclenchement précise, scripts concrets, options vérifiables, garde-fous sur les actions destructrices. Un peu fourre-tout (30 scripts), SKILL.md long et tronqué."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "athevon/genjutsu/skills/_jutsu/swiftui-graphics",
+      "nom": "swiftui-graphics",
+      "repo": "AThevon/genjutsu",
+      "resume_fr": "écrit des shaders Metal et effets SwiftUI avancés → visuels iOS fluides, sans tâtonner",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Contenu précis et à jour (API iOS 26, pièges glassEffectID, coûts GPU) avec code concret. Description un peu vague sur le déclenchement, dépendances à des skills voisins, flag internal."
+    },
+    {
+      "id": "garrytan/gstack/ios-clean",
+      "nom": "ios-clean",
+      "repo": "garrytan/gstack",
+      "resume_fr": "retire DebugBridge et le code #if DEBUG de ton app iOS → build release sans instrumentation",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "sonnet",
+      "risque_max": "eleve",
+      "raison": "Déclencheur net et sujet ciblé, mais le contenu visible est surtout un préambule gstack générique ; la logique de nettoyage est tronquée et le skill dépend de gstack et de /ios-qa."
+    },
+    {
+      "id": "garrytan/gstack/ios-design-review",
+      "nom": "ios-design-review",
+      "repo": "garrytan/gstack",
+      "resume_fr": "audite chaque écran sur iPhone réel → repère les écarts avec les règles Apple HIG",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement clair et distinct des skills voisins. Le contenu utile est noyé dans un preamble gstack générique et tronqué (24000 sur 32250 caractères), donc le workflow de notation reste invérifiable."
+    },
+    {
+      "id": "garrytan/gstack/ios-qa",
+      "nom": "ios-qa",
+      "repo": "garrytan/gstack",
+      "resume_fr": "teste l'app SwiftUI sur iPhone réel, écran par écran → repère les bugs avant les utilisateurs",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "sonnet",
+      "risque_max": "eleve",
+      "raison": "Déclenchement clair et savoir-faire rare (tunnel CoreDevice, daemon, ACL, audit). Mais le préambule gstack est très lourd, couplé à l'écosystème gstack, et le texte est tronqué."
+    },
+    {
+      "id": "mukul975/anthropic-cybersecurity-skills/skills/analyzing-ios-app-security-with-objection",
+      "nom": "analyzing-ios-app-security-with-objection",
+      "repo": "mukul975/Anthropic-Cybersecurity-Skills",
+      "resume_fr": "teste le stockage et le keychain d'une app iOS → repère les fuites de données sensibles",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement net et cadre d'autorisation posé. Commandes Objection en partie inventées ou non vérifiées (sqlite execute, flags), mapping MASVS/MITRE décoratif, peu de savoir-faire propre. Note : 7/10."
+    },
+    {
+      "id": "avdlee/swiftui-agent-skill/.agents/skills/update-swiftui-apis",
+      "nom": "update-swiftui-apis",
+      "repo": "AvdLee/SwiftUI-Agent-Skill",
+      "resume_fr": "repère les API SwiftUI dépréciées dans la doc Apple → évite le code obsolète",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Périmètre net et déclencheur clair, mais le skill est un processus de mainteneur (ouvrir une PR) qui dépend d'un fichier absent et d'un MCP externe. Le manifeste est utile mais tronqué."
+    },
+    {
+      "id": "affaan-m/ecc/skills/accessibility",
+      "nom": "accessibility",
+      "repo": "affaan-m/ECC",
+      "resume_fr": "audite et corrige l'accessibilité web, iOS, Android → interfaces utilisables au clavier et au lecteur d'écran",
+      "note": 6,
+      "note_juge": 6,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Déclenchement clair et tableau multiplateforme utile, mais contenu surtout connu de Claude, exemples minimaux et quelques approximations (Switch, hint, aria-label redondant)."
+    },
+    {
+      "id": "jeffallan/claude-skills/skills/swift-expert",
+      "nom": "swift-expert",
+      "repo": "Jeffallan/claude-skills",
+      "resume_fr": "construit des apps SwiftUI avec async/await et acteurs → moins de bugs de concurrence",
+      "note": 6,
+      "note_juge": 6,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et périmètre Swift net. Mais contenu surtout connu de Claude, exemples parfois fautifs (struct Task qui masque Task, protocole Collection redéfini, swift build inadapté à une app iOS)."
+    },
+    {
+      "id": "appeeky/aso-skills/skills/crash-analytics",
+      "nom": "crash-analytics",
+      "repo": "appeeky/aso-skills",
+      "resume_fr": "classe les crashs par impact → moins de plantages, meilleur classement sur l'App Store",
+      "note": 6,
+      "note_juge": 6,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et cadre utile (Crashlytics, triage, symbolication). Mais beaucoup d'affirmations non sourcées (classement, seuils de mise en avant), Bitcode obsolète, version Gradle en placeholder, périmètre ASO mélangé."
+    },
+    {
+      "id": "appeeky/aso-skills/skills/app-clips",
+      "nom": "app-clips",
+      "repo": "appeeky/aso-skills",
+      "resume_fr": "te guide sur les App Clips → fait convertir les visiteurs sans installation complète",
+      "note": 6,
+      "note_juge": 6,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et ciblé iOS. Contenu surtout générique, mêlé à de l'ASO et du marketing. Chiffres de conversion non sourcés, limites de texte à vérifier, pas d'annexes."
+    },
+    {
+      "id": "athevon/genjutsu/skills/cast",
+      "nom": "cast",
+      "repo": "AThevon/genjutsu",
+      "resume_fr": "te demande une thèse d'interaction avant de coder → animations fluides, sans effets génériques",
+      "note": 6,
+      "note_juge": 6,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Périmètre net (motion UI multi-plateforme) mais processus lourd, déclenchement peu précis, et l'essentiel repose sur des modules genjutsu et sous-skills non fournis. SKILL.md tronqué à moitié : jugement partiel."
+    },
+    {
+      "id": "athevon/genjutsu/skills/_jutsu/mobile-principles",
+      "nom": "mobile-principles",
+      "repo": "AThevon/genjutsu",
+      "resume_fr": "vérifie les cibles tactiles et zones du pouce → interfaces mobiles utilisables sans erreur de tap",
+      "note": 6,
+      "note_juge": 6,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Contenu dense et vérifiable (tailles de cibles, code SwiftUI, Compose et CSS, anti-patterns), mais surtout des principes déjà connus de Claude. Déclenchement flou : une liste de sujets, sans quand l'utiliser. Références manquantes."
     }
   ]
 }

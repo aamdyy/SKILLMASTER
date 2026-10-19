@@ -1,0 +1,10 @@
+{
+  "note": "Décisions d'Amdy, appliquées par le juge à chaque tour. epingles : toujours en tête du pack, quelle que soit la note. jamais : jamais proposé, quel que soit le pack. exclus : retiré d'un pack précis.",
+  "epingles": {
+    "site-web": [
+      { "repo": "bencium/bencium-marketplace", "nom": "bencium-controlled-ux-designer", "decide_le": "2026-10-18", "raison": "choix d'Amdy, revu après la v2" }
+    ]
+  },
+  "jamais": ["frontend-design", "premium-frontend-ui", "find-skills"],
+  "exclus": {}
+}

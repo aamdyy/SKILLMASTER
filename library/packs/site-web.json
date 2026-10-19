@@ -1,147 +1,233 @@
 {
   "type": "site-web",
-  "genere_le": "2026-10-18T19:08:09.637Z",
+  "genere_le": "2026-10-18T20:02:10.395Z",
+  "version_juge": "v2",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
-  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "regles": "les 5 à 8 meilleurs du type avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "recommandes": [
     {
-      "id": "addyosmani/agent-skills/skills/constraint-driven-development",
-      "nom": "constraint-driven-development",
-      "repo": "addyosmani/agent-skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis, process en étapes avec commandes exactes et seuils justifiés, garde-fou sur le diff. Périmètre net. Pénalisé par la dépendance à des commandes de phase (/build, /ship) et à un fichier de référence non relu."
+      "id": "bencium/bencium-marketplace/bencium-controlled-ux-designer/skills/bencium-controlled-ux-designer",
+      "nom": "bencium-controlled-ux-designer",
+      "repo": "bencium/bencium-marketplace",
+      "resume_fr": "te demande avant chaque choix visuel → évite les designs génériques inventés par Claude",
+      "note": 6,
+      "note_juge": 6,
+      "modele": "sonnet",
+      "epingle": true,
+      "risque_max": null,
+      "raison": "Skill riche et concret (échelles, durées, WCAG) avec protocole « toujours demander ». Mais en partie connu, fourre-tout et couplé à shadcn/Phosphor. Description large et opinions de style imposées."
     },
     {
       "id": "vercel-labs/agent-skills/skills/react-best-practices",
       "nom": "vercel-react-best-practices",
       "repo": "vercel-labs/agent-skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Règles concrètes, priorisées par impact, avec un fichier par règle. Ne fait aucun choix visuel. Note bridée : plusieurs règles citées (server-*, certaines rerender-*) n'ont pas de fichier listé, et la licence diverge."
-    },
-    {
-      "id": "greensock/gsap-skills/skills/gsap-plugins",
-      "nom": "gsap-plugins",
-      "repo": "greensock/gsap-skills",
-      "note": 7,
+      "resume_fr": "règles de performance React et Next.js classées par impact → pages plus rapides, moins de re-rendus",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": null,
-      "raison": "Skill officiel et à jour : licence gratuite après le rachat par Webflow, pas de registre privé, exemples exacts. Vue large mais peu profonde, recoupe gsap-core et gsap-scrolltrigger. Aucun script."
-    },
-    {
-      "id": "greensock/gsap-skills/skills/gsap-react",
-      "nom": "gsap-react",
-      "repo": "greensock/gsap-skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis, source officielle, API récentes (useGSAP, revertOnUpdate, contextSafe) et pièges concrets. Limites : peu de cas avancés (ScrollTrigger en React, StrictMode) et une consigne qui pousse GSAP par défaut."
-    },
-    {
-      "id": "awslabs/agent-plugins/plugins/aws-amplify/skills/amplify-workflow",
-      "nom": "amplify-workflow",
-      "repo": "awslabs/agent-plugins",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et patterns Gen2 versionnés, bonne valeur ajoutée. Seul SKILL.md jugé : les 16 références ne sont pas lues. Checklist sécurité générique, consigne « toujours utiliser » trop large."
-    }
-  ],
-  "ajouts": [
-    {
-      "id": "obra/superpowers/skills/test-driven-development",
-      "nom": "test-driven-development",
-      "repo": "obra/superpowers",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Discipline TDD claire avec règles et commandes de vérification, mais largement générique : Claude connaît déjà le cycle. Ton dogmatique, longue table de rationalisations, pas de spécificités stack. Règle « supprimer » risquée."
-    },
-    {
-      "id": "affaan-m/ecc/skills/accessibility",
-      "nom": "accessibility",
-      "repo": "affaan-m/ECC",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur clair et périmètre net. Tableau de correspondance Web/iOS/Android et exemples utiles. Mais beaucoup de généralités (POUR, checklist), une erreur sur Android (stateDescription présenté comme hint) et peu de commandes d'audit concrètes."
-    },
-    {
-      "id": "affaan-m/ecc/skills/frontend-a11y",
-      "nom": "frontend-a11y",
-      "repo": "affaan-m/ECC",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et exemples React utiles (label/htmlFor, aria-describedby, focus de modale). Mais largement connu, et le Dropdown (combobox sans aria-activedescendant, Enter mal géré) et la modale sans focus trap sont fautifs."
-    },
-    {
-      "id": "addyosmani/agent-skills/skills/api-and-interface-design",
-      "nom": "api-and-interface-design",
-      "repo": "addyosmani/agent-skills",
-      "note": 6,
-      "risque_max": null,
-      "raison": "Déclencheur net et périmètre clair. Contenu surtout générique (pagination, codes HTTP, PATCH), mais la section idempotence (clé dérivée de l'intention, claim atomique, payload gardé) apporte des pièges réels. Pas de commandes ni de versions récentes."
-    },
-    {
-      "id": "thedotmack/claude-mem/plugin/skills/design-is",
-      "nom": "design-is",
-      "repo": "thedotmack/claude-mem",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Cadre d'audit précis, barème 0-3 et règles de verdict mécaniques, sans choix visuel imposé. Mais процесс lourd (5 sous-agents, 5 fichiers) et dépendances non fournies (/make-plan, /do, /review, agent-browser)."
-    },
-    {
-      "id": "shanraisshan/claude-code-best-practice/.claude/skills/agent-browser",
-      "nom": "agent-browser",
-      "repo": "shanraisshan/claude-code-best-practice",
-      "note": 6,
-      "risque_max": "eleve",
-      "raison": "Commandes exactes et cycle snapshot/refs utile. Mais déclencheurs trop larges, liens vers references/ et templates/ absents, et la sauvegarde de session en clair n'est pas signalée. Solide mais à cadrer."
-    },
-    {
-      "id": "coreyhaines31/marketingskills/skills/seo-audit",
-      "nom": "seo-audit",
-      "repo": "coreyhaines31/marketingskills",
-      "note": 6,
-      "risque_max": null,
-      "raison": "Déclenchement précis et utile. Corps surtout en checklists génériques, mais avec pièges réels (schéma invisible via web_fetch, hreflang, canonicals inter-locales). Références non lues, d'où confiance moyenne."
-    },
-    {
-      "id": "chromedevtools/chrome-devtools-mcp/skills/a11y-debugging",
-      "nom": "a11y-debugging",
-      "repo": "ChromeDevTools/chrome-devtools-mcp",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur net et sujet ciblé. Workflow concret avec noms d'outils MCP et commande jq/node. Valeur réelle mais surtout procédurale ; peu de conventions propres. Fichier de snippets non lu, donc jugement partiel."
+      "raison": "Guide de mainteneur Vercel, ciblé et concret : 70 règles priorisées avec exemples incorrect/correct et pièges réels. Déclenchement clair. Léger défaut : compteurs de règles incohérents."
     },
     {
       "id": "vercel-labs/agent-skills/skills/composition-patterns",
       "nom": "vercel-composition-patterns",
       "repo": "vercel-labs/agent-skills",
-      "note": 6,
+      "resume_fr": "remplace les props booléennes par des composants composés → composants React plus flexibles, faciles à maintenir",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Skill Vercel ciblé, déclencheurs clairs, règles avec exemples faux/corrects et section React 19. Contenu en partie connu des développeurs React, mais structuré et utile."
+    },
+    {
+      "id": "vercel-labs/agent-skills/skills/vercel-optimize",
+      "nom": "vercel-optimize",
+      "repo": "vercel-labs/agent-skills",
+      "resume_fr": "analyse tes métriques Vercel et cible les routes coûteuses → factures réduites, pages plus rapides",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheurs précis et sujet net. Contenu surtout en index : les règles détaillées (fichiers rules/) n'ont pas été lues. Patterns connus, utiles surtout pour la partie React 19. Licence absente du repo, alors que le frontmatter indique MIT."
+      "raison": "Skill de mainteneur Vercel, déclenchement précis, pipeline concret avec commandes exactes, garde-fous (scope, citations, vérification). Très spécialisé, à jour, sans marketing."
     },
     {
       "id": "agricidaniel/claude-seo/skills/seo-agentic",
       "nom": "seo-agentic",
       "repo": "AgriciDaniel/claude-seo",
-      "note": 6,
+      "resume_fr": "audite robots.txt, llms.txt et l'accessibilité pour les agents IA → site plus utilisable par eux",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Périmètre net, déclencheurs précis, références datées et règles de sécurité claires (SSRF, UA-matrix sur autorisation). Note bridée : il dépend de scripts absents du paquet (plugin claude-seo) et reste de niche."
+      "raison": "Skill ciblé et précis, avec des faits récents et datés (Lighthouse 13.5, ARD, WebMCP) et des règles d'honnêteté. Il dépend des scripts du plugin claude-seo, qui ne sont pas fournis."
     },
     {
-      "id": "agricidaniel/claude-seo/skills/seo-cluster",
-      "nom": "seo-cluster",
+      "id": "agricidaniel/claude-seo/skills/seo-ecommerce",
+      "nom": "seo-ecommerce",
       "repo": "AgriciDaniel/claude-seo",
-      "note": 6,
+      "resume_fr": "audite fiches produit, schema et visibilité Shopping → meilleur référencement de ta boutique en ligne",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Méthode SERP-overlap concrète, seuils chiffrés et matrice de liens utiles. Mais dépend d'un plugin externe (/seo, scripts claude-seo) absent du skill, description incohérente (« blog-cluster »), et des conseils SEO assez génériques."
+      "raison": "Skill ciblé, précis et à jour (schema Google, UCP, garde-fou de coût). Dépend du plugin claude-seo et de DataForSEO, et le contenu est dense."
     },
     {
-      "id": "ibelick/ui-skills/skills/fixing-accessibility",
-      "nom": "fixing-accessibility",
-      "repo": "ibelick/ui-skills",
-      "note": 6,
+      "id": "greensock/gsap-skills/skills/gsap-core",
+      "nom": "gsap-core",
+      "repo": "greensock/gsap-skills",
+      "resume_fr": "écrit les animations GSAP : tweens, easings, staggers, mouvement réduit → animations web fluides et accessibles",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": null,
-      "raison": "Déclencheur clair et format de revue utile (violation, extrait, correctif minimal). Mais la plupart des règles sont des bases WCAG que Claude connaît déjà, et il manque des exemples pour les widgets complexes."
+      "raison": "Skill officiel, ciblé et à jour, avec exemples concrets et pièges réels (immediateRender, clearProps, matchMedia). Valeur partiellement connue de Claude, un peu promotionnel sur la recommandation de GSAP."
+    },
+    {
+      "id": "greensock/gsap-skills/skills/gsap-scrolltrigger",
+      "nom": "gsap-scrolltrigger",
+      "repo": "greensock/gsap-skills",
+      "resume_fr": "anime tes éléments au défilement : épinglage, parallaxe, scrub → pages plus fluides au scroll",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Skill officiel, ciblé et précis, avec pièges réels (ease none, refreshPriority, scrub contre toggleActions). Petits défauts : exemple avec Max.max, répétitions, conseil de recommander GSAP."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "greensock/gsap-skills/skills/gsap-timeline",
+      "nom": "gsap-timeline",
+      "repo": "greensock/gsap-skills",
+      "resume_fr": "enchaîne et synchronise tes animations GSAP avec des timelines → séquences mieux ordonnées, code plus lisible",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Skill officiel, ciblé, avec exemples de code exacts et pièges (ScrollTrigger, duration). Utile mais en partie connu de Claude ; peu de nouveautés."
+    },
+    {
+      "id": "googlechrome/modern-web-guidance/skills/modern-web-guidance",
+      "nom": "modern-web-guidance",
+      "repo": "GoogleChrome/modern-web-guidance",
+      "resume_fr": "cherche les bonnes pratiques web actuelles avant ton code → front moderne, sans motifs obsolètes",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill officiel Google Chrome, déclencheurs précis, guides à jour (:user-invalid, text-scale, API IA intégrées), commandes exactes. Léger bémol : description agressive (MANDATORY) et dépendance réseau npx."
+    },
+    {
+      "id": "awslabs/agent-plugins/plugins/aws-amplify/skills/amplify-workflow",
+      "nom": "amplify-workflow",
+      "repo": "awslabs/agent-plugins",
+      "resume_fr": "guide Amplify Gen2 pour auth, données, stockage et IA → évite les erreurs de configuration",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Skill officiel AWS, ciblé et précis : déclenchement net, pièges de version (autorisations des routes IA, SAML absent, guest par défaut). Ton trop impératif (MUST partout) et annexes en grande partie absentes."
+    },
+    {
+      "id": "vercel-labs/agent-skills/skills/web-design-guidelines",
+      "nom": "web-design-guidelines",
+      "repo": "vercel-labs/agent-skills",
+      "resume_fr": "audite ton UI selon les règles web → moins de soucis d'accessibilité et d'UX",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et périmètre net (revue UI web). Les règles sont absentes du skill : elles sont récupérées à l'exécution depuis une URL non épinglée. Pas de licence, contenu de référence non vérifiable."
+    },
+    {
+      "id": "affaan-m/ecc/skills/frontend-a11y",
+      "nom": "frontend-a11y",
+      "repo": "affaan-m/ECC",
+      "resume_fr": "vérifie labels, ARIA et focus des formulaires → évite les défauts d'accessibilité en revue",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et sujet net, exemples de code concrets. Valeur en partie connue de Claude (patrons WAI-ARIA classiques). Qualité freinée par le dropdown incomplet (pas d'aria-activedescendant, onClick sur le wrapper) et le focus trap seulement esquissé."
+    },
+    {
+      "id": "addyosmani/agent-skills/skills/browser-testing-with-devtools",
+      "nom": "browser-testing-with-devtools",
+      "repo": "addyosmani/agent-skills",
+      "resume_fr": "vérifie ton interface dans le vrai navigateur → repère bugs, erreurs console et lenteurs",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclencheur clair et config MCP exacte, garde-fous utiles contre le contenu de page non fiable. Une bonne part reste générique (checklists, tableaux de rationalisations). Note finale 8/10."
+    },
+    {
+      "id": "coreyhaines31/marketingskills/skills/seo-audit",
+      "nom": "seo-audit",
+      "repo": "coreyhaines31/marketingskills",
+      "resume_fr": "audite ton site et classe les problèmes par priorité → pages mieux indexées, puis mieux classées",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement très précis et cadre d'audit structuré avec pièges réels (détection du schema JS, hreflang). Beaucoup de checklists génériques déjà connues de Claude, et renvois vers des skills et annexes absents."
+    },
+    {
+      "id": "chromedevtools/chrome-devtools-mcp/skills/a11y-debugging",
+      "nom": "a11y-debugging",
+      "repo": "ChromeDevTools/chrome-devtools-mcp",
+      "resume_fr": "audite l'accessibilité web → repère contrastes, focus clavier et cibles tactiles trop petites",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Description précise, workflow concret et snippets vérifiables, sujet net. Mais le snippet de contraste lit un fond transparent comme noir, ce qui fausse les résultats, et la valeur ajoutée reste en partie connue."
+    },
+    {
+      "id": "wshobson/agents/plugins/accessibility-compliance/skills/screen-reader-testing",
+      "nom": "screen-reader-testing",
+      "repo": "wshobson/agents",
+      "resume_fr": "te guide pour tester ton site avec lecteurs d'écran → repère les soucis d'accessibilité tôt",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et périmètre net. Commandes et checklists concrètes, annexes utiles. Pénalisé pour les statistiques d'usage sans source, IE cité, et un exemple de code qui référence une variable non définie."
+    },
+    {
+      "id": "jimliu/baoyu-skills/skills/baoyu-markdown-to-html",
+      "nom": "baoyu-markdown-to-html",
+      "repo": "JimLiu/baoyu-skills",
+      "resume_fr": "convertit Markdown en HTML stylé pour WeChat → publie sans refaire la mise en forme",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et options CLI exactes, sujet net. Valeur réelle surtout pour WeChat, le reste est connu. Document long et dépendant de scripts non fournis ; dépôt connu et MIT."
+    },
+    {
+      "id": "agricidaniel/claude-seo/skills/seo-content-brief",
+      "nom": "seo-content-brief",
+      "repo": "AgriciDaniel/claude-seo",
+      "resume_fr": "génère des briefs SEO par section et concurrents → aide à rédiger des pages mieux classées",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis et règles testables. Savoir-faire SEO largement connu, peu propre à Claude Code. Annexe page-type tronquée et quelques incohérences mineures."
+    },
+    {
+      "id": "agricidaniel/claude-seo/skills/seo-dataforseo",
+      "nom": "seo-dataforseo",
+      "repo": "AgriciDaniel/claude-seo",
+      "resume_fr": "interroge DataForSEO en direct (SERP, mots-clés, backlinks) → décisions SEO fondées sur des données réelles",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Déclenchement et commandes précis, garde-fous de coût utiles, catalogue d'outils détaillé. Mais dépend d'une extension et d'un script du dépôt claude-seo, et le contenu est lié à un écosystème."
     }
   ]
 }

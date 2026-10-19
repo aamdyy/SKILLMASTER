@@ -1,155 +1,232 @@
 {
   "type": "outillage-claude-code",
-  "genere_le": "2026-10-18T19:08:09.642Z",
+  "genere_le": "2026-10-18T20:02:10.399Z",
+  "version_juge": "v2",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
-  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "regles": "les 5 à 8 meilleurs du type avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "recommandes": [
     {
-      "id": "obra/superpowers/skills/finishing-a-development-branch",
-      "nom": "finishing-a-development-branch",
+      "id": "obra/superpowers/skills/diagnosing-superpowers",
+      "nom": "diagnosing-superpowers",
       "repo": "obra/superpowers",
-      "note": 7,
+      "resume_fr": "analyse une session ratée en citant les preuves → comprends pourquoi elle a dérapé",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur précis et garde-fous utiles (menu figé, suppression confirmée, pas de --force sans accord, worktrees limités à .worktrees/). Procédure git générique, peu spécifique à Claude Code, et écrite pour le framework superpowers."
+      "raison": "Skill de mainteneur, ciblé et rigoureux : déclencheurs précis, workflow en étapes, règles strictes (citations, lecture seule, approbations), analystes parallèles et gabarits fournis."
     },
     {
       "id": "anthropics/skills/skills/mcp-builder",
       "nom": "mcp-builder",
       "repo": "anthropics/skills",
-      "note": 7,
+      "resume_fr": "te guide pour créer un serveur MCP → outils mieux conçus pour les LLM",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur net et utile pour construire un serveur MCP, avec conventions de nommage, annotations et format d'évaluation XML. Une partie du process reste générique, et les scripts embarqués n'ont pas été lus."
-    },
-    {
-      "id": "anthropics/claude-code/plugins/plugin-dev/skills/skill-development",
-      "nom": "Skill Development",
-      "repo": "anthropics/claude-code",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et spécifiques à Claude Code, structure de plugin correcte, bonne divulgation progressive. Pénalisé par des répétitions (checklists, bonnes pratiques), des renvois vers des skills frères absents si installé seul, et du remplissage générique."
-    },
-    {
-      "id": "addyosmani/agent-skills/skills/constraint-driven-development",
-      "nom": "constraint-driven-development",
-      "repo": "addyosmani/agent-skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis, process en étapes avec commandes exactes et seuils justifiés, garde-fou sur le diff. Périmètre net. Pénalisé par la dépendance à des commandes de phase (/build, /ship) et à un fichier de référence non relu."
-    },
-    {
-      "id": "tt-a1i/archify/archify",
-      "nom": "archify",
-      "repo": "tt-a1i/archify",
-      "note": 7,
-      "risque_max": "eleve",
-      "raison": "Déclencheur précis, types de diagrammes bien définis, schémas et exemples, garde-fous de validation (finalize). Retiré un point : nombreux scripts bin/, réseau possible, et écriture proposée dans les règles globales."
-    },
-    {
-      "id": "github/awesome-copilot/skills/java-mcp-server-generator",
-      "nom": "java-mcp-server-generator",
-      "repo": "github/awesome-copilot",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis et workflow vérifiable (pom, template, tests, config VS Code). Gotchas SDK 2.x utiles. Hors stack d'Amdy (pas de Java dans ses projets) et déclencheur un peu large."
-    }
-  ],
-  "ajouts": [
-    {
-      "id": "obra/superpowers/skills/dispatching-parallel-agents",
-      "nom": "dispatching-parallel-agents",
-      "repo": "obra/superpowers",
-      "note": 6,
-      "risque_max": null,
-      "raison": "Déclencheur net et contenu propre, sans script ni réseau. Méthode surtout générique, peu de spécifique à Claude Code. Seuil incohérent : 2+ dans la description, 3+ dans le corps."
+      "raison": "Skill officiel Anthropic, ciblé et à jour (registerTool, streamable HTTP, structuredContent). Workflow en 4 phases, conventions de nommage précises, guides détaillés par langage et évaluations."
     },
     {
       "id": "anthropics/skills/skills/skill-creator",
       "nom": "skill-creator",
       "repo": "anthropics/skills",
-      "note": 6,
+      "resume_fr": "te guide pour créer et tester tes skills → skills plus fiables, déclenchés au bon moment",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Skill officiel Anthropic, déclencheur net et utile pour l'outillage. Processus d'évaluation lourd et scripts non relus ; SKILL.md tronqué à 24000/32987 caractères, donc jugement partiel. Pas de licence."
+      "raison": "Skill officiel, ciblé et très outillé (évals, grader, comparateur, scripts). Déclenchement clair. Léger défaut : ton parfois familier et SKILL.md long (>500 lignes conseillées)."
     },
     {
       "id": "anthropics/claude-code/plugins/hookify/skills/writing-rules",
       "nom": "Writing Hookify Rules",
       "repo": "anthropics/claude-code",
-      "note": 6,
+      "resume_fr": "écrit des règles qui avertissent ou bloquent des actions de Claude → évite les commandes risquées",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill officiel, ciblé, avec syntaxe précise et exemples vérifiables. Spécifique à hookify, donc utile. Léger défaut : exemples référencés absents, version 0.1.0."
+    },
+    {
+      "id": "anthropics/claude-code/plugins/plugin-dev/skills/agent-development",
+      "nom": "Agent Development",
+      "repo": "anthropics/claude-code",
+      "resume_fr": "t'explique comment écrire des sous-agents de plugin (frontmatter, prompt, déclenchement) → agents mieux déclenchés, plus fiables",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill officiel ciblé, précis (règles de nommage, champs, modèles, couleurs, gabarits) et utile. Petits défauts : version 0.1.0, script test-agent-trigger.sh cité mais absent, un peu verbeux."
+    },
+    {
+      "id": "juliusbrussee/caveman/skills/caveman-learn",
+      "nom": "caveman-learn",
+      "repo": "JuliusBrussee/caveman",
+      "resume_fr": "mesure où partent les tokens, propose des corrections validées → coûts réduits, économies mesurées",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "eleve",
-      "raison": "Syntaxe précise et pièges réels (échappement YAML, conditions AND), mais niche : utile seulement si hookify est installé. Exemples référencés absents du skill (examples/ non fourni). Déclencheur net."
+      "raison": "Skill de mainteneur, précis : boucle de consentement par classe, garde-fous net-négatif et rollback. Dépend de l'outil caveman, et le texte est dense et sans exemples."
     },
     {
-      "id": "thedotmack/claude-mem/plugin/skills/babysit",
-      "nom": "babysit",
-      "repo": "thedotmack/claude-mem",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur net et commandes gh/GraphQL exactes et vérifiables, avec pagination. Limites : description en anglais, boucle sans délai maximal, et pas de garde-fou avant push ni résolution de threads."
-    },
-    {
-      "id": "egonex-ai/understand-anything/understand-anything-plugin/skills/understand-diff",
-      "nom": "understand-diff",
-      "repo": "Egonex-AI/Understand-Anything",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclenchement clair et étapes concrètes avec commandes git. Dépend d'un graphe produit par un autre plugin (/understand) et d'un dashboard externe, donc utile seulement si ce plugin est installé. Écrit un fichier dans le projet."
-    },
-    {
-      "id": "egonex-ai/understand-anything/understand-anything-plugin/skills/understand",
-      "nom": "understand",
-      "repo": "Egonex-AI/Understand-Anything",
-      "note": 6,
+      "id": "obra/superpowers/skills/subagent-driven-development",
+      "nom": "subagent-driven-development",
+      "repo": "obra/superpowers",
+      "resume_fr": "lance un sous-agent par tâche du plan, relu après chacune → code mieux vérifié, contexte préservé",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
       "risque_max": "eleve",
-      "raison": "Procédure détaillée et précise, mais SKILL.md tronqué (24 000 sur 58 787 car.), jugement partiel. Pipeline très lourd en tokens ; exécute pnpm install/build et des scripts tiers. Ajout ciblé seulement."
+      "raison": "Workflow d'agents mature, précis (scripts, boucle de correction, choix de modèle, ledger). Description trop brève; skill long, dépend d'autres skills superpowers; exécution sans pause."
     },
     {
-      "id": "cherryhq/cherry-studio/.agents/skills/gh-pr-review",
-      "nom": "gh-pr-review",
-      "repo": "CherryHQ/cherry-studio",
-      "note": 6,
+      "id": "obra/superpowers/skills/dispatching-parallel-agents",
+      "nom": "dispatching-parallel-agents",
+      "repo": "obra/superpowers",
+      "resume_fr": "lance un agent par problème indépendant → corrections en parallèle, plus rapides",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et périmètre net. Valeur surtout méthodologique, en partie connue de Claude. Exemples et prompt type utiles, mais peu de commandes ou de règles vérifiables. Contenu cohérent, sans marketing."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "obra/superpowers/skills/executing-plans",
+      "nom": "executing-plans",
+      "repo": "obra/superpowers",
+      "resume_fr": "exécute un plan tâche par tâche → coût réduit, trace écrite et tests à chaque étape",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Déclencheur précis et garde-fous solides (report-only, fix et submit explicites). Mais très spécifique à Cherry Studio, avec 11 références non lues, et hors des projets habituels d'Amdy."
+      "raison": "Workflow d'agent précis (ledger, rulings, revue finale), bien ciblé. Note limitée par les scripts et skills frères absents, donc non vérifiables, et par la dépendance à superpowers."
     },
     {
-      "id": "anthropics/claude-plugins-official/plugins/hookify/skills/writing-rules",
-      "nom": "writing-hookify-rules",
-      "repo": "anthropics/claude-plugins-official",
-      "note": 6,
-      "risque_max": "eleve",
-      "raison": "Déclencheur précis et format de règles concret avec exemples. Valeur limitée au seul plugin hookify, et quelques incohérences : exemple sans name/enabled, dépendance à des exemples absents du skill."
-    },
-    {
-      "id": "chrisbanes/skills/skills/release-kotlin-library",
-      "nom": "release-kotlin-library",
-      "repo": "chrisbanes/skills",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis et process de release prudent (approbation explicite, pas de publication sans accord). Mais niche (libs Kotlin publiées), dense, dépend de fichiers non fournis (gradle-run, helper, script Python) et manipule ~/.env."
-    },
-    {
-      "id": "mattpocock/skills/skills/engineering/ask-matt",
-      "nom": "ask-matt",
-      "repo": "mattpocock/skills",
-      "note": 5,
-      "risque_max": "moyen",
-      "raison": "Carte bien écrite et sans marketing, mais c'est un index d'une vingtaine de skills externes, pas un savoir-faire. Déclenchement vague, dépend de skills absents du pack, et contredit « moins mais mieux »."
+      "id": "obra/superpowers/skills/requesting-code-review",
+      "nom": "requesting-code-review",
+      "repo": "obra/superpowers",
+      "resume_fr": "fait relire ton code par un sous-agent avant fusion → repère les problèmes avant qu'ils s'accumulent",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et procédure exécutable (commandes git, placeholders, gabarit). Valeur moyenne : la démarche de revue est largement connue de Claude. Annexe tronquée en fin de fichier, donc qualité réduite."
     },
     {
       "id": "affaan-m/ecc/skills/codehealth-mcp",
       "nom": "codehealth-mcp",
       "repo": "affaan-m/ECC",
-      "note": 5,
+      "resume_fr": "contrôle la santé du code avant chaque modification et commit → évite les régressions structurelles",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Déclencheur clair et boucle utile, mais dépend d'un MCP tiers à token, et la doc reste générique. Pas de commande épinglée. Contradiction de seuils (5-7 contre 4-8.9). Exemple chiffré marketing."
+      "raison": "Déclencheurs clairs et outils nommés avec seuils de score. Savoir-faire général, en partie connu. Dépend d'un MCP externe et de chemins ECC absents. Exemple de résultat non vérifiable."
     },
     {
-      "id": "juliusbrussee/caveman/plugins/caveman/skills/cavecrew",
-      "nom": "cavecrew",
-      "repo": "JuliusBrussee/caveman",
-      "note": 5,
+      "id": "anthropics/claude-code/plugins/plugin-dev/skills/command-development",
+      "nom": "Command Development",
+      "repo": "anthropics/claude-code",
+      "resume_fr": "t'enseigne la structure des commandes slash et leurs arguments → commandes réutilisables et cohérentes",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et exemples concrets, sujet net. Valeur partiellement connue de Claude (bases générales), mais utile sur les champs de frontmatter et CLAUDE_PLUGIN_ROOT. Exemples à mieux sécuriser, annexes tronquées."
+    },
+    {
+      "id": "anthropics/claude-code/plugins/plugin-dev/skills/hook-development",
+      "nom": "Hook Development",
+      "repo": "anthropics/claude-code",
+      "resume_fr": "te guide pour créer des hooks → bloque les commandes dangereuses et automatise tes workflows",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Skill officiel, déclenchement précis et bon périmètre. Exemples utiles sur les hooks prompt et command. Note limitée par des incohérences de vocabulaire (approve/allow/decision), un exemple sans effet et des annexes tronquées."
+    },
+    {
+      "id": "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration",
+      "nom": "MCP Integration",
+      "repo": "anthropics/claude-code",
+      "resume_fr": "branche des serveurs MCP dans un plugin → intégrations externes fiables, sans erreurs de configuration",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur net et tableau de décision utile, mais le skill dépend d'agents définis ailleurs (absents du fichier), se limite à de la stratégie de délégation, et sa forme condensée nuit à la lecture."
+      "raison": "Skill officiel ciblé, déclencheurs précis, exemples concrets. Mais version 0.1.0, partiellement connu de Claude, et quelques points datés (SSE, mcp.github.com)."
+    },
+    {
+      "id": "juliusbrussee/caveman/plugins/caveman/skills/caveman-compress",
+      "nom": "caveman-compress",
+      "repo": "JuliusBrussee/caveman",
+      "resume_fr": "compresse CLAUDE.md en caveman → moins de tokens, mais le texte part au fournisseur",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et règles de compression testables, mais gain de valeur limité (règles génériques). Annexes scripts non fournies. Réécrire CLAUDE.md en langage compressé peut altérer des consignes."
+    },
+    {
+      "id": "addyosmani/agent-skills/skills/browser-testing-with-devtools",
+      "nom": "browser-testing-with-devtools",
+      "repo": "addyosmani/agent-skills",
+      "resume_fr": "vérifie ton interface dans le vrai navigateur → repère bugs, erreurs console et lenteurs",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclencheur clair et config MCP exacte, garde-fous utiles contre le contenu de page non fiable. Une bonne part reste générique (checklists, tableaux de rationalisations). Note finale 8/10."
+    },
+    {
+      "id": "thedotmack/claude-mem/plugin/skills/babysit",
+      "nom": "babysit",
+      "repo": "thedotmack/claude-mem",
+      "resume_fr": "surveille CI et commentaires de PR jusqu'à la fusion → moins de allers-retours en revue",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et commandes gh/GraphQL testables avec pagination. Workflow en grande partie générique, consignes de boucle ambiguës (« watcher »), placeholders <number> non fournis. Pas d'annexe."
+    },
+    {
+      "id": "thedotmack/claude-mem/plugin/skills/cloud-sync",
+      "nom": "cloud-sync",
+      "repo": "thedotmack/claude-mem",
+      "resume_fr": "vérifie et configure la sync cmem.ai → sauvegarde tes souvenirs sans exposer de jeton",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et sujet net, mais utile seulement pour claude-mem avec cmem Pro. Commandes curl exactes et garde-fous sur le token. Logique de port inline fragile, et la doc externe n'est pas fournie."
+    },
+    {
+      "id": "thedotmack/claude-mem/plugin/skills/handoff",
+      "nom": "handoff",
+      "repo": "thedotmack/claude-mem",
+      "resume_fr": "génère un HANDOFF.md de reprise → une nouvelle session continue sans rien perdre",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et gabarit de sortie concret. Valeur en partie connue de Claude (documents de passation génériques). Dépendance à claude-mem présentée comme acquise, et quelques redondances dans les règles d'écriture."
+    },
+    {
+      "id": "egonex-ai/understand-anything/understand-anything-plugin/skills/understand-chat",
+      "nom": "understand-chat",
+      "repo": "Egonex-AI/Understand-Anything",
+      "resume_fr": "répond à tes questions sur le code via le graphe → compréhension plus rapide des dépendances",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Schéma du graphe et procédure de recherche précis et vérifiables, contrôle de fraîcheur git utile. Déclenchement vague (« questions sur un codebase ») et dépendance à un graphe externe non fourni."
     }
   ]
 }

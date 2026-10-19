@@ -1,99 +1,232 @@
 {
   "type": "video",
-  "genere_le": "2026-10-18T19:08:09.640Z",
+  "genere_le": "2026-10-18T20:02:10.399Z",
+  "version_juge": "v2",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
-  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "regles": "les 5 à 8 meilleurs du type avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "recommandes": [
     {
-      "id": "heygen-com/hyperframes/skills/figma",
-      "nom": "figma",
+      "id": "heygen-com/hyperframes/skills/embedded-captions",
+      "nom": "embedded-captions",
       "repo": "heygen-com/hyperframes",
-      "note": 7,
+      "resume_fr": "ajoute des sous-titres à une vidéo face caméra, même derrière le sujet → rendu plus cinéma",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur net, commandes exactes, garde-fous (token en lecture seule, assets figés, validation visuelle). Limité au framework HyperFrames et à un connecteur optionnel. Dépendances externes non fournies et télémétrie à vérifier."
+      "raison": "Skill de mainteneur, ciblé et très concret (pipeline, scripts, garde-fous, QA). Valeur forte. Défauts : long, dense, dépend de HyperFrames, appels npx et mises à jour."
     },
     {
-      "id": "jimliu/baoyu-skills/skills/baoyu-youtube-transcript",
-      "nom": "baoyu-youtube-transcript",
-      "repo": "JimLiu/baoyu-skills",
-      "note": 7,
+      "id": "heygen-com/hyperframes/skills/general-video",
+      "nom": "general-video",
+      "repo": "heygen-com/hyperframes",
+      "resume_fr": "compose des vidéos HyperFrames sur mesure, multi-scènes → montages et vidéos de marque sans workflow dédié",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheurs précis, commandes exactes, cache et formats bien décrits, pièges connus (guillemets zsh). Manques : scripts non lus, consigne d'installer yt-dlp seul, zone grise anti-bot et cookies navigateur."
+      "raison": "Skill de mainteneur, précis et à jour, avec déclenchement clair et commandes concrètes. Fortement couplé à l'écosystème HyperFrames, dense et dépendant de nombreuses références externes."
     },
-    {
-      "id": "remotion-dev/skills/skills/remotion-interactivity",
-      "nom": "remotion-interactivity",
-      "repo": "remotion-dev/skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "API Remotion précise et récente (Interactive.create, connected compositions, schémas), exemples vérifiables. Déclencheur implicite seulement : la description est courte et ne dit pas quand l'appliquer. Niche vidéo, pas de contenu visuel imposé."
-    }
-  ],
-  "ajouts": [
     {
       "id": "heygen-com/hyperframes/skills/music-to-video",
       "nom": "music-to-video",
       "repo": "heygen-com/hyperframes",
-      "note": 6,
+      "resume_fr": "transforme une musique en vidéo calée sur le rythme → montage synchronisé sans effort manuel",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur net et étapes précises, avec scripts et gates. Mais il dépend de l'écosystème HyperFrames (CLI, catalogue distant), il est très long, et il choisit seul polices et palette. Le mode autonome saute des validations."
-    },
-    {
-      "id": "remotion-dev/skills/skills/remotion-markup",
-      "nom": "remotion-markup",
-      "repo": "remotion-dev/skills",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Contenu Remotion précis (Interactive.create, effets @remotion/effects, règles fps, pas de CSS transition). Déclencheur vague et renvoi vers des fichiers non fournis : jugement partiel. Chevauche « Remotion Best Practices »."
-    },
-    {
-      "id": "0x0funky/agent-sprite-forge/skills/video2dsprite",
-      "nom": "video2dsprite",
-      "repo": "0x0funky/agent-sprite-forge",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis et pipeline très détaillé, avec commandes exactes et contrôles. Niche jeu 2D, hors projets web/iOS/data, et dépendant d'API payantes et de nombreux scripts non audités."
-    },
-    {
-      "id": "coreyhaines31/marketingskills/skills/video",
-      "nom": "video",
-      "repo": "coreyhaines31/marketingskills",
-      "note": 5,
-      "risque_max": "moyen",
-      "raison": "Déclencheur large et très marketing (stratégie, avatars, tarifs). Le volet Remotion/Hyperframes est générique et court. Tableaux de modèles IA et prix datés, sans commandes vérifiables au-delà de l'init. Périmètre fourre-tout."
-    },
-    {
-      "id": "latent-spaces/brag/skills/brag-slim",
-      "nom": "brag-slim",
-      "repo": "latent-spaces/brag",
-      "note": 5,
-      "risque_max": "eleve",
-      "raison": "Déclencheur clair et exclusions de secrets bien posées. Mais le contenu reste surtout créatif et générique (« modern, slick, polished »), sans outil ni version précisés pour le rendu. Niche, et doublon avec /brag."
+      "raison": "Workflow de mainteneur, ciblé et précis (6 étapes, gates, scripts, catalogue de primitives). Dépend fortement de l'écosystème HyperFrames et de skills voisins ; quelques renvois externes."
     },
     {
       "id": "latent-spaces/brag/skills/brag",
       "nom": "brag",
       "repo": "latent-spaces/brag",
-      "note": 5,
+      "resume_fr": "transforme le code de ton site en vidéo de lancement → partage ton projet sans montage",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur net et périmètre étroit. Mais le SKILL.md délègue l'essentiel aux références absentes, impose des presets de style sans demander, et le bundle de 288 fichiers (musiques, sfx) a une licence non vérifiée."
-    },
-    {
-      "id": "krillinai/opencreator/skills/krillinai-subtitle",
-      "nom": "krillinai-subtitle",
-      "repo": "krillinai/OpenCreator",
-      "note": 5,
-      "risque_max": "moyen",
-      "raison": "Déclencheur net et commandes exactes, mais dépend d'un CLI externe et d'un fichier de référence absent du skill (cli-contract.md), avec des variables d'environnement non définies. Utile seulement si KrillinAI est installé."
+      "raison": "Workflow ciblé et précis en 4 étapes avec portes de validation, annexes riches, assets CC0 intégrés. Dépend de Hyperframes, dispatch modèle fragile et lourd (288 fichiers)."
     },
     {
       "id": "krillinai/opencreator/skills/krillinai-cli",
       "nom": "krillinai-cli",
       "repo": "krillinai/OpenCreator",
-      "note": 5,
+      "resume_fr": "enchaîne sous-titres, doublage et rendu vidéo via KrillinAI → vidéos localisées sans deviner les fichiers",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclenchement clair et règles d'usage précises (dry-run, manifest, error.kind). Mais c'est le guide d'un outil tiers précis, hors du stack habituel d'Amdy, et le détail est renvoyé à un fichier non lu."
+      "raison": "Description claire, commandes exactes, pièges réels (codes de sortie, pipeline en dry-run, manifeste). Très lié au dépôt OpenCreator et à des skills frères, donc peu réutilisable seul."
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-best-practices",
+      "nom": "remotion-best-practices",
+      "repo": "remotion-dev/skills",
+      "resume_fr": "charge le bon guide Remotion selon la tâche → code vidéo React plus juste",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill officiel Remotion, à jour, conventions précises (Interactive, Track, prévisualisation avant rendu). Description trop brève ; annexes tronquées et clé Algolia en clair."
+    },
+    {
+      "id": "krillinai/opencreator/skills/krillinai-render-vertical",
+      "nom": "krillinai-render-vertical",
+      "repo": "krillinai/OpenCreator",
+      "resume_fr": "convertit une vidéo en vertical avec sous-titres bilingues courts → lisibles sur mobile",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et commandes concrètes pour une CLI de niche. Dépend d'un contrat CLI absent et de variables d'environnement non définies ; contrôles de lisibilité vagues. Note 8."
+    },
+    {
+      "id": "vincentwei1021/video-shotcraft/video-shotcraft",
+      "nom": "video-shotcraft",
+      "repo": "Vincentwei1021/video-shotcraft",
+      "resume_fr": "transforme ton site en vidéo promo Remotion avec de vraies captures → rendu cinématographique et calé",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill riche et précis (Remotion, rythme, QA, déterminisme), déclenchement net. Mais périmètre large (publication, export JianYing, promo auteur) et SKILL.md très long, en partie chinois."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "heygen-com/hyperframes/skills/pr-to-video",
+      "nom": "pr-to-video",
+      "repo": "heygen-com/hyperframes",
+      "resume_fr": "transforme une pull request en vidéo explicative du changement → présente tes modifications sans montage manuel",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill de mainteneur, très précis : description nette, étapes avec gates, scripts et références détaillés. Dépend fortement de l'écosystème HyperFrames et reste long."
+    },
+    {
+      "id": "heygen-com/hyperframes/skills/product-launch-video",
+      "nom": "product-launch-video",
+      "repo": "heygen-com/hyperframes",
+      "resume_fr": "transforme une URL produit ou un brief en vidéo promo → présente tes lancements plus vite",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill de mainteneur, précis, avec étapes et gates vérifiables, scripts testés et références détaillées. Dépend d'un écosystème HyperFrames, et le SKILL.md est long et tronqué."
+    },
+    {
+      "id": "heygen-com/hyperframes/skills/remotion-to-hyperframes",
+      "nom": "remotion-to-hyperframes",
+      "repo": "heygen-com/hyperframes",
+      "resume_fr": "porte une composition Remotion vers HyperFrames HTML → migration fiable, cas non traduisibles refusés",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill de mainteneur, très ciblé : déclenchement strict, lint des cas non traduisibles, correspondances d'API et seuils SSIM mesurés. Léger défaut : renvois à des références absentes."
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-captions",
+      "nom": "remotion-captions",
+      "repo": "remotion-dev/skills",
+      "resume_fr": "transcrit, affiche et anime les sous-titres d'une vidéo Remotion → sous-titres synchronisés et lisibles",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill Remotion ciblé et précis : type Caption, Whisper local, parseSrt, pièges de synchronisation avec trimBefore et playbackRate. Description vague (« animating » non couvert), licence absente, annexes tronquées."
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-interactivity",
+      "nom": "remotion-interactivity",
+      "repo": "remotion-dev/skills",
+      "resume_fr": "structure le markup Remotion → positions, styles et keyframes éditables dans le Studio",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Conventions précises et vérifiables propres à Remotion Studio, avec exemples et annexes utiles. Déclenchement vague (« Structure Remotion markup for interactivity ») et licence absente."
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-markup",
+      "nom": "remotion-markup",
+      "repo": "remotion-dev/skills",
+      "resume_fr": "fixe les règles d'animation Remotion en keyframes inline → timings éditables directement dans Studio",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Ciblé Remotion avec règles testables (pas de CSS transition, fps via useVideoConfig, effets natifs). Description vague, nombreuses annexes citées absentes, compositions.md tronqué."
+    },
+    {
+      "id": "0x0funky/agent-sprite-forge/skills/video2dsprite",
+      "nom": "video2dsprite",
+      "repo": "0x0funky/agent-sprite-forge",
+      "resume_fr": "anime un personnage depuis une image validée → sprites cohérents, sans refaire chaque action",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis avec renvois vers les skills voisins. Pipeline détaillé avec commandes exactes. Périmètre dense et dépendances absentes (generate2dmedia, generate2dsprite) : note 8/10."
+    },
+    {
+      "id": "composiohq/awesome-claude-skills/video-downloader",
+      "nom": "youtube-downloader",
+      "repo": "ComposioHQ/awesome-claude-skills",
+      "resume_fr": "télécharge des vidéos YouTube en qualité et format choisis → fichiers prêts à monter ou archiver",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et périmètre net. Valeur limitée : enveloppe de yt-dlp déjà connue de Claude. Commandes claires, mais le script n'est pas fourni pour vérification. Chemin de sortie propre à claude.ai."
+    },
+    {
+      "id": "latent-spaces/brag/skills/brag-slim",
+      "nom": "brag-slim",
+      "repo": "latent-spaces/brag",
+      "resume_fr": "fait une vidéo de lancement partageable depuis ton site → le montre en 20 secondes",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et périmètre net. Valeur surtout créative et générique, peu de règles vérifiables (« avec ce qui marche sur la machine »), style imposé (« moderne, soigné »). Risques liés au contenu web lu et rendu."
+    },
+    {
+      "id": "krillinai/opencreator/skills/krillinai-subtitle",
+      "nom": "krillinai-subtitle",
+      "repo": "krillinai/OpenCreator",
+      "resume_fr": "sous-titres bilingues depuis YouTube ou vidéo locale → évite de tout transcrire à la main",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et périmètre net (sous-titres KrillinAI). Flags utiles, mais savoir surtout propre à l'outil. Variables non définies et annexe cli-contract.md absente, ce qui limite la précision."
+    },
+    {
+      "id": "krillinai/opencreator/skills/krillinai-render-horizontal",
+      "nom": "krillinai-render-horizontal",
+      "repo": "krillinai/OpenCreator",
+      "resume_fr": "rend les vidéos horizontales sous-titrées ou doublées → évite de refaire les réglages de rendu",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et périmètre net. Commandes concrètes, mais tout dépend du contrat CLI absent (binaire, variables, JSON). Peu de savoir-faire au-delà de la doc de l'outil."
+    },
+    {
+      "id": "krillinai/opencreator/skills/krillinai-tts",
+      "nom": "krillinai-tts",
+      "repo": "krillinai/OpenCreator",
+      "resume_fr": "génère la voix off depuis les sous-titres traduits → doublage prêt sans réenregistrement",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et périmètre net (étape tts de KrillinAI). Commandes concrètes, mais le contrat CLI référencé est absent, donc la configuration et le JSON ne sont pas vérifiables. Peu de savoir-faire au-delà des flags."
     }
   ]
 }

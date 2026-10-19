@@ -1,171 +1,232 @@
 {
   "type": "data",
-  "genere_le": "2026-10-18T19:08:09.640Z",
+  "genere_le": "2026-10-18T20:02:10.399Z",
+  "version_juge": "v2",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
-  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "regles": "les 5 à 8 meilleurs du type avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "recommandes": [
+    {
+      "id": "topoteretes/cognee/.agents/skills/cognee-community",
+      "nom": "cognee-community",
+      "repo": "topoteretes/cognee",
+      "resume_fr": "branche cognee sur des bases et sources communautaires → stockage et ingestion sans toucher au cœur",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill de mainteneur, ciblé et précis : import de register, piège du contrôle d'accès multi-tenant, structure des paquets, règles de contribution. Déclenchement net, sans marketing."
+    },
     {
       "id": "k-dense-ai/scientific-agent-skills/skills/polars-bio",
       "nom": "polars-bio",
       "repo": "K-Dense-AI/scientific-agent-skills",
-      "note": 8,
+      "resume_fr": "croise intervalles génomiques et lit fichiers bioinformatiques avec Polars → analyses génomiques plus rapides, coordonnées justes",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "eleve",
-      "raison": "Très spécifique, versionné et vérifié : conventions de coordonnées, pièges de 0.36.0 (on_cols, Int16 du depth, SQL join), exemples exécutables. Niche bioinformatique, et la section citation pousse à modifier des manuscrits."
+      "raison": "Skill ciblé, très précis, avec pièges réels de la version 0.36.0 (coordonnées, on_cols, Int16, min_dist) et fixtures vérifiables. Léger défaut : bloc de citation promotionnel."
+    },
+    {
+      "id": "k-dense-ai/scientific-agent-skills/skills/scientific-visualization",
+      "nom": "scientific-visualization",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "resume_fr": "crée et audite tes figures scientifiques → graphiques fidèles aux données, accessibles, prêts à publier",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": "eleve",
+      "raison": "Skill ciblé et précis : garde-fous d'intégrité, pièges Seaborn et Plotly 7, CLIs d'export et d'audit. Défauts : bloc de citation promotionnel et dépendance à des versions épinglées."
     },
     {
       "id": "k-dense-ai/scientific-agent-skills/skills/aeon",
       "nom": "aeon",
       "repo": "K-Dense-AI/scientific-agent-skills",
-      "note": 8,
+      "resume_fr": "applique des algorithmes de séries temporelles (classification, prévision, anomalies) → analyses temporelles fiables sans tout recoder",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "eleve",
-      "raison": "Déclencheur net, version épinglée, API vérifiées et pièges documentés (axes, formats, modules expérimentaux). Quelques réserves : beaucoup d'exemples non exécutés, citation à récupérer sur le réseau, Bash/Write autorisés."
-    },
-    {
-      "id": "tt-a1i/archify/archify",
-      "nom": "archify",
-      "repo": "tt-a1i/archify",
-      "note": 7,
-      "risque_max": "eleve",
-      "raison": "Déclencheur précis, types de diagrammes bien définis, schémas et exemples, garde-fous de validation (finalize). Retiré un point : nombreux scripts bin/, réseau possible, et écriture proposée dans les règles globales."
-    },
-    {
-      "id": "cathrynlavery/diagram-design/skills/diagram-design",
-      "nom": "diagram-design",
-      "repo": "cathrynlavery/diagram-design",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis et grand périmètre net (diagrammes). Règles de connecteurs vérifiables et garde-fou de style. Pénalisé : long, impose une esthétique éditoriale par défaut, lecture tronquée."
-    },
-    {
-      "id": "jimliu/baoyu-skills/skills/baoyu-youtube-transcript",
-      "nom": "baoyu-youtube-transcript",
-      "repo": "JimLiu/baoyu-skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis, commandes exactes, cache et formats bien décrits, pièges connus (guillemets zsh). Manques : scripts non lus, consigne d'installer yt-dlp seul, zone grise anti-bot et cookies navigateur."
+      "raison": "Skill ciblé, précis et à jour (aeon 1.6, pièges d'API et de dépendances vérifiés). Annexes riches. Léger défaut : bloc de citation promotionnel en fin de fichier."
     },
     {
       "id": "google/skills/skills/analytics/google-analytics-data-api-basics",
       "nom": "google-analytics-data-api-basics",
       "repo": "google/skills",
-      "note": 7,
+      "resume_fr": "lance des rapports Google Analytics via l'API Data → stats d'audience exploitables directement dans ton code",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclenchement précis avec exclusions claires, source officielle Google, exemple Python exact et vérifiable. Limité par la part de mise en route générique et par une formulation parfois bancale. Références par langage non vues."
+      "raison": "Skill officiel Google, ciblé, avec description claire (usage et exclusions), commandes exactes et annexes par langage. Valeur modérée : l'API est bien documentée et en partie connue de Claude."
     },
     {
-      "id": "teng-lin/notebooklm-py/notebooklm",
-      "nom": "notebooklm",
-      "repo": "teng-lin/notebooklm-py",
-      "note": 7,
+      "id": "google/skills/skills/cloud/dbt-sf-to-bq-translator",
+      "nom": "dbt-sf-to-bq-translator",
+      "repo": "google/skills",
+      "resume_fr": "convertit tes modèles dbt Snowflake en SQL BigQuery → migration plus rapide, moins de reprises manuelles",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur précis, procédures d'ID, d'attente et d'autorisations très concrètes. Limites : API non officielle, gestion d'identifiants lourde, périmètre de service unique. Scripts du dépôt non vérifiés."
+      "raison": "Skill officiel Google, ciblé, avec déclenchement clair, scripts, motifs avant/après et pièges BQMS précis. Défaut : en-tête de copyright Google imposé, règles très spécifiques à Google."
+    },
+    {
+      "id": "google/skills/skills/cloud/cloud-sql-basics",
+      "nom": "cloud-sql-basics",
+      "repo": "google/skills",
+      "resume_fr": "crée des instances Cloud SQL (MySQL, PostgreSQL, SQL Server) → bases gérées en quelques commandes",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill officiel Google, ciblé et précis (commandes gcloud, Terraform, éditions, PITR). Une partie est connue de Claude. Quelques défauts : mot de passe en clair, sslmode=disable, annexes tronquées."
     },
     {
       "id": "eigent-ai/eigent/resources/example-skills/xlsx",
       "nom": "xlsx",
       "repo": "eigent-ai/eigent",
-      "note": 7,
+      "resume_fr": "crée et modifie tes fichiers Excel et CSV → évite les formules erronées et valeurs figées",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur précis, avec exclusions claires (Word, Google Sheets, pipeline). Apporte le recalcul LibreOffice et les règles formules-plutôt-que-valeurs. Quelques généralités, polices et couleurs imposées par défaut, licence propriétaire."
+      "raison": "Déclenchement très précis, workflow concret avec recalc.py et règles de formules. Mais licence propriétaire restrictive, conventions financières spécifiques et contenu en partie connu."
     }
   ],
   "ajouts": [
     {
-      "id": "obra/superpowers/skills/test-driven-development",
-      "nom": "test-driven-development",
-      "repo": "obra/superpowers",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Discipline TDD claire avec règles et commandes de vérification, mais largement générique : Claude connaît déjà le cycle. Ton dogmatique, longue table de rationalisations, pas de spécificités stack. Règle « supprimer » risquée."
+      "id": "k-dense-ai/scientific-agent-skills/skills/alphagenome",
+      "nom": "alphagenome",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "resume_fr": "prédit l'effet des variants d'ADN avec AlphaGenome → priorise les variants régulateurs non codants",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": "eleve",
+      "raison": "Skill ciblé, très précis (commandes, conventions de coordonnées, pièges d'interprétation), à jour. Niche bioinformatique, bloc de citation promotionnel final, clé API requise."
     },
     {
-      "id": "topoteretes/cognee/.agents/skills/cognee-community",
-      "nom": "cognee-community",
-      "repo": "topoteretes/cognee",
-      "note": 6,
+      "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
+      "nom": "astropy",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, tables → code astronomique plus fiable",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur net et tableaux de packages utiles, avec le piège register/multi-tenant bien décrit. Limité à un écosystème de niche, et le bloc bash est mal balisé en python. Partie contribution générique."
-    },
-    {
-      "id": "google/skills/skills/analytics/google-analytics-admin-api-basics",
-      "nom": "google-analytics-admin-api-basics",
-      "repo": "google/skills",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis et source officielle Google. Apporte les scopes ADC, la distinction v1beta/v1alpha et l'exemple Python exact. Mais c'est surtout un sommaire de liens, peu de détails sur les autres langages ni sur les méthodes de configuration."
-    },
-    {
-      "id": "eigent-ai/eigent/resources/example-skills/pptx",
-      "nom": "pptx",
-      "repo": "eigent-ai/eigent",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur net et workflows concrets (markitdown, unpack/pack, rendu PDF). Pénalisé : conseils esthétiques génériques, choix de palette imposés, licence propriétaire, scripts non audités."
+      "raison": "Skill ciblé, à jour (Astropy 8.0.1), avec exemples exécutables, pièges de migration et notes réseau. Valeur partielle car l'API est connue de Claude, et une demande de citation promotionnelle."
     },
     {
       "id": "jeffallan/claude-skills/skills/pandas-pro",
       "nom": "pandas-pro",
       "repo": "Jeffallan/claude-skills",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et quelques bons patterns (merge avec validate, observed=True, .copy()). Mais beaucoup de rappels pandas généraux, et l'imputation automatique mode/médiane contredit la consigne « gérer explicitement les NaN »."
+      "resume_fr": "règles pandas pour nettoyer, joindre et agréger → évite les boucles lentes et les erreurs silencieuses",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et exemples testables, mais le contenu reste en grande partie connu de Claude (pandas standard). Léger défaut : usage de to_numeric(errors='ignore'), déprécié depuis pandas 2.2."
     },
     {
-      "id": "huggingface/skills/skills/huggingface-gradio",
-      "nom": "huggingface-gradio",
-      "repo": "huggingface/skills",
-      "note": 6,
+      "id": "jeffallan/claude-skills/skills/sql-pro",
+      "nom": "sql-pro",
+      "repo": "Jeffallan/claude-skills",
+      "resume_fr": "optimise tes requêtes SQL et lit les EXPLAIN → requêtes plus rapides, index mieux placés",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Déclenchement clair et signatures détaillées, utiles pour les API récentes (gr.HTML, Timer, api_info). Mais surtout une copie de la doc, sans pièges réels ni conventions propres, et la fin est tronquée."
-    },
-    {
-      "id": "agents365-ai/drawio-skill/skills/drawio-skill",
-      "nom": "drawio-skill",
-      "repo": "Agents365-ai/drawio-skill",
-      "note": 6,
-      "risque_max": "eleve",
-      "raison": "Déclencheur net et procédures précises (CLI, export, validation). Mais périmètre très large (IaC, K8s, Databricks, MCP, CI, PPTX), doublons avec Mermaid, et scripts et outils risqués embarqués. Références non lues."
+      "raison": "Déclenchement précis et exemples SQL concrets, mais contenu largement générique que Claude connaît déjà. Quelques imprécisions (seuil 100 ms arbitraire). Annexes lues tronquées."
     },
     {
       "id": "xberg-io/xberg/plugin/skills/xberg-extracting-tables",
       "nom": "xberg-extracting-tables",
       "repo": "xberg-io/xberg",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur clair et flags CLI précis, limites documentées. Mais niche (un seul outil), pas d'installation ni de vérification de version, dépendance aux modèles ONNX non détaillée, et une formulation ambiguë sur le seuil de confiance."
-    },
-    {
-      "id": "samber/cc-skills-golang/skills/golang-database",
-      "nom": "golang-database",
-      "repo": "samber/cc-skills-golang",
-      "note": 6,
-      "risque_max": "eleve",
-      "raison": "Déclencheur précis et périmètre net. Valeur réelle sur les pièges (ErrNoRows, rows.Close, pool) mais une grande part est générique. Les références détaillées n'ont pas été lues, d'où une confiance moyenne."
-    },
-    {
-      "id": "egonex-ai/understand-anything/understand-anything-plugin/skills/understand-knowledge",
-      "nom": "understand-knowledge",
-      "repo": "Egonex-AI/Understand-Anything",
-      "note": 5,
-      "risque_max": "eleve",
-      "raison": "Déclencheur précis mais niche. Étapes claires et garde rm -rf correcte. Pas de valeur pour les projets code d'Amdy. Scripts Python non lus, donc jugement partiel."
-    },
-    {
-      "id": "coreyhaines31/marketingskills/skills/ab-testing",
-      "nom": "ab-testing",
-      "repo": "coreyhaines31/marketingskills",
-      "note": 5,
+      "resume_fr": "extrait les tableaux de PDF et images → évite de recopier les chiffres à la main",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclencheurs précis et prudence statistique correcte (p-value, IC, peeking). Mais le contenu est surtout marketing générique (ICE, cadence, playbook), peu lié à Claude Code, et les tables de taille d'échantillon sont brutes."
+      "raison": "Déclenchement précis et commandes exactes. Savoir-faire spécifique à la bibliothèque xberg (modèles de tables, pièges), mais surtout de l'usage d'outil. Fichier généré, annexes tronquées."
+    },
+    {
+      "id": "cloudflare/skills/skills/basin",
+      "nom": "basin",
+      "repo": "cloudflare/skills",
+      "resume_fr": "guide Basin Pipelines, Catalog et SQL → évite les erreurs sur les tables Iceberg R2",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis, avec les anciens noms. Pièges utiles (immuabilité, délai de 3 à 7 min, validation différée). Beaucoup de renvois vers une doc publiée dans une PR ouverte, et annexes manquantes."
+    },
+    {
+      "id": "apify/agent-skills/skills/apify-ultimate-scraper",
+      "nom": "apify-ultimate-scraper",
+      "repo": "apify/agent-skills",
+      "resume_fr": "extrait les données de 15+ plateformes via Apify → prospection, veille et analyses plus rapides",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill officiel Apify, commandes CLI exactes et protocole de coût utile. Périmètre très large (« any platform », ~100 Actors, workflows n8n hors sujet). Annexes en majorité absentes, licence absente."
+    },
+    {
+      "id": "k-dense-ai/scientific-agent-skills/skills/polars",
+      "nom": "polars",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "resume_fr": "te guide sur Polars en lazy et expressions → ETL plus rapides que pandas",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "sonnet",
+      "risque_max": "moyen",
+      "raison": "Skill Polars précis, à jour (1.44.2), avec pièges réels (NaN/null, with_columns, pushdown). Description sans déclencheurs explicites, bruit de citation arXiv, base largement connue de Claude."
     },
     {
       "id": "sickn33/agentic-awesome-skills/skills/analytics-tracking",
       "nom": "analytics-tracking",
       "repo": "sickn33/agentic-awesome-skills",
-      "note": 5,
+      "resume_fr": "audite ton tracking analytics avant toute décision → données fiables, moins de conclusions erronées",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Périmètre net et déclenchement clair. Valeur surtout générique (nommage, PII, consentement). Quelques pièges utiles (déduplication par ID de transaction). Rubrique à pondérations arbitraires, admise non validée. Note 7/10."
+    },
+    {
+      "id": "sickn33/agentic-awesome-skills/skills/analytics",
+      "nom": "analytics",
+      "repo": "sickn33/agentic-awesome-skills",
+      "resume_fr": "définit un plan de tracking GA4 et ses événements → mesures utiles pour décider",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et périmètre net. Valeur surtout générale : conventions d'événements et UTM connues de Claude. Exemples GA4/GTM utiles mais génériques. Annexes tronquées, phrases cassées, frontmatter risk: critical incohérent."
+    },
+    {
+      "id": "github/awesome-copilot/skills/convert-excel-to-md",
+      "nom": "convert-excel-to-md",
+      "repo": "github/awesome-copilot",
+      "resume_fr": "convertit tes classeurs Excel en Markdown → analyses fiables, sans parsing improvisé",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Déclencheur clair (audit, conversions incohérentes) et bonne discipline de conversion et de dédoublonnage. Mais beaucoup de principes génériques, grille de score aux poids non validés, rien de spécifique à Claude Code."
+      "raison": "Déclenchement précis et périmètre net. Valeur réelle mais en partie connue (MarkItDown). Script absent du jeu fourni, chemins PowerShell alors que la machine est sous macOS, renvois vers des skills non fournis."
+    },
+    {
+      "id": "googleworkspace/cli/skills/recipe-backup-sheet-as-csv",
+      "nom": "recipe-backup-sheet-as-csv",
+      "repo": "googleworkspace/cli",
+      "resume_fr": "exporte une feuille Google Sheets en CSV → sauvegarde locale et traitement des données",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Description précise et sujet net. Commandes gws concrètes, mais recette très courte, peu de savoir-faire. Piège omis : l'export Drive en CSV ne couvre que la première feuille."
     }
   ]
 }

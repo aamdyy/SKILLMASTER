@@ -1,33 +1,50 @@
 // Scanner statique : repère les risques d'un skill sans rien exécuter, à partir du texte
 // du SKILL.md et de la liste de ses fichiers (chemins, modes et tailles de l'arbre git).
+// v2 : un motif trouvé dans un bloc de code d'exemple descend d'un cran, et une phrase
+// d'injection citée pour mettre en garde n'est qu'une mention.
 import { frontmatter } from './lib.ts'
 
 export type Gravite = 'critique' | 'eleve' | 'moyen' | 'info'
 export type Risk = { code: string; gravite: Gravite; detail?: string; source: 'scan' | 'juge' }
 export type SkillFile = { path: string; mode: string; size?: number }
 
+const ORDER: Gravite[] = ['critique', 'eleve', 'moyen', 'info']
+const lower = (gravite: Gravite): Gravite => ORDER[Math.min(ORDER.indexOf(gravite) + 1, ORDER.length - 1)] as Gravite
+
 const SCRIPT = /\.(sh|bash|zsh|py|js|mjs|cjs|ts|ps1|rb|pl)$/i
 const BINARY = /\.(exe|dll|so|dylib|bin|jar|wasm|class|app|pkg|dmg)$/i
+const WARNING = /\b(never|don['’]t|do not|must not|beware|watch (out )?for|treat\b.*\bas data|if\b.*\bcontains|ne jamais|n['’]obéis|méfie)/i
 
-const PATTERNS: { re: RegExp; code: string; gravite: Gravite }[] = [
-  { re: /!`[^`\n]+`|^```!/m, code: 'shell inline exécuté au chargement (!`…`)', gravite: 'critique' },
-  { re: /\b(curl|wget)\b[^\n|]*\|\s*(sudo\s+)?(sh|bash|zsh|python3?)\b/i, code: 'télécharge et exécute un script (curl | sh)', gravite: 'critique' },
-  { re: /ignore (all )?(previous|prior|above) instructions|disregard (all )?(previous|prior) instructions/i, code: 'phrase d’injection de prompt', gravite: 'critique' },
-  { re: /do not (tell|inform|show) the user|without (asking|telling) the user/i, code: 'consigne de cacher des actions à l’utilisateur', gravite: 'critique' },
-  { re: /--dangerously-skip-permissions|bypassPermissions/i, code: 'contourne les permissions', gravite: 'critique' },
-  { re: /<\/?system(-reminder)?>/i, code: 'fausse balise système', gravite: 'eleve' },
-  { re: /\brm\s+-[a-z]*r[a-z]*f|\brm\s+-[a-z]*f[a-z]*r/i, code: 'suppression récursive (rm -rf)', gravite: 'eleve' },
-  { re: /~\/\.ssh|~\/\.aws|\bid_rsa\b|security find-generic-password/i, code: 'accès à des secrets locaux', gravite: 'eleve' },
-  { re: /(edit|modify|write|update)[^\n]{0,40}(settings\.json|CLAUDE\.md|hooks\.json)/i, code: 'modifie la configuration de Claude Code', gravite: 'eleve' },
-  { re: /[​-‏‪-‮⁦-⁩]/, code: 'caractères invisibles ou bidirectionnels', gravite: 'eleve' },
-  { re: /[A-Za-z0-9+/]{200,}={0,2}/, code: 'bloc base64 long', gravite: 'moyen' },
-  { re: /\beval\s*\(|child_process|subprocess\.[a-z]+\([^)]*shell\s*=\s*True|os\.system\(/i, code: 'exécution dynamique de code', gravite: 'moyen' },
+type Pattern = { re: RegExp; code: string; gravite: Gravite; isInjection?: true }
+
+const PATTERNS: Pattern[] = [
+  { re: /!`[^`\n]+`|^```!/gm, code: 'shell inline exécuté au chargement (!`…`)', gravite: 'critique' },
+  { re: /\b(curl|wget)\b[^\n|]*\|\s*(sudo\s+)?(sh|bash|zsh|python3?)\b/gi, code: 'télécharge et exécute un script (curl | sh)', gravite: 'critique' },
+  { re: /ignore (all )?(previous|prior|above) instructions|disregard (all )?(previous|prior) instructions/gi, code: 'phrase d’injection de prompt', gravite: 'critique', isInjection: true },
+  { re: /do not (tell|inform|show) the user|without (asking|telling) the user/gi, code: 'consigne de cacher des actions à l’utilisateur', gravite: 'critique', isInjection: true },
+  { re: /--dangerously-skip-permissions|bypassPermissions/gi, code: 'contourne les permissions', gravite: 'critique' },
+  { re: /<\/?system(-reminder)?>/gi, code: 'fausse balise système', gravite: 'eleve', isInjection: true },
+  { re: /\brm\s+-[a-z]*r[a-z]*f|\brm\s+-[a-z]*f[a-z]*r/gi, code: 'suppression récursive (rm -rf)', gravite: 'eleve' },
+  { re: /~\/\.ssh|~\/\.aws|\bid_rsa\b|security find-generic-password/gi, code: 'accès à des secrets locaux', gravite: 'eleve' },
+  { re: /(edit|modify|write|update)[^\n]{0,40}(settings\.json|CLAUDE\.md|hooks\.json)/gi, code: 'modifie la configuration de Claude Code', gravite: 'eleve' },
+  { re: /[​-‏‪-‮⁦-⁩]/g, code: 'caractères invisibles ou bidirectionnels', gravite: 'eleve' },
+  { re: /[A-Za-z0-9+/]{200,}={0,2}/g, code: 'bloc base64 long', gravite: 'moyen' },
+  { re: /\beval\s*\(|child_process|subprocess\.[a-z]+\([^)]*shell\s*=\s*True|os\.system\(/gi, code: 'exécution dynamique de code', gravite: 'moyen' },
 ]
+
+function fences(text: string) {
+  return [...text.matchAll(/^(```|~~~)[^\n]*\n[\s\S]*?^\1/gm)].map(match => [match.index ?? 0, (match.index ?? 0) + match[0].length] as const)
+}
+
+function lineAt(text: string, index: number) {
+  return text.slice(text.lastIndexOf('\n', index) + 1, text.indexOf('\n', index) === -1 ? undefined : text.indexOf('\n', index))
+}
 
 export function scanSkill(skillMd: string, files: SkillFile[]): Risk[] {
   const risks = new Map<string, Risk>()
   const add = (code: string, gravite: Gravite, detail?: string) => {
-    if (!risks.has(code)) risks.set(code, { code, gravite, detail, source: 'scan' })
+    const before = risks.get(code)
+    if (!before || ORDER.indexOf(gravite) < ORDER.indexOf(before.gravite)) risks.set(code, { code, gravite, detail, source: 'scan' })
   }
 
   const { fields } = frontmatter(skillMd)
@@ -38,7 +55,20 @@ export function scanSkill(skillMd: string, files: SkillFile[]): Risk[] {
   if (fields.hooks !== undefined) add('frontmatter hooks (actifs toute la session)', 'critique')
   if (fields.shell !== undefined) add(`frontmatter shell: ${fields.shell}`, 'moyen')
 
-  for (const { re, code, gravite } of PATTERNS) if (re.test(skillMd)) add(code, gravite)
+  const blocks = fences(skillMd)
+  const inBlock = (index: number) => blocks.some(([start, end]) => index >= start && index < end)
+  for (const { re, code, gravite, isInjection } of PATTERNS) {
+    for (const match of skillMd.matchAll(re)) {
+      const index = match.index ?? 0
+      if (isInjection && WARNING.test(lineAt(skillMd, index))) {
+        add(`${code} (citée pour mettre en garde)`, 'info')
+      } else if (inBlock(index)) {
+        add(`${code} (dans un exemple de code, à vérifier)`, lower(gravite))
+      } else {
+        add(code, gravite)
+      }
+    }
+  }
 
   const scripts: string[] = []
   for (const file of files) {
@@ -55,6 +85,5 @@ export function scanSkill(skillMd: string, files: SkillFile[]): Risk[] {
   }
   if (scripts.length) add('scripts embarqués', 'moyen', scripts.slice(0, 5).join(', '))
 
-  const order: Gravite[] = ['critique', 'eleve', 'moyen', 'info']
-  return [...risks.values()].sort((a, b) => order.indexOf(a.gravite) - order.indexOf(b.gravite))
+  return [...risks.values()].sort((a, b) => ORDER.indexOf(a.gravite) - ORDER.indexOf(b.gravite))
 }

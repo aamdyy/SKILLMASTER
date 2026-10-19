@@ -1,131 +1,188 @@
 {
   "type": "app-expo",
-  "genere_le": "2026-10-18T19:08:09.639Z",
+  "genere_le": "2026-10-18T20:02:10.397Z",
+  "version_juge": "v2",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
-  "regles": "note ≥ 7 pour recommandé, ≥ 5 pour ajout ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus",
+  "regles": "les 5 à 8 meilleurs du type avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "recommandes": [
+    {
+      "id": "expo/skills/plugins/expo/skills/eas-update-insights",
+      "nom": "eas-update-insights",
+      "repo": "expo/skills",
+      "resume_fr": "interroge les stats d'une mise à jour EAS publiée → repère vite les plantages après déploiement",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
+      "risque_max": "eleve",
+      "raison": "Skill officiel Expo, ciblé et à jour : commandes exactes, schémas JSON en annexe, limites réelles des métriques (sous-comptage OTA, retard), cas d'usage et exclusions clairs."
+    },
     {
       "id": "expo/skills/plugins/expo/skills/expo-brownfield",
       "nom": "expo-brownfield",
       "repo": "expo/skills",
-      "note": 8,
-      "risque_max": "moyen",
-      "raison": "Déclencheur précis, périmètre net, critères de choix clairs et règles utiles (ne jamais prebuild un hôte natif). Références externes non lues ; le bloc de feedback envoie des données à un tiers."
+      "resume_fr": "embarque un écran React Native dans ton app native existante → évite de la réécrire",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Skill officiel Expo, ciblé et à jour. Description claire, règles de choix concrètes, pièges réels (pas de prebuild sur l'hôte), annexes détaillées avec exemples SwiftUI."
     },
     {
       "id": "expo/skills/plugins/expo/skills/expo-examples",
       "nom": "expo-examples",
       "repo": "expo/skills",
-      "note": 8,
+      "resume_fr": "te montre les exemples officiels Expo par bibliothèque → intégrations fiables, sans partir de zéro",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
       "risque_max": "eleve",
-      "raison": "Déclencheur précis, valeur réelle : vérifie meta.json (exemples renommés ou morts), ne copie pas les versions épinglées, fusionne app.json sans écraser. Quelques passages à risque (npx, feedback envoyé à un tiers)."
-    },
-    {
-      "id": "vercel-labs/agent-skills/skills/react-native-skills",
-      "nom": "vercel-react-native-skills",
-      "repo": "vercel-labs/agent-skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs clairs et règles spécifiques, actionnables (FlashList, Gesture.Tap, expo-image, navigateurs natifs). Jugé sur l'index seul : les fichiers rules/ ne sont pas lus. Aucune licence."
+      "raison": "Skill officiel Expo, ciblé et à jour. Description précise, commandes exactes, méthode non destructive, pièges réels (branche master, meta.json, alias et exemples dépréciés) et catalogue en annexe."
     },
     {
       "id": "callstackincubator/agent-skills/skills/react-native-best-practices",
       "nom": "react-native-best-practices",
       "repo": "callstackincubator/agent-skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et priorisés, commandes de profilage et de bundle exactes, pièges réels (FlashList v2, alignement 16 Ko). Limite : beaucoup de rappels généraux, et dépend d'un outil tiers non vérifié (agent-device). 43 références non lues."
+      "resume_fr": "guide de performance React Native, mesuré avant et après → app plus fluide, démarrage plus rapide",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
+      "risque_max": "info",
+      "raison": "Skill de mainteneur reconnu (Callstack), ciblé et à jour. Workflow mesure-d'abord, garde-fous de revue, 40 références détaillées avec commandes exactes, versions et pièges réels."
     },
     {
-      "id": "callstackincubator/agent-skills/plugins/vendored/.agents/skills/react-native-testing",
-      "nom": "react-native-testing",
+      "id": "vercel-labs/agent-skills/skills/react-native-skills",
+      "nom": "vercel-react-native-skills",
+      "repo": "vercel-labs/agent-skills",
+      "resume_fr": "règles React Native et Expo classées par impact → listes et animations plus fluides sur mobile",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Skill de mainteneur, ciblé, avec règles concrètes et exemples incorrect/correct (FlashList, Reanimated, expo-image, React Compiler). Léger défaut : priorités incohérentes entre SKILL.md et AGENTS.md."
+    },
+    {
+      "id": "callstackincubator/agent-skills/skills/assess-react-native-migration",
+      "nom": "assess-react-native-migration",
       "repo": "callstackincubator/agent-skills",
-      "note": 7,
+      "resume_fr": "audite la migration vers React Native sans rien exécuter → évite un pari coûteux non mesuré",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
+      "risque_max": null,
+      "raison": "Skill de mainteneur Callstack, ciblé, avec des portes de validation et un contrat de sortie concrets. Utile pour une décision de migration, mais rare, et sa réponse imposée est rigide."
+    },
+    {
+      "id": "callstackincubator/agent-skills/skills/create-react-native-library",
+      "nom": "create-react-native-library",
+      "repo": "callstackincubator/agent-skills",
+      "resume_fr": "génère une bibliothèque React Native ou un module natif local → démarrage plus rapide, structure correcte",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheur net et précis, distinction v13/v14 utile, règles concrètes (findBy, queryBy réservé aux absences, pas de act). Les fichiers de référence n'ont pas été lus, donc le fond version par version reste non vérifié."
+      "raison": "Skill ciblé de mainteneur (Callstack) : commandes exactes, combinaisons type/langage, pièges réels. Une partie reste devinable via --help, d'où valeur ajoutée moyenne."
     },
     {
       "id": "software-mansion-labs/skills/skills/expo-horizon",
       "nom": "expo-horizon",
       "repo": "software-mansion-labs/skills",
-      "note": 7,
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis et règles non évidentes (demander avant de migrer location/notifications, supportedDevices, prebuild, pas d'Expo Go). Renvoie aux READMEs pour les détails, donc dépend du web. Niche, licence absente."
+      "resume_fr": "guide l'ajout de Meta Quest à une app Expo → évite les appels GPS non supportés",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Guide ciblé d'un éditeur reconnu, avec règles et pièges précis (pas d'auto-install des paquets sœurs, Expo Go non supporté, isHorizonDevice vs isHorizonBuild). Note freinée : contenu renvoyé vers des docs externes, pas de licence."
     }
   ],
   "ajouts": [
     {
-      "id": "obra/superpowers/skills/test-driven-development",
-      "nom": "test-driven-development",
-      "repo": "obra/superpowers",
-      "note": 6,
+      "id": "expo/skills/plugins/expo/skills/expo-module",
+      "nom": "expo-module",
+      "repo": "expo/skills",
+      "resume_fr": "te guide pour créer des modules natifs Expo en Swift et Kotlin → modules mieux structurés",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Discipline TDD claire avec règles et commandes de vérification, mais largement générique : Claude connaît déjà le cycle. Ton dogmatique, longue table de rationalisations, pas de spécificités stack. Règle « supprimer » risquée."
+      "raison": "Skill officiel Expo, ciblé et à jour. Description claire avec exclusion explicite de la migration. Commandes exactes, pièges réels (slug non interactif, --name), références bien rangées."
     },
     {
-      "id": "thedotmack/claude-mem/plugin/skills/design-is",
-      "nom": "design-is",
-      "repo": "thedotmack/claude-mem",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Cadre d'audit précis, barème 0-3 et règles de verdict mécaniques, sans choix visuel imposé. Mais процесс lourd (5 sous-agents, 5 fichiers) et dépendances non fournies (/make-plan, /do, /review, agent-browser)."
+      "id": "expo/skills/plugins/expo/skills/expo-ui",
+      "nom": "expo-ui",
+      "repo": "expo/skills",
+      "resume_fr": "construit tes écrans avec de vrais composants SwiftUI et Compose → interfaces natives, sans bibliothèques tierces",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
+      "risque_max": "eleve",
+      "raison": "Skill officiel Expo, ciblé et à jour (SDK 56). Pièges réels : List non virtualisée, props de BottomSheet, imports plateforme, fichiers hors app/. Description précise."
     },
     {
-      "id": "vercel-labs/agent-skills/skills/composition-patterns",
-      "nom": "vercel-composition-patterns",
-      "repo": "vercel-labs/agent-skills",
-      "note": 6,
+      "id": "expo/skills/plugins/expo-experiments/skills/expo-migrate-module",
+      "nom": "expo-migrate-module",
+      "repo": "expo/skills",
+      "resume_fr": "convertit un module Swift Expo vers les macros 2.0 → migration progressive sans casser l'API JS",
+      "note": 10,
+      "note_juge": 10,
+      "modele": "sonnet",
       "risque_max": "moyen",
-      "raison": "Déclencheurs précis et sujet net. Contenu surtout en index : les règles détaillées (fichiers rules/) n'ont pas été lues. Patterns connus, utiles surtout pour la partie React 19. Licence absente du repo, alors que le frontmatter indique MIT."
+      "raison": "Skill officiel Expo, ciblé et à jour. Pièges réels (threading async, noms d'événements, expo-module.config.json), vérifications concrètes, annexes riches. Description claire avec exclusions."
     },
     {
-      "id": "appeeky/aso-skills/skills/app-preview-video",
-      "nom": "app-preview-video",
-      "repo": "appeeky/aso-skills",
-      "note": 6,
+      "id": "callstackincubator/agent-skills/skills/react-native-brownfield-migration",
+      "nom": "react-native-brownfield-migration",
+      "repo": "callstackincubator/agent-skills",
+      "resume_fr": "guide l'intégration de React Native dans une app native existante → migration progressive, sans réécriture complète",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Déclencheurs précis et specs utiles (durée, nombre, règles de rejet Apple). Mais beaucoup de chiffres de conversion non sourcés, du marketing ciblé store, et une logique hors code. Utile seulement pour une fiche store."
+      "raison": "Skill ciblé, commandes CLI exactes, garde-fous et pièges réels, déclenchement précis. Note réduite par des annexes Expo et runtime-api absentes, et une annexe CLI tronquée."
     },
     {
-      "id": "wataru-maeda/react-native-boilerplate/.agents/skills/init-project",
-      "nom": "init-project",
-      "repo": "wataru-maeda/react-native-boilerplate",
-      "note": 6,
-      "risque_max": "moyen",
-      "raison": "Déclencheur net et workflow en étapes avec validation du plan avant toute action. Mais il est lié à un seul template, et rename.md et services.md ne sont pas fournis : les commandes concrètes restent invérifiables."
+      "id": "callstackincubator/agent-skills/skills/react-native-tv-best-practices",
+      "nom": "react-native-tv-best-practices",
+      "repo": "callstackincubator/agent-skills",
+      "resume_fr": "vérifie focus, D-pad et lisibilité TV → évite les écrans inutilisables à la télécommande",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Périmètre TV net et déclenchement précis. Conseils spécifiques (TVFocusGuideView, modales, pièges de focus) qui vont au-delà du générique. Annexe layout tronquée et seulement 6 fichiers sur 28 fournis."
     },
     {
-      "id": "coreyhaines31/marketingskills/skills/analytics",
-      "nom": "analytics",
-      "repo": "coreyhaines31/marketingskills",
-      "note": 5,
+      "id": "callstackincubator/agent-skills/skills/upgrading-react-native",
+      "nom": "upgrading-react-native",
+      "repo": "callstackincubator/agent-skills",
+      "resume_fr": "te guide dans la montée React Native, diff et dépendances → moins de builds cassés",
+      "note": 9,
+      "note_juge": 9,
+      "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Déclencheurs précis et bons. Contenu surtout marketing générique (principes, conventions de nommage). Vraie valeur sur les UTM par type de partenaire et le canal IA. Périmètre flou : règles d'analyse ajoutées hors sujet."
-    },
-    {
-      "id": "coreyhaines31/marketingskills/skills/aso",
-      "nom": "aso",
-      "repo": "coreyhaines31/marketingskills",
-      "note": 5,
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis et contenu structuré avec limites de caractères utiles. Mais c'est du marketing ASO plus que du code, des statistiques de conversion non sourcées, et les specs sont dans des fichiers non relus. Utile ponctuellement."
+      "raison": "Workflow précis et ciblé (rn-diff-purge, Upgrade Helper, règles React 19, commandes exactes, pièges). Le routeur et une annexe manquent, une autre est tronquée. Note 9/10."
     },
     {
       "id": "jeffallan/claude-skills/skills/react-native-expert",
       "nom": "react-native-expert",
       "repo": "Jeffallan/claude-skills",
-      "note": 5,
+      "resume_fr": "te guide sur FlatList, memo et SafeArea pour apps mobiles → listes fluides, écrans sans coupures",
+      "note": 8,
+      "note_juge": 8,
+      "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclencheur net et contenu complet, mais surtout des conseils génériques. Exemple FlatList : onPress inline annule le memo. SafeAreaView importé de react-native, qui est déprécié. Pas de risque repéré."
+      "raison": "Déclenchement précis et exemples de code exécutables, mais contenu largement connu de Claude (memo, useCallback, Platform). Versions datées et SafeAreaView de react-native déprécié. Pas de risque nouveau."
     },
     {
-      "id": "jakeschincariol/replica-skill/replica-architect",
-      "nom": "replica-architect",
-      "repo": "Jakeschincariol/replica-skill",
-      "note": 5,
+      "id": "wataru-maeda/react-native-boilerplate/.agents/skills/init-project",
+      "nom": "init-project",
+      "repo": "wataru-maeda/react-native-boilerplate",
+      "resume_fr": "renomme le modèle, retire les exemples, lie EAS → lance une app propre dès le départ",
+      "note": 7,
+      "note_juge": 7,
+      "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Étapes concrètes (schéma SQL avec index et contraintes, tableau de stack, règles d'API publiques). Mais déclencheur niche, dépend de replica-recon et replica-design absents, et vise le clonage d'apps existantes. Hors besoin principal."
+      "raison": "Déclenchement clair et commandes exactes, mais utile seulement pour ce template précis. Dépend de manage-docs (absent) et mêle renommage, EAS, branches et CI. Pas de risque nouveau notable."
     }
   ]
 }

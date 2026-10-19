@@ -19,6 +19,7 @@ Lis-le **en entier avec l'outil Read, une seule fois**, au moment de proposer. N
   - `plugin` et `condition` (seulement pour `plugin-coupe`) : le plugin d'origine, et ce qui doit être détecté pour proposer le skill ;
   - `skill_md` : **le chemin absolu du `SKILL.md` à lire**. Il règle déjà les cas de bencium et des liens ; il vaut `null` pour `shared` ;
   - `description` : 110 caractères au maximum ;
+  - `resume_fr` : la phrase à montrer à Amdy, 15 mots au plus, « ce qu'il fait → ce qu'il améliore » ;
   - `packs` : les types de projet où le skill apparaît ;
   - `role` : `recommande`, `ajout`, `jamais`, `sur_demande_explicite`, `hors_pack` ou `annexe` ;
   - `usage` : le nombre d'invocations avant le ménage ;
@@ -61,7 +62,8 @@ Règles :
 - **Cloudflare.** Si le projet utilise `wrangler` (dépendance, `wrangler.jsonc` ou `wrangler.toml`, y compris dans `apps/*`), propose **d'office** dans les ajouts `cloudflare:wrangler`, `cloudflare:workers-best-practices` et `cloudflare:cloudflare`. Ajoute les autres `cloudflare:*` quand leur `condition` (dans le manifeste) est remplie. Le plugin est coupé : ces skills se chargent par lecture de leur `skill_md`, comme les autres. **Ne propose jamais `cloudflare:nextjs-on-cloudflare` à un projet `@opennextjs/cloudflare`** : ce skill repose sur vinext.
 - **Skill introuvable.** Si un `skill_md` de `kind: plugin-coupe` n'existe plus (le plugin a changé de version), cherche-le avec `ls ~/.claude/plugins/cache/<marketplace>/<plugin>/*/skills/<skill>/SKILL.md`.
 - Pour chaque skill proposé, signale en quelques mots ses `risques` d'après le manifeste.
-- Présente la sélection en liste courte, puis pose **une** question avec l'outil AskUserQuestion : « Charger pour la session (recommandé) », « Charger et garder pour ce projet », « Choisir moi-même » ou « Ne rien charger ».
+- Présente la sélection en liste courte : **une ligne par skill**, son nom puis son `resume_fr` tel quel, par exemple « `bencium-controlled-ux-designer` — te demande avant chaque choix visuel → évite que Claude invente le design ». Si un skill n'a pas de `resume_fr`, écris-en un au même format, 15 mots au plus.
+- Pose ensuite **une** question avec l'outil AskUserQuestion : « Charger pour la session (recommandé) », « Charger et garder pour ce projet », « Choisir moi-même » ou « Ne rien charger ».
 
 ## 3. Charger pour la session (par défaut)
 

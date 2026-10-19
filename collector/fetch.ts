@@ -8,7 +8,7 @@
 //           --max-repos N (400), --with-anthropic-directory (désactivé par défaut).
 import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { CACHE, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
+import { CACHE, OFFICIAL, REFERENCES, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
 import { scanSkill, type Risk, type SkillFile } from './scan.ts'
 
 const argv = process.argv.slice(2)
@@ -53,16 +53,8 @@ const PACK_QUERIES: Record<string, string[]> = {
   'outillage-claude-code': ['claude code plugin', 'claude code hooks', 'claude code skills toolkit'],
 }
 const TOPICS = ['claude-skills', 'agent-skills', 'claude-code-skills', 'claude-skill', 'claude-code-plugin', 'claude-code-plugins', 'claude-code-marketplace']
-const OFFICIAL = ['anthropics/skills', 'anthropics/claude-plugins-official', 'anthropics/claude-code-playground']
-// Dépôts d'origine des skills qu'Amdy utilise déjà : toujours parcourus, avec un bonus
-// de présélection, pour qu'ils soient comparés aux nouveaux venus.
-const REFERENCES = [
-  'remotion-dev/skills', 'vercel-labs/agent-skills', 'expo/skills', 'greensock/gsap-skills', 'obra/superpowers',
-  'twostraws/SwiftUI-Agent-Skill', 'hamen/material-3-skill', 'nextlevelbuilder/ui-ux-pro-max-skill',
-  'ceorkm/mobile-app-ui-design', 'bencium/bencium-marketplace',
-]
 const AWESOME = ['hesreallyhim/awesome-claude-code', 'ComposioHQ/awesome-claude-skills', 'VoltAgent/awesome-agent-skills', 'travisvn/awesome-claude-skills']
-const SKIP_PATH = /(^|\/)(node_modules|\.git|tests?|__tests__|fixtures|dist|build|vendor)(\/|$)|(^|\/)(ja|ja-JP|zh|zh-CN|zh-TW|ko|ko-KR|es|fr|de|ru|pt|pt-BR|it|tr|vi|i18n|locales?|translations?)(\/|$)|template/i
+const SKIP_PATH = /(^|\/)(node_modules|\.git|tests?|__tests__|fixtures|__fixtures__|evals?|samples?|testdata|test-data|dist|build|vendor)(\/|$)|(^|\/)(ja|ja-JP|zh|zh-CN|zh-TW|ko|ko-KR|es|fr|de|ru|pt|pt-BR|it|tr|vi|i18n|locales?|translations?)(\/|$)|template/i
 
 type Repo = {
   name: string
@@ -178,6 +170,7 @@ type Candidate = {
   frontmatterKeys: string[]
   hash: string
   types: string[]
+  contentTypes: string[]
   prescore: number
   risks: Risk[]
   repoStars: number
@@ -233,6 +226,7 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
       frontmatterKeys: Object.keys(fields),
       hash: sha256(text),
       types: typesOf(`${entry.path} ${name} ${description}`),
+      contentTypes: typesOf(`${entry.path} ${name} ${description} ${text.slice(0, 4_000)}`),
       prescore,
       risks: scanSkill(text, files),
       repoStars: stars,
