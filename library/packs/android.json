@@ -1,12 +1,12 @@
 {
   "type": "android",
-  "genere_le": "2026-10-19T14:51:52.164Z",
+  "genere_le": "2026-10-19T17:34:50.070Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
   "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "tenants_de": "tour précédent",
-  "reclasse": true,
+  "reclasse": false,
   "finalistes": [
     "aldefy/compose-skill/skills/compose-expert",
     "athevon/genjutsu/skills/_jutsu/compose-motion",
@@ -37,9 +37,8 @@
   "changements": [],
   "ecartes": [],
   "stabilite": {
-    "tirages": 3,
-    "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "Les skills Compose généralistes sur l'état, les effets et la performance, utiles à chaque écran Android, dominent le pack, et les tenants restent bien placés."
+    "tirages": 0,
+    "note": "classement Sonnet indisponible pour ce pack"
   },
   "recommandes": [
     {
@@ -104,7 +103,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Déclenchement précis et périmètre net (Kotlin/Compose). Commandes exactes, triage en étapes et sortie vérifiable. Retrait de points : fiches de pièges référencées absentes, scan.py non fourni, pas de version ou date de règles."
     },
     {
@@ -171,7 +170,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Déclencheurs précis et contenu technique dense, avec exemples et pièges réels. Qualité pénalisée : annexes tronquées, la plupart des références absentes, licence non précisée, bannière de migration."
     },
     {
@@ -275,7 +274,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill Compose très ciblé, avec règles testables, gabarits et matrice d'états de tests. Note réduite : renvois à compose-architecture et CONTRACT_BRIEF absents, annexes tronquées, jargon de tickets."
     },
     {

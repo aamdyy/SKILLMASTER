@@ -1,6 +1,7 @@
 {
-  "genere_le": "2026-10-19T14:53:08.478Z",
+  "genere_le": "2026-10-19T17:35:59.942Z",
   "type": "android",
+  "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
     {
@@ -13,7 +14,9 @@
       "sha_epingle": "0226e5494bf2256356be2be8481f41ad29be1ceb",
       "resume_fr": "trouve la cause des recompositions Compose inutiles → interface plus fluide, moins de re-rendus",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -26,7 +29,9 @@
       "sha_epingle": "0226e5494bf2256356be2be8481f41ad29be1ceb",
       "resume_fr": "guide les modifiers et slots de tes composants Compose → API réutilisables, sans booléens cachés",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -39,9 +44,15 @@
       "sha_epingle": "14385f2bf3804d8779f8b4db2604211f1e70b4c1",
       "resume_fr": "guide les composants Material 3 de Compose → interfaces cohérentes, adaptatives et accessibles",
       "note": 7,
+      "editeur_confiance": false,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "plugin.json : chargé comme plugin"
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "plugin.json : chargé comme plugin"
+        }
       ]
     },
     {
@@ -54,7 +65,9 @@
       "sha_epingle": "0226e5494bf2256356be2be8481f41ad29be1ceb",
       "resume_fr": "vérifie la portée des coroutines et StateFlow ou Channel → évite fuites et événements perdus",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -67,8 +80,17 @@
       "sha_epingle": "dfcbe32081705bbe2aeefef830b9adeb67bec438",
       "resume_fr": "repère les pièges Kotlin et Compose dans ton diff → évite les bugs avant le commit",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/scan.py"
+        }
+      ]
     },
     {
       "id": "hamen/compose_skill/skills/compose-agent",
@@ -80,10 +102,22 @@
       "sha_epingle": "f815c31d6cc1a4af4ce2796d08eb7d8b506785c9",
       "resume_fr": "corrige l'état, les effets et les modifiers Compose → moins d'erreurs typiques des LLM",
       "note": 10,
+      "editeur_confiance": false,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools",
-        "plugin.json : chargé comme plugin"
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "plugin.json : chargé comme plugin"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read, Glob, Grep, Edit, Write, Bash"
+        }
       ]
     },
     {
@@ -96,7 +130,9 @@
       "sha_epingle": "1f518a71378b15d423389e546e767cffc86e14c3",
       "resume_fr": "guide les animations Jetpack Compose, du simple fondu aux transitions partagées → évite les bricolages",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -109,7 +145,9 @@
       "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
       "resume_fr": "décode ANR, R8 et fuites mémoire Android → trouve la cause racine avant tout correctif",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     }
   ],
@@ -124,7 +162,9 @@
       "sha_epingle": "0226e5494bf2256356be2be8481f41ad29be1ceb",
       "resume_fr": "place l'état Compose et ses effets au bon endroit → évite bugs et fuites",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -137,8 +177,17 @@
       "sha_epingle": "954ef54ea32288fbc90745f012d09d7b791f0d8a",
       "resume_fr": "guide Compose et Compose Multiplatform, navigation comprise → interfaces plus fluides, moins de re-rendus",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La bannière de SKILL.md invite à exécuter `/plugin marketplace add aldefy/compose-skill` puis `/plugin install`, ce qui installe un plugin tiers non sandboxé. À signaler à Amdy avant toute installati…"
+        }
+      ]
     },
     {
       "id": "rcosteira79/android-skills/plugins/android-skills/skills/android-testing",
@@ -150,7 +199,9 @@
       "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
       "resume_fr": "impose des tests rouges avant tout code Android → évite les pièges Compose et KMP",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -163,7 +214,9 @@
       "sha_epingle": "fe2bf99f22afc994555ddf9c5d415d2625693050",
       "resume_fr": "écrit et relit tes composables Compose → moins de re-rendus, interfaces plus fluides et accessibles",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -176,7 +229,9 @@
       "sha_epingle": "0226e5494bf2256356be2be8481f41ad29be1ceb",
       "resume_fr": "choisit la plus simple API d'animation Compose → évite les contenus fantômes après sortie",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -189,7 +244,9 @@
       "sha_epingle": "1b32f81724c0d71fe9ef093ca44697f559fdab6e",
       "resume_fr": "te fait mesurer avant de corriger → gains de fluidité prouvés par des chiffres",
       "note": 10,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -202,7 +259,9 @@
       "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
       "resume_fr": "guide Coil 3 en Compose KMP → évite les OOM et saccades dans les listes",
       "note": 10,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -215,10 +274,34 @@
       "sha_epingle": "f815c31d6cc1a4af4ce2796d08eb7d8b506785c9",
       "resume_fr": "audite Jetpack Compose et note performance, état, effets → moins de recompositions inutiles",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools",
-        "plugin.json : chargé comme plugin"
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "plugin.json : chargé comme plugin"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read, Glob, Grep, Write, Bash, Agent"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Étape 4 : lance ./gradlew du dépôt audité, donc exécute son code de build (tâches Gradle, plugins) sans confirmation explicite de l'utilisateur."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "destruction",
+          "code": "Le fallback écrit un script dans le dépôt cible puis le supprime : écriture et suppression de fichiers dans un projet tiers, sans garde-fou précisé."
+        }
       ]
     },
     {
@@ -231,7 +314,9 @@
       "sha_epingle": "1b32f81724c0d71fe9ef093ca44697f559fdab6e",
       "resume_fr": "génère et mesure les Baseline Profiles Compose → démarrage plus rapide, scroll plus fluide",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -244,8 +329,17 @@
       "sha_epingle": "fe2bf99f22afc994555ddf9c5d415d2625693050",
       "resume_fr": "construit un écran complet, tests inclus → évite les features inachevées et états oubliés",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/new-feature.sh"
+        }
+      ]
     },
     {
       "id": "skydoves/compose-performance-skills/measurement/testing-compose-in-release-mode",
@@ -257,7 +351,9 @@
       "sha_epingle": "1b32f81724c0d71fe9ef093ca44697f559fdab6e",
       "resume_fr": "mesure les performances Compose en build release → évite des chiffres faussés par le mode debug",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -270,7 +366,9 @@
       "sha_epingle": "fe2bf99f22afc994555ddf9c5d415d2625693050",
       "resume_fr": "isole DTO, Ktor, Room et Paging → une API qui change ne casse plus l'UI",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     }
   ]

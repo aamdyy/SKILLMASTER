@@ -1,6 +1,7 @@
 {
-  "genere_le": "2026-10-19T14:53:08.484Z",
+  "genere_le": "2026-10-19T17:35:59.947Z",
   "type": "site-web",
+  "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
     {
@@ -13,7 +14,9 @@
       "sha_epingle": "5de46a39b4640fa419560cd0b67e4c4b50dac802",
       "resume_fr": "te demande avant chaque choix visuel → évite que Claude invente le design",
       "note": 5,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -26,8 +29,17 @@
       "sha_epingle": "b31dc0a43ff5d19bcf386a3476a216f3b39a6f55",
       "resume_fr": "cherche les pratiques web actuelles avant HTML, CSS et JS → évite les API obsolètes",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La commande « npx -y modern-web-guidance@latest » exécute un paquet npm non épinglé : du code distant qui peut changer à chaque appel, avec accès réseau."
+        }
+      ]
     },
     {
       "id": "vercel-labs/agent-skills/skills/react-best-practices",
@@ -39,7 +51,9 @@
       "sha_epingle": "063bee94c3f4df8453406c830b0a7df0f2860278",
       "resume_fr": "applique 70 règles de performance React et Next.js → pages plus rapides, moins de re-rendus",
       "note": 9,
+      "editeur_confiance": true,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -49,10 +63,12 @@
       "repo": "ChromeDevTools/chrome-devtools-mcp",
       "chemin_skill": "skills/a11y-debugging",
       "skill_md": "skills/a11y-debugging/SKILL.md",
-      "sha_epingle": "b1e6e6850dcadc2380aab7da7c9f7dbb00d204fd",
+      "sha_epingle": "f874aeb96ae58587c509d3da4707bcba1a4074b5",
       "resume_fr": "audite l'accessibilité web → repère contrastes, focus clavier et cibles tactiles trop petites",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -65,7 +81,9 @@
       "sha_epingle": "aed9cfd3277740755f6bfc1155c7aa645403b760",
       "resume_fr": "te fait animer React avec useGSAP, nettoyage auto au démontage → évite fuites et animations orphelines",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -78,7 +96,9 @@
       "sha_epingle": "063bee94c3f4df8453406c830b0a7df0f2860278",
       "resume_fr": "te fait préférer la composition aux props booléennes → composants plus lisibles et évolutifs",
       "note": 8,
+      "editeur_confiance": true,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -91,8 +111,17 @@
       "sha_epingle": "4b99de2f7de7e7d5247042e5fb5b4ea9368ef734",
       "resume_fr": "compare tes pages à une référence → repère vite les régressions SEO après chaque déploiement",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Chaque URL analysée est envoyée à l'API PageSpeed de Google (pagespeed_check.py) pour les CWV, donc à un tiers, sauf --skip-cwv."
+        }
+      ]
     },
     {
       "id": "textura-agency/next16-claude-starter/.claude/skills/mobile-device-qa",
@@ -104,9 +133,23 @@
       "sha_epingle": "4ce3ade04ed0c21f38d9b476e079f02a18273463",
       "resume_fr": "traque les bugs iPhone de Safari et WebGL → évite les défauts invisibles aux tests automatiques",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash, Read, Grep, Glob, Edit, Write"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Les sondes lancent des scripts tools/qa/*.mjs du dépôt tiers, non fournis : à relire avant exécution. Bash et Write sont accordés sans restriction."
+        }
       ]
     }
   ],
@@ -121,8 +164,17 @@
       "sha_epingle": "063bee94c3f4df8453406c830b0a7df0f2860278",
       "resume_fr": "audite ton UI selon les règles web → moins de soucis d'accessibilité et d'UX",
       "note": 7,
+      "editeur_confiance": true,
       "risque_max": "moyen",
-      "risques": []
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Injection de prompt indirecte : le skill exécute à chaque revue des instructions téléchargées depuis une branche main non épinglée, sans contrôle de version ni de contenu."
+        }
+      ]
     },
     {
       "id": "jeffallan/claude-skills/skills/nextjs-developer",
@@ -134,20 +186,9 @@
       "sha_epingle": "36f3fe8052da7c57083783268c6ea3265d075265",
       "resume_fr": "configure App Router, Server Components et Server Actions → apps Next.js plus rapides, mieux référencées",
       "note": 7,
+      "editeur_confiance": false,
       "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "textura-agency/next16-claude-starter/.claude/skills/optimize-3d-scene",
-      "nom": "optimize-3d-scene",
-      "place": "ajout",
-      "repo": "textura-agency/next16-claude-starter",
-      "chemin_skill": ".claude/skills/optimize-3d-scene",
-      "skill_md": ".claude/skills/optimize-3d-scene/SKILL.md",
-      "sha_epingle": "4ce3ade04ed0c21f38d9b476e079f02a18273463",
-      "resume_fr": "optimise la scène 3D pour mobiles, pause hors écran → moins de saccades au scroll",
-      "note": 9,
-      "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -160,7 +201,24 @@
       "sha_epingle": "34d881dc9bdc669aadc3a1e8147a4bd5467ecbe3",
       "resume_fr": "guide le cache Next.js et le PPR → pages plus rapides, moins de calculs serveur",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "textura-agency/next16-claude-starter/.claude/skills/optimize-3d-scene",
+      "nom": "optimize-3d-scene",
+      "place": "ajout",
+      "repo": "textura-agency/next16-claude-starter",
+      "chemin_skill": ".claude/skills/optimize-3d-scene",
+      "skill_md": ".claude/skills/optimize-3d-scene/SKILL.md",
+      "sha_epingle": "4ce3ade04ed0c21f38d9b476e079f02a18273463",
+      "resume_fr": "optimise la scène 3D pour mobiles, pause hors écran → moins de saccades au scroll",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -173,8 +231,17 @@
       "sha_epingle": "86505e44f87d801aa1864a3c4109e9a8ae5c409f",
       "resume_fr": "te guide pour déployer Next.js sur Cloudflare Workers → garde l'API Next.js familière",
       "note": 7,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Commande `npx skills add cloudflare/vinext` lancée automatiquement « si absent » : elle télécharge et installe du contenu distant dans le projet sans validation explicite de l'utilisateur."
+        }
+      ]
     },
     {
       "id": "cloudflare/skills/skills/turnstile-spin",
@@ -186,8 +253,41 @@
       "sha_epingle": "86505e44f87d801aa1864a3c4109e9a8ae5c409f",
       "resume_fr": "branche Turnstile au front et au serveur → bloque les bots sans captcha pénible",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/auth-probe.sh, scripts/persist-skill.sh, scripts/validate.sh, scripts/widget-create.sh"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "tests/test_persist_skill.py"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Le skill fait créer aux utilisateurs un token API Cloudflare, puis propose de le stocker en clair dans ~/.cf-turnstile-token (fichier utilisateur en umask 077, mais persistant)."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Récupération et écriture du secret du widget via Wrangler et des scripts shell (widget-create.sh, auth-probe.sh) non fournis à relire ; permissions Account.Turnstile:Edit sur le compte."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La version hébergée annonce une fonction fetch_spin_script qui télécharge des scripts à la demande depuis developers.cloudflare.com : exécution de code distant non vérifiable localement."
+        }
+      ]
     },
     {
       "id": "jeffallan/claude-skills/skills/react-expert",
@@ -199,7 +299,9 @@
       "sha_epingle": "36f3fe8052da7c57083783268c6ea3265d075265",
       "resume_fr": "crée des composants React typés et guide Server Components → moins de re-rendus, code plus robuste",
       "note": 8,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -212,9 +314,29 @@
       "sha_epingle": "1f518a71378b15d423389e546e767cffc86e14c3",
       "resume_fr": "te fait valider la direction visuelle avant de coder → évite les designs génériques",
       "note": 6,
+      "editeur_confiance": false,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash, Read, Edit, Write, Grep, Glob, WebSearch, Artifact"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le bloc shell parcourt $HOME, /sessions et des répertoires partagés (find -L) et sourcе des chemins découverts, ce qui peut charger du contenu non vérifié."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Les instructions d'installation invitent à exécuter npx skills add depuis une URL distante, sans contrôle d'intégrité."
+        }
       ]
     },
     {
@@ -227,33 +349,9 @@
       "sha_epingle": "d271880757842ea3bee70d958cab80da5621eb81",
       "resume_fr": "génère les thèmes web et mobile depuis tes tokens → un design identique partout",
       "note": 7,
+      "editeur_confiance": false,
       "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "composio-community/awesome-claude-plugins/senior-frontend/skills/senior-frontend",
-      "nom": "senior-frontend",
-      "place": "ajout",
-      "repo": "composio-community/awesome-claude-plugins",
-      "chemin_skill": "senior-frontend/skills/senior-frontend",
-      "skill_md": "senior-frontend/skills/senior-frontend/SKILL.md",
-      "sha_epingle": "e521f7ada8d89abea888e67b93b4dcfbb977041f",
-      "resume_fr": "optimise React et Next.js, analyse le bundle, vérifie l'accessibilité → pages plus rapides, interfaces accessibles",
-      "note": 5,
-      "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "molauu/svg-character-animator/svg-character-animator",
-      "nom": "svg-character-animator",
-      "place": "ajout",
-      "repo": "molauu/svg-character-animator",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "5ee1e7845caefe2c9ab51c64a2aa6f386e72ef5b",
-      "resume_fr": "anime un personnage SVG entre plusieurs poses → transitions fluides et mouvements de repos",
-      "note": 10,
-      "risque_max": "moyen",
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -266,8 +364,71 @@
       "sha_epingle": "8376ef751cb94429d58843565a1ba119e4e26b59",
       "resume_fr": "pilote l'interface comme un vrai utilisateur → repère les erreurs console et requêtes échouées",
       "note": 5,
-      "risque_max": "moyen",
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Le mode --auto-connect et la reprise du profil Chrome réel donnent à l'agent accès aux sessions authentifiées de l'utilisateur, ce qui constitue une permission excessive."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Sauvegarde d'états de session (state save, cookies, tokens Bearer) dans des fichiers : risque de fuite de jetons si mal stockés."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Installation par npm install -g et npx chrome-devtools-mcp@latest sans version épinglée : risque de chaîne d'approvisionnement."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le mock réseau (network route --body) et --ignore-https-errors affaiblissent la vérification réelle et peuvent masquer des erreurs TLS."
+        }
+      ]
+    },
+    {
+      "id": "composio-community/awesome-claude-plugins/senior-frontend/skills/senior-frontend",
+      "nom": "senior-frontend",
+      "place": "ajout",
+      "repo": "composio-community/awesome-claude-plugins",
+      "chemin_skill": "senior-frontend/skills/senior-frontend",
+      "skill_md": "senior-frontend/skills/senior-frontend/SKILL.md",
+      "sha_epingle": "e521f7ada8d89abea888e67b93b4dcfbb977041f",
+      "resume_fr": "optimise React et Next.js, analyse le bundle, vérifie l'accessibilité → pages plus rapides, interfaces accessibles",
+      "note": 5,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
+    },
+    {
+      "id": "molauu/svg-character-animator/svg-character-animator",
+      "nom": "svg-character-animator",
+      "place": "ajout",
+      "repo": "molauu/svg-character-animator",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "5ee1e7845caefe2c9ab51c64a2aa6f386e72ef5b",
+      "resume_fr": "anime un personnage SVG entre plusieurs poses → transitions fluides et mouvements de repos",
+      "note": 10,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "exécution dynamique de code"
+        }
+      ]
     }
   ]
 }

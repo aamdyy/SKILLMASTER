@@ -1,6 +1,7 @@
 {
-  "genere_le": "2026-10-19T14:53:08.483Z",
+  "genere_le": "2026-10-19T17:35:59.945Z",
   "type": "ios",
+  "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
     {
@@ -13,7 +14,9 @@
       "sha_epingle": "bdd857feb374fa58e21a364f56f31288eb7cc2fe",
       "resume_fr": "traduit Figma en SwiftUI dans les deux sens → moins d'écarts entre design et code iOS",
       "note": 10,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -26,8 +29,29 @@
       "sha_epingle": "204dba7c67256a8b707ee3fbc5759a824191974f",
       "resume_fr": "écrit et revoit ton SwiftUI moderne → évite API dépréciées et re-rendus inutiles",
       "note": 10,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/analyze_trace.py, scripts/record_trace.py"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "scripts/instruments_parser/__init__.py, scripts/instruments_parser/causes.py, scripts/instruments_parser/correlate.py, …"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "record_trace.py propose un enregistrement de tous les processus de la machine : le .trace peut contenir des données sensibles, à manipuler avec précaution."
+        }
+      ]
     },
     {
       "id": "twostraws/swiftui-agent-skill/swiftui-pro",
@@ -39,9 +63,21 @@
       "sha_epingle": "ce32af1693b9e78a7d22ff48001c97a304d32063",
       "resume_fr": "relit ton SwiftUI : API modernes, performance → code plus à jour et plus rapide",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "plugin.json : chargé comme plugin"
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "plugin.json : chargé comme plugin"
+        },
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "lien symbolique",
+          "detail": "skills/swiftui-pro/references"
+        }
       ]
     },
     {
@@ -54,7 +90,9 @@
       "sha_epingle": "d5770817d2622e1585b1f7eaebc791a9cb0959c8",
       "resume_fr": "diagnostique les erreurs de concurrence Swift avant toute correction → évite les @MainActor posés au hasard",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -67,8 +105,35 @@
       "sha_epingle": "e38b3ad5cc2585140c91b9c0f974124c3add31dc",
       "resume_fr": "pilote le simulateur iOS par accessibilité → tests et captures sans deviner les coordonnées",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/accessibility_audit.py, scripts/app_launcher.py, scripts/app_state_capture.py, scripts/appearance.py, scripts/b…"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "scripts/common/__init__.py, scripts/common/cache_utils.py, scripts/common/device_utils.py, scripts/common/env_config.py…"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "L'option --deep active le mode d'automatisation d'accessibilité du simulateur sans le restaurer ensuite"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "destruction",
+          "code": "Des scripts détruisent des données (--uninstall, erase, delete) ; ils exigent --yes, mais l'agent peut le passer sans demander"
+        }
+      ]
     },
     {
       "id": "truongduy2611/app-store-preflight-skills/app-store-preflight-skills",
@@ -80,7 +145,9 @@
       "sha_epingle": "cfd9c73577300f9310ca892fefd38fbe1abd73cb",
       "resume_fr": "vérifie un projet iOS avant soumission → moins de rejets sur l'App Store",
       "note": 8,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -93,7 +160,9 @@
       "sha_epingle": "3a6c74be7bf9cbc6b19c2025922f6b364542c000",
       "resume_fr": "guide l'usage de Liquid Glass en SwiftUI → évite les faux effets de verre bricolés",
       "note": 10,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -106,8 +175,23 @@
       "sha_epingle": "2e41b4490a37f53db0beb6d4904618da9af2f559",
       "resume_fr": "lance l'app iOS dans le simulateur et garde les preuves → évite les bugs avant livraison",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le setup recommande « npx -y xcodebuildmcp@latest mcp » : exécution d'un paquet npm tiers non épinglé, sans vérification de version ni d'intégrité."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "L'outil peut ouvrir une URL arbitraire dans le simulateur via « xcrun simctl openurl » et arrêter un simulateur démarré par le run, sans garde-fou explicite sur l'URL."
+        }
+      ]
     }
   ],
   "ajouts": [
@@ -121,8 +205,17 @@
       "sha_epingle": "6f9ff8d5ad6000491cb0f483a776b7062e41cd97",
       "resume_fr": "relit et écrit du SwiftUI selon les règles d'Apple → moins de re-rendus, code plus idiomatique",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": "moyen",
-      "risques": []
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Tentative de contournement des instructions : le SKILL.md déclare que ses directives « supplantent inconditionnellement » tout entraînement antérieur du modèle. C'est une instruction adressée à l'age…"
+        }
+      ]
     },
     {
       "id": "mintuz/skills/src/app/skills/swiftui-architecture",
@@ -131,10 +224,12 @@
       "repo": "mintuz/skills",
       "chemin_skill": "src/app/skills/swiftui-architecture",
       "skill_md": "src/app/skills/swiftui-architecture/SKILL.md",
-      "sha_epingle": "1dbeb8587de3be27949bf1c3891ff612b3d13907",
+      "sha_epingle": "3527b5ab83a5a6039b5f65060c9c17bbf6c596c5",
       "resume_fr": "guide l'état SwiftUI sans ViewModel, tâches async annulées → flux de données clair et sûr",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -147,9 +242,17 @@
       "sha_epingle": "9ffb83138209057875698dd11c1720c657c47a92",
       "resume_fr": "diagnostique lenteurs et re-rendus SwiftUI avec Instruments → apps iOS plus fluides",
       "note": 9,
-      "risque_max": "eleve",
+      "editeur_confiance": false,
+      "risque_max": "info",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "[Read, Glob, Grep, Bash]"
+        }
       ]
     },
     {
@@ -162,7 +265,9 @@
       "sha_epingle": "498626005e65783ebe8570a103b2335cf397768c",
       "resume_fr": "guide les animations SwiftUI, transitions et Animatable → mouvements fluides et performants",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -175,7 +280,9 @@
       "sha_epingle": "64e5848d371b7774a4c27ffd430c02121d03e371",
       "resume_fr": "audite SwiftUI pour VoiceOver et Dynamic Type → donne des correctifs priorisés et prêts à coller",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -188,7 +295,9 @@
       "sha_epingle": "3a6c74be7bf9cbc6b19c2025922f6b364542c000",
       "resume_fr": "adapte SwiftUI à l'iPhone Duo sans branches d'appareil → une interface qui tient à toute taille",
       "note": 10,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -201,8 +310,17 @@
       "sha_epingle": "6f9ff8d5ad6000491cb0f483a776b7062e41cd97",
       "resume_fr": "corrige les erreurs @State après SDK 27 → évite un faux correctif aux effets cachés",
       "note": 8,
+      "editeur_confiance": false,
       "risque_max": "moyen",
-      "risques": []
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Le texte se pose en autorité supérieure à l'entraînement du modèle (« unconditionally supersedes », « you MUST consult ») : tentative de forcer le comportement de l'agent, à traiter comme une instruc…"
+        }
+      ]
     },
     {
       "id": "charleswiltgen/axiom/axiom-codex/skills/axiom-analyze-swiftui-performance",
@@ -214,7 +332,9 @@
       "sha_epingle": "3b930bde3dd287b59a1983f325d9cf582422f4eb",
       "resume_fr": "repère les mauvais réflexes SwiftUI qui font saccader le scroll → fluidité et moins de re-rendus",
       "note": 8,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -227,8 +347,17 @@
       "sha_epingle": "9ffb83138209057875698dd11c1720c657c47a92",
       "resume_fr": "revoit ton code Swift et tes écrans contre les règles Apple → interfaces iOS plus accessibles",
       "note": 8,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "info",
+      "risque_max_projet": "info",
+      "risques": [
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "[Read, Glob, Grep, WebFetch]"
+        }
+      ]
     },
     {
       "id": "dpearson2699/swift-ios-skills/skills/avkit",
@@ -240,7 +369,9 @@
       "sha_epingle": "8d90fd121a263355a4fb44fd082af1416a5c1c2a",
       "resume_fr": "ajoute des lecteurs vidéo natifs, PiP et AirPlay → lecture fiable, sans réinventer les contrôles",
       "note": 10,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -253,7 +384,9 @@
       "sha_epingle": "1f518a71378b15d423389e546e767cffc86e14c3",
       "resume_fr": "te guide sur shaders Metal et Liquid Glass SwiftUI → effets visuels avancés sans tâtonner",
       "note": 8,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -263,10 +396,12 @@
       "repo": "mintuz/skills",
       "chemin_skill": "src/app/skills/app-intent-driven-development",
       "skill_md": "src/app/skills/app-intent-driven-development/SKILL.md",
-      "sha_epingle": "1dbeb8587de3be27949bf1c3891ff612b3d13907",
+      "sha_epingle": "3527b5ab83a5a6039b5f65060c9c17bbf6c596c5",
       "resume_fr": "conçoit les intents iOS avant l'UI → évite la logique dupliquée entre Siri et écrans",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     }
   ]

@@ -1,12 +1,12 @@
 {
   "type": "ios",
-  "genere_le": "2026-10-19T14:51:07.435Z",
+  "genere_le": "2026-10-19T17:34:23.674Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
   "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "tenants_de": "tour précédent",
-  "reclasse": true,
+  "reclasse": false,
   "finalistes": [
     "apollographql/skills/skills/apollo-ios",
     "athevon/genjutsu/skills/_jutsu/swiftui-graphics",
@@ -37,9 +37,8 @@
   "changements": [],
   "ecartes": [],
   "stabilite": {
-    "tirages": 3,
-    "meme_composition_sans_tenants": true,
-    "raison_tirage_1": "Le skill Figma → SwiftUI bidirectionnel est en tête, car son travail part de maquettes Figma, suivi des skills SwiftUI généralistes (expert, pro, Liquid Glass) ; aucun challenger ne les dépasse nettement."
+    "tirages": 0,
+    "note": "classement Sonnet indisponible pour ce pack"
   },
   "recommandes": [
     {
@@ -65,7 +64,7 @@
       "score_pack": 8.4,
       "note_juge": 10,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill de mainteneur très ciblé sur SwiftUI, avec API récentes, checklist de correction et renvois vers des références. Annexes partielles seulement. Il n'impose pas de style visuel."
     },
     {
@@ -104,7 +103,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Déclenchement précis et commandes exactes, avec pièges idb et variables d'env documentés. Note amputée : SKILL.md tronqué au tiers et scripts non lus."
     },
     {
@@ -143,7 +142,7 @@
       "score_pack": 7,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill iOS ciblé : pipeline XcodeBuildMCP, statuts dérivés des preuves, rapport au format fixe, piège SwiftUI (liens inline AttributedString) avec repli simctl. Points perdus : ce-debug et agents/openai.yaml non fournis, verbosité."
     }
   ],
@@ -184,7 +183,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "eleve",
+      "risque_max": "info",
       "raison": "Déclenchement précis et savoir-faire réel (seuils Apple, pièges SwiftUI, exemples Swift). Note bridée par des références annexes absentes, un nom de skill incohérent et des annexes tronquées."
     },
     {
@@ -262,7 +261,7 @@
       "score_pack": 7.2,
       "note_juge": 8,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "info",
       "raison": "Skill iOS à jour (iOS 27, vérifié 07/2026) avec des API récentes et des workflows concrets (audits XCUITest, Assistive Access). Déclenchement et périmètre larges car c'est un sommaire multi-modules ; annexes tronquées."
     },
     {

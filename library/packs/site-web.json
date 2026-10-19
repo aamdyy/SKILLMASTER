@@ -1,6 +1,6 @@
 {
   "type": "site-web",
-  "genere_le": "2026-10-19T14:50:46.579Z",
+  "genere_le": "2026-10-19T17:34:23.670Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
@@ -23,28 +23,25 @@
     "jakeschincariol/replica-skill/replica-architect",
     "jeffallan/claude-skills/skills/nextjs-developer",
     "jeffallan/claude-skills/skills/react-expert",
-    "jezweb/claude-skills/plugins/cloudflare/skills/vite-flare-starter",
-    "jezweb/claude-skills/plugins/dev-tools/skills/vitest",
     "molauu/svg-character-animator/svg-character-animator",
     "plugin87/ux-ui-agent-skills/.claude/skills/token-build",
     "sangrokjung/claude-forge/skills/cache-components",
     "textura-agency/next16-claude-starter/.claude/skills/mobile-device-qa",
     "textura-agency/next16-claude-starter/.claude/skills/optimize-3d-scene",
     "vercel-labs/agent-skills/skills/composition-patterns",
-    "vercel-labs/agent-skills/skills/react-best-practices",
-    "vercel/vercel-plugin/skills/auth"
+    "vercel-labs/agent-skills/skills/react-best-practices"
   ],
   "changements": [],
   "ecartes": [
     {
       "nom": "elastic-beanstalk",
-      "raison": "Déploiement AWS, hors stack (Cloudflare)."
+      "raison": "Déploiement AWS, hors de sa stack (Cloudflare)."
     }
   ],
   "stabilite": {
     "tirages": 3,
-    "meme_composition_sans_tenants": true,
-    "raison_tirage_1": "Les bonnes pratiques web modernes et la performance React/Next.js, plus l'accessibilité et le QA mobile, couvrent le mieux un site Next.js construit depuis Figma ; aucune techno absente de sa stack ne justifie un écart."
+    "meme_composition_sans_tenants": false,
+    "raison_tirage_1": "Les bonnes pratiques React/Next.js de Vercel et le guide web moderne de Chrome couvrent le cœur d'un site Next.js, suivis de l'accessibilité et du QA mobile."
   },
   "recommandes": [
     {
@@ -71,7 +68,7 @@
       "score_pack": 5.4,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Guides Google ciblés, Apache-2.0, à jour (Baseline, fallbacks explicites), déclenchement clair. Retrait pour ton impératif, annexes partielles et npx @latest non épinglé."
     },
     {
@@ -136,7 +133,7 @@
       "score_pack": 7,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Sujet net et déclencheurs précis. Règles de comparaison avec seuils et actions utiles, commandes exactes. Note limitée par les scripts du plugin parent non fournis, annexe tronquée (règles 15 à 17 absentes) et version datée."
     },
     {
@@ -181,19 +178,6 @@
       "raison": "Déclenchement et périmètre précis. Valeur limitée : connaissances Next.js de base, et API datées (params non asynchrones, cache fetch par défaut, useFormState, experimental_useOptimistic). Annexe server-components absente."
     },
     {
-      "id": "textura-agency/next16-claude-starter/.claude/skills/optimize-3d-scene",
-      "nom": "optimize-3d-scene",
-      "repo": "textura-agency/next16-claude-starter",
-      "resume_fr": "optimise la scène 3D pour mobiles, pause hors écran → moins de saccades au scroll",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis et périmètre net. Pièges réels et mesures chiffrées (cap fps, DPR, recompilation en cours de scroll). Tronqué à 63 % et dépend de modules et docs absents : confiance basse."
-    },
-    {
       "id": "sangrokjung/claude-forge/skills/cache-components",
       "nom": "cache-components",
       "repo": "sangrokjung/claude-forge",
@@ -207,6 +191,19 @@
       "raison": "Skill précis et bien ciblé sur les API récentes de Cache Components, avec exemples et messages d'erreur. Note amputée : application « proactive » trop large, annexes tronquées, dépôt tiers non officiel."
     },
     {
+      "id": "textura-agency/next16-claude-starter/.claude/skills/optimize-3d-scene",
+      "nom": "optimize-3d-scene",
+      "repo": "textura-agency/next16-claude-starter",
+      "resume_fr": "optimise la scène 3D pour mobiles, pause hors écran → moins de saccades au scroll",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et périmètre net. Pièges réels et mesures chiffrées (cap fps, DPR, recompilation en cours de scroll). Tronqué à 63 % et dépend de modules et docs absents : confiance basse."
+    },
+    {
       "id": "cloudflare/skills/skills/nextjs-on-cloudflare",
       "nom": "nextjs-on-cloudflare",
       "repo": "cloudflare/skills",
@@ -216,7 +213,7 @@
       "score_pack": 7.4,
       "note_juge": 7,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Déclenchement précis et périmètre net (Next.js sur Workers). Mais le skill renvoie surtout vers des liens externes, avec peu de commandes ou de règles vérifiables. Une seule vraie opinion : vinext par défaut."
     },
     {
@@ -229,7 +226,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill officiel Cloudflare, précis : siteverify canonique avec contrôle de action et hostname, commandes exactes. Pénalisé en qualité pour sa longueur et sa troncature (SKILL.md, scripts absents), d'où confiance basse."
     },
     {
@@ -272,6 +269,19 @@
       "raison": "Déclenchement précis et règles utiles (alias résolus, deltas de thème, validation). Mais il dépend de fichiers d'un kit absent de l'installation, et les étapes de génération restent peu concrètes."
     },
     {
+      "id": "gmickel/flow-next/plugins/flow-next/skills/flow-next-drive",
+      "nom": "flow-next-drive",
+      "repo": "gmickel/flow-next",
+      "resume_fr": "pilote l'interface comme un vrai utilisateur → repère les erreurs console et requêtes échouées",
+      "note": 5,
+      "pertinence": 6,
+      "score_pack": 5.4,
+      "note_juge": 5,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Processus bien pensé et pièges réels (refs périmées, CDP, console et réseau), mais la description liste des déclencheurs très larges, le périmètre est fourre-tout et de nombreuses annexes citées manquent ou sont tronquées."
+    },
+    {
       "id": "composio-community/awesome-claude-plugins/senior-frontend/skills/senior-frontend",
       "nom": "senior-frontend",
       "repo": "composio-community/awesome-claude-plugins",
@@ -296,19 +306,6 @@
       "modele": "haiku",
       "risque_max": "moyen",
       "raison": "Déclenchement précis et savoir-faire réel : stratégie TRANSFORM/MORPH par chemin, normalisation, gestion des orphelins et de l'interruption. Lecture partielle seulement (SKILL.md tronqué), d'où confiance moyenne."
-    },
-    {
-      "id": "gmickel/flow-next/plugins/flow-next/skills/flow-next-drive",
-      "nom": "flow-next-drive",
-      "repo": "gmickel/flow-next",
-      "resume_fr": "pilote l'interface comme un vrai utilisateur → repère les erreurs console et requêtes échouées",
-      "note": 5,
-      "pertinence": 6,
-      "score_pack": 5.4,
-      "note_juge": 5,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Processus bien pensé et pièges réels (refs périmées, CDP, console et réseau), mais la description liste des déclencheurs très larges, le périmètre est fourre-tout et de nombreuses annexes citées manquent ou sont tronquées."
     }
   ]
 }

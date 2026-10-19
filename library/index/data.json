@@ -1,6 +1,7 @@
 {
-  "genere_le": "2026-10-19T14:53:08.481Z",
+  "genere_le": "2026-10-19T17:35:59.944Z",
   "type": "data",
+  "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
     {
@@ -13,7 +14,9 @@
       "sha_epingle": "36f3fe8052da7c57083783268c6ea3265d075265",
       "resume_fr": "règles pandas pour nettoyer, joindre et agréger → évite les boucles lentes et les erreurs silencieuses",
       "note": 8,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -26,8 +29,23 @@
       "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
       "resume_fr": "te guide sur Polars en lazy et expressions → ETL plus rapides que pandas",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La section de citation demande à Claude de récupérer une URL arXiv (réseau) avant d'écrire la référence : appel réseau mineur, non nécessaire au skill."
+        }
+      ]
     },
     {
       "id": "jeffallan/claude-skills/skills/sql-pro",
@@ -39,7 +57,9 @@
       "sha_epingle": "36f3fe8052da7c57083783268c6ea3265d075265",
       "resume_fr": "optimise tes requêtes SQL et lit les EXPLAIN → requêtes plus rapides, index mieux placés",
       "note": 7,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -52,9 +72,35 @@
       "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
       "resume_fr": "crée et audite des figures scientifiques honnêtes → évite les graphiques trompeurs avant publication",
       "note": 10,
+      "editeur_confiance": false,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "assets/color_palettes.py, scripts/export_plan.py, scripts/figure_export.py, scripts/image_metadata.py, scripts/palette_…"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read Write Edit Bash Glob Grep"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "scripts/_common.py"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Consigne de citation qui impose un accès réseau à arXiv et une modification de manuscrit, hors du périmètre de la figure."
+        }
       ]
     },
     {
@@ -67,23 +113,46 @@
       "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
       "resume_fr": "classe, prévoit et détecte les anomalies en séries temporelles → évite les algorithmes faits maison",
       "note": 9,
-      "risque_max": "eleve",
+      "editeur_confiance": false,
+      "risque_max": "info",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read Write Edit Bash"
+        }
       ]
     },
     {
-      "id": "eigent-ai/eigent/resources/example-skills/xlsx",
+      "id": "anthropics/skills/skills/xlsx",
       "nom": "xlsx",
       "place": "recommande",
-      "repo": "eigent-ai/eigent",
-      "chemin_skill": "resources/example-skills/xlsx",
-      "skill_md": "resources/example-skills/xlsx/SKILL.md",
-      "sha_epingle": "687ddc84cebb07bcab913b2955ddb74f585f643f",
-      "resume_fr": "crée et modifie tes fichiers Excel et CSV → évite les formules erronées et valeurs figées",
-      "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "repo": "anthropics/skills",
+      "chemin_skill": "skills/xlsx",
+      "skill_md": "skills/xlsx/SKILL.md",
+      "sha_epingle": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "resume_fr": "crée et corrige des fichiers Excel avec formules vérifiées → tableurs sans erreurs de calcul",
+      "note": 10,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/office/soffice.py, scripts/recalc.py"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "scripts/office/helpers/__init__.py, scripts/office/helpers/pptx_chart.py, scripts/office/helpers/pptx_slide.py, scripts…"
+        }
+      ]
     },
     {
       "id": "phuryn/pm-skills/pm-execution/skills/dummy-dataset",
@@ -95,26 +164,118 @@
       "sha_epingle": "07b34f64ee828df08953f505b7f747aef85ae7c6",
       "resume_fr": "génère des jeux de données factices réalistes → testes ton code sans vraies données",
       "note": 6,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
-      "id": "k-dense-ai/scientific-agent-skills/skills/dask",
-      "nom": "dask",
+      "id": "duckdb/duckdb-skills/skills/query",
+      "nom": "query",
       "place": "recommande",
-      "repo": "K-Dense-AI/scientific-agent-skills",
-      "chemin_skill": "skills/dask",
-      "skill_md": "skills/dask/SKILL.md",
-      "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
-      "resume_fr": "étend pandas et NumPy au-delà de la RAM → traite des fichiers trop gros sans planter",
-      "note": 9,
+      "repo": "duckdb/duckdb-skills",
+      "chemin_skill": "skills/query",
+      "skill_md": "skills/query/SKILL.md",
+      "sha_epingle": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "resume_fr": "lance des requêtes DuckDB sur tes fichiers → analyses rapides, sans SQL compliqué",
+      "note": 8,
+      "editeur_confiance": false,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le mode session exécute `duckdb -init .duckdb-skills/state.sql` : un fichier fourni par le dépôt cloné est exécuté automatiquement, sans validation, et peut ATTACHer ou écrire des fichiers."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le chemin de fichier et la requête sont injectés dans une commande shell (`-c \"<QUERY>\"`, `FILE_PATH` dans allowed_paths) : risque d'injection si l'entrée n'est pas échappée."
+        }
       ]
     }
   ],
   "ajouts": [
+    {
+      "id": "duckdb/duckdb-skills/skills/duckdb-docs",
+      "nom": "duckdb-docs",
+      "place": "ajout",
+      "repo": "duckdb/duckdb-skills",
+      "chemin_skill": "skills/duckdb-docs",
+      "skill_md": "skills/duckdb-docs/SKILL.md",
+      "sha_epingle": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "resume_fr": "cherche dans la doc DuckDB et DuckLake → réponses sourcées, sans quitter Claude Code",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Télécharge et attache en local une base distante (duckdb.org, ducklake.select) sans vérification d'intégrité ni de version épinglée."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Installe des extensions DuckDB (httpfs, fts) depuis le réseau à chaque exécution si absentes."
+        }
+      ]
+    },
+    {
+      "id": "duckdb/duckdb-skills/skills/spatial",
+      "nom": "spatial",
+      "place": "ajout",
+      "repo": "duckdb/duckdb-skills",
+      "chemin_skill": "skills/spatial",
+      "skill_md": "skills/spatial/SKILL.md",
+      "sha_epingle": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "resume_fr": "calcule distances et lieux proches avec DuckDB → réponses géographiques sans clé API",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "$0 et ${1:-} sont insérés dans un modèle de commande bash (duckdb -c \"...\") : une question contenant des guillemets ou des métacaractères shell peut casser la commande ou injecter des commandes."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "destruction",
+          "code": "Le skill lit des données distantes sur S3 (Overture) et peut écrire des fichiers via COPY TO ; sans restriction de chemin, l'écriture peut écraser des fichiers existants."
+        }
+      ]
+    },
     {
       "id": "timescale/pg-aiguide/skills/schema-exploration",
       "nom": "schema-exploration",
@@ -125,20 +286,9 @@
       "sha_epingle": "187be00d317a51210c132010d947f4546ffb5eef",
       "resume_fr": "explore le schéma avant d'écrire du SQL → évite les requêtes sur de mauvaises tables",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "neondatabase/agent-skills/skills/neon-postgres",
-      "nom": "neon-postgres",
-      "place": "ajout",
-      "repo": "neondatabase/agent-skills",
-      "chemin_skill": "skills/neon-postgres",
-      "skill_md": "skills/neon-postgres/SKILL.md",
-      "sha_epingle": "51c7d594c0568d52a15eede61cc43f9f1227607a",
-      "resume_fr": "guide migrations, branches et requêtes Neon → évite les erreurs de schéma et de connexion",
-      "note": 9,
-      "risque_max": "moyen",
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -151,8 +301,23 @@
       "sha_epingle": "c3ff942be3e07116b475253f0a8fc4f54682c1a8",
       "resume_fr": "journalise les métriques d'entraînement et déclenche des alertes → repère vite les runs qui divergent",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Par défaut, trackio.init avec space_id crée un Space public : les métriques (et la config) partent chez un tiers (Hugging Face) et peuvent être exposées si l'Amdy ne passe pas private=True."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "destruction",
+          "code": "trackio sync avec --force écrase le contenu du Space distant sans confirmation."
+        }
+      ]
     },
     {
       "id": "datopian/portaljs/skills/portaljs-add-geo",
@@ -164,49 +329,36 @@
       "sha_epingle": "8248783a4ef962c09477e9e53538255266723b9d",
       "resume_fr": "convertit un fichier géo en carte et requêtes spatiales → portail prêt sans serveur",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read, Write, Edit, Bash(ogr2ogr:*), Bash(ogrinfo:*), Bash(tippecanoe:*), Bash(du"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le SKILL.md demande de lire et suivre un fichier distant sur GitHub (branche main, non épinglée) : un changement de ce fichier change les instructions exécutées sans relecture."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le pipeline envoie les données de l'utilisateur à un tiers (Cloudflare R2 via Arc, data.portaljs.com) et les rend publiques par URL, sans avertissement de confidentialité."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Une URL source fournie par l'utilisateur est téléchargée (curl ou WebFetch) puis traitée par ogr2ogr et duckdb : entrée non fiable sur des parseurs natifs."
+        }
       ]
-    },
-    {
-      "id": "pydantic/skills/skills/logfire-query",
-      "nom": "logfire-query",
-      "place": "ajout",
-      "repo": "pydantic/skills",
-      "chemin_skill": "skills/logfire-query",
-      "skill_md": "skills/logfire-query/SKILL.md",
-      "sha_epingle": "98f591c0886eb11df0bdd57804419e11439efc93",
-      "resume_fr": "interroge traces, logs et métriques Logfire → trouve plus vite la cause des erreurs",
-      "note": 9,
-      "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "nvidia/skills/skills/accelerated-computing-cudf",
-      "nom": "accelerated-computing-cudf",
-      "place": "ajout",
-      "repo": "NVIDIA/skills",
-      "chemin_skill": "skills/accelerated-computing-cudf",
-      "skill_md": "skills/accelerated-computing-cudf/SKILL.md",
-      "sha_epingle": "4621bf0967c40a4bfd0045ab29c8958290bb4f9c",
-      "resume_fr": "règles NVIDIA cuDF pour accélérer pandas sur GPU → traitements de données plus rapides",
-      "note": 10,
-      "risque_max": "moyen",
-      "risques": []
-    },
-    {
-      "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
-      "nom": "astropy",
-      "place": "ajout",
-      "repo": "K-Dense-AI/scientific-agent-skills",
-      "chemin_skill": "skills/astropy",
-      "skill_md": "skills/astropy/SKILL.md",
-      "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
-      "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, WCS → moins d'erreurs d'unités et de conversion",
-      "note": 9,
-      "risque_max": null,
-      "risques": []
     },
     {
       "id": "astronomer/agents/skills/airflow",
@@ -218,20 +370,43 @@
       "sha_epingle": "486ee63d01f8126c52fbc92c36cd36ec31708dcd",
       "resume_fr": "lance, relance et diagnostique tes DAG Airflow → moins de temps perdu sur les échecs",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "hooks/warm-uvx-cache.sh"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Les commandes `af api` d'écriture (POST/DELETE sur variables et connexions) et `af runs delete` agissent sur une instance de production ; le skill ne demande de confirmation que pour `af instance dis…"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "`af instance discover local --scan` balaie les ports 1024-65535 de la machine, ce qui peut être perçu comme une sonde réseau."
+        }
+      ]
     },
     {
-      "id": "awslabs/agent-plugins/plugins/databases-on-aws/skills/dsql",
-      "nom": "dsql",
+      "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
+      "nom": "astropy",
       "place": "ajout",
-      "repo": "awslabs/agent-plugins",
-      "chemin_skill": "plugins/databases-on-aws/skills/dsql",
-      "skill_md": "plugins/databases-on-aws/skills/dsql/SKILL.md",
-      "sha_epingle": "fbefb3764e67558fe10ac834dd85db49734aa9b6",
-      "resume_fr": "te donne les limites et erreurs d'Aurora DSQL → évite les blocages inattendus en production",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "chemin_skill": "skills/astropy",
+      "skill_md": "skills/astropy/SKILL.md",
+      "sha_epingle": "593377bb048752abb0152deab9fbb1083a6087df",
+      "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, WCS → moins d'erreurs d'unités et de conversion",
       "note": 9,
-      "risque_max": "moyen",
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -244,34 +419,104 @@
       "sha_epingle": "2c2c0f291a675bb726260172826a09667c5dbbec",
       "resume_fr": "revoit ton modèle de données MongoDB → évite les schémas qui ralentissent les requêtes",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": "moyen",
-      "risques": []
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Le skill décrit des commandes d'analyse sur une base réelle (agrégations, explain, serverStatus) et des outils MCP d'écriture. Les garde-fous (--readOnly, accord explicite) sont énoncés mais non impo…"
+        }
+      ]
     },
     {
-      "id": "microsoft/dataverse-skills/.github/plugins/dataverse/skills/dv-query",
-      "nom": "dv-query",
+      "id": "pydantic/skills/skills/logfire-query",
+      "nom": "logfire-query",
       "place": "ajout",
-      "repo": "microsoft/Dataverse-skills",
-      "chemin_skill": ".github/plugins/dataverse/skills/dv-query",
-      "skill_md": ".github/plugins/dataverse/skills/dv-query/SKILL.md",
-      "sha_epingle": "1966192f0bee20216f1b58cf11f8b0c4b0e3edb8",
-      "resume_fr": "interroge et agrège tes données Dataverse → analyses rapides, sans tout télécharger",
-      "note": 8,
-      "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "dynatrace/dynatrace-for-ai/skills/dt-app-notebooks",
-      "nom": "dt-app-notebooks",
-      "place": "ajout",
-      "repo": "Dynatrace/dynatrace-for-ai",
-      "chemin_skill": "skills/dt-app-notebooks",
-      "skill_md": "skills/dt-app-notebooks/SKILL.md",
-      "sha_epingle": "4f9aa71f9802aa6db0a4069ae5619eb3392ff411",
-      "resume_fr": "crée et modifie tes notebooks Dynatrace, requêtes DQL validées → évite les requêtes inventées",
+      "repo": "pydantic/skills",
+      "chemin_skill": "skills/logfire-query",
+      "skill_md": "skills/logfire-query/SKILL.md",
+      "sha_epingle": "98f591c0886eb11df0bdd57804419e11439efc93",
+      "resume_fr": "interroge traces, logs et métriques Logfire → trouve plus vite la cause des erreurs",
       "note": 9,
-      "risque_max": "moyen",
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
+    },
+    {
+      "id": "neondatabase/agent-skills/skills/neon-postgres",
+      "nom": "neon-postgres",
+      "place": "ajout",
+      "repo": "neondatabase/agent-skills",
+      "chemin_skill": "skills/neon-postgres",
+      "skill_md": "skills/neon-postgres/SKILL.md",
+      "sha_epingle": "51c7d594c0568d52a15eede61cc43f9f1227607a",
+      "resume_fr": "guide migrations, branches et requêtes Neon → évite les erreurs de schéma et de connexion",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Les instructions proposent `neon skills -s neon -y` et des téléchargements depuis neon.com sans confirmation explicite : installation de contenu distant sans validation."
+        }
+      ]
+    },
+    {
+      "id": "neondatabase/agent-skills/skills/neon-realtime",
+      "nom": "neon-realtime",
+      "place": "ajout",
+      "repo": "neondatabase/agent-skills",
+      "chemin_skill": "skills/neon-realtime",
+      "skill_md": "skills/neon-realtime/SKILL.md",
+      "sha_epingle": "51c7d594c0568d52a15eede61cc43f9f1227607a",
+      "resume_fr": "synchronise les requêtes SQL en direct dans l'UI → évite le polling et les rafraîchissements manuels",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Les instructions d'installation utilisent `neon skills -s neon -y` (installation non interactive) et une récupération depuis une URL distante, sans vérification d'empreinte"
+        }
+      ]
+    },
+    {
+      "id": "tronghieu/agent-skills/skills/data-scientist",
+      "nom": "data-scientist",
+      "place": "ajout",
+      "repo": "tronghieu/agent-skills",
+      "chemin_skill": "skills/data-scientist",
+      "skill_md": "skills/data-scientist/SKILL.md",
+      "sha_epingle": "f923333754b1fcf45c443cae1ebe8c9886162207",
+      "resume_fr": "guide toute analyse de données → conclusions vérifiées, moins de faux résultats",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/baseline_model.py, scripts/profile_data.py"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "tests/test_scripts.py"
+        }
+      ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "type": "outillage-claude-code",
-  "genere_le": "2026-10-19T14:53:08.001Z",
+  "genere_le": "2026-10-19T17:35:59.381Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
@@ -14,12 +14,14 @@
     "anthropics/claude-code/plugins/plugin-dev/skills/agent-development",
     "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration",
     "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
+    "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcpb",
     "anthropics/skills/skills/claude-api",
     "anthropics/skills/skills/mcp-builder",
     "anthropics/skills/skills/skill-creator",
     "confident-ai/deepeval/skills/deepeval",
     "confluentinc/agent-skills/skills/confluent-skill-creator",
     "epicgames/unreal-engine-skills-for-claude-code-plugin/skills/create-toolset",
+    "expo/skills/plugins/expo/skills/expo-skill-feedback",
     "gaasher/agent-loop-skills/loops/optimize-loop",
     "googlecloudplatform/data-agent-kit-plugin/skills/bigtable-basics",
     "mattpocock/skills/skills/engineering/code-review"
@@ -28,11 +30,11 @@
   "ecartes": [
     {
       "nom": "bigtable-basics",
-      "raison": "Bigtable est une base cloud managée Google, hors de sa stack."
+      "raison": "Bigtable est un service de données cloud Google, absent de sa stack."
     },
     {
       "nom": "confluent-skill-creator",
-      "raison": "Spécifique à Confluent/Kafka, absent de sa stack."
+      "raison": "Spécifique à Confluent/Kafka/Flink, techno absente de sa stack."
     },
     {
       "nom": "create-toolset",
@@ -42,7 +44,7 @@
   "stabilite": {
     "tirages": 3,
     "meme_composition_sans_tenants": true,
-    "raison_tirage_1": "Les skills génériques d'outillage Claude Code (création de skills, subagents, API Claude) servent directement son flux de travail, tandis que les skills liés à Unreal, Confluent et Bigtable sont hors stack."
+    "raison_tirage_1": "Les skills génériques de création de skills et d'API Claude, plus la garde-fou de qualité, servent directement son outillage Claude Code, tandis que les skills Unreal, Confluent et Bigtable sont hors stack."
   },
   "recommandes": [
     {
@@ -55,7 +57,7 @@
       "score_pack": 7,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill officiel, ciblé sur la création et l'évaluation de skills, avec une méthode d'evals concrète et des schémas JSON. Note limitée car SKILL.md et annexes sont tronqués : la fin n'a pas été jugée."
     },
     {
@@ -68,7 +70,7 @@
       "score_pack": 7,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill officiel Anthropic, ciblé et précis sur le format des agents (champs, règles de validation, exemples). Retrait d'un point : script test-agent-trigger.sh cité mais absent, annexes tronquées."
     },
     {
@@ -81,7 +83,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "info",
       "raison": "Skill officiel Anthropic, ciblé et précis : conventions de nommage, registerTool, annotations, pagination et évaluations. Note amputée par des annexes manquantes (Python, scripts) et une licence contradictoire."
     },
     {
@@ -94,7 +96,7 @@
       "score_pack": 7,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill officiel Anthropic, ciblé sur les plugins Claude Code, avec conventions précises (nommage mcp__plugin_…, ${CLAUDE_PLUGIN_ROOT}). Qualité réduite par des contradictions (démarrage vs lazy loading) et des checklists génériques."
     },
     {
@@ -107,7 +109,7 @@
       "score_pack": 6.4,
       "note_juge": 8,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill officiel d'Anthropic, très précis : exemples concrets, pièges de dérive d'API bien signalés. Déclenchement trop large et périmètre fourre-tout. Seuls 23 % du SKILL.md sont lus : confiance basse."
     },
     {
@@ -152,6 +154,19 @@
   ],
   "ajouts": [
     {
+      "id": "gaasher/agent-loop-skills/loops/optimize-loop",
+      "nom": "optimize-loop",
+      "repo": "gaasher/Agent-Loop-Skills",
+      "resume_fr": "mesure chaque retouche, garde si tests verts → code plus simple ou SQL plus rapide",
+      "note": 8,
+      "pertinence": 6,
+      "score_pack": 7.2,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis, avec des exclusions claires. Règles testables (ordre lexicographique, ledger, patience) et conventions concrètes. Idée connue, outils tools/ non fournis, pas vérifiables."
+    },
+    {
       "id": "affaan-m/ecc/skills/agent-security-hardening",
       "nom": "agent-security-hardening",
       "repo": "affaan-m/ECC",
@@ -165,19 +180,6 @@
       "raison": "Déclenchement précis et contenu technique concret (validation de chemins Windows, DNS rebinding, redirections). Note réduite : code Python sans annexes, certaines phrases denses et un passage sur la vérification sans commandes."
     },
     {
-      "id": "gaasher/agent-loop-skills/loops/optimize-loop",
-      "nom": "optimize-loop",
-      "repo": "gaasher/Agent-Loop-Skills",
-      "resume_fr": "mesure chaque retouche, garde si tests verts → code plus simple ou SQL plus rapide",
-      "note": 8,
-      "pertinence": 6,
-      "score_pack": 7.2,
-      "note_juge": 8,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis, avec des exclusions claires. Règles testables (ordre lexicographique, ledger, patience) et conventions concrètes. Idée connue, outils tools/ non fournis, pas vérifiables."
-    },
-    {
       "id": "confident-ai/deepeval/skills/deepeval",
       "nom": "deepeval",
       "repo": "confident-ai/deepeval",
@@ -187,8 +189,21 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill officiel Confident AI, ciblé et précis : commandes exactes, règles claires (deepeval test run, metrics.py). Annexes metrics, pytest, traces et templates absentes ; renvoie à des skills sœurs."
+    },
+    {
+      "id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcpb",
+      "nom": "build-mcpb",
+      "repo": "anthropics/claude-plugins-official",
+      "resume_fr": "empaquette un serveur MCP local avec son runtime → installable sans Node ni Python",
+      "note": 10,
+      "pertinence": 6,
+      "score_pack": 8.4,
+      "note_juge": 10,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Skill officiel, ciblé sur MCPB, avec pièges réels (pas d'auto-préfixe d'env, pas de sandbox, validation de chemins), commandes exactes et déclencheurs clairs. Annexes tronquées à la fin."
     },
     {
       "id": "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
@@ -200,8 +215,21 @@
       "score_pack": 6,
       "note_juge": 6,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Sujet net et officiel, mais niche : utile aux contributeurs du cookbook, pas à un usage courant de Claude Code. Déclenchement large, script de validation absent, annexe style_guide tronquée."
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-skill-feedback",
+      "nom": "expo-skill-feedback",
+      "repo": "expo/skills",
+      "resume_fr": "envoie un retour ciblé sur un skill Expo → aide Expo à corriger ce qui bloque",
+      "note": 7,
+      "pertinence": 6,
+      "score_pack": 6.6,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et commandes exactes. Mais utilité limitée pour construire, périmètre mêlant retours et télémétrie, et appel répété à un paquet npm non épinglé (@latest) qui envoie des données à un tiers."
     }
   ]
 }

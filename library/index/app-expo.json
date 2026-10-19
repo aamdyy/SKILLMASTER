@@ -1,6 +1,7 @@
 {
-  "genere_le": "2026-10-19T14:53:08.479Z",
+  "genere_le": "2026-10-19T17:35:59.943Z",
   "type": "app-expo",
+  "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
     {
@@ -13,7 +14,9 @@
       "sha_epingle": "063bee94c3f4df8453406c830b0a7df0f2860278",
       "resume_fr": "règles de performance React Native classées par impact → listes plus fluides, animations plus légères",
       "note": 9,
+      "editeur_confiance": true,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
@@ -26,9 +29,29 @@
       "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
       "resume_fr": "construit feuilles, sélecteurs et listes natifs → rendu fidèle iOS et Android, sans bibliothèques tierces",
       "note": 9,
+      "editeur_confiance": true,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/list-components.js"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash(node *expo-ui/scripts/list-components.js *)"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le bloc « Submitting Feedback » demande à l'agent d'exécuter `npx --yes submit-expo-feedback@latest` avec un sujet et un contenu libres : cela envoie des données de session à un tiers et télécharge d…"
+        }
       ]
     },
     {
@@ -41,8 +64,23 @@
       "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
       "resume_fr": "lance builds et envois App Store et Play → moins de rejets à la soumission",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le skill demande de lancer `npx --yes submit-expo-feedback@latest` avec un texte libre : exécution d'un paquet npm distant non épinglé et envoi de contenu à un tiers (Expo) sans validation explicite."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Le skill invite à créer des identifiants ASC et une clé .p8 et à gérer des comptes de service Google : risque de fuite si ces fichiers sont mal placés, même si le texte recommande de les garder hors …"
+        }
+      ]
     },
     {
       "id": "expo/skills/plugins/expo/skills/expo-dev-client",
@@ -54,21 +92,45 @@
       "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
       "resume_fr": "compile un client Expo de test → teste le code natif sur appareil, sans store",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La section « Submitting Feedback » exécute `npx --yes submit-expo-feedback@latest` : c'est l'exécution d'un paquet npm distant non épinglé, qui envoie du texte rédigé par l'agent à un service tiers, …"
+        }
+      ]
     },
     {
-      "id": "callstackincubator/agent-skills/skills/upgrading-react-native",
-      "nom": "upgrading-react-native",
+      "id": "expo/skills/plugins/expo/skills/expo-animation",
+      "nom": "expo-animation",
       "place": "recommande",
-      "repo": "callstackincubator/agent-skills",
-      "chemin_skill": "skills/upgrading-react-native",
-      "skill_md": "skills/upgrading-react-native/SKILL.md",
-      "sha_epingle": "59e9d17446a248b21d86f078fcd0bd2d36db1ca4",
-      "resume_fr": "te guide dans la montée React Native, diff et dépendances → moins de builds cassés",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/expo-animation",
+      "skill_md": "plugins/expo/skills/expo-animation/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "choisit l'outil le plus léger, anime sur le thread UI → fluidité même sur téléphones modestes",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Section « Submitting Feedback » : exécution via npx --yes submit-expo-feedback@latest, c'est-à-dire un paquet distant non épinglé, avec envoi de contexte de l'agent vers un tiers"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Demande à l'agent de charger un autre skill (expo-skill-feedback) en cas d'échec répété, ce qui est une instruction adressée à l'agent"
+        }
+      ]
     },
     {
       "id": "software-mansion-labs/skills/skills/react-native-best-practices",
@@ -80,8 +142,17 @@
       "sha_epingle": "58afa0a09b01dc47819af8fd48bb062561414108",
       "resume_fr": "guide les animations, gestes et threads React Native → apps plus fluides, moins de bugs",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "enable-worklets-bundle-mode télécharge des patches metro depuis raw.githubusercontent.com, modifie node_modules et met à niveau react-native-worklets : à relire avant exécution."
+        }
+      ]
     },
     {
       "id": "suleimanodetoro/skills/skills/engineer-react-native",
@@ -93,36 +164,97 @@
       "sha_epingle": "390a7cc2c55c77f27cd28f3c38953e24d3676883",
       "resume_fr": "cadre les apps React Native iOS et Android → moins de bugs natifs avant publication",
       "note": 9,
+      "editeur_confiance": false,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
     },
     {
-      "id": "callstackincubator/agent-skills/skills/react-native-brownfield-migration",
-      "nom": "react-native-brownfield-migration",
+      "id": "expo/skills/plugins/expo/skills/expo-overview",
+      "nom": "expo-overview",
       "place": "recommande",
-      "repo": "callstackincubator/agent-skills",
-      "chemin_skill": "skills/react-native-brownfield-migration",
-      "skill_md": "skills/react-native-brownfield-migration/SKILL.md",
-      "sha_epingle": "59e9d17446a248b21d86f078fcd0bd2d36db1ca4",
-      "resume_fr": "guide l'intégration de React Native dans une app native existante → migration progressive, sans réécriture complète",
-      "note": 8,
-      "risque_max": "moyen",
-      "risques": []
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/expo-overview",
+      "skill_md": "plugins/expo/skills/expo-overview/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "oriente chaque tâche Expo ou EAS vers le bon skill → évite les erreurs de configuration",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Commande `npx --yes submit-expo-feedback@latest` : exécute un paquet npm distant non épinglé et envoie du contexte de session à un tiers"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Annexe : modifie les préférences système du simulateur iOS via PlistBuddy (approbation de schémas d'URL)"
+        }
+      ]
     }
   ],
   "ajouts": [
     {
-      "id": "expo/skills/plugins/expo/skills/expo-module",
-      "nom": "expo-module",
+      "id": "expo/skills/plugins/expo/skills/expo-design-system",
+      "nom": "expo-design-system",
       "place": "ajout",
       "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-module",
-      "skill_md": "plugins/expo/skills/expo-module/SKILL.md",
+      "chemin_skill": "plugins/expo/skills/expo-design-system",
+      "skill_md": "plugins/expo/skills/expo-design-system/SKILL.md",
       "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
-      "resume_fr": "guide les modules natifs Expo iOS et Android → évite les erreurs de structure",
+      "resume_fr": "centralise couleurs et espacements dans un thème partagé → écrans cohérents, sans valeurs en dur",
+      "note": 10,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Instruction de soumission de feedback via npx submit-expo-feedback@latest : exécution d'un paquet npm distant non épinglé, à faire seulement sur demande"
+        }
+      ]
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/eas-update",
+      "nom": "eas-update",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/eas-update",
+      "skill_md": "plugins/expo/skills/eas-update/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "publie des mises à jour JavaScript sans nouveau build → corrections livrées sans attendre les stores",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash(npx expo *), Bash(npx *eas-cli@*), Bash(eas *)"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La section « Submitting Feedback » demande d'exécuter « npx --yes submit-expo-feedback@latest » : exécution d'un paquet distant sans confirmation et envoi de texte libre (contexte de projet possible)…"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Le skill incite à soumettre du feedback automatiquement en cas d'erreur, sans demander l'accord de l'utilisateur."
+        }
+      ]
     },
     {
       "id": "expo/skills/plugins/expo/skills/expo-examples",
@@ -134,53 +266,136 @@
       "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
       "resume_fr": "copie le modèle officiel Expo d'une intégration tierce → évite les configs Expo obsolètes",
       "note": 9,
+      "editeur_confiance": true,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read,Bash(gh api:*),Bash(git clone:*),Bash(npx create-expo:*),Bash(npx degit:*),"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La commande `npx --yes submit-expo-feedback@latest` exécute un paquet npm non épinglé et envoie du texte à un tiers ; le contexte de session peut donc partir hors de la machine."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "L'instruction de charger expo-skill-feedback et de suivre son flux d'évaluation est une consigne vers un autre skill, à vérifier avant usage."
+        }
       ]
     },
     {
-      "id": "devsemih/appstore-review-skill/skills/appstore-review",
-      "nom": "appstore-review",
+      "id": "expo/skills/plugins/expo/skills/eas-workflows",
+      "nom": "eas-workflows",
       "place": "ajout",
-      "repo": "devsemih/appstore-review-skill",
-      "chemin_skill": "skills/appstore-review",
-      "skill_md": "skills/appstore-review/SKILL.md",
-      "sha_epingle": "ab77bb701fe9bee863b89db4634efcf6e128798e",
-      "resume_fr": "vérifie ton app iOS avant soumission → moins de rejets à l'App Store",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/eas-workflows",
+      "skill_md": "plugins/expo/skills/eas-workflows/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "rédige et valide tes workflows EAS → évite les erreurs de syntaxe dans tes pipelines",
       "note": 9,
+      "editeur_confiance": true,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/fetch.js"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read,Write,Bash(node:*),Bash(npx *eas-cli@*)"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Exécution de paquets non épinglés (npx eas-cli@latest, npx submit-expo-feedback@latest) : code distant lancé à chaque appel, sans version fixée."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Soumission automatique de retours à un service tiers (submit-expo-feedback) pouvant inclure du contexte projet ou des données sensibles, sans garde-fou explicite."
+        }
       ]
     },
     {
-      "id": "devsemih/appstore-review-skill/skills/playstore-review",
-      "nom": "playstore-review",
+      "id": "software-mansion-labs/skills/skills/react-native-best-practices/references/multithreading",
+      "nom": "multithreading",
       "place": "ajout",
-      "repo": "devsemih/appstore-review-skill",
-      "chemin_skill": "skills/playstore-review",
-      "skill_md": "skills/playstore-review/SKILL.md",
-      "sha_epingle": "ab77bb701fe9bee863b89db4634efcf6e128798e",
-      "resume_fr": "vérifie un projet Android avant soumission → évite les rejets et retraits de Google Play",
-      "note": 9,
-      "risque_max": "eleve",
-      "risques": [
-        "frontmatter allowed-tools"
-      ]
-    },
-    {
-      "id": "suleimanodetoro/skills/skills/review-react-native",
-      "nom": "review-react-native",
-      "place": "ajout",
-      "repo": "suleimanodetoro/skills",
-      "chemin_skill": "skills/review-react-native",
-      "skill_md": "skills/review-react-native/SKILL.md",
-      "sha_epingle": "390a7cc2c55c77f27cd28f3c38953e24d3676883",
-      "resume_fr": "relit React Native et Expo sans rien modifier → évite les bugs natifs iOS et Android",
-      "note": 8,
+      "repo": "software-mansion-labs/skills",
+      "chemin_skill": "skills/react-native-best-practices/references/multithreading",
+      "skill_md": "skills/react-native-best-practices/references/multithreading/SKILL.md",
+      "sha_epingle": "58afa0a09b01dc47819af8fd48bb062561414108",
+      "resume_fr": "déplace les calculs lourds hors du thread JS → interface plus fluide, sans blocages",
+      "note": 10,
+      "editeur_confiance": true,
       "risque_max": null,
+      "risque_max_projet": null,
       "risques": []
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-module",
+      "nom": "expo-module",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/expo-module",
+      "skill_md": "plugins/expo/skills/expo-module/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "guide les modules natifs Expo iOS et Android → évite les erreurs de structure",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Commande `npx --yes submit-expo-feedback@latest` : exécute un paquet npm distant non épinglé sans confirmation, et envoie du contenu (contexte de session) à un tiers. Déclenchement à surveiller."
+        }
+      ]
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/eas-observe",
+      "nom": "eas-observe",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/eas-observe",
+      "skill_md": "plugins/expo/skills/eas-observe/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "mesure démarrage et navigation de ton app Expo → repère lenteurs et crashs en production",
+      "note": 10,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La section « Submitting Feedback » fait lancer `npx --yes submit-expo-feedback@latest` : exécution d'un paquet npm distant non épinglé, avec envoi de contenu à un tiers, sur simple instruction du ski…"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "La même section demande de charger un autre skill (expo-skill-feedback) et de suivre son flux, ce qui chaîne des instructions externes sans validation de l'utilisateur."
+        }
+      ]
     },
     {
       "id": "expo/skills/plugins/expo/skills/eas-update-insights",
@@ -192,88 +407,155 @@
       "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
       "resume_fr": "mesure les crashs et installs de tes EAS Update → repère vite une régression après publication",
       "note": 9,
+      "editeur_confiance": true,
       "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
-        "frontmatter allowed-tools"
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash(eas *)"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La commande `npx --yes submit-expo-feedback@latest` exécute un paquet non épinglé et envoie du texte libre (contexte du projet compris) à un tiers, sans demande de confirmation explicite."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "L'instruction de soumission de feedback incite l'agent à transmettre automatiquement des informations du projet, hors du périmètre de `allowed-tools` (Bash(eas *))."
+        }
       ]
     },
     {
-      "id": "software-mansion-labs/skills/skills/rnrepo",
-      "nom": "rnrepo",
+      "id": "callstackincubator/agent-skills/skills/upgrading-react-native",
+      "nom": "upgrading-react-native",
       "place": "ajout",
-      "repo": "software-mansion-labs/skills",
-      "chemin_skill": "skills/rnrepo",
-      "skill_md": "skills/rnrepo/SKILL.md",
-      "sha_epingle": "58afa0a09b01dc47819af8fd48bb062561414108",
-      "resume_fr": "guide la configuration de RNRepo → builds natifs React Native jusqu'à 2× plus rapides",
+      "repo": "callstackincubator/agent-skills",
+      "chemin_skill": "skills/upgrading-react-native",
+      "skill_md": "skills/upgrading-react-native/SKILL.md",
+      "sha_epingle": "59e9d17446a248b21d86f078fcd0bd2d36db1ca4",
+      "resume_fr": "te guide dans la montée React Native, diff et dépendances → moins de builds cassés",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le skill télécharge un diff via curl depuis raw.githubusercontent.com puis l'applique au projet sans vérification de somme : risque faible, la source est celle de rn-diff-purge."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "upgrade-verification.md demande d'installer agent-device « par un chemin approuvé » sans préciser lequel : une installation tierce pourrait suivre une source non vérifiée."
+        }
+      ]
     },
     {
-      "id": "software-mansion-labs/skills/skills/pulsar-haptics",
-      "nom": "pulsar-haptics",
-      "place": "ajout",
-      "repo": "software-mansion-labs/skills",
-      "chemin_skill": "skills/pulsar-haptics",
-      "skill_md": "skills/pulsar-haptics/SKILL.md",
-      "sha_epingle": "58afa0a09b01dc47819af8fd48bb062561414108",
-      "resume_fr": "implémente les retours haptiques Pulsar sur le SDK installé → évite les appels d'API inventés",
-      "note": 8,
-      "risque_max": "moyen",
-      "risques": []
-    },
-    {
-      "id": "wataru-maeda/react-native-boilerplate/.agents/skills/init-project",
-      "nom": "init-project",
-      "place": "ajout",
-      "repo": "wataru-maeda/react-native-boilerplate",
-      "chemin_skill": ".agents/skills/init-project",
-      "skill_md": ".agents/skills/init-project/SKILL.md",
-      "sha_epingle": "6a18c4befcf1a3981035bc3d09c6155213d6a628",
-      "resume_fr": "renomme le modèle, retire les exemples, lie EAS → lance une app propre dès le départ",
-      "note": 8,
-      "risque_max": null,
-      "risques": []
-    },
-    {
-      "id": "sickn33/agentic-awesome-skills/skills/add-app-clip",
-      "nom": "add-app-clip",
-      "place": "ajout",
-      "repo": "sickn33/agentic-awesome-skills",
-      "chemin_skill": "skills/add-app-clip",
-      "skill_md": "skills/add-app-clip/SKILL.md",
-      "sha_epingle": "c808e6e480696d243e0668ebbc3499bb8e7e10a4",
-      "resume_fr": "ajoute un App Clip iOS à ton app Expo → lancement via URL, sans installation",
-      "note": 9,
-      "risque_max": "moyen",
-      "risques": []
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/eas-hosting",
-      "nom": "eas-hosting",
+      "id": "expo/skills/plugins/expo/skills/eas-simulator",
+      "nom": "eas-simulator",
       "place": "ajout",
       "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/eas-hosting",
-      "skill_md": "plugins/expo/skills/eas-hosting/SKILL.md",
+      "chemin_skill": "plugins/expo/skills/eas-simulator",
+      "skill_md": "plugins/expo/skills/eas-simulator/SKILL.md",
       "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
-      "resume_fr": "déploie ton site Expo et ses routes API → mise en ligne sans gérer de serveur",
-      "note": 6,
-      "risque_max": "moyen",
-      "risques": []
+      "resume_fr": "lance ton app sur un simulateur cloud EAS → teste iOS sans Mac ni simulateur local",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash(npx *eas-cli@*), Bash(npx *agent-device@*), Bash(npx expo *), Bash(eas *), "
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le mode C ouvre un tunnel Metro vers un tiers ; le code source de l'app transite par ce tunnel, sans garde-fou explicite dans le skill."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Le skill demande de « porter l'autorisation existante » à travers la création de tunnel et de contourner la revue d'approbation, ce qui affaiblit une validation humaine."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Le fichier .env.eas-simulator contient un token d'accès au contrôle de la session ; le risque de fuite dépend d'un .gitignore que le skill ne garantit pas."
+        }
+      ]
     },
     {
-      "id": "expo/skills/plugins/expo/skills/expo-brownfield",
-      "nom": "expo-brownfield",
+      "id": "expo/skills/plugins/expo/skills/expo-dom",
+      "nom": "expo-dom",
       "place": "ajout",
       "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-brownfield",
-      "skill_md": "plugins/expo/skills/expo-brownfield/SKILL.md",
+      "chemin_skill": "plugins/expo/skills/expo-dom",
+      "skill_md": "plugins/expo/skills/expo-dom/SKILL.md",
       "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
-      "resume_fr": "embarque Expo dans une app native existante → garde intactes la navigation et les vues natives",
+      "resume_fr": "embarque du code web dans une webview native → réutilise bibliothèques web comme recharts sans réécriture",
       "note": 9,
-      "risque_max": "moyen",
-      "risques": []
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La section feedback exécute 'npx --yes submit-expo-feedback@latest' : exécution d'un paquet distant non épinglé, sans confirmation."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le skill demande d'inclure 'as much relevant context as possible' dans un envoi à un tiers, ce qui peut faire fuiter du code ou des données du projet."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Le skill oriente vers le chargement d'un autre skill (expo-skill-feedback) et un flux 'eval-candidate' non décrit, ouvrant une chaîne d'instructions non contrôlée."
+        }
+      ]
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-app-clip",
+      "nom": "expo-app-clip",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/expo-app-clip",
+      "skill_md": "plugins/expo/skills/expo-app-clip/SKILL.md",
+      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "resume_fr": "ajoute une App Clip iOS à ton app Expo → lancement sans installation depuis un lien",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Section « Submitting Feedback » : commande npx --yes submit-expo-feedback@latest non épinglée qui envoie du contexte à un tiers, et instruction adressée à l'agent de charger un autre skill (expo-skil…"
+        }
+      ]
     }
   ]
 }

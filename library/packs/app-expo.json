@@ -1,6 +1,6 @@
 {
   "type": "app-expo",
-  "genere_le": "2026-10-19T14:51:29.921Z",
+  "genere_le": "2026-10-19T17:34:50.067Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
@@ -9,45 +9,52 @@
   "reclasse": true,
   "finalistes": [
     "callstackincubator/agent-skills/skills/react-native-brownfield-migration",
-    "callstackincubator/agent-skills/skills/react-native-tv-best-practices",
     "callstackincubator/agent-skills/skills/upgrading-react-native",
-    "devsemih/appstore-review-skill/skills/appstore-review",
-    "devsemih/appstore-review-skill/skills/playstore-review",
     "expo/skills/plugins/expo-experiments/skills/expo-migrate-module",
     "expo/skills/plugins/expo/skills/eas-app-stores",
-    "expo/skills/plugins/expo/skills/eas-hosting",
+    "expo/skills/plugins/expo/skills/eas-observe",
+    "expo/skills/plugins/expo/skills/eas-simulator",
+    "expo/skills/plugins/expo/skills/eas-update",
     "expo/skills/plugins/expo/skills/eas-update-insights",
+    "expo/skills/plugins/expo/skills/eas-workflows",
+    "expo/skills/plugins/expo/skills/expo-animation",
+    "expo/skills/plugins/expo/skills/expo-app-clip",
     "expo/skills/plugins/expo/skills/expo-brownfield",
+    "expo/skills/plugins/expo/skills/expo-design-system",
     "expo/skills/plugins/expo/skills/expo-dev-client",
+    "expo/skills/plugins/expo/skills/expo-dom",
     "expo/skills/plugins/expo/skills/expo-examples",
     "expo/skills/plugins/expo/skills/expo-module",
+    "expo/skills/plugins/expo/skills/expo-overview",
     "expo/skills/plugins/expo/skills/expo-ui",
-    "scandit/skills/skills/barcode-capture-rn",
     "sickn33/agentic-awesome-skills/skills/add-app-clip",
-    "software-mansion-labs/skills/skills/expo-horizon",
     "software-mansion-labs/skills/skills/fishjam",
-    "software-mansion-labs/skills/skills/pulsar-haptics",
     "software-mansion-labs/skills/skills/react-native-best-practices",
-    "software-mansion-labs/skills/skills/rnrepo",
+    "software-mansion-labs/skills/skills/react-native-best-practices/references/multithreading",
     "suleimanodetoro/skills/skills/engineer-react-native",
-    "suleimanodetoro/skills/skills/review-react-native",
-    "vercel-labs/agent-skills/skills/react-native-skills",
-    "wataru-maeda/react-native-boilerplate/.agents/skills/init-project"
+    "vercel-labs/agent-skills/skills/react-native-skills"
   ],
   "changements": [
     {
-      "entrant": "engineer-react-native",
-      "sortant": "expo-horizon",
-      "raison": "expo-horizon ne sert que pour porter une app sur Meta Quest, hors besoin courant d'une app Expo. engineer-react-native couvre navigation, permissions, liens profonds, listes, EAS et OTA pour Expo.",
-      "entrant_id": "suleimanodetoro/skills/skills/engineer-react-native",
-      "sortant_id": "software-mansion-labs/skills/skills/expo-horizon"
+      "entrant": "expo-animation",
+      "sortant": "upgrading-react-native",
+      "raison": "expo-animation traite les animations, les gestes et les sheets d'une app Expo, ce qui fait partie du travail courant. La montée de version RN est un besoin ponctuel.",
+      "entrant_id": "expo/skills/plugins/expo/skills/expo-animation",
+      "sortant_id": "callstackincubator/agent-skills/skills/upgrading-react-native"
+    },
+    {
+      "entrant": "expo-overview",
+      "sortant": "react-native-brownfield-migration",
+      "raison": "Le brownfield sert à intégrer React Native dans une app native existante, pas à créer une app Expo. expo-overview est le point d'entrée qui oriente toute tâche Expo ou EAS, donc il sert bien plus.",
+      "entrant_id": "expo/skills/plugins/expo/skills/expo-overview",
+      "sortant_id": "callstackincubator/agent-skills/skills/react-native-brownfield-migration"
     }
   ],
   "ecartes": [],
   "stabilite": {
     "tirages": 3,
     "meme_composition_sans_tenants": true,
-    "raison_tirage_1": "Les skills généralistes Expo et React Native (performance, UI native, EAS) décident la tête du pack. Les skills de niche (TV, Quest, brownfield, Fishjam, Scandit) passent après."
+    "raison_tirage_1": "Pour une app Expo, la tête du pack est le routeur expo-overview, suivi des bonnes pratiques de performance RN et de l'UI native @expo/ui. Les skills brownfield, App Clip et Fishjam passent en queue."
   },
   "recommandes": [
     {
@@ -86,7 +93,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill officiel Expo, ciblé et précis : commandes exactes, pièges de versioning et de signature, renvois clairs vers d'autres skills. Annexes tronquées dans la demande et ton parfois marketing."
     },
     {
@@ -99,21 +106,21 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill officiel Expo, ciblé et précis : profils EAS, commandes exactes, pièges de lancement sans dev menu. Retire un point qualité : annexe citée absente, passage confus sur « eas update », et une commande npx distante qui envoie du texte à un tiers."
     },
     {
-      "id": "callstackincubator/agent-skills/skills/upgrading-react-native",
-      "nom": "upgrading-react-native",
-      "repo": "callstackincubator/agent-skills",
-      "resume_fr": "te guide dans la montée React Native, diff et dépendances → moins de builds cassés",
+      "id": "expo/skills/plugins/expo/skills/expo-animation",
+      "nom": "expo-animation",
+      "repo": "expo/skills",
+      "resume_fr": "choisit l'outil le plus léger, anime sur le thread UI → fluidité même sur téléphones modestes",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis, workflow reproductible (diff rn-diff-purge, commandes exactes, pièges de dépendances connus). Annexe core tronquée et routeur absent, ce qui pèse sur la qualité."
+      "risque_max": "eleve",
+      "raison": "Skill de mainteneur très ciblé, avec APIs Reanimated 4 précises, courbes et règles testables. Note retenue pour un défaut de qualité : instructions de feedback via npx vers un tiers et annexe tronquée."
     },
     {
       "id": "software-mansion-labs/skills/skills/react-native-best-practices",
@@ -125,7 +132,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
+      "risque_max": "eleve",
       "raison": "Skill de mainteneur (Software Mansion), ciblé RN/Expo et à jour (Reanimated 4, worklets, RNGH v3), avec règles testables (scheduleOnRN). Périmètre de routeur très large ; références non fournies ; pas de licence."
     },
     {
@@ -142,32 +149,45 @@
       "raison": "Skill de mainteneur, déclencheurs précis et pièges RN réels (AppState, SecureStore, FlatList, liens profonds). Peu de commandes ou d'exemples concrets, surtout des principes. Note sur 9."
     },
     {
-      "id": "callstackincubator/agent-skills/skills/react-native-brownfield-migration",
-      "nom": "react-native-brownfield-migration",
-      "repo": "callstackincubator/agent-skills",
-      "resume_fr": "guide l'intégration de React Native dans une app native existante → migration progressive, sans réécriture complète",
-      "note": 8,
-      "pertinence": 6,
-      "score_pack": 7.2,
-      "note_juge": 8,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill de mainteneur Callstack, précis : commandes CLI exactes, étapes vérifiables, pièges réels. Périmètre un peu large (iOS, Android, Expo, bare) et annexe tronquée, plusieurs références absentes."
-    }
-  ],
-  "ajouts": [
-    {
-      "id": "expo/skills/plugins/expo/skills/expo-module",
-      "nom": "expo-module",
+      "id": "expo/skills/plugins/expo/skills/expo-overview",
+      "nom": "expo-overview",
       "repo": "expo/skills",
-      "resume_fr": "guide les modules natifs Expo iOS et Android → évite les erreurs de structure",
+      "resume_fr": "oriente chaque tâche Expo ou EAS vers le bon skill → évite les erreurs de configuration",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill officiel Expo, ciblé et précis (DSL, config plugins, cycle de vie, pièges Android). Annexes partiellement tronquées, section vide, et commande npx@latest d'envoi de feedback à risque."
+      "risque_max": "eleve",
+      "raison": "Déclenchement très précis et règles concrètes (docs versionnées, npx expo install, lancement sans dev menu). Périmètre large car c'est un routeur couvrant tout Expo. Annexe lancement propre, mais agents/openai.yaml absent."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-design-system",
+      "nom": "expo-design-system",
+      "repo": "expo/skills",
+      "resume_fr": "centralise couleurs et espacements dans un thème partagé → écrans cohérents, sans valeurs en dur",
+      "note": 10,
+      "pertinence": 6,
+      "score_pack": 8.4,
+      "note_juge": 10,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Skill de mainteneur officiel, ciblé Expo, très précis (tokens, contrat de composants, grep d'audit, règles d'adoption). Annexes cohérentes ; audit.md tronqué mais sections clés présentes."
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/eas-update",
+      "nom": "eas-update",
+      "repo": "expo/skills",
+      "resume_fr": "publie des mises à jour JavaScript sans nouveau build → corrections livrées sans attendre les stores",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et pièges réels (runtime, cold launches, canal vs branche, garde-fous de publication). Contenu bien cadré en Expo officiel. Retrait pour renvois à d'autres skills absents et section feedback intrusive."
     },
     {
       "id": "expo/skills/plugins/expo/skills/expo-examples",
@@ -183,43 +203,56 @@
       "raison": "Skill officiel Expo, très ciblé : déclencheurs nets, méthode de lecture de l'repo, vérification meta.json (alias et dépréciés), merge non destructif de la config. Catalogue en instantané qui peut dériver, références à des skills absents."
     },
     {
-      "id": "devsemih/appstore-review-skill/skills/appstore-review",
-      "nom": "appstore-review",
-      "repo": "devsemih/appstore-review-skill",
-      "resume_fr": "vérifie ton app iOS avant soumission → moins de rejets à l'App Store",
+      "id": "expo/skills/plugins/expo/skills/eas-workflows",
+      "nom": "eas-workflows",
+      "repo": "expo/skills",
+      "resume_fr": "rédige et valide tes workflows EAS → évite les erreurs de syntaxe dans tes pipelines",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
       "risque_max": "eleve",
-      "raison": "Déclenchement clair et checklist précise (fichiers de config, grep, sections Apple) avec un vrai savoir-faire de review. Tronqué à 24000/27300 car., référence externe absente : qualité réduite."
+      "raison": "Skill officiel Expo, ciblé et précis : déclenchement clair, procédure de validation explicite. Note réduite par les annexes non fournies (fetch.js, openai.yaml) et la dépendance à des ressources distantes."
     },
     {
-      "id": "devsemih/appstore-review-skill/skills/playstore-review",
-      "nom": "playstore-review",
-      "repo": "devsemih/appstore-review-skill",
-      "resume_fr": "vérifie un projet Android avant soumission → évite les rejets et retraits de Google Play",
-      "note": 9,
+      "id": "software-mansion-labs/skills/skills/react-native-best-practices/references/multithreading",
+      "nom": "multithreading",
+      "repo": "software-mansion-labs/skills",
+      "resume_fr": "déplace les calculs lourds hors du thread JS → interface plus fluide, sans blocages",
+      "note": 10,
       "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Déclenchement précis et périmètre net. Contrôles concrets par framework (permissions restreintes, SDK collecteurs, Billing, suppression de compte, targetSdk). Note bridée : SKILL.md tronqué, référence absente."
-    },
-    {
-      "id": "suleimanodetoro/skills/skills/review-react-native",
-      "nom": "review-react-native",
-      "repo": "suleimanodetoro/skills",
-      "resume_fr": "relit React Native et Expo sans rien modifier → évite les bugs natifs iOS et Android",
-      "note": 8,
-      "pertinence": 6,
-      "score_pack": 7.2,
-      "note_juge": 8,
+      "score_pack": 8.4,
+      "note_juge": 10,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement net et pièges mobiles réels (process death, liens non prouvants, OTA, permissions). Pénalisé par les skills dépendants non fournis, l'annexe tronquée et l'absence de commandes non mutantes concrètes."
+      "raison": "Skill officiel de Software Mansion, déclencheurs précis (API worklets nommées), règles et pièges concrets. Annexes tronquées et licence absente limitent la confiance, pas la qualité du corps."
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-module",
+      "nom": "expo-module",
+      "repo": "expo/skills",
+      "resume_fr": "guide les modules natifs Expo iOS et Android → évite les erreurs de structure",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Skill officiel Expo, ciblé et précis (DSL, config plugins, cycle de vie, pièges Android). Annexes partiellement tronquées, section vide, et commande npx@latest d'envoi de feedback à risque."
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/eas-observe",
+      "nom": "eas-observe",
+      "repo": "expo/skills",
+      "resume_fr": "mesure démarrage et navigation de ton app Expo → repère lenteurs et crashs en production",
+      "note": 10,
+      "pertinence": 6,
+      "score_pack": 8.4,
+      "note_juge": 10,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Skill officiel Expo, ciblé et précis : écarts SDK 55/56+, commandes CLI exactes, seuils et interprétation des métriques. Notes perdues ailleurs : aucune. Annexe openai.yaml absente, annexes tronquées."
     },
     {
       "id": "expo/skills/plugins/expo/skills/eas-update-insights",
@@ -235,82 +268,56 @@
       "raison": "Skill officiel Expo, ciblé et précis : commandes eas exactes, schémas JSON, pièges (données en retard, doubles comptages). Note réduite pour la commande de feedback npx@latest non épinglée, qui envoie du texte à un tiers."
     },
     {
-      "id": "software-mansion-labs/skills/skills/rnrepo",
-      "nom": "rnrepo",
-      "repo": "software-mansion-labs/skills",
-      "resume_fr": "guide la configuration de RNRepo → builds natifs React Native jusqu'à 2× plus rapides",
+      "id": "callstackincubator/agent-skills/skills/upgrading-react-native",
+      "nom": "upgrading-react-native",
+      "repo": "callstackincubator/agent-skills",
+      "resume_fr": "te guide dans la montée React Native, diff et dépendances → moins de builds cassés",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill officiel Software Mansion, ciblé et précis : commandes, fichiers, messages de log et pièges réels (Xcode 26, C++ debug/release). Note amputée par la licence incohérente et le statut beta."
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis, workflow reproductible (diff rn-diff-purge, commandes exactes, pièges de dépendances connus). Annexe core tronquée et routeur absent, ce qui pèse sur la qualité."
     },
     {
-      "id": "software-mansion-labs/skills/skills/pulsar-haptics",
-      "nom": "pulsar-haptics",
-      "repo": "software-mansion-labs/skills",
-      "resume_fr": "implémente les retours haptiques Pulsar sur le SDK installé → évite les appels d'API inventés",
-      "note": 8,
-      "pertinence": 6,
-      "score_pack": 7.2,
-      "note_juge": 8,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis et périmètre net (Pulsar seul), avec une table de migration expo-haptics utile. Le corps reste surtout procédural : peu de syntaxe vérifiable, et l'essentiel renvoie vers la doc. Pas de licence."
-    },
-    {
-      "id": "wataru-maeda/react-native-boilerplate/.agents/skills/init-project",
-      "nom": "init-project",
-      "repo": "wataru-maeda/react-native-boilerplate",
-      "resume_fr": "renomme le modèle, retire les exemples, lie EAS → lance une app propre dès le départ",
-      "note": 8,
-      "pertinence": 6,
-      "score_pack": 7.2,
-      "note_juge": 8,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis et étapes vérifiables (commandes, validation avant action). Utile seulement pour ce boilerplate précis, donc valeur limitée. Dépend de manage-docs, absent du dépôt fourni."
-    },
-    {
-      "id": "sickn33/agentic-awesome-skills/skills/add-app-clip",
-      "nom": "add-app-clip",
-      "repo": "sickn33/agentic-awesome-skills",
-      "resume_fr": "ajoute un App Clip iOS à ton app Expo → lancement via URL, sans installation",
+      "id": "expo/skills/plugins/expo/skills/eas-simulator",
+      "nom": "eas-simulator",
+      "repo": "expo/skills",
+      "resume_fr": "lance ton app sur un simulateur cloud EAS → teste iOS sans Mac ni simulateur local",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill officiel expo/skills, ciblé et précis (commandes, JSON AASA, module natif). Qualité amputée par des incohérences : version iOS 17.6 douteuse, identifiants d'exemple en dur, boilerplate « Limitations » générique."
+      "risque_max": "eleve",
+      "raison": "Skill officiel Expo, ciblé et précis : commandes exactes, pièges réels, gestion des sessions. Note bridée par la longueur excessive, la répétition, et un SKILL.md tronqué (24000/26503 car.)."
     },
     {
-      "id": "expo/skills/plugins/expo/skills/eas-hosting",
-      "nom": "eas-hosting",
+      "id": "expo/skills/plugins/expo/skills/expo-dom",
+      "nom": "expo-dom",
       "repo": "expo/skills",
-      "resume_fr": "déploie ton site Expo et ses routes API → mise en ligne sans gérer de serveur",
-      "note": 6,
-      "pertinence": 8,
-      "score_pack": 6.8,
-      "note_juge": 6,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement net, mais contenu en partie générique (routes API, CORS, gestion d'erreurs). Commandes utiles, sans plus de vérifiabilité. Incohérences de commandes deploy, exemples d'auth fragiles, et commande de feedback externe."
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/expo-brownfield",
-      "nom": "expo-brownfield",
-      "repo": "expo/skills",
-      "resume_fr": "embarque Expo dans une app native existante → garde intactes la navigation et les vues natives",
+      "resume_fr": "embarque du code web dans une webview native → réutilise bibliothèques web comme recharts sans réécriture",
       "note": 9,
-      "pertinence": 8,
-      "score_pack": 8.6,
+      "pertinence": 6,
+      "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill officiel Expo, ciblé et précis : commandes, config Gradle et CocoaPods, pièges de versions et scénario d'acceptation. Note réduite car annexes tronquées et cohérence de versions SDK à vérifier."
+      "risque_max": "eleve",
+      "raison": "Skill officiel Expo, ciblé et précis avec exemples et pièges (hooks du routeur, props sérialisables). Note amputée par une section feedback qui incite à envoyer du contexte via npx et des incohérences mineures (prop dom requise/optionnelle)."
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-app-clip",
+      "nom": "expo-app-clip",
+      "repo": "expo/skills",
+      "resume_fr": "ajoute une App Clip iOS à ton app Expo → lancement sans installation depuis un lien",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Skill ciblé, étapes concrètes et commandes exactes sur un sujet net. Retenue pour quelques affirmations non sourcées (deploymentTarget 17.6, permissions Clip), IDs d'exemple et feedback automatique."
     }
   ]
 }
