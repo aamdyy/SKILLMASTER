@@ -1,8 +1,14 @@
 import Link from 'next/link'
-import { skillHref, type Pack, type Skill } from '@/lib/library'
+import { href, type Lang } from '@/lib/lang'
+import { labelOf, skillHref, tr, type Pack, type Skill } from '@/lib/library'
 import { Frame } from './Frame'
 import { InlineCode } from './InlineCode'
 import { NoteBadge } from './Badges'
+
+const T = {
+  fr: { skill: 'skill', type: 'type de projet', detected: 'détecté par', pack: 'pack', plus: 'plus', equals: 'égale', head: 'en tête', extras: 'ajouts' },
+  en: { skill: 'skill', type: 'project type', detected: 'detected by', pack: 'pack', plus: 'plus', equals: 'equals', head: 'in the head', extras: 'extras' },
+}
 
 // « skill + type de projet = pack », avec de vraies données.
 function Operator({ children }: { children: string }) {
@@ -13,37 +19,38 @@ function Operator({ children }: { children: string }) {
   )
 }
 
-export function Construction({ skill, pack, detection }: { skill: Skill; pack: Pack; detection: string }) {
+export function Construction({ skill, pack, detection, lang = 'fr' }: { skill: Skill; pack: Pack; detection: string; lang?: Lang }) {
+  const t = T[lang]
   return (
     <div className="flex flex-col lg:grid lg:grid-cols-[1fr_auto_1fr_auto_1fr] lg:items-stretch">
-      <Frame legend="skill" className="p-5 pt-6">
-        <Link href={skillHref(skill)} className="flex h-full flex-col gap-3">
+      <Frame legend={t.skill} className="p-5 pt-6">
+        <Link href={skillHref(skill, lang)} className="flex h-full flex-col gap-3">
           <p className="truncate font-mono text-[13px] text-fg">{skill.nom}</p>
           <p className="truncate font-mono text-[11px] text-muted">{skill.repo}</p>
-          <p className="text-sm leading-relaxed text-fg/80">{skill.resume}</p>
+          <p className="text-sm leading-relaxed text-fg/80">{tr(lang, skill.resume)}</p>
           <div className="mt-auto">
-            <NoteBadge note={skill.note} />
+            <NoteBadge note={skill.note} lang={lang} />
           </div>
         </Link>
       </Frame>
       <Operator>+</Operator>
-      <span className="sr-only">plus</span>
-      <Frame legend="type de projet" className="p-5 pt-6">
+      <span className="sr-only">{t.plus}</span>
+      <Frame legend={t.type} className="p-5 pt-6">
         <div className="flex h-full flex-col gap-3">
           <p className="font-mono text-[13px] text-fg">{pack.type}</p>
-          <p className="caps text-[11px] text-muted">détecté par</p>
+          <p className="caps text-[11px] text-muted">{t.detected}</p>
           <p className="text-sm leading-loose text-fg/80">
-            <InlineCode text={detection} />
+            <InlineCode text={tr(lang, detection)} />
           </p>
         </div>
       </Frame>
       <Operator>=</Operator>
-      <span className="sr-only">égale</span>
-      <Frame legend="pack" className="bg-panel p-5 pt-6">
-        <Link href={`/packs/${pack.type}/`} className="flex h-full flex-col gap-3">
-          <p className="font-mono text-[15px] uppercase tracking-[0.06em] text-fg">{pack.label}</p>
+      <span className="sr-only">{t.equals}</span>
+      <Frame legend={t.pack} className="bg-panel p-5 pt-6">
+        <Link href={href.pack(lang, pack.type)} className="flex h-full flex-col gap-3">
+          <p className="font-mono text-[15px] uppercase tracking-[0.06em] text-fg">{labelOf(pack.type, lang)}</p>
           <p className="text-sm text-muted tabular">
-            {pack.recommandes.length} en tête · {pack.ajouts.length} ajouts
+            {pack.recommandes.length} {t.head} · {pack.ajouts.length} {t.extras}
           </p>
           <ol className="mt-auto flex flex-col gap-1 border-t border-line pt-3 font-mono text-[12px]">
             {pack.recommandes.slice(0, 4).map((item, i) => (

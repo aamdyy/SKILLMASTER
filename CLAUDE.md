@@ -45,9 +45,12 @@ skillmaster/
 ├── library/
 │   ├── skills.json                     # catalogue complet (voir schéma ci-dessous)
 │   ├── packs/ · index/                 # site-web, ios, app-expo, android, video, data, outillage-claude-code
+│   └── i18n/en.json                    # traductions anglaises des textes affichés par le site
 ├── collector/
 │   ├── fetch.ts                        # GitHub Search API + listes awesome + annuaires
-│   └── judge.ts                        # Claude API : classe, note, signale les risques
+│   ├── judge.ts                        # Claude API : classe, note, signale les risques
+│   └── translate.ts                    # version anglaise : traduit les textes nouveaux ou modifiés
+├── site/                               # site de la bibliothèque (Next.js statique), en français et en anglais (/en/)
 └── .github/workflows/weekly-scan.yml   # scan hebdo → écrit library/ directement sur main
 ```
 
@@ -207,6 +210,12 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Détection** : `detection.json` est la référence ; le tableau de `skill-master` et la page Pack du site en reprennent le texte. Les dossiers cachés (`.claude/`, `.agents/`) ne comptent pas.
   - **Tests restés ouverts en phase 1** : `/add-dir` charge bien un skill dans le terminal ; `/reload-skills` part seul s'il est lancé juste après la commande (minuterie) ; l'outil est appelé par Claude de lui-même.
   - **Installation** : depuis la marketplace `aamdyy/SKILLMASTER`. Le lien `~/.claude/skills/skill-master` est retiré le même jour : le skill vient désormais du plugin.
+- 2026-10-20 : **teaser vidéo v2** (sources dans `docs/local/video/`, non versionnées). Canvas déterministe rendu image par image, 26,7 s, muet. Du mouvement partout (aucune image figée plus de 0,4 s, vérifié par `freezedetect`), transitions variées, flou de mouvement par sous-images. **Pas de voix off** : Piper et Kokoro sonnaient trop robotiques en français, et Amdy a écarté les voix payantes. Sur le site, la vidéo (4 Mo, H.264) a sa section sous le hero, et s'ouvre une fois en fenêtre à la première visite de l'accueil (mémoire dans le navigateur du visiteur). Elle ne joue que visible, jamais avec `prefers-reduced-motion`, avec un bouton pause.
+- 2026-10-20 : **site en anglais** sous `/en/` (`/en/changes/`, `/en/install/`), avec un sélecteur FR / EN et les balises `hreflang`. Chaque langue a son layout racine (groupes `(fr)` et `(en)`), la 404 est commune et bilingue (`global-not-found`).
+  - **Tout le contenu est traduit** : résumés, jugements, réserves, alertes, raisons, critères de détection. `collector/translate.ts` (Haiku, par lots) écrit `library/i18n/en.json`, indexé par l'empreinte du texte français. Seuls les textes nouveaux ou modifiés sont traduits : c'est une étape de l'Action, après le récapitulatif, qui ne bloque pas la publication si elle échoue. Sans traduction, le site garde le français.
+  - Premier passage le 2026-10-20 : 9 618 textes en 14 min, sur l'abonnement d'Amdy (1,46 $ en équivalent).
+- 2026-10-20 : **page Installation** (`/installation/`, `/en/install/`) : prérequis, marketplace, premier `/sm check`, commandes, réglages, sécurité, mise à jour et désinstallation.
+- 2026-10-20 : **le dépôt passe en public** (décision d'Amdy ; il change lui-même la visibilité), pour que la marketplace et la synchronisation de la bibliothèque marchent pour tout le monde. Aucun secret versionné (fichiers et historique vérifiés). Deviennent visibles : l'e-mail des commits, l'usage réel d'Amdy (`retours_amdy`, `bonus_usage` de 9 skills), `profil.json`, ce brief et les plans de `docs/`.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard
@@ -223,5 +232,5 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
 
 ## Décisions encore ouvertes
 
-- Publier l'outil plus tard (repo public, contenu pour sa chaîne) ?
+- Contenu pour sa chaîne à partir de l'outil ?
 - Packs supplémentaires à créer après les 3 premiers.

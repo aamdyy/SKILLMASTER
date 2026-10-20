@@ -1,16 +1,17 @@
+import { href, type Lang } from '@/lib/lang'
 import { Button } from './Button'
 import { Label } from './Label'
 
 // Le pipeline en quatre étapes numérotées, reliées par un filet vertical.
-export function Pipeline({ steps, intro }: { steps: { title: string; text: string }[]; intro: string }) {
+export function Pipeline({ steps, intro, lang = 'fr' }: { steps: { title: string; text: string }[]; intro: string; lang?: Lang }) {
   return (
     <div className="grid gap-14 lg:grid-cols-2 lg:gap-16">
       <div className="flex flex-col gap-6 lg:sticky lg:top-28 lg:self-start">
         <Label as="h2" id="titre-pipeline">Pipeline</Label>
-        <p className="text-[2rem] leading-[1.1] tracking-[-0.025em] md:text-[2.75rem]">Chaque lundi, sans intervention.</p>
+        <p className="text-[2rem] leading-[1.1] tracking-[-0.025em] md:text-[2.75rem]">{lang === 'en' ? 'Every Monday, hands-off.' : 'Chaque lundi, sans intervention.'}</p>
         <p className="max-w-md text-[15px] leading-relaxed text-muted">{intro}</p>
-        <Button href="/changements/" variant="secondary" className="w-fit">
-          Voir les changements
+        <Button href={href.changes(lang)} variant="secondary" className="w-fit">
+          {lang === 'en' ? 'See the changes' : 'Voir les changements'}
         </Button>
       </div>
       <ol className="flex flex-col">

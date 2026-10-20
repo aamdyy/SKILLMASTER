@@ -93,6 +93,28 @@ body {
   background: linear-gradient(#2a2a2a, #1d1d1d);
 }
 
+/* Fenêtre du teaser (première visite) : apparition douce, la page ne défile pas derrière. */
+html:has(.teaser-dialog[open]) {
+  overflow: hidden;
+}
+.teaser-dialog[open] {
+  animation: teaser-in 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.teaser-dialog[open]::backdrop {
+  animation: teaser-fade 280ms ease-out;
+}
+@keyframes teaser-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+}
+@keyframes teaser-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 /* Transition de la ligne d'un pack vers la fiche du skill (React <ViewTransition>). */
 ::view-transition-group(.morph) {
   animation-duration: 350ms;

@@ -1,9 +1,11 @@
 import { formatDate } from '@/lib/format'
+import type { Lang } from '@/lib/lang'
 import { getDernierTour } from '@/lib/library'
 import { Container } from './Container'
 
-export function Footer() {
+export function Footer({ lang }: { lang: Lang }) {
   const tour = getDernierTour()
+  const le = formatDate(tour.le, lang)
   return (
     <footer className="relative">
       <div aria-hidden className="section-rule" />
@@ -12,7 +14,7 @@ export function Footer() {
           <span aria-hidden className="size-2 bg-accent" />
           skillmaster
         </span>
-        <span>Bibliothèque du {formatDate(tour.le)} · mise à jour chaque lundi · lecture seule</span>
+        <span>{lang === 'en' ? `Library of ${le} · updated every Monday · read-only` : `Bibliothèque du ${le} · mise à jour chaque lundi · lecture seule`}</span>
       </Container>
     </footer>
   )
