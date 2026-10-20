@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { Teaser } from './Teaser'
 
@@ -11,7 +12,7 @@ const SEEN = 'sm-teaser-vu'
 // Échap ferme, le focus reste dedans, un clic à côté ferme). Ensuite, il ne reste qu'à sa place dans
 // la page. La mémoire « déjà vu » vit dans le navigateur du visiteur ; si elle est indisponible,
 // la fenêtre ne s'ouvre pas, pour ne pas revenir à chaque page.
-export function TeaserPopup({ src, poster, text }: { src: string; poster: string; text: Text }) {
+export function TeaserPopup({ src, poster, text, install }: { src: string; poster: string; text: Text; install: { href: string; label: string } }) {
   const dialog = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -40,11 +41,16 @@ export function TeaserPopup({ src, poster, text }: { src: string; poster: string
           <span className="label-code text-[12px]">
             <span aria-hidden>// </span>teaser · 27 s
           </span>
-          <form method="dialog">
-            <button className="btn-secondary inline-flex h-9 items-center gap-2 rounded-md px-3 font-mono text-[11px] uppercase tracking-[0.06em]">
-              {text.close} <span aria-hidden>✕</span>
-            </button>
-          </form>
+          <div className="flex items-center gap-2">
+            <Link href={install.href} className="btn-primary inline-flex h-9 items-center gap-2 rounded-md px-3 font-mono text-[11px] uppercase tracking-[0.06em]">
+              {install.label} <span aria-hidden>→</span>
+            </Link>
+            <form method="dialog">
+              <button autoFocus className="btn-secondary inline-flex h-9 items-center gap-2 rounded-md px-3 font-mono text-[11px] uppercase tracking-[0.06em]">
+                {text.close} <span aria-hidden>✕</span>
+              </button>
+            </form>
+          </div>
         </div>
         <div className="p-2 md:p-3">
           <Teaser src={src} poster={poster} text={text} />

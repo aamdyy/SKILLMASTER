@@ -1,4 +1,5 @@
 import { Button } from '@/components/Button'
+import { CodeBlock } from '@/components/CodeBlock'
 import { Construction } from '@/components/Construction'
 import { Container } from '@/components/Container'
 import { Frame } from '@/components/Frame'
@@ -28,8 +29,8 @@ const T = {
     tetes: (n: number) => `${n} têtes changent`,
     h1: 'Les bons skills Claude Code, pour chaque projet.',
     intro: 'Une bibliothèque triée par type de projet, notée par un juge et mise à jour toute seule chaque lundi.',
+    install: 'Installer SKILLMASTER',
     explore: 'Explorer les packs',
-    all: 'Toute la bibliothèque',
     lastRun: 'dernier tour',
     figures: { analyses: 'skills analysés', retenus: 'retenus dans les packs', packs: 'packs par type de projet' },
     teaser: { label: 'Teaser', title: 'SKILLMASTER en 27 secondes.', video: 'Teaser SKILLMASTER, 27 secondes, sans son', pause: 'Pause', play: 'Lecture', close: 'Fermer', dialog: 'Teaser SKILLMASTER',
@@ -37,6 +38,7 @@ const T = {
     construction: { label: 'Construction', title: 'Un pack, c’est des skills et un type de projet.', text: 'skill-master reconnaît le type de ton projet à ses fichiers, puis te propose la tête du pack qui lui correspond.' },
     packs: { title: 'Sept types de projet.', note: '8 skills en tête au plus, puis les ajouts' },
     pipelineIntro: 'Une GitHub Action fait tout le travail : elle collecte, juge, classe et publie. Rien ne s’installe sans l’accord d’Amdy.',
+    cta: { label: 'Installation', title: 'Deux commandes, et c’est prêt.', text: 'Le plugin te propose le bon pack à chaque nouveau projet ou prompt long, dans le terminal comme dans le panneau VS Code. Rien ne se charge sans ton accord.', guide: 'Le tuto complet' },
     steps: (stats: Stats, tour: DernierTour) => [
       { title: 'Collecte', text: `Le collecteur parcourt GitHub et retient ${formatInt(stats.analyses)} skills venus de ${formatInt(stats.depots)} dépôts actifs. Chacun est lu au commit épinglé, sans jamais être exécuté.` },
       { title: 'Jugement', text: `Claude Haiku note chaque skill nouveau ou modifié sur cinq critères. Un scan statique et le juge signalent les risques : ${formatInt(stats.alertes)} alertes, rangées par catégorie.` },
@@ -49,8 +51,8 @@ const T = {
     tetes: (n: number) => `${n} heads change`,
     h1: 'The right Claude Code skills, for every project.',
     intro: 'A library sorted by project type, rated by a judge and updated on its own every Monday.',
+    install: 'Install SKILLMASTER',
     explore: 'Explore the packs',
-    all: 'The whole library',
     lastRun: 'last run',
     figures: { analyses: 'skills analyzed', retenus: 'kept in the packs', packs: 'packs by project type' },
     teaser: { label: 'Teaser', title: 'SKILLMASTER in 27 seconds.', video: 'SKILLMASTER teaser, 27 seconds, no sound', pause: 'Pause', play: 'Play', close: 'Close', dialog: 'SKILLMASTER teaser',
@@ -58,6 +60,7 @@ const T = {
     construction: { label: 'Construction', title: 'A pack is skills plus a project type.', text: 'skill-master recognizes your project type from its files, then suggests the head of the matching pack.' },
     packs: { title: 'Seven project types.', note: 'up to 8 skills in the head, then the extras' },
     pipelineIntro: 'A GitHub Action does all the work: it collects, judges, ranks and publishes. Nothing gets installed without Amdy’s approval.',
+    cta: { label: 'Install', title: 'Two commands, and you’re set.', text: 'The plugin suggests the right pack for every new project or long prompt, in the terminal as well as in the VS Code panel. Nothing gets loaded without your approval.', guide: 'The full guide' },
     steps: (stats: Stats, tour: DernierTour) => [
       { title: 'Collection', text: `The collector crawls GitHub and keeps ${formatInt(stats.analyses, 'en')} skills from ${formatInt(stats.depots, 'en')} active repositories. Each one is read at its pinned commit and never executed.` },
       { title: 'Judging', text: `Claude Haiku rates every new or changed skill on five criteria. A static scan and the judge flag the risks: ${formatInt(stats.alertes, 'en')} alerts, sorted by category.` },
@@ -94,11 +97,11 @@ export function HomeView({ lang }: { lang: Lang }) {
           <h1 className="mt-8 max-w-3xl text-balance text-[2.5rem] leading-[1.05] tracking-[-0.03em] md:text-[4rem]">{t.h1}</h1>
           <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted md:text-[17px]">{t.intro}</p>
           <div className="mt-9 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
-            <Button href="#packs" icon="↓">
-              {t.explore}
+            <Button href={href.install(lang)} icon="→">
+              {t.install}
             </Button>
-            <Button href={href.skills(lang)} variant="secondary">
-              {t.all}
+            <Button href="#packs" variant="secondary" icon="↓">
+              {t.explore}
             </Button>
           </div>
         </Container>
@@ -129,7 +132,7 @@ export function HomeView({ lang }: { lang: Lang }) {
       </section>
 
       {/* À la première visite, le teaser s'ouvre aussi une fois en fenêtre. */}
-      <TeaserPopup src={TEASER.src} poster={TEASER.poster} text={{ ...teaserText, close: t.teaser.close, dialog: t.teaser.dialog, caption: t.teaser.caption }} />
+      <TeaserPopup src={TEASER.src} poster={TEASER.poster} install={{ href: href.install(lang), label: lang === 'en' ? 'Install' : 'Installer' }} text={{ ...teaserText, close: t.teaser.close, dialog: t.teaser.dialog, caption: t.teaser.caption }} />
       <Section labelledBy="titre-teaser">
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-5">
@@ -176,6 +179,22 @@ export function HomeView({ lang }: { lang: Lang }) {
           <ThisWeek tour={latest} lang={lang} />
         </Section>
       )}
+
+      <Section labelledBy="titre-installer">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="flex flex-col gap-6">
+            <Label as="h2" id="titre-installer">{t.cta.label}</Label>
+            <p className="text-[2rem] leading-[1.1] tracking-[-0.025em] md:text-[2.75rem]">{t.cta.title}</p>
+            <p className="max-w-md text-[15px] leading-relaxed text-muted">{t.cta.text}</p>
+          </div>
+          <div className="flex min-w-0 flex-col gap-5 lg:pt-14">
+            <CodeBlock lang={lang} lines={['claude plugin marketplace add aamdyy/SKILLMASTER', 'claude plugin install skillmaster@skillmaster']} />
+            <Button href={href.install(lang)} icon="→" className="w-fit">
+              {t.cta.guide}
+            </Button>
+          </div>
+        </div>
+      </Section>
     </>
   )
 }

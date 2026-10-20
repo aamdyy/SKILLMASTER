@@ -10,17 +10,15 @@ const NAV: Record<Lang, { href: string; label: string }[]> = {
     { href: href.packs('fr'), label: 'Packs' },
     { href: href.skills('fr'), label: 'Skills' },
     { href: href.changes('fr'), label: 'Changements' },
-    { href: href.install('fr'), label: 'Installation' },
   ],
   en: [
     { href: href.packs('en'), label: 'Packs' },
     { href: href.skills('en'), label: 'Skills' },
     { href: href.changes('en'), label: 'Changes' },
-    { href: href.install('en'), label: 'Install' },
   ],
 }
 
-// En-tête : logo, séparateur, navigation en majuscules mono ; langue et bouton de recherche à droite.
+// En-tête : logo, séparateur, navigation en majuscules mono ; langue et appel à installer à droite.
 // Mobile : logo, langue et bouton sur une ligne, navigation en dessous (elle défile si elle déborde).
 export function Header({ lang }: { lang: Lang }) {
   return (
@@ -39,8 +37,8 @@ export function Header({ lang }: { lang: Lang }) {
         </nav>
         <div className="flex items-center gap-2">
           <LangSwitch lang={lang} />
-          <Button href={href.skills(lang)} variant="secondary" className="h-10" lang={lang}>
-            {lang === 'en' ? 'Search' : 'Chercher'}
+          <Button href={href.install(lang)} icon="→" className="h-10" lang={lang}>
+            {lang === 'en' ? 'Install' : 'Installer'}
           </Button>
         </div>
       </Container>
