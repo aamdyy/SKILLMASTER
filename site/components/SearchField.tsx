@@ -11,7 +11,7 @@ export function SearchField({ className = '' }: { className?: string }) {
           id="recherche"
           name="q"
           type="search"
-          placeholder="nom ou dépôt d'un skill"
+          placeholder="nom ou dépôt"
           autoComplete="off"
           className="h-full min-w-0 flex-1 bg-transparent font-mono text-[15px] text-fg placeholder:text-muted focus:outline-none md:text-sm"
         />

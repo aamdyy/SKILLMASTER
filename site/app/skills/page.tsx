@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { Suspense } from 'react'
 import { Container } from '@/components/Container'
 import { Label } from '@/components/Label'
@@ -14,6 +13,10 @@ export const metadata: Metadata = {
 }
 
 const RISK_SHORT: Record<Gravite | 'aucun', string> = { aucun: 'aucun', info: 'info', moyen: 'moyen', eleve: 'élevé', critique: 'critique' }
+
+// Applique ?q= et ?type= pendant le chargement, sans attendre React (même logique que SkillsFilter,
+// qui reprend la main une fois hydraté).
+const earlyFilter = `(function(){var p=new URLSearchParams(location.search),q=(p.get('q')||''),t=p.get('type')||'tous';if(!q&&t==='tous')return;var n=function(s){return s.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'')},w=n(q).split(/\\s+/).filter(Boolean);document.querySelectorAll('#liste-skills [data-skill-row]').forEach(function(r){var txt=n(r.textContent||'');r.hidden=!((t==='tous'||r.getAttribute('data-type')===t)&&w.every(function(x){return txt.indexOf(x)>=0}))})})()`
 
 export default function SkillsPage() {
   const trusted = getTrustedIds()
@@ -47,7 +50,8 @@ export default function SkillsPage() {
               const risk = skill.risqueMax ?? 'aucun'
               return (
                 <li key={skill.id} className="srow" data-skill-row data-type={type}>
-                  <Link href={skillHref(skill)}>
+                  {/* Lien simple, pas <Link> : 1 500 composants client rendraient l'hydratation (et le filtre) lente. */}
+                  <a href={skillHref(skill)}>
                     <div>
                       <b>{skill.nom}</b>
                       <i>
@@ -63,11 +67,12 @@ export default function SkillsPage() {
                         <span aria-hidden>● </span>risque {RISK_SHORT[risk]}
                       </span>
                     </span>
-                  </Link>
+                  </a>
                 </li>
               )
             })}
           </ul>
+          <script dangerouslySetInnerHTML={{ __html: earlyFilter }} />
         </Container>
       </section>
     </>

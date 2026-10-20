@@ -181,6 +181,7 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
     - étiquettes de section façon code (`// PACKS`), navigation et boutons en majuscules mono ;
     - titres en Geist Sans droite, données et identifiants en Geist Mono ;
     - bouton principal en métal clair, secondaire sombre. L'accent vert ne sert qu'aux étiquettes, au logo et au focus.
+  - **Visuel du hero** : les deux mains de *La Création d'Adam* (Michel-Ange, domaine public), dans notre propre rendu en trame, losanges et points. Elles sont calculées par `site/scripts/hands.mjs` à partir de la fresque, qui reste hors du repo. Amdy a choisi ce visuel en connaissant sa proximité avec la référence.
   - **Contenu** :
     - la pastille d'info en haut du hero ;
     - la construction « skill + type de projet = pack » ;

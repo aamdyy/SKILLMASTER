@@ -13,6 +13,9 @@ export function SkillsFilter({ types, total, listId }: { types: TypeOption[]; to
   const [query, setQuery] = useState('')
   const [type, setType] = useState('tous')
   const [shown, setShown] = useState(total)
+  // Tant que l'adresse n'est pas lue, on ne touche pas aux lignes : le script de la page les a
+  // peut-être déjà filtrées pendant le chargement.
+  const [ready, setReady] = useState(false)
   // Texte cherchable de chaque ligne (nom, dépôt, résumé), lu une fois dans le HTML rendu.
   const rows = useRef<{ element: HTMLElement; text: string }[]>([])
 
@@ -21,9 +24,11 @@ export function SkillsFilter({ types, total, listId }: { types: TypeOption[]; to
     const params = new URLSearchParams(window.location.search)
     setQuery(params.get('q') ?? '')
     setType(params.get('type') ?? 'tous')
+    setReady(true)
   }, [listId])
 
   useEffect(() => {
+    if (!ready) return
     const words = normalize(query).split(/\s+/).filter(Boolean)
     let count = 0
     for (const { element, text } of rows.current) {
@@ -37,7 +42,7 @@ export function SkillsFilter({ types, total, listId }: { types: TypeOption[]; to
     if (type !== 'tous') params.set('type', type)
     const search = params.toString()
     window.history.replaceState(null, '', search ? `?${search}` : window.location.pathname)
-  }, [query, type])
+  }, [query, type, ready])
 
   return (
     <div className="flex flex-col gap-5">

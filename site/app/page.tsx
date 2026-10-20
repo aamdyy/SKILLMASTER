@@ -2,6 +2,7 @@ import { Button } from '@/components/Button'
 import { Construction } from '@/components/Construction'
 import { Container } from '@/components/Container'
 import { Frame } from '@/components/Frame'
+import { Hands } from '@/components/Hands'
 import { InfoPill } from '@/components/InfoPill'
 import { Label } from '@/components/Label'
 import { CountUp } from '@/components/motion/CountUp'
@@ -49,7 +50,7 @@ export default function HomePage() {
   return (
     <>
       <section className="relative">
-        <Container className="flex flex-col items-center pb-20 pt-14 text-center md:pb-24 md:pt-24">
+        <Container className="flex flex-col items-center pb-0 pt-14 text-center md:pt-24">
           <InfoPill href="/changements/">
             Tour du {formatDate(tour.le)}
             {chiffres?.tetes ? <span className="hidden sm:inline">{` · ${chiffres.tetes} têtes changent`}</span> : null}
@@ -68,7 +69,13 @@ export default function HomePage() {
               Toute la bibliothèque
             </Button>
           </div>
-          <SearchField className="mt-10 max-w-xl text-left" />
+        </Container>
+        {/* Les deux mains, juste sous les boutons, d'un bord à l'autre. */}
+        <div className="-mt-6 md:-mt-10">
+          <Hands />
+        </div>
+        <Container className="flex justify-center pb-14 pt-4 md:pb-20">
+          <SearchField className="max-w-xl" />
         </Container>
         <Container className="pb-20 md:pb-28">
           <Frame legend="dernier tour" className="bg-panel/60">
