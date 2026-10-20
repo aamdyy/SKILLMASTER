@@ -1,5 +1,7 @@
-// Le panneau B (tableau compact), en lignes de texte prêtes à dessiner, pour une largeur donnée.
-//   vue « pack »  : une ligne par skill (numéro, nom coupé à 22, ce qu'il améliore), légende, ajouts, conseil ;
+// Le panneau B (tableau compact), en lignes de texte prêtes à dessiner, sur toute la largeur du panneau.
+//   vue « pack »  : une ligne par skill (numéro, nom coupé à 22, ce qu'il améliore, qui continue sous sa
+//                   colonne s'il ne tient pas), légende, ajouts, conseil ;
+//                   sous 70 colonnes, deux lignes par skill (le nom, puis ce qu'il améliore, en entier) ;
 //   vue « choix » : chaque skill avec son resume_fr complet, pour « Choisir moi-même » ;
 //   vue « conflit » : les deux packs possibles quand le prompt et le dossier diffèrent.
 import type { SkillmasterItem, SkillmasterProposition } from '../../types'
@@ -9,9 +11,32 @@ export type Line = { text: string; dim?: boolean; bold?: boolean; wrap?: boolean
 
 const NAME = 22
 const GAP = '   '
+const TWO_LINES_BELOW = 70
 
 export const cut = (text: string, room: number) => (room <= 0 ? '' : text.length <= room ? text : `${text.slice(0, Math.max(0, room - 1))}…`)
 export const num = (n: number) => String(n).padStart(2, '0')
+
+// Coupe un texte en lignes de `room` caractères au plus, entre les mots (un mot trop long est scindé).
+export function wrapWords(text: string, room: number) {
+  const lines: string[] = []
+  let line = ''
+  for (let word of text.split(/\s+/).filter(Boolean)) {
+    while (word.length > room) {
+      if (line) lines.push(line)
+      lines.push(word.slice(0, room))
+      word = word.slice(room)
+      line = ''
+    }
+    if (!line) line = word
+    else if (line.length + 1 + word.length <= room) line += ` ${word}`
+    else {
+      lines.push(line)
+      line = word
+    }
+  }
+  if (line) lines.push(line)
+  return lines
+}
 
 // Un titre à gauche, les indices calés à droite s'il reste de la place.
 function titled(left: string, indices: string[], width: number): Line {
@@ -22,9 +47,14 @@ function titled(left: string, indices: string[], width: number): Line {
 
 const header = (p: SkillmasterProposition, width: number) => titled(`// SKILLMASTER · ${p.libelle.toUpperCase()}`, p.indices, width)
 
-const row = (item: SkillmasterItem, width: number) => {
-  const room = width - 3 - NAME - GAP.length
-  return { text: `${num(item.n)} ${cut(item.nom, NAME).padEnd(NAME)}${GAP}${cut(gain(item.resume), room)}` }
+function rows(item: SkillmasterItem, width: number, isNarrow: boolean): Line[] {
+  if (isNarrow) {
+    const better = gain(item.resume)
+    return [{ text: cut(`${num(item.n)} ${item.nom}`, width) }, ...(better ? [{ text: better, dim: true, wrap: true, indent: 3 }] : [])]
+  }
+  const lead = `${num(item.n)} ${cut(item.nom, NAME).padEnd(NAME)}${GAP}`
+  const [first = '', ...rest] = wrapWords(gain(item.resume), Math.max(10, width - lead.length))
+  return [{ text: `${lead}${first}` }, ...rest.map(text => ({ text: `${' '.repeat(lead.length)}${text}` }))]
 }
 
 function legend(items: SkillmasterItem[]) {
@@ -47,14 +77,17 @@ function conseil(p: SkillmasterProposition, width: number): Line[] {
   ]
 }
 
-export function panelLines(p: SkillmasterProposition, width: number): Line[] {
+// `columns` : la largeur du panneau (bodyColumns), toute utilisée.
+export function panelLines(p: SkillmasterProposition, columns: number): Line[] {
+  const width = Math.max(30, columns)
+  const isNarrow = columns < TWO_LINES_BELOW
   const rule: Line = { text: '─'.repeat(width), dim: true }
   if (p.vue === 'conflit' && p.conflit) {
     const lines: Line[] = [{ text: cut(`// SKILLMASTER · ${p.conflit.length} PACKS POSSIBLES`, width), bold: true }, rule]
     for (const candidat of p.conflit) {
       const shown = candidat.tete.slice(0, 5)
       lines.push(titled(`${candidat.origine === 'prompt' ? 'TON PROMPT' : 'LE DOSSIER'} · ${candidat.libelle.toUpperCase()}`, candidat.indices, width))
-      lines.push(...shown.map(item => row(item, width)))
+      lines.push(...shown.flatMap(item => rows(item, width, isNarrow)))
       if (candidat.tete.length > shown.length) lines.push({ text: `+ ${candidat.tete.length - shown.length} autres en tête`, dim: true })
       lines.push(rule)
     }
@@ -76,7 +109,7 @@ export function panelLines(p: SkillmasterProposition, width: number): Line[] {
     }
     lines.push(rule, { text: '◆ épinglé · ✓ éditeur de confiance · ● risque élevé', dim: true, wrap: true })
   } else {
-    for (const item of p.tete) lines.push(row(item, width))
+    for (const item of p.tete) lines.push(...rows(item, width, isNarrow))
     const marks = legend(p.tete)
     if (marks || p.ajouts.length) lines.push(rule)
     if (marks) lines.push({ text: cut(marks, width), dim: true })

@@ -1,6 +1,6 @@
 {
   "name": "skillmaster",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "SKILLMASTER : propose les skills du pack de ton projet et le réglage modèle/effort, puis les charge pour la session sur accord. Commande /sm (check, install, clean, status).",
   "author": { "name": "Amdy Bouviala" },
   "types": "./types/index.d.ts",

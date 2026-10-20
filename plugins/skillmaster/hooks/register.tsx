@@ -836,10 +836,9 @@ export const register: Register = (on, raw) => {
     const { Box, Text } = $.ui.resolve(e)
     const p = await read($, proposition)
     if (!p) return <Text dimColor>SKILLMASTER : rien à proposer pour l'instant (/sm check).</Text>
-    const width = Math.max(30, Math.min(60, e.props.bodyColumns))
     return (
       <Box flexDirection="column">
-        {panelLines(p, width).map(line => {
+        {panelLines(p, e.props.bodyColumns).map(line => {
           const text = (
             <Text mono dimColor={line.dim} bold={line.bold} wrap={line.wrap ? 'wrap' : 'truncate-end'}>
               {line.text}

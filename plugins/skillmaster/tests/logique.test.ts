@@ -134,7 +134,7 @@ test('conseil : règle choisie, puis les commandes depuis le réglage actuel', (
   expect(advise(MODEL_RULES, MODEL_RULES.regles[3]!, opusOn).commandes).toEqual(['/effort ultracode off'])
 })
 
-test('panneau B : 60 colonnes, nom coupé à 22, ce que le skill améliore, légende et ajouts', () => {
+test('panneau B : toute la largeur, nom coupé à 22, ce que le skill améliore sans coupure, légende et ajouts', () => {
   const p: SkillmasterProposition = {
     racine: '/p',
     types: ['site-web'],
@@ -152,16 +152,37 @@ test('panneau B : 60 colonnes, nom coupé à 22, ce que le skill améliore, lég
     etat: [],
     pret: 'ton prompt est de retour dans ta saisie',
   }
-  const lines = panelLines(p, 60).map(line => line.text)
-  expect(lines[0]).toBe(`// SKILLMASTER · SITE WEB${' '.repeat(20)}next · tailwind`)
-  expect(lines[2]).toBe('01 bencium-controlled-ux…   évite que Claude invente le des…')
+  const lines = panelLines(p, 80).map(line => line.text)
+  expect(lines[0]).toBe(`// SKILLMASTER · SITE WEB${' '.repeat(40)}next · tailwind`)
+  expect(lines[2]).toBe('01 bencium-controlled-ux…   évite que Claude invente le design')
   expect(lines[3]).toBe('02 modern-web-guidance      évite les API obsolètes')
   expect(lines).toContain('◆ épinglé 01 · ✓ confiance 02 · ● risque élevé 02')
   expect(lines).toContain('+ 1 ajout : web-design-guidelines')
   expect(lines).toContain('OPUS 5.5 · HIGH · ultracode off')
   expect(lines).toContain('pour le suivre, tape /effort high')
   expect(lines).toContain('ton prompt est de retour dans ta saisie')
-  for (const line of panelLines(p, 60)) if (!line.wrap) expect(line.text.length).toBeLessThanOrEqual(60)
+  for (const line of panelLines(p, 80)) if (!line.wrap) expect(line.text.length).toBeLessThanOrEqual(80)
+
+  // Un résumé trop long pour la largeur continue sous sa colonne, sans « … ».
+  const long = { ...p.tete[0]!, n: 1, resume: 'audite → repère contrastes, focus clavier et cibles tactiles trop petites' }
+  const wrapped = panelLines({ ...p, tete: [long] }, 70).map(line => line.text)
+  expect(wrapped.slice(2, 4)).toEqual([
+    '01 bencium-controlled-ux…   repère contrastes, focus clavier et cibles',
+    `${' '.repeat(28)}tactiles trop petites`,
+  ])
+
+  // Sous 70 colonnes : deux lignes par skill, le nom puis ce qu'il améliore, en entier et en retrait.
+  const narrow = panelLines(p, 49)
+  expect(narrow.map(line => line.text).slice(2, 6)).toEqual([
+    '01 bencium-controlled-ux-designer',
+    'évite que Claude invente le design',
+    '02 modern-web-guidance',
+    'évite les API obsolètes',
+  ])
+  expect(narrow[3]).toMatchObject({ indent: 3, wrap: true, dim: true })
+  for (const line of narrow) if (!line.wrap) expect(line.text.length).toBeLessThanOrEqual(49)
+  expect(panelLines(p, 69).map(line => line.text)).toContain('01 bencium-controlled-ux-designer')
+  expect(panelLines(p, 70).map(line => line.text)).toContain(lines[2])
 
   const choix = panelLines({ ...p, vue: 'choix' }, 60).map(line => line.text)
   expect(choix).toContain('te demande avant chaque choix visuel → évite que Claude invente le design')

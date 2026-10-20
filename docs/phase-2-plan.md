@@ -101,6 +101,9 @@ plugins/skillmaster/
 
 - **Conflit prompt / dossier** : « site vitrine » dans SKILLMASTER proposait le pack outillage-claude-code. Désormais, quand le prompt désigne un type que le dossier n'a pas, le panneau montre les deux packs et Amdy choisit (prompt, dossier ou les deux).
 - **Plus de pré-remplissage de `/model` ni `/effort`** : le panneau affiche seulement le conseil.
+- **Résumés jamais coupés** (plugin 0.2.2) :
+  - en dessous de 70 colonnes (dont le panneau VS Code), chaque skill tient sur deux lignes : le nom, puis ce qu'il améliore, en entier et en retrait ;
+  - au-delà, le panneau utilise toute sa largeur, et un résumé trop long continue sous sa colonne.
 
 ## Tests prévus (faits le 2026-10-20)
 

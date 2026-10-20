@@ -251,17 +251,25 @@ test('le panneau B se dessine sur le terminal et dans VS Code', async ($, on) =>
   const { clock } = world(on, [ESC])
   await start($, clock)
   await $.prompt.submit(typed(LONG))
-  for (const surface of ['terminal', 'vscode'] as const) {
-    const ui = await $.ui.mount({
+  const mount = (surface: 'terminal' | 'vscode', bodyColumns: number) =>
+    $.ui.mount({
       plugin: 'skillmaster',
       surface,
       component: 'Pane',
       requestId: 'skillmaster',
-      props: { title: 'SKILLMASTER', isFocused: false, bodyColumns: 60, placement: 'inline', scroll: { offset: 0, bodyRows: 20 }, view: {} },
+      props: { title: 'SKILLMASTER', isFocused: false, bodyColumns, placement: 'inline', scroll: { offset: 0, bodyRows: 20 }, view: {} },
     })
-    expect((await ui.find({ type: 'Text', text: /SKILLMASTER · SITE WEB/ }))?.text).toContain('next')
-    expect((await ui.find({ type: 'Text', text: /^01 a / }))?.text).toContain('améliore a')
-    expect((await ui.find({ type: 'Text', text: /OPUS 5\.5 · MEDIUM/ }))?.text).toBe('OPUS 5.5 · MEDIUM · ultracode off')
-    await ui.unmount()
+  for (const surface of ['terminal', 'vscode'] as const) {
+    const wide = await mount(surface, 100)
+    expect((await wide.find({ type: 'Text', text: /SKILLMASTER · SITE WEB/ }))?.text).toContain('next')
+    expect((await wide.find({ type: 'Text', text: /^01 a / }))?.text).toContain('améliore a')
+    expect((await wide.find({ type: 'Text', text: /OPUS 5\.5 · MEDIUM/ }))?.text).toBe('OPUS 5.5 · MEDIUM · ultracode off')
+    await wide.unmount()
+
+    // Le panneau VS Code fait 60 colonnes : deux lignes par skill.
+    const narrow = await mount(surface, 60)
+    expect((await narrow.find({ type: 'Text', text: /^01 a$/ }))?.text).toBe('01 a')
+    expect((await narrow.find({ type: 'Text', text: /^améliore a$/ }))?.text).toBe('améliore a')
+    await narrow.unmount()
   }
 })
