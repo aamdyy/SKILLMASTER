@@ -1,10 +1,10 @@
 {
   "type": "outillage-claude-code",
-  "genere_le": "2026-10-19T17:35:59.381Z",
+  "genere_le": "2026-10-20T13:35:05.464Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
-  "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
+  "regles": "finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "tenants_de": "tour précédent",
   "reclasse": true,
   "finalistes": [
@@ -24,17 +24,18 @@
     "expo/skills/plugins/expo/skills/expo-skill-feedback",
     "gaasher/agent-loop-skills/loops/optimize-loop",
     "googlecloudplatform/data-agent-kit-plugin/skills/bigtable-basics",
-    "mattpocock/skills/skills/engineering/code-review"
+    "mattpocock/skills/skills/engineering/code-review",
+    "sickn33/agentic-awesome-skills/skills/aas-compose-stack"
   ],
   "changements": [],
   "ecartes": [
     {
       "nom": "bigtable-basics",
-      "raison": "Bigtable est un service de données cloud Google, absent de sa stack."
+      "raison": "Bigtable est une base cloud Google, hors de sa stack."
     },
     {
       "nom": "confluent-skill-creator",
-      "raison": "Spécifique à Confluent/Kafka/Flink, techno absente de sa stack."
+      "raison": "Spécifique à Confluent/Kafka, absent de sa stack."
     },
     {
       "nom": "create-toolset",
@@ -44,7 +45,7 @@
   "stabilite": {
     "tirages": 3,
     "meme_composition_sans_tenants": true,
-    "raison_tirage_1": "Les skills génériques de création de skills et d'API Claude, plus la garde-fou de qualité, servent directement son outillage Claude Code, tandis que les skills Unreal, Confluent et Bigtable sont hors stack."
+    "raison_tirage_1": "Les tenants généralistes (skill-creator, garde-fous de qualité, agents, MCP) servent directement son outillage Claude Code, et aucun challenger non écarté ne les dépasse nettement."
   },
   "recommandes": [
     {
@@ -180,19 +181,6 @@
       "raison": "Déclenchement précis et contenu technique concret (validation de chemins Windows, DNS rebinding, redirections). Note réduite : code Python sans annexes, certaines phrases denses et un passage sur la vérification sans commandes."
     },
     {
-      "id": "confident-ai/deepeval/skills/deepeval",
-      "nom": "deepeval",
-      "repo": "confident-ai/deepeval",
-      "resume_fr": "guide une évaluation pytest d'agents IA → repère les échecs et améliore leur fiabilité",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Skill officiel Confident AI, ciblé et précis : commandes exactes, règles claires (deepeval test run, metrics.py). Annexes metrics, pytest, traces et templates absentes ; renvoie à des skills sœurs."
-    },
-    {
       "id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcpb",
       "nom": "build-mcpb",
       "repo": "anthropics/claude-plugins-official",
@@ -204,6 +192,19 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Skill officiel, ciblé sur MCPB, avec pièges réels (pas d'auto-préfixe d'env, pas de sandbox, validation de chemins), commandes exactes et déclencheurs clairs. Annexes tronquées à la fin."
+    },
+    {
+      "id": "confident-ai/deepeval/skills/deepeval",
+      "nom": "deepeval",
+      "repo": "confident-ai/deepeval",
+      "resume_fr": "guide une évaluation pytest d'agents IA → repère les échecs et améliore leur fiabilité",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Skill officiel Confident AI, ciblé et précis : commandes exactes, règles claires (deepeval test run, metrics.py). Annexes metrics, pytest, traces et templates absentes ; renvoie à des skills sœurs."
     },
     {
       "id": "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
@@ -230,6 +231,19 @@
       "modele": "haiku",
       "risque_max": "eleve",
       "raison": "Déclenchement précis et commandes exactes. Mais utilité limitée pour construire, périmètre mêlant retours et télémétrie, et appel répété à un paquet npm non épinglé (@latest) qui envoie des données à un tiers."
+    },
+    {
+      "id": "sickn33/agentic-awesome-skills/skills/aas-compose-stack",
+      "nom": "aas-compose-stack",
+      "repo": "sickn33/agentic-awesome-skills",
+      "resume_fr": "compose une pile de skills AAS validée → garde une trace vérifiable sans installation automatique",
+      "note": 5,
+      "pertinence": 6,
+      "score_pack": 5.4,
+      "note_juge": 5,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement limité à une demande explicite, mais workflow spécifique à un outil MCP interne. Noms d'outils cités sans paramètres exacts ; « the client » et « Core » restent flous. Runtime absent, pas de commandes vérifiables."
     }
   ]
 }

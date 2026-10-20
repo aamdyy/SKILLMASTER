@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-19T17:35:59.946Z",
+  "genere_le": "2026-10-20T13:35:05.845Z",
   "type": "outillage-claude-code",
   "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -39,7 +39,7 @@
       "repo": "anthropics/claude-code",
       "chemin_skill": "plugins/plugin-dev/skills/agent-development",
       "skill_md": "plugins/plugin-dev/skills/agent-development/SKILL.md",
-      "sha_epingle": "ef7bfdca55d906929fe6b782025b93758c325074",
+      "sha_epingle": "a6e289a2e772a17b3614a9ef43303003de5cd887",
       "resume_fr": "te guide pour écrire des subagents → déclenchement précis, prompts plus solides",
       "note": 9,
       "editeur_confiance": true,
@@ -83,7 +83,7 @@
       "repo": "anthropics/claude-code",
       "chemin_skill": "plugins/plugin-dev/skills/mcp-integration",
       "skill_md": "plugins/plugin-dev/skills/mcp-integration/SKILL.md",
-      "sha_epingle": "ef7bfdca55d906929fe6b782025b93758c325074",
+      "sha_epingle": "a6e289a2e772a17b3614a9ef43303003de5cd887",
       "resume_fr": "explique comment brancher des serveurs MCP dans un plugin → relie les services externes proprement",
       "note": 9,
       "editeur_confiance": true,
@@ -165,7 +165,7 @@
       "repo": "anthropics/claude-code",
       "chemin_skill": "plugins/hookify/skills/writing-rules",
       "skill_md": "plugins/hookify/skills/writing-rules/SKILL.md",
-      "sha_epingle": "ef7bfdca55d906929fe6b782025b93758c325074",
+      "sha_epingle": "a6e289a2e772a17b3614a9ef43303003de5cd887",
       "resume_fr": "t'aide à écrire des règles hookify pour signaler les commandes risquées → moins d'accidents en session",
       "note": 9,
       "editeur_confiance": true,
@@ -236,10 +236,25 @@
       "repo": "affaan-m/ECC",
       "chemin_skill": "skills/agent-security-hardening",
       "skill_md": "skills/agent-security-hardening/SKILL.md",
-      "sha_epingle": "76aaa77df6adc5b889e689007bf99b9a4f74af34",
+      "sha_epingle": "6f1881aeafa3c48f7b603cc4be4b2e4e70daad59",
       "resume_fr": "valide identifiants, chemins et URLs avant chaque action d'agent → bloque fuites et écritures hors périmètre",
       "note": 9,
       "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcpb",
+      "nom": "build-mcpb",
+      "place": "ajout",
+      "repo": "anthropics/claude-plugins-official",
+      "chemin_skill": "plugins/mcp-server-dev/skills/build-mcpb",
+      "skill_md": "plugins/mcp-server-dev/skills/build-mcpb/SKILL.md",
+      "sha_epingle": "a0b04d9ddccaabe1976645f68b0eda50f74e7022",
+      "resume_fr": "empaquette un serveur MCP local avec son runtime → installable sans Node ni Python",
+      "note": 10,
+      "editeur_confiance": true,
       "risque_max": null,
       "risque_max_projet": null,
       "risques": []
@@ -279,21 +294,6 @@
       ]
     },
     {
-      "id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcpb",
-      "nom": "build-mcpb",
-      "place": "ajout",
-      "repo": "anthropics/claude-plugins-official",
-      "chemin_skill": "plugins/mcp-server-dev/skills/build-mcpb",
-      "skill_md": "plugins/mcp-server-dev/skills/build-mcpb/SKILL.md",
-      "sha_epingle": "ea10b213686c90bb1984b2016937310e05336cf3",
-      "resume_fr": "empaquette un serveur MCP local avec son runtime → installable sans Node ni Python",
-      "note": 10,
-      "editeur_confiance": true,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
       "id": "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
       "nom": "cookbook-audit",
       "place": "ajout",
@@ -322,7 +322,7 @@
       "repo": "expo/skills",
       "chemin_skill": "plugins/expo/skills/expo-skill-feedback",
       "skill_md": "plugins/expo/skills/expo-skill-feedback/SKILL.md",
-      "sha_epingle": "7ddc1f5796996e5c7efe2fc3fa9168eb24e8dac1",
+      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
       "resume_fr": "envoie un retour ciblé sur un skill Expo → aide Expo à corriger ce qui bloque",
       "note": 7,
       "editeur_confiance": true,
@@ -360,6 +360,21 @@
           "code": "Soumission proactive : la section finale demande à l'agent d'envoyer des retours de sa propre initiative, sans approbation explicite de l'utilisateur."
         }
       ]
+    },
+    {
+      "id": "sickn33/agentic-awesome-skills/skills/aas-compose-stack",
+      "nom": "aas-compose-stack",
+      "place": "ajout",
+      "repo": "sickn33/agentic-awesome-skills",
+      "chemin_skill": "skills/aas-compose-stack",
+      "skill_md": "skills/aas-compose-stack/SKILL.md",
+      "sha_epingle": "c808e6e480696d243e0668ebbc3499bb8e7e10a4",
+      "resume_fr": "compose une pile de skills AAS validée → garde une trace vérifiable sans installation automatique",
+      "note": 5,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     }
   ]
 }

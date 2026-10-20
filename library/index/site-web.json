@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-19T17:35:59.947Z",
+  "genere_le": "2026-10-20T13:35:05.846Z",
   "type": "site-web",
   "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -26,9 +26,9 @@
       "repo": "GoogleChrome/modern-web-guidance",
       "chemin_skill": "skills/modern-web-guidance",
       "skill_md": "skills/modern-web-guidance/SKILL.md",
-      "sha_epingle": "b31dc0a43ff5d19bcf386a3476a216f3b39a6f55",
-      "resume_fr": "cherche les pratiques web actuelles avant HTML, CSS et JS → évite les API obsolètes",
-      "note": 9,
+      "sha_epingle": "65e7edd67e77420eaf02c5df00fdc0521417d809",
+      "resume_fr": "consulte les guides web modernes avant tout code front → évite les patterns obsolètes",
+      "note": 7,
       "editeur_confiance": false,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
@@ -37,7 +37,7 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "La commande « npx -y modern-web-guidance@latest » exécute un paquet npm non épinglé : du code distant qui peut changer à chaque appel, avec accès réseau."
+          "code": "Les commandes `npx -y modern-web-guidance@latest` exécutent un paquet npm distant non épinglé à chaque appel, risque de chaîne d'approvisionnement."
         }
       ]
     },
@@ -63,7 +63,7 @@
       "repo": "ChromeDevTools/chrome-devtools-mcp",
       "chemin_skill": "skills/a11y-debugging",
       "skill_md": "skills/a11y-debugging/SKILL.md",
-      "sha_epingle": "f874aeb96ae58587c509d3da4707bcba1a4074b5",
+      "sha_epingle": "384d9aad349a2e19940a5f93aaac6b2e8312bc91",
       "resume_fr": "audite l'accessibilité web → repère contrastes, focus clavier et cibles tactiles trop petites",
       "note": 9,
       "editeur_confiance": false,
@@ -346,7 +346,7 @@
       "repo": "plugin87/ux-ui-agent-skills",
       "chemin_skill": ".claude/skills/token-build",
       "skill_md": ".claude/skills/token-build/SKILL.md",
-      "sha_epingle": "d271880757842ea3bee70d958cab80da5621eb81",
+      "sha_epingle": "55156b40e3a9aafa52448bde76cdcb5147b958db",
       "resume_fr": "génère les thèmes web et mobile depuis tes tokens → un design identique partout",
       "note": 7,
       "editeur_confiance": false,
@@ -361,7 +361,7 @@
       "repo": "gmickel/flow-next",
       "chemin_skill": "plugins/flow-next/skills/flow-next-drive",
       "skill_md": "plugins/flow-next/skills/flow-next-drive/SKILL.md",
-      "sha_epingle": "8376ef751cb94429d58843565a1ba119e4e26b59",
+      "sha_epingle": "759a80561a82c04a62cc872b3f8a75b5498b4590",
       "resume_fr": "pilote l'interface comme un vrai utilisateur → repère les erreurs console et requêtes échouées",
       "note": 5,
       "editeur_confiance": false,

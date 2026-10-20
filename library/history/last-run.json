@@ -1,0 +1,15 @@
+{
+  "le": "2026-10-20T13:35:05.513Z",
+  "duree_min": 4,
+  "skills": 1500,
+  "cout": {
+    "total": 0.44593109000000003,
+    "haiku": 0.10939393500000003,
+    "resumes": 0.045648955000000026,
+    "classements": 0.2866853,
+    "alertes": 0.0042029
+  },
+  "tetes_changees": 2,
+  "nouveaux": 35,
+  "archives": 0
+}

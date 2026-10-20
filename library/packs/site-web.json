@@ -1,12 +1,12 @@
 {
   "type": "site-web",
-  "genere_le": "2026-10-19T17:34:23.670Z",
+  "genere_le": "2026-10-20T13:33:23.304Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
-  "regles": "finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
+  "regles": "finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "tenants_de": "tour précédent",
-  "reclasse": true,
+  "reclasse": false,
   "finalistes": [
     "agricidaniel/claude-seo/skills/seo-drift",
     "athevon/genjutsu/skills/paint",
@@ -32,16 +32,10 @@
     "vercel-labs/agent-skills/skills/react-best-practices"
   ],
   "changements": [],
-  "ecartes": [
-    {
-      "nom": "elastic-beanstalk",
-      "raison": "Déploiement AWS, hors de sa stack (Cloudflare)."
-    }
-  ],
+  "ecartes": [],
   "stabilite": {
-    "tirages": 3,
-    "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "Les bonnes pratiques React/Next.js de Vercel et le guide web moderne de Chrome couvrent le cœur d'un site Next.js, suivis de l'accessibilité et du QA mobile."
+    "tirages": 0,
+    "note": "classement Sonnet indisponible pour ce pack"
   },
   "recommandes": [
     {
@@ -62,14 +56,14 @@
       "id": "googlechrome/modern-web-guidance/skills/modern-web-guidance",
       "nom": "modern-web-guidance",
       "repo": "GoogleChrome/modern-web-guidance",
-      "resume_fr": "cherche les pratiques web actuelles avant HTML, CSS et JS → évite les API obsolètes",
-      "note": 9,
+      "resume_fr": "consulte les guides web modernes avant tout code front → évite les patterns obsolètes",
+      "note": 7,
       "pertinence": 0,
-      "score_pack": 5.4,
-      "note_juge": 9,
+      "score_pack": 4.2,
+      "note_juge": 7,
       "modele": "haiku",
       "risque_max": "eleve",
-      "raison": "Guides Google ciblés, Apache-2.0, à jour (Baseline, fallbacks explicites), déclenchement clair. Retrait pour ton impératif, annexes partielles et npx @latest non épinglé."
+      "raison": "Guides de mainteneur Google, API récentes et pièges réels, commandes exactes. Déclenchement très large (\"MANDATORY\", \"etc.\"), périmètre fourre-tout, ton impératif et annexe language-model tronquée."
     },
     {
       "id": "vercel-labs/agent-skills/skills/react-best-practices",

@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-19T17:35:59.948Z",
+  "genere_le": "2026-10-20T13:35:05.847Z",
   "type": "video",
   "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -110,7 +110,7 @@
       "repo": "heygen-com/hyperframes",
       "chemin_skill": "skills/product-launch-video",
       "skill_md": "skills/product-launch-video/SKILL.md",
-      "sha_epingle": "9ad12da18a15a3a980163fb0fd05e37a9a42f1db",
+      "sha_epingle": "30f514b13a00953ef9e23c64de009a122236d12f",
       "resume_fr": "transforme une URL produit en vidéo de lancement → promo prête sans montage manuel",
       "note": 9,
       "editeur_confiance": false,
@@ -181,57 +181,9 @@
       "risques": []
     },
     {
-      "id": "jimliu/baoyu-skills/skills/baoyu-youtube-transcript",
-      "nom": "baoyu-youtube-transcript",
-      "place": "recommande",
-      "repo": "JimLiu/baoyu-skills",
-      "chemin_skill": "skills/baoyu-youtube-transcript",
-      "skill_md": "skills/baoyu-youtube-transcript/SKILL.md",
-      "sha_epingle": "1567581c26ec29f4216c6e6835415bf30343b0e3",
-      "resume_fr": "extrait transcriptions et couvertures YouTube → fournit le texte sans copier-coller",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "scripts/main.ts"
-        },
-        {
-          "gravite": "info",
-          "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
-          "detail": "scripts/main.test.ts, scripts/shared.ts, scripts/storage.ts, scripts/transcript.ts, scripts/types.ts"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Le SKILL demande à l'agent d'installer yt-dlp de sa propre initiative, sans demander à l'utilisateur."
-        },
-        {
-          "gravite": "moyen",
-          "source": "juge",
-          "categorie": "donnees",
-          "code": "Option YOUTUBE_TRANSCRIPT_COOKIES_FROM_BROWSER : les cookies de session du navigateur sont transmis à yt-dlp, donc exposés à un outil tiers."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "npx -y bun exécute un paquet distant sans version épinglée."
-        }
-      ]
-    }
-  ],
-  "ajouts": [
-    {
       "id": "ooiyeefei/ccc/skills/motion-video",
       "nom": "motion-video",
-      "place": "ajout",
+      "place": "recommande",
       "repo": "ooiyeefei/ccc",
       "chemin_skill": "skills/motion-video",
       "skill_md": "skills/motion-video/SKILL.md",
@@ -261,6 +213,36 @@
           "code": "Instructions d'installation par git clone ou npx skills add d'un dépôt tiers (video-shotcraft) sans épinglage de version ni revue, donc exécution de code distant non vérifié."
         }
       ]
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "remotion-dev/skills/skills/remotion-create",
+      "nom": "remotion-create",
+      "place": "ajout",
+      "repo": "remotion-dev/skills",
+      "chemin_skill": "skills/remotion-create",
+      "skill_md": "skills/remotion-create/SKILL.md",
+      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
+      "resume_fr": "crée un projet Remotion et ouvre le Studio → tu vois la vidéo évoluer en direct",
+      "note": 5,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Commande npx create-video@latest exécute un paquet distant non épinglé"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "destruction",
+          "code": "Instruction de supprimer des fichiers de métadonnées dans le dossier courant (action destructrice limitée)"
+        }
+      ]
     },
     {
       "id": "trunghaiy/appshot/skills/appshot-videos",
@@ -283,6 +265,21 @@
           "code": "Le skill lance npm install sur des dépendances tierces et un serveur de dev en arrière-plan, puis tue tout processus sur le port 3000 via lsof | xargs kill sans vérifier le processus."
         }
       ]
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-studio",
+      "nom": "remotion-studio",
+      "place": "ajout",
+      "repo": "remotion-dev/skills",
+      "chemin_skill": "skills/remotion-studio",
+      "skill_md": "skills/remotion-studio/SKILL.md",
+      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
+      "resume_fr": "ouvre un aperçu Remotion dès le départ → suivre et ajuster la vidéo en temps réel",
+      "note": 6,
+      "editeur_confiance": true,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     },
     {
       "id": "vincentwei1021/video-talkcraft/video-talkcraft",
@@ -319,58 +316,6 @@
       ]
     },
     {
-      "id": "kajisho5/ffmpeg-skill/ffmpeg-skill",
-      "nom": "ffmpeg-skill",
-      "place": "ajout",
-      "repo": "kajisho5/ffmpeg-skill",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "11a70aa680c0916581164dc49957a1b64ec57a79",
-      "resume_fr": "découpe, recadre et sous-titre tes vidéos en local → exports prêts pour les réseaux sociaux",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Serveur MCP qui expose les 42 scripts par nom via tools/call : un client MCP peut lancer ffmpeg sur des chemins arbitraires, et batch.py exécute des recettes JSON. À cadrer dans l'installation."
-        }
-      ]
-    },
-    {
-      "id": "remotion-dev/skills/skills/remotion-studio",
-      "nom": "remotion-studio",
-      "place": "ajout",
-      "repo": "remotion-dev/skills",
-      "chemin_skill": "skills/remotion-studio",
-      "skill_md": "skills/remotion-studio/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "ouvre un aperçu Remotion dès le départ → suivre et ajuster la vidéo en temps réel",
-      "note": 6,
-      "editeur_confiance": true,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "remotion-dev/skills/skills/remotion-docs",
-      "nom": "remotion-docs",
-      "place": "ajout",
-      "repo": "remotion-dev/skills",
-      "chemin_skill": "skills/remotion-docs",
-      "skill_md": "skills/remotion-docs/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "cherche la doc Remotion à jour et la lit en Markdown → évite les API obsolètes",
-      "note": 8,
-      "editeur_confiance": true,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
       "id": "vincentwei1021/anything2explainer/anything2explainer",
       "nom": "anything2explainer",
       "place": "ajout",
@@ -401,6 +346,43 @@
           "source": "juge",
           "categorie": "reseau",
           "code": "Installation de dépendances non épinglées (npm install, pip install, brew, modèles TTS téléchargés) et exécution de scripts zsh/Python du template, sans vérification d'intégrité."
+        }
+      ]
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-docs",
+      "nom": "remotion-docs",
+      "place": "ajout",
+      "repo": "remotion-dev/skills",
+      "chemin_skill": "skills/remotion-docs",
+      "skill_md": "skills/remotion-docs/SKILL.md",
+      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
+      "resume_fr": "cherche la doc Remotion à jour et la lit en Markdown → évite les API obsolètes",
+      "note": 8,
+      "editeur_confiance": true,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "kajisho5/ffmpeg-skill/ffmpeg-skill",
+      "nom": "ffmpeg-skill",
+      "place": "ajout",
+      "repo": "kajisho5/ffmpeg-skill",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "f02bab420312cde013f02602007654b9d381fe8d",
+      "resume_fr": "monte tes vidéos et audio en local, sous-titres compris → exports prêts pour YouTube, Reels, TikTok",
+      "note": 10,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le skill exécute des scripts Python locaux appelant ffmpeg sur des fichiers utilisateur; des options de sortie peuvent écraser des fichiers (--overwrite), à garder en tête pour les actions destructri…"
         }
       ]
     },
@@ -491,7 +473,7 @@
       "repo": "Devin-AXIS/iPolloWork",
       "chemin_skill": ".agents/skills/ipollowork-video-compose",
       "skill_md": ".agents/skills/ipollowork-video-compose/SKILL.md",
-      "sha_epingle": "8c3bf443b798e2241c785a18e6b4ed42a3128645",
+      "sha_epingle": "05fe4e2d8d99518004360ef08d95ba3c1a07eb4f",
       "resume_fr": "aide à composer les visuels vidéo et leurs animations → modifications locales sans casser la chronologie",
       "note": 5,
       "editeur_confiance": false,
