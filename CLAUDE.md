@@ -56,10 +56,10 @@ skillmaster/
 
 ### Fiche d'un skill (`skills.json`)
 
-`id`, `repo`, `chemin_skill`, `resume_fr`, `description_courte`, `categories[]`, `stars`, `vitesse_stars_30j`, `dernier_commit`, `installs` (si dispo), `note_qualite` (0–10), `risques[]`, `statut` (`nouveau` | `en_test` | `valide` | `archive`), `remplace_par`, `retours_amdy[]`, `date_ajout`.
+`id`, `repo`, `chemin_skill`, `resume_fr`, `description_courte`, `categories[]`, `stars`, `vitesse_stars_30j`, `dernier_commit`, `installs` (si dispo), `note_qualite` (0–10), `risques[]`, `statut` (`nouveau` | `en_test` | `valide` | `archive`), `remplace_par`, `date_ajout`.
 
 - `resume_fr` est écrit par le juge : une phrase en français, 15 mots au plus, au format « ce qu'il fait → ce qu'il améliore ». Par exemple : « te demande avant chaque choix visuel → évite que Claude invente le design ». Elle s'affiche **partout** où un skill est proposé à Amdy : panneau du mod, question de `skill-master`, demande de note.
-- `retours_amdy[]` reçoit l'usage réel (compteurs d'invocations), les étoiles de `/sm rate` et les signaux automatiques (proposition acceptée ou refusée).
+- **L'usage réel d'Amdy reste en local** : compteurs d'invocations, étoiles de `/sm rate` et signaux automatiques (proposition acceptée ou refusée) vivent dans `docs/local/usage-amdy.json`, ignoré par git (`node collector/usage.ts`). Ils ne sont jamais publiés dans `library/`.
 
 ### Cycle de vie
 
@@ -67,7 +67,7 @@ skillmaster/
 - **en_test** : Amdy l'a installé sur un projet.
 - **valide** : au moins un bon retour, et la note dépasse le seuil.
 - **archive** : plus de commit depuis 6 mois, remplacé par un meilleur skill, ou mauvais retours.
-- **Étoiles et usage décident** : un skill passe en « recommandé » de son pack, ou part en archive, selon les étoiles de `/sm rate`, l'usage réel et les signaux automatiques. Seuils proposés, à confirmer en phase 4 :
+- **Étoiles et usage, côté perso** : en phase 4, les étoiles de `/sm rate`, l'usage réel et les signaux automatiques pourront classer les skills pour Amdy seul, en local dans `skill-master`. La bibliothèque publique classe uniquement sur la qualité, la pertinence et les épinglages d'`overrides.json`. Seuils proposés, à confirmer en phase 4 :
   - recommandé : moyenne ≥ 4 étoiles sur au moins 3 notes ;
   - archive : moyenne ≤ 2 étoiles sur au moins 2 notes, ou deux refus de suite sans aucune utilisation.
 
@@ -145,7 +145,7 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - Les réserves de qualité sont séparées des risques de sécurité. Le scan tient compte des blocs de code et des mises en garde.
   - Les types sont stricts : le juge doit être d'accord avec la détection, et Expo ou React Native n'entrent jamais dans ios ni android.
   - Le jugement se fait en deux temps : Haiku sur tout, puis Sonnet sur les finalistes de chaque pack.
-  - Note finale = note du juge + bonus d'usage (+0,5, +1 ou +1,5, consigné dans `retours_amdy`).
+  - Note finale = note du juge + bonus d'usage (+0,5, +1 ou +1,5). Abandonné le 2026-10-20 : voir plus bas.
   - « Recommandé » se décide par pack : les 5 à 8 meilleurs, note ≥ 6. Les épinglages et les exclusions sont dans `library/overrides.json`, où bencium est épinglé en site-web.
 - 2026-10-19 : **juge v3.1.** Haiku seul pour noter. Pour chaque pack, Sonnet range les finalistes entre eux, sans note absolue ni ex-aequo, en 3 tirages, et l'ordre final se fait au rang moyen. Il y a un seul type principal par skill, et `outillage-claude-code` couvre tout ce qui sert à « construire avec Claude ». La pertinence vient de `library/profil.json` (types, stack, domaines hors sujet) et se calcule sur le nom et la description.
 - 2026-10-19 : **critère de montée en volume** : ce qui compte, c'est la **composition** des têtes de pack, pas leur ordre exact, puisque `skill-master` les propose comme un ensemble. On monte en volume si les mêmes skills sont en tête sur au moins 6 packs sur 7 entre deux séries. C'était 7 sur 7 en v3.1. La montée est progressive : environ 1 500 skills au tour suivant.
@@ -215,7 +215,10 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Tout le contenu est traduit** : résumés, jugements, réserves, alertes, raisons, critères de détection. `collector/translate.ts` (Haiku, par lots) écrit `library/i18n/en.json`, indexé par l'empreinte du texte français. Seuls les textes nouveaux ou modifiés sont traduits : c'est une étape de l'Action, après le récapitulatif, qui ne bloque pas la publication si elle échoue. Sans traduction, le site garde le français.
   - Premier passage le 2026-10-20 : 9 618 textes en 14 min, sur l'abonnement d'Amdy (1,46 $ en équivalent).
 - 2026-10-20 : **page Installation** (`/installation/`, `/en/install/`) : prérequis, marketplace, premier `/sm check`, commandes, réglages, sécurité, mise à jour et désinstallation.
-- 2026-10-20 : **le dépôt passe en public** (décision d'Amdy ; il change lui-même la visibilité), pour que la marketplace et la synchronisation de la bibliothèque marchent pour tout le monde. Aucun secret versionné (fichiers et historique vérifiés). Deviennent visibles : l'e-mail des commits, l'usage réel d'Amdy (`retours_amdy`, `bonus_usage` de 9 skills), `profil.json`, ce brief et les plans de `docs/`.
+- 2026-10-20 : **le dépôt passe en public** (décision d'Amdy ; il change lui-même la visibilité), pour que la marketplace et la synchronisation de la bibliothèque marchent pour tout le monde. Aucun secret versionné (fichiers et historique vérifiés).
+- 2026-10-20 : **nettoyage du dépôt public.**
+  - **Plus de bonus d'usage** : la bibliothèque publique classe uniquement sur la qualité (note du juge), la pertinence et les épinglages d'`overrides.json`. `note_qualite` vaut la note du juge. L'usage réel d'Amdy reste en local (`docs/local/usage-amdy.json`), pour un éventuel classement perso côté `skill-master`.
+  - **Historique réécrit** (`git filter-repo`, sauvegarde miroir dans `docs/local/`) : e-mail des commits passé en adresse noreply GitHub, usage retiré de toutes les versions de `library/`, noms des autres projets d'Amdy retirés des plans. La config git d'Amdy utilise l'adresse noreply.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard

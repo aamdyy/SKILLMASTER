@@ -4,8 +4,9 @@
 // Le juge n'a aucun outil, aucun hook, aucun MCP, ne garde aucun transcript, et lit le
 // SKILL.md et ses annexes comme des données. Les verdicts sont en cache par version de
 // grille, modèle et hash : seuls les skills nouveaux ou modifiés sont rejugés.
-// La note finale ajoute l'usage réel d'Amdy (retours_amdy). Les packs sont décidés par
-// type : les 5 à 8 meilleurs, note minimale de 6, plus les épinglages d'Amdy.
+// La note est celle du juge seul : l'usage réel d'Amdy n'entre pas dans la bibliothèque publique
+// (il reste en local, collector/usage.ts). Les packs sont décidés par type sur la qualité et la
+// pertinence : les 5 à 8 meilleurs, note minimale de 6, plus les épinglages d'Amdy (overrides.json).
 //
 //   node collector/judge.ts [--concurrency 5] [--limit N] [--finalists 12] [--no-sonnet]
 import { spawn } from 'node:child_process'
@@ -17,7 +18,6 @@ import { alertKey, classifyAlerts, classifyCost } from './classify.ts'
 import { execFileSync } from 'node:child_process'
 import { MAX_CHANGES, rankCost, rankPack, type Finalist, type Ranking } from './rank.ts'
 import { resumeCost, summarize } from './resume.ts'
-import { loadUsage, usageBonus } from './usage.ts'
 
 const argv = process.argv.slice(2)
 const option = (name: string, fallback: number) => {
@@ -31,8 +31,6 @@ const FINALISTS = option('finalists', 25)
 const TENANTS_AT = argv.indexOf('--tenants')
 const TENANTS_REF = TENANTS_AT >= 0 ? argv[TENANTS_AT + 1] : undefined
 const RANK_RUNS = option('rank-runs', 3)
-// Usage figé jusqu'à la phase 4 : repris des retours_amdy de library/skills.json. --usage-live relit ~/.claude.json.
-const USAGE_LIVE = argv.includes('--usage-live')
 const STARTED = Date.now()
 // Haiku seul depuis la v3 (Sonnet n'écartait la note que de 0,11 point en moyenne) ; --with-sonnet le réactive.
 const WITH_SONNET = argv.includes('--with-sonnet')
@@ -303,13 +301,6 @@ async function main() {
   await mkdir(CWD, { recursive: true })
   const overrides = await readJson<Overrides>(join(LIBRARY, 'overrides.json'), {})
   const never = new Set((overrides.jamais ?? []).map(name => name.toLowerCase()))
-  const usage = USAGE_LIVE ? await loadUsage() : new Map()
-  type UsageEntry = { type: string; invocations: number; dernier: string | null; releve_le?: string }
-  const frozenUsage = new Map<string, UsageEntry>()
-  for (const entry of (await readJson<{ skills: { id: string; retours_amdy?: UsageEntry[] }[] }>(join(LIBRARY, 'skills.json'), { skills: [] })).skills) {
-    const found = entry.retours_amdy?.find(item => item.type === 'usage')
-    if (found) frozenUsage.set(resolveId(entry.id), found)
-  }
 
   // Le scan v2 est refait ici, sur le texte en cache, pour profiter de ses corrections.
   const scans = new Map<string, Risk[]>()
@@ -352,12 +343,6 @@ async function main() {
   const pinned = (type: string, skill: Selected) => (overrides.epingles?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
   const pinnedAddition = (type: string, skill: Selected) => (overrides.epingles_ajout?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
   const excluded = (type: string, skill: Selected) => (overrides.exclus?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
-  const bonusOf = (skill: Selected) => {
-    const used: { invocations: number; dernier: string | null; releve_le?: string } | undefined = USAGE_LIVE
-      ? (isTrustedRepo(skill.repo) ? usage.get(skill.name.toLowerCase()) : undefined)
-      : frozenUsage.get(skill.id)
-    return { used, bonus: used ? usageBonus(used.invocations) : 0 }
-  }
   // Alertes du juge rangées par catégorie (Haiku, une fois par alerte et par dépôt), puis notées
   // avec le barème partagé : réseau, exécution ou destruction = élevé. Jamais critique.
   // Classées après le temps 2 ; avant, une alerte sans catégorie compte « moyen », ce qui ne
@@ -392,7 +377,7 @@ async function main() {
     for (const type of TYPES) {
       skills
         .filter(skill => isEligible(type, skill, haiku.verdicts.get(skill.id)?.verdict ?? null))
-        .map(skill => ({ skill, note: noteOf(haiku.verdicts.get(skill.id)!.verdict!) + bonusOf(skill).bonus }))
+        .map(skill => ({ skill, note: noteOf(haiku.verdicts.get(skill.id)!.verdict!) }))
         .sort((a, b) => b.note - a.note || b.skill.repoStars - a.skill.repoStars)
         .slice(0, FINALISTS)
         .forEach(({ skill }) => finalists.set(skill.id, skill))
@@ -431,7 +416,6 @@ async function main() {
     const fromSonnet = sonnet.verdicts.get(skill.id)
     const verdict = fromSonnet?.verdict ?? fromHaiku?.verdict ?? null
     const risks = riskOf(skill, verdict)
-    const { used, bonus } = bonusOf(skill)
     const noteJuge = verdict ? noteOf(verdict) : null
     const before = known.get(skill.id)
     return {
@@ -458,10 +442,10 @@ async function main() {
         note_sonnet: fromSonnet?.verdict ? noteOf(fromSonnet.verdict) : null,
         sous_notes: verdict?.sous_notes ?? null,
         note_juge: noteJuge,
-        bonus_usage: bonus,
         pertinence: relevanceOf(skill, verdict),
         type_principal: primaryType(skill, verdict),
-        note_qualite: noteJuge === null ? null : Math.min(10, noteJuge + bonus),
+        // note_qualite reste pour les lecteurs de la bibliothèque (index, classement) : c'est la note du juge.
+        note_qualite: noteJuge,
         justification: verdict?.justification ?? fromHaiku?.error ?? null,
         reserves: verdict?.reserves ?? [],
         choix_visuels_autonomes: verdict?.choix_visuels_autonomes ?? null,
@@ -473,7 +457,6 @@ async function main() {
         packs: {} as Record<string, 'recommande' | 'ajout' | 'epingle' | 'ajout_epingle'>,
         statut: before?.statut ?? (verdict ? 'nouveau' : 'revue_manuelle'),
         remplace_par: null,
-        retours_amdy: used ? [{ type: 'usage', invocations: used.invocations, dernier: used.dernier, bonus, releve_le: used.releve_le ?? today }] : [],
         date_ajout: before?.date_ajout ?? today,
         licence: skill.license,
         cout_contexte: skill.description.length,
@@ -506,7 +489,7 @@ async function main() {
     }
   }
   const rankContext = { stack: Object.keys(profile.stack), exclusions: Object.keys(profile.exclusions ?? {}) }
-  // Classement en pack : qualité (usage compris) et pertinence, pondérées par le profil.
+  // Classement en pack : qualité (note du juge) et pertinence, pondérées par le profil.
   const packScore = (entry: { note_qualite: number | null; pertinence: number }) =>
     (entry.note_qualite ?? 0) * profile.poids.qualite + entry.pertinence * profile.poids.pertinence
   for (const type of TYPES) {
@@ -520,13 +503,11 @@ async function main() {
     const lostTenants = previousIds
       .filter(id => !tenants.some(item => item.entry.id === id) && !entries.some(({ entry, skill }) => entry.id === id && (pinned(type, skill) || pinnedAddition(type, skill))))
       .map(id => ({ id, nom: entries.find(({ entry }) => entry.id === id)?.entry.nom ?? id, raison: 'plus éligible pour ce type ou absent de la sélection' }))
-    // Finalistes (25 au plus) : épinglés, tenants, skills qu'Amdy a utilisés au moins 5 fois, puis
-    // les meilleurs au score de pack parmi ceux dont la pertinence est d'au moins 6.
-    const heavyUse = (item: (typeof entries)[number]) => (item.entry.retours_amdy[0]?.invocations ?? 0) >= 5
+    // Finalistes (25 au plus) : épinglés, tenants, puis les meilleurs au score de pack parmi ceux
+    // dont la pertinence est d'au moins 6.
     const finalists = [...new Set([
       ...ranked.filter(item => pinned(type, item.skill)),
       ...tenants,
-      ...ranked.filter(heavyUse),
       ...ranked.filter(item => item.entry.pertinence >= 6 && (item.entry.note_qualite ?? 0) >= 5),
     ])].filter(item => !pinnedAddition(type, item.skill)).slice(0, FINALISTS)
     const tenantIds = new Set(tenants.map(item => item.entry.id))
@@ -634,7 +615,6 @@ async function main() {
       score_pack: Math.round(packScore(entry) * 10) / 10,
       note_juge: entry.note_juge,
       modele: entry.juge.modele,
-      bonus_usage: entry.bonus_usage,
       epingle: pinned(type, skill) || undefined,
       risque_max: entry.risque_max,
       raison: entry.justification,
@@ -646,7 +626,7 @@ async function main() {
       proposition_auto: true,
       statut: 'a_valider_par_amdy',
       regles:
-        'finale de 25 au plus : épinglés, tenants, skills utilisés au moins 5 fois, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note finale ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ' +
+        'finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ' +
         'ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; ' +
         '3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json',
       moins_de_5_recommandes: recommended.length < 5 || undefined,

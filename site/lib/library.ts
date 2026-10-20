@@ -1,6 +1,6 @@
 // Lecture et typage de la bibliothèque (../library) au moment du build. Lecture seule :
-// le site ne modifie jamais library/. L'usage réel d'Amdy (retours_amdy, bonus d'usage, note
-// finale qui l'inclut) et library/profil.json ne sont jamais lus ni exposés.
+// le site ne modifie jamais library/. library/profil.json n'est jamais lu ni exposé ; l'usage
+// réel d'Amdy n'est pas dans library/ (il reste en local, collector/usage.ts).
 import { createHash } from 'node:crypto'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -30,7 +30,7 @@ export type Skill = {
   categories: string[]
   stars: number
   dernierCommit: string | null
-  // Note du juge seule : la note finale contient le bonus d'usage d'Amdy, qui reste privé.
+  // Note du juge (qualité seule).
   note: number | null
   sousNotes: SousNotes | null
   justification: string | null

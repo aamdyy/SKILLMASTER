@@ -1,7 +1,7 @@
-// Calibrage par l'usage réel : les skills qu'Amdy invoque le plus doivent finir en haut de
-// leur pack. Compare leur place dans la bibliothèque actuelle et dans une version
-// précédente (un commit git), et donne aussi leur rang d'après la seule note du juge, sans
-// le bonus d'usage, pour voir si le juge lui-même s'améliore.
+// Calibrage par l'usage réel, en local : les skills qu'Amdy invoque le plus devraient finir en
+// haut de leur pack. Compare leur place dans la bibliothèque actuelle et dans une version
+// précédente (un commit git), et donne leur rang d'après la note du juge. L'usage est lu sur
+// la machine d'Amdy (usage.ts) et n'est jamais publié.
 //
 //   node collector/calibrate.ts [--avant <commit>] [--min 5]
 import { execFileSync } from 'node:child_process'
@@ -72,7 +72,7 @@ const rows = candidates
       invocations: usage.get(entry.nom.toLowerCase())?.invocations ?? 0,
       [`avant (${ref ?? '-'})`]: place(before.packs, previous?.id),
       maintenant: place(now.packs, entry.id),
-      'rang juge seul (sans bonus)': judgeRank(entry),
+      'rang d’après la note du juge': judgeRank(entry),
     }
   })
   .sort((a, b) => b.invocations - a.invocations)

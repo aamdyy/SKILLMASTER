@@ -1,12 +1,15 @@
 // Usage réel d'Amdy : compteurs d'invocations de Claude Code (~/.claude.json, skillUsage),
 // ramenés au nom de frontmatter des skills grâce au manifeste de la bibliothèque locale.
-// Lu à l'exécution sur la machine d'Amdy ; seuls des compteurs atterrissent dans library/.
+// Il reste sur la machine d'Amdy : la bibliothèque publique ne le lit ni ne le publie (décision
+// du 2026-10-20). Il sert au calibrage (calibrate.ts) et à un éventuel classement perso côté skill-master.
+//   node collector/usage.ts   → écrit docs/local/usage-amdy.json (ignoré par git)
 import { readFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { frontmatter, readJson } from './lib.ts'
+import { ROOT, frontmatter, log, readJson, writeJson } from './lib.ts'
 
 export type Usage = { invocations: number; dernier: string | null }
+export const USAGE_FILE = join(ROOT, 'docs', 'local', 'usage-amdy.json')
 
 type Manifest = { entrees?: { name: string; skill_md?: string | null }[] }
 type ClaudeJson = { skillUsage?: Record<string, { usageCount?: number; lastUsedAt?: number }> }
@@ -37,10 +40,16 @@ export async function loadUsage(): Promise<Map<string, Usage>> {
   return usage
 }
 
-// Bonus de note finale : +0,5 (1 à 4 invocations), +1 (5 à 9), +1,5 (10 et plus).
-export function usageBonus(invocations: number) {
-  if (invocations >= 10) return 1.5
-  if (invocations >= 5) return 1
-  if (invocations >= 1) return 0.5
-  return 0
+// Relevé local : les compteurs du moment, par nom de skill, en gardant les relevés figés déjà notés.
+if (process.argv[1]?.endsWith('usage.ts')) {
+  const before = await readJson<Record<string, unknown>>(USAGE_FILE, {})
+  const usage = await loadUsage()
+  await writeJson(USAGE_FILE, {
+    ...before,
+    note: 'Usage réel d’Amdy, local et ignoré par git. Jamais publié dans library/.',
+    releve_le: new Date().toISOString().slice(0, 10),
+    source: '~/.claude.json (skillUsage)',
+    skills: Object.fromEntries([...usage].sort(([a], [b]) => a.localeCompare(b))),
+  })
+  log(`usage : ${usage.size} skills relevés dans ${USAGE_FILE}`)
 }

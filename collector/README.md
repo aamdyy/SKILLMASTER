@@ -26,13 +26,13 @@ node collector/calibrate.ts --avant <commit> --min 5
 |---|---|
 | `fetch.ts` | Découverte (topics, recherches par type, marketplace officielle, listes awesome, dépôts de référence), métadonnées, arbres git, lecture des SKILL.md, déduplication, présélection par type, dernier commit par chemin, étoiles sur 30 jours |
 | `scan.ts` | Réexporte le scanner de `plugins/skillmaster/skills/skill-master/scripts/scan.ts`, partagé avec skill-master. Risques détectés sans LLM ni exécution. Un motif trouvé dans un bloc de code d'exemple descend d'un cran, et une phrase d'injection citée pour mettre en garde n'est qu'une mention |
-| `judge.ts` | Grille v2 : 5 sous-notes de 0 à 2 sur le SKILL.md et ses annexes. Types stricts confirmés par la détection, drapeau « choix visuels autonomes » séparé de la note, réserves de qualité séparées des risques de sécurité. Note finale = note du juge + bonus d'usage. Packs : les 5 à 8 meilleurs par type (note ≥ 6), plus les épinglages |
+| `judge.ts` | Grille v2 : 5 sous-notes de 0 à 2 sur le SKILL.md et ses annexes. Types stricts confirmés par la détection, drapeau « choix visuels autonomes » séparé de la note, réserves de qualité séparées des risques de sécurité. Note = note du juge seul. Packs : les 5 à 8 meilleurs par type (note ≥ 6), plus les épinglages |
 | `resume.ts` | `resume_fr` : une phrase, 15 mots au plus, « ce qu'il fait → ce qu'il améliore ». Troisième temps du juge (Sonnet pour les finalistes, Haiku pour les autres). `node collector/resume.ts --archive` remplit aussi le manifeste de la bibliothèque locale |
 | `publish.ts` | Après le juge : cycle de vie (archive des skills disparus du tour qui comptaient, `remplace_par`), index léger `library/index/<type>.json` pour skill-master, récapitulatif `library/RECAP.md`, signal « tête changée » pour l'issue |
 | `translate.ts` | Version anglaise du site : Haiku traduit par lots les textes affichés (résumés, jugements, réserves, alertes, raisons, critères de détection). La table `library/i18n/en.json` est indexée par l'empreinte du texte français : seuls les textes nouveaux ou modifiés sont traduits, ceux qui disparaissent sont retirés. Sans traduction, le site garde le français |
 | `rank.ts` | Classement comparatif d'un pack par Sonnet : 3 tirages, stack et exclusions, avantage au tenant (2 changements au plus) |
-| `usage.ts` | Compteurs d'invocations d'Amdy, ramenés au nom des skills. Ne crédite que les dépôts officiels et de référence |
-| `calibrate.ts` | Calibrage par l'usage : les skills les plus utilisés doivent finir en haut de leur pack |
+| `usage.ts` | Usage réel d'Amdy, en local seulement : `node collector/usage.ts` écrit `docs/local/usage-amdy.json` (ignoré par git). Sert au calibrage, jamais à la bibliothèque publique |
+| `calibrate.ts` | Calibrage local par l'usage : les skills les plus utilisés devraient finir en haut de leur pack |
 | `lib.ts` | Accès GitHub, cache disque, parallélisme, listes des dépôts officiels et de référence |
 
 Les décisions d'Amdy (épinglages, « jamais », exclusions) sont dans `library/overrides.json`.
@@ -41,7 +41,8 @@ Les décisions d'Amdy (épinglages, « jamais », exclusions) sont dans `library
 
 - Le contenu des skills tiers est lu comme du texte, **jamais exécuté**. Il est gardé dans `collector/.cache/`, qui n'est pas versionné, et n'est jamais copié dans `library/`.
 - Le juge n'a **aucun outil, aucun hook, aucun MCP**, ne garde aucun transcript, et lit le SKILL.md comme une donnée non fiable.
-- Aucun secret dans le code : le jeton GitHub vient de `gh auth token`, et le juge passe par la session `claude` d'Amdy. Seuls des compteurs d'usage atterrissent dans `library/` (`retours_amdy`).
+- Aucun secret dans le code : le jeton GitHub vient de `gh auth token`, et le juge passe par la session `claude` d'Amdy.
+- L'usage réel d'Amdy ne quitte pas sa machine : `node collector/usage.ts` l'écrit dans `docs/local/usage-amdy.json`, ignoré par git. Il n'entre ni dans la note ni dans le classement des packs.
 
 ## En CI (phase 3)
 
@@ -52,5 +53,4 @@ Les décisions d'Amdy (épinglages, « jamais », exclusions) sont dans `library
 Le coût reste minimal parce que trois choses sont réutilisées :
 - **les verdicts et les résumés déjà publiés dans `library/skills.json`** (même hash, même grille), qui servent de cache durable même quand le cache des Actions a expiré ;
 - **la tête et les ajouts d'un pack** quand sa finale n'a pas changé, sans appel à Sonnet ;
-- **l'usage d'Amdy**, figé jusqu'à la phase 4 (`--usage-live` pour le relire en local) ;
 - **les traductions anglaises** de `library/i18n/en.json`, par empreinte du texte français.

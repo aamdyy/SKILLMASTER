@@ -1,7 +1,7 @@
 // Après le juge : cycle de vie, index léger pour skill-master, récapitulatif hebdomadaire.
 // Compare la bibliothèque produite au dernier commit (HEAD).
-//   - library/skills.json : statut « archive » (disparu du tour alors qu'il était dans un pack ou
-//     avait des retours : dépôt archivé, sans push depuis 6 mois ou sous le seuil), remplace_par.
+//   - library/skills.json : statut « archive » (disparu du tour alors qu'il était dans un pack :
+//     dépôt archivé, sans push depuis 6 mois ou sous le seuil), remplace_par.
 //   - library/index/<type>.json : les skills de chaque pack, avec juste ce qu'il faut pour les proposer.
 //   - library/RECAP.md : changements de têtes et raisons, lisible en 30 secondes.
 //   - collector/out/issue.md et la sortie `tete_changee` (GitHub Actions) si une tête change.
@@ -29,7 +29,6 @@ type Skill = {
   risque_max_projet?: string | null
   statut: string
   remplace_par: string | null
-  retours_amdy?: unknown[]
   packs?: Record<string, string>
   date_ajout: string
   raison_statut?: string
@@ -66,7 +65,7 @@ const profile = await readJson<{ editeurs_confiance?: string[] }>(join(LIBRARY, 
 const trusted = new Set((profile.editeurs_confiance ?? []).map(owner => owner.toLowerCase()))
 
 // Cycle de vie. L'inactivité se juge au niveau du dépôt : le collecteur écarte déjà les dépôts
-// sans push depuis 6 mois. Un skill qui disparaît du tour alors qu'il comptait (pack ou retours)
+// sans push depuis 6 mois. Un skill qui disparaît du tour alors qu'il comptait (dans un pack)
 // passe en archive ; un vieux dossier dans un dépôt vivant n'est pas archivé. Un skill de la
 // liste « jamais » d'Amdy est archivé pour cette raison-là, même s'il était déjà archivé.
 const archived: { nom: string; raison: string }[] = []
@@ -74,7 +73,7 @@ const present = new Set(library.skills.map(skill => skill.id))
 const byIdNow = new Map(library.skills.map(skill => [skill.id, skill]))
 for (const old of before.skills) {
   if (present.has(old.id)) continue
-  const mattered = Object.keys(old.packs ?? {}).length > 0 || (old.retours_amdy ?? []).length > 0
+  const mattered = Object.keys(old.packs ?? {}).length > 0
   if (!mattered) continue
   const origin = alias[old.id] ? byIdNow.get(alias[old.id]!) : undefined
   const raison = never.has(old.nom.toLowerCase())

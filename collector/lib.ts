@@ -12,8 +12,8 @@ export const LIBRARY = join(ROOT, 'library')
 const TOKEN = process.env.GITHUB_TOKEN ?? ''
 
 export const OFFICIAL = ['anthropics/skills', 'anthropics/claude-plugins-official', 'anthropics/claude-code-playground']
-// Dépôts d'origine des skills qu'Amdy utilise déjà : toujours parcourus, avec un bonus
-// de présélection ; seuls eux (et les dépôts anthropics/) reçoivent son usage réel.
+// Dépôts de référence (skills qu'Amdy utilise déjà) : toujours parcourus, avec un bonus de
+// présélection pour la collecte. Ils n'influencent pas la note ni le classement des packs.
 export const REFERENCES = [
   'remotion-dev/skills', 'vercel-labs/agent-skills', 'expo/skills', 'greensock/gsap-skills', 'obra/superpowers',
   'twostraws/SwiftUI-Agent-Skill', 'hamen/material-3-skill', 'nextlevelbuilder/ui-ux-pro-max-skill',

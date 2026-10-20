@@ -56,7 +56,7 @@ L'usage réel (`~/.claude.json`) n'existe que sur le Mac d'Amdy. Il est figé ju
 ## Décisions d'Amdy (2026-10-19)
 
 1. **Synchronisation : le repo de dev ne bouge jamais.** `skill-master` garde sa propre copie légère, en lecture seule, de `library/` seulement, dans `~/.cache/skillmaster/library/`. Il la met à jour avant chaque proposition.
-2. **Usage figé** à sa valeur actuelle jusqu'à la phase 4. Le juge reprend les `retours_amdy` déjà présents dans `library/skills.json`. En phase 4, on construira un seul canal de retour pour l'usage et les étoiles.
+2. **Usage figé** à sa valeur actuelle jusqu'à la phase 4. Le juge reprend les `retours_amdy` déjà présents dans `library/skills.json`. En phase 4, on construira un seul canal de retour pour l'usage et les étoiles. *(Remplacé le 2026-10-20 : plus de bonus d'usage, l'usage reste en local.)*
 3. **Récapitulatif :** `library/RECAP.md` chaque semaine, plus une **issue GitHub seulement les semaines où une tête de pack change**.
 4. **Jeton du collecteur :** jeton *fine-grained* en lecture seule, créé par Amdy, en secret `COLLECTOR_TOKEN`.
 5. **Horaire :** le lundi à **5 h 17 UTC** (`cron: '17 5 * * 1'`).
