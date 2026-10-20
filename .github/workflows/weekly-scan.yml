@@ -59,6 +59,15 @@ jobs:
         id: publish
         run: node collector/publish.ts >> "$GITHUB_STEP_SUMMARY"
 
+      # Version anglaise du site : seuls les textes nouveaux ou modifiés sont traduits
+      # (library/i18n/en.json). En cas d'échec, le site garde le français pour eux.
+      - name: Traduire en anglais
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SM_CLAUDE_BARE: '1'
+        run: node collector/translate.ts --concurrency 6
+
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: library
