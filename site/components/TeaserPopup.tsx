@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { Teaser } from './Teaser'
 
-type Text = { label: string; pause: string; play: string; close: string; caption: string; dialog: string }
+type Text = { label: string; pause: string; play: string; sound: string; close: string; caption: string; dialog: string }
 
 const SEEN = 'sm-teaser-vu'
 

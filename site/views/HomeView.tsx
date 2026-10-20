@@ -33,8 +33,8 @@ const T = {
     explore: 'Explorer les packs',
     lastRun: 'dernier tour',
     figures: { analyses: 'skills analysés', retenus: 'retenus dans les packs', packs: 'packs par type de projet' },
-    teaser: { label: 'Teaser', title: 'SKILLMASTER en 27 secondes.', video: 'Teaser SKILLMASTER, 27 secondes, sans son', pause: 'Pause', play: 'Lecture', close: 'Fermer', dialog: 'Teaser SKILLMASTER',
-      caption: 'Sans son. 1 500 skills analysés, 134 retenus dans 7 packs, puis le panneau du mod qui propose le pack dans Claude Code.' },
+    teaser: { label: 'Teaser', title: 'SKILLMASTER en 27 secondes.', video: 'Teaser SKILLMASTER, 27 secondes, son coupé au départ', pause: 'Pause', play: 'Lecture', sound: 'Son', close: 'Fermer', dialog: 'Teaser SKILLMASTER',
+      caption: '1 500 skills analysés, 134 retenus dans 7 packs, puis le panneau du mod qui propose le pack dans Claude Code. Le son est coupé au départ : bouton « Son ».' },
     construction: { label: 'Construction', title: 'Un pack, c’est des skills et un type de projet.', text: 'skill-master reconnaît le type de ton projet à ses fichiers, puis te propose la tête du pack qui lui correspond.' },
     packs: { title: 'Sept types de projet.', note: '8 skills en tête au plus, puis les ajouts' },
     pipelineIntro: 'Une GitHub Action fait tout le travail : elle collecte, juge, classe et publie. Rien ne s’installe sans l’accord d’Amdy.',
@@ -55,8 +55,8 @@ const T = {
     explore: 'Explore the packs',
     lastRun: 'last run',
     figures: { analyses: 'skills analyzed', retenus: 'kept in the packs', packs: 'packs by project type' },
-    teaser: { label: 'Teaser', title: 'SKILLMASTER in 27 seconds.', video: 'SKILLMASTER teaser, 27 seconds, no sound', pause: 'Pause', play: 'Play', close: 'Close', dialog: 'SKILLMASTER teaser',
-      caption: 'No sound. 1,500 skills analyzed, 134 kept in 7 packs, then the mod’s panel suggesting the pack inside Claude Code.' },
+    teaser: { label: 'Teaser', title: 'SKILLMASTER in 27 seconds.', video: 'SKILLMASTER teaser, 27 seconds, muted at first', pause: 'Pause', play: 'Play', sound: 'Sound', close: 'Close', dialog: 'SKILLMASTER teaser',
+      caption: '1,500 skills analyzed, 134 kept in 7 packs, then the mod’s panel suggesting the pack inside Claude Code. Sound is off at first: “Sound” button.' },
     construction: { label: 'Construction', title: 'A pack is skills plus a project type.', text: 'skill-master recognizes your project type from its files, then suggests the head of the matching pack.' },
     packs: { title: 'Seven project types.', note: 'up to 8 skills in the head, then the extras' },
     pipelineIntro: 'A GitHub Action does all the work: it collects, judges, ranks and publishes. Nothing gets installed without Amdy’s approval.',
@@ -84,7 +84,7 @@ export function HomeView({ lang }: { lang: Lang }) {
   const candidates = pack.recommandes.filter(item => !item.epingle && getSkill(item.id)?.resume)
   const place = candidates.find(item => item.confiance) ?? candidates[0] ?? pack.recommandes[0]!
   const skill = getSkill(place.id)!
-  const teaserText = { label: t.teaser.video, pause: t.teaser.pause, play: t.teaser.play }
+  const teaserText = { label: t.teaser.video, pause: t.teaser.pause, play: t.teaser.play, sound: t.teaser.sound }
 
   return (
     <>
