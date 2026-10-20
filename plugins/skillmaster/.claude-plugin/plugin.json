@@ -1,0 +1,28 @@
+{
+  "name": "skillmaster",
+  "version": "0.2.0",
+  "description": "SKILLMASTER : propose les skills du pack de ton projet et le réglage modèle/effort, puis les charge pour la session sur accord. Commande /sm (check, install, clean, status).",
+  "author": { "name": "Amdy Bouviala" },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "auto": {
+      "type": "boolean",
+      "title": "Proposition automatique",
+      "description": "Proposer le pack seul (nouveau projet, prompt long ou mot de projet), une fois par conversation.",
+      "default": true
+    },
+    "seuil": {
+      "type": "number",
+      "title": "Seuil du prompt long",
+      "description": "Nombre de caractères à partir duquel un prompt déclenche la proposition.",
+      "default": 400
+    },
+    "mots": {
+      "type": "string",
+      "multiple": true,
+      "title": "Mots de projet",
+      "description": "Mots qui déclenchent la proposition, comptés en mots entiers.",
+      "default": ["site", "landing", "app", "refonte", "montage", "vidéo", "dashboard", "data", "notebook", "plugin", "mod"]
+    }
+  }
+}

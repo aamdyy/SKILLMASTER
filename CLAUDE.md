@@ -11,18 +11,18 @@ Amdy utilise Claude Code pour tous ses projets : sites web, apps iOS, montage vi
 
 1. **Une bibliothèque de skills vivante**, hébergée dans ce repo GitHub. Elle est triée, notée et classée par type de projet. Elle se met à jour toute seule chaque semaine : les nouveaux skills importants entrent, les skills morts ou dépassés sont archivés.
 2. **Un conseiller intégré à Claude Code**, par deux chemins :
-   - **dans le terminal, un mod** qui détecte le contexte quand Amdy démarre un projet ou envoie un prompt long ou complexe ;
+   - **un mod**, dans le terminal comme dans le panneau VS Code, qui détecte le contexte quand Amdy démarre un projet ou envoie un prompt long ou complexe ;
    - **partout, y compris dans VS Code, le skill `skill-master`**. Amdy lui dit « va voir SKILLMASTER et prends les skills dont tu as besoin », et il fait la même proposition.
 
    Dans les deux cas, l'outil affiche :
    - la **sélection recommandée** pour le type de projet détecté sur le moment (8 skills maximum), avec une **liste d'ajouts possibles**. Chaque skill y est présenté par son `resume_fr`, une phrase de 15 mots au plus : « ce qu'il fait → ce qu'il améliore » ;
-   - un **conseil modèle et effort** : par exemple « Opus 5.5 · xhigh · ultracode ON », avec une phrase qui explique pourquoi.
-3. **Il propose, Amdy valide.** Rien ne s'installe ou ne se change sans accord. Toutes les commandes passent sous le préfixe `/sm` : `/sm check`, `/sm install`, `/sm clean`, `/sm rate` et `/sm status`.
+   - un **conseil modèle et effort** : par exemple « Opus 5.5 · xhigh · ultracode ON », avec une phrase qui explique pourquoi. Il est affiché seulement : Amdy tape lui-même `/model` ou `/effort`.
+3. **Il propose, Amdy valide.** Rien ne s'installe ou ne se change sans accord. Toutes les commandes passent sous le préfixe `/sm` : `/sm check`, `/sm install`, `/sm clean`, `/sm status`, `/sm prompt` et, en phase 4, `/sm rate`.
 
 ## Principes non négociables
 
 - **Moins mais mieux.** Chaque skill installé consomme du contexte, et des skills qui se contredisent dégradent le résultat. Un pack contient 8 skills au maximum.
-- **Accepter = charger pour la session seulement**, sans rien écrire dans le projet. Les skills sont préparés dans un dossier de session puis chargés par `/add-dir`. Une option « garder pour ce projet » les copie dans `<projet>/.claude/skills/`. Le global se limite à un socle explicitement validé.
+- **Accepter = charger pour la session seulement**, sans rien écrire dans le projet. Les skills sont téléchargés à leur version épinglée dans `~/.cache/skillmaster/`, puis servis par l'outil du mod (`mcp__skillmaster__skill`). Une option « garder pour ce projet » les copie dans `<projet>/.claude/skills/`. Le global se limite à un socle explicitement validé.
 - **Pas de pack par projet.** Les packs sont définis par type de projet (site-web, ios, app-expo, android, video, data, outillage-claude-code…), et le type se détecte à partir des fichiers du dossier.
 - **Sécurité.** Les skills tiers peuvent embarquer des scripts. Le juge signale tout script, appel réseau ou commande destructive. L'outil n'installe **jamais** de mod tiers, car les mods ne sont pas sandboxés et ont le même accès à la machine que Claude Code.
 - **Pas de front-end inventé.** Amdy dessine les écrans sur Figma, puis Claude Code les code fidèlement. Si une interface est nécessaire (panneau du mod, page web de la bibliothèque), on attend ses maquettes. En attendant, on utilise un affichage minimal et neutre.
@@ -35,14 +35,16 @@ skillmaster/
 ├── CLAUDE.md
 ├── .claude-plugin/marketplace.json     # ce repo = la marketplace perso d'Amdy
 ├── plugins/skillmaster/                # le plugin qui contient le conseiller
-│   ├── (manifest plugin)               # format exact : vérifier la doc officielle
-│   ├── mods/advisor.ts                 # détecte le contexte, affiche pack + conseil modèle
-│   ├── skills/skill-master/SKILL.md    # pour demander à Claude « quels skills pour ce projet ? »
-│   └── commands/                       # /sm check · install · clean · rate · status
+│   ├── .claude-plugin/plugin.json      # nom, version, userConfig (auto, seuil, mots)
+│   ├── hooks/register.tsx              # le mod : déclenchement, panneau, dialogue, /sm, outil
+│   ├── hooks/lib/                      # détection, packs, conseil, mise en page du panneau
+│   ├── detection.json                  # règles de détection du type (la référence)
+│   ├── model-rules.json                # règles du conseil modèle/effort (éditable à la main)
+│   ├── types/index.d.ts · tests/       # contrat de $.state, tests de claude plugin test
+│   └── skills/skill-master/            # SKILL.md + scripts/sm.ts (sync, fetch) et scan.ts
 ├── library/
 │   ├── skills.json                     # catalogue complet (voir schéma ci-dessous)
-│   ├── packs/                          # site-web, ios, app-expo, video-remotion, data, outillage-claude-code…
-│   └── model-rules.json                # règles du conseil modèle/effort (éditable à la main)
+│   ├── packs/ · index/                 # site-web, ios, app-expo, android, video, data, outillage-claude-code
 ├── collector/
 │   ├── fetch.ts                        # GitHub Search API + listes awesome + annuaires
 │   └── judge.ts                        # Claude API : classe, note, signale les risques
@@ -75,19 +77,19 @@ skillmaster/
 
 ### Le conseiller : quand se déclencher
 
-Il se déclenche si au moins une de ces conditions est vraie (seuils réglables) :
-- le prompt est long (au-delà de N caractères) ;
-- le prompt contient des mots-clés de projet (site, landing, app, refonte, montage, dashboard…) ;
+Il se déclenche **une seule fois par conversation** (remis à zéro par `/clear`) si au moins une de ces conditions est vraie (seuils réglables dans `/config`) :
+- le prompt tapé fait au moins 400 caractères ;
+- le prompt contient un mot de projet, compté en mot entier (site, landing, app, refonte, montage, vidéo, dashboard, data, notebook, plugin, mod) ;
 - c'est un nouveau projet (pas de `CLAUDE.md`, dossier quasi vide) ;
-- l'utilisateur appelle `/sm`.
+- l'utilisateur appelle `/sm check`.
 
-Pour détecter le type de projet, il regarde les fichiers présents (`package.json` avec next/astro/vite, `*.xcodeproj` ou `Package.swift`, `remotion.config.*`, notebooks…) et les mots du prompt.
+Pour détecter le type de projet, il applique `plugins/skillmaster/detection.json` aux fichiers du dossier, et lit séparément les mots du prompt. Si le prompt désigne un type que le dossier n'a pas, le panneau montre les deux packs et Amdy choisit.
 
-### Règles de départ du conseil modèle (`model-rules.json`)
+### Règles de départ du conseil modèle (`plugins/skillmaster/model-rules.json`)
 
 | Situation | Modèle | Effort | Ultracode |
 |---|---|---|---|
-| Question, petite modif | Sonnet 5.5 | low / medium | off |
+| Question, petite modif (200 caractères au plus) | Sonnet 5.5 | low / medium | off |
 | Feature standard | Opus 5.5 | medium (défaut) | off |
 | Problème profond sur un seul fil (archi, bug coriace) | Opus 5.5 | high / xhigh | off |
 | Gros projet large, multi-fichiers (site complet, refonte) | Opus 5.5 | xhigh | **on** |
@@ -111,7 +113,7 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Étape 0 : mod de test** (`experiments/sm-smoke/`), lancé dans le panneau VS Code et dans le terminal. Il tranche ce qui s'affiche vraiment et ce qu'un mod peut lire ou déclencher.
   - **Étape 1 : ménage des skills globaux.** On définit un socle global de 10 skills maximum, et le reste est réparti en packs par projet (proposition : `docs/local/phase-1-menage-skills.md`). Amdy valide avant tout déplacement.
   - **Étape 2 :** collecteur et juge lancés une première fois à la main (plan : `docs/phase-1-etape2-plan-collecteur-juge.md`). Premier `skills.json` et packs par type. Amdy relit les notes et les packs.
-- **Phase 2** : le mod conseiller, le skill `skill-master` et les commandes `/sm`. Test sur un vrai projet.
+- **Phase 2** : le mod conseiller, le skill `skill-master` et les commandes `/sm`. Faite le 2026-10-20 : voir `docs/phase-2-plan.md`.
 - **Phase 3** : GitHub Action hebdomadaire, cycle de vie automatique, mise à jour écrite directement sur `main`.
 - **Phase 4** : boucle de retours qui influence les notes. `/sm rate` demande une note sur 5 étoiles en fin de session, pour 3 skills au plus, réellement utilisés pendant la session, et les signaux automatiques comptent aussi. Page web de la bibliothèque (GitHub Pages) **à partir des maquettes Figma d'Amdy**.
 
@@ -194,6 +196,17 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
 
     Tout est coupé avec `prefers-reduced-motion`.
   - **Données ajoutées par `publish.ts`** pour le site : `library/history/recap-AAAA-MM-JJ.md` et `last-run.json`. L'Action appelle le deploy hook Vercel (secret `VERCEL_DEPLOY_HOOK`) après chaque tour.
+- 2026-10-20 : **phase 2 livrée** (plugin `skillmaster` 0.2.0, testé dans le terminal et dans le panneau VS Code).
+  - **Charger pour la session** passe par l'outil du mod, `mcp__skillmaster__skill`, qui rend le `SKILL.md` puis ses annexes à la demande, sans sortir du dossier du skill. Une section du prompt système liste les skills chargés : sans elle, Claude n'appelait pas l'outil. Téléchargement, scan et décision passent par `skill-master/scripts/sm.ts`.
+  - **Dialogue natif à 4 options** (limite de Claude Code) : charger pour la session, garder pour ce projet, choisir moi-même, ne plus proposer dans ce projet. « Ne rien charger », c'est Échap. Dans `/sm check`, la 4ᵉ option est « Ne rien charger », ou « Reprendre la proposition auto ici » quand elle est coupée.
+  - **« Choisir moi-même »** : le panneau montre chaque skill avec son `resume_fr` complet, et Amdy tape les numéros dans le champ libre (« 1 3 12 », « 2-5 »).
+  - **Prompt retenu** : il revient dans la saisie après le choix, et une copie reste dans `$.store`. Il n'est jamais réécrit dans la saisie sans demande ; `/sm prompt` le rend, même après `/clear`. Échap ou une erreur du mod : il part tel quel.
+  - **Conseil modèle et effort affiché seulement**, sans pré-remplir `/model` ni `/effort` : ces commandes deviennent les réglages par défaut d'Amdy pour les nouvelles sessions.
+  - **Prompt et dossier en désaccord** (« site vitrine » dans SKILLMASTER) : le panneau montre les deux packs, Amdy choisit celui du prompt, celui du dossier ou les deux.
+  - **`/clear`** ouvre une nouvelle conversation : l'outil est vidé, le panneau fermé, et une nouvelle proposition devient possible.
+  - **Détection** : `detection.json` est la référence ; le tableau de `skill-master` et la page Pack du site en reprennent le texte. Les dossiers cachés (`.claude/`, `.agents/`) ne comptent pas.
+  - **Tests restés ouverts en phase 1** : `/add-dir` charge bien un skill dans le terminal ; `/reload-skills` part seul s'il est lancé juste après la commande (minuterie) ; l'outil est appelé par Claude de lui-même.
+  - **Installation** : depuis la marketplace `aamdyy/SKILLMASTER`. Le lien `~/.claude/skills/skill-master` est retiré le même jour : le skill vient désormais du plugin.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard

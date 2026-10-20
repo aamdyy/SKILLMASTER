@@ -1,0 +1,52 @@
+{
+  "note": "Règles du conseil modèle et effort, éditables à la main. La première règle dont la condition est remplie l'emporte ; la dernière, sans condition, sert de défaut. Les mots se comptent en mots entiers, sans tenir compte des accents. « ou_nouveau_projet » : la règle vaut aussi pour un dossier neuf. « max_caracteres » : seulement pour un prompt court. Ultracode sert la largeur (travail en parallèle), pas la difficulté ; max reste rare.",
+  "modeles": {
+    "opus": { "nom": "Opus 5.5", "id": "claude-opus-5-5", "commande": "opus" },
+    "sonnet": { "nom": "Sonnet 5.5", "id": "claude-sonnet-5-5", "commande": "sonnet" }
+  },
+  "regles": [
+    {
+      "id": "gros-chantier",
+      "situation": "Gros projet large, multi-fichiers (site complet, refonte)",
+      "si": {
+        "mots": ["refonte", "site complet", "from scratch", "de zero", "migration", "migrer", "tout le site", "toute l'app", "toutes les pages", "reecris", "reecrire", "nouveau projet"],
+        "ou_nouveau_projet": true
+      },
+      "modele": "opus",
+      "effort": "xhigh",
+      "ultracode": true,
+      "raison": "chantier large sur beaucoup de fichiers : ultracode sert la largeur"
+    },
+    {
+      "id": "probleme-profond",
+      "situation": "Problème profond sur un seul fil (archi, bug coriace)",
+      "si": {
+        "mots": ["bug", "crash", "plante", "regression", "fuite", "archi", "architecture", "lent", "lenteur", "performance", "perf", "coriace", "comprends pas", "debug", "debugger"]
+      },
+      "modele": "opus",
+      "effort": "high",
+      "ultracode": false,
+      "raison": "un seul fil à creuser : la profondeur d'abord, pas la largeur"
+    },
+    {
+      "id": "petite-modif",
+      "situation": "Question, petite modif",
+      "si": {
+        "mots": ["typo", "renomme", "renommer", "petite", "petit", "rapide", "question"],
+        "max_caracteres": 200
+      },
+      "modele": "sonnet",
+      "effort": "medium",
+      "ultracode": false,
+      "raison": "tâche courte et locale : Sonnet suffit et répond plus vite"
+    },
+    {
+      "id": "feature",
+      "situation": "Feature standard",
+      "modele": "opus",
+      "effort": "medium",
+      "ultracode": false,
+      "raison": "une feature standard : Opus à l'effort moyen suffit"
+    }
+  ]
+}

@@ -7,7 +7,7 @@ import { join } from 'node:path'
 
 const ROOT = join(process.cwd(), '..')
 const LIBRARY = join(ROOT, 'library')
-const SKILL_MASTER = join(ROOT, 'plugins', 'skillmaster', 'skills', 'skill-master', 'SKILL.md')
+const DETECTION = join(ROOT, 'plugins', 'skillmaster', 'detection.json')
 
 export type Gravite = 'critique' | 'eleve' | 'moyen' | 'info'
 export type Risque = { gravite: Gravite; source: 'scan' | 'juge'; categorie?: string; code: string; detail?: string }
@@ -226,17 +226,10 @@ export const getDernierTour = once((): DernierTour => {
   return { le: tour.date, coutUsd: chiffres.coutUsd, dureeMin: chiffres.dureeMin }
 })
 
-// Critères de détection du type, lus dans le SKILL.md de skill-master (lecture seule).
+// Critères de détection du type, lus dans detection.json du plugin, la référence (lecture seule).
 export const getDetection = once((): Record<string, string> => {
-  const text = readFileSync(SKILL_MASTER, 'utf8')
-  const table = text.slice(text.indexOf('| Type | Détecté par |'))
-  const rows: Record<string, string> = {}
-  for (const line of table.split('\n').slice(2)) {
-    if (!line.startsWith('|')) break
-    const [, type, rule] = line.split('|').map(cell => cell.trim())
-    if (type && rule) rows[type] = rule
-  }
-  return rows
+  const { types } = JSON.parse(readFileSync(DETECTION, 'utf8')) as { types: Record<string, { texte: string }> }
+  return Object.fromEntries(Object.entries(types).map(([type, rule]) => [type, rule.texte]))
 })
 
 export const getStats = once(() => {

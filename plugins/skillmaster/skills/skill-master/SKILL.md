@@ -20,6 +20,8 @@ Lance `node "<base>/scripts/sm.ts" sync`. Il rend une ligne JSON :
 
 Regarde la racine du dossier de travail, puis un niveau plus bas pour les monorepos (`apps/*`, `packages/*`). Lis les dépendances des `package.json`. Annonce en une ligne ce que tu as détecté, et d'après quels fichiers.
 
+Les règles de référence sont dans `<base>/../../detection.json` (le mod les applique telles quelles) ; le tableau ci-dessous en reprend le texte. Les dossiers cachés (`.claude/`, `.agents/`…) ne comptent pas.
+
 | Type | Détecté par |
 |---|---|
 | site-web | `package.json` avec next, astro, vite ou react, sans expo ni react-native ; ou un `index.html` à la racine |
@@ -78,7 +80,7 @@ Pour tous :
 2. Copie chaque dossier retenu dans `<racine du projet>/.claude/skills/<nom>/` :
    - depuis la bibliothèque : `cp -R "<dossier>" "<projet>/.claude/skills/<nom>"`, puis `chmod -R u+w` sur la copie ;
    - depuis l'archive (secours, ou skill hors index) : `cp -RL`, ce qui suit les liens. Pour bencium, copie seulement `skills/bencium-controlled-ux-designer/`. Pour les `accessibility-*`, copie aussi `shared/` dans `.claude/skills/shared/`.
-3. Retire de la copie `.claude-plugin/`, `hooks/`, `.mcp.json`, `bin/` et `.skillmaster.json`. Ne copie jamais un mod tiers.
+3. Retire de la copie `.claude-plugin/`, `hooks/`, `.mcp.json` et `bin/`. Ne copie jamais un mod tiers. Garde `.skillmaster.json` : c'est lui qui permet à `/sm clean` de reconnaître la copie.
 4. Demande à Amdy de taper `/reload-skills`, car tu ne peux pas lancer de commande intégrée.
 5. Ne touche pas au `.gitignore`. S'il y a un repo git, signale que les fichiers y apparaîtront.
 
@@ -95,4 +97,4 @@ Donne la commande à taper (`/model …`, `/effort …`, `/effort ultracode on`)
 
 ## Hors du périmètre de la v1
 
-Pas de note ni de « ne plus proposer » mémorisé : ça viendra avec `/sm rate` en phase 4. Pour un plugin à installer, donne la commande (`claude plugin install <nom>@claude-plugins-official -s project`) et laisse Amdy décider.
+Pas de note : ça viendra avec `/sm rate` en phase 4. Quand le plugin SKILLMASTER est installé, son mod fait la proposition automatique et `/sm` (`check`, `install`, `clean`, `status`) ; « ne plus proposer dans ce projet » vit dans le mod. Pour un plugin à installer, donne la commande (`claude plugin install <nom>@claude-plugins-official -s project`) et laisse Amdy décider.

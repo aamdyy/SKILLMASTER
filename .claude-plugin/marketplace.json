@@ -1,0 +1,14 @@
+{
+  "name": "skillmaster",
+  "owner": {
+    "name": "Amdy Bouviala"
+  },
+  "description": "La marketplace personnelle d'Amdy : le plugin SKILLMASTER et sa bibliothèque de skills.",
+  "plugins": [
+    {
+      "name": "skillmaster",
+      "source": "./plugins/skillmaster",
+      "description": "Propose les skills du pack de ton projet et le réglage modèle/effort, puis les charge pour la session sur accord."
+    }
+  ]
+}

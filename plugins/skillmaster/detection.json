@@ -1,0 +1,67 @@
+{
+  "note": "Règles de détection du type de projet. C'est la référence : le mod les applique, le tableau de skill-master (SKILL.md) et la page Pack du site reprennent le champ « texte ». Éditable à la main. Les fichiers se cherchent à la racine et dans les sous-projets (apps/*, packages/*). Les mots du prompt ne servent que si les fichiers ne révèlent aucun type ; ils se comptent en mots entiers, sans tenir compte des accents. « chemins » se cherchent dans les sous-dossiers jusqu'à « profondeur » niveaux, sans descendre dans les dossiers cachés (.claude/, .agents/…).",
+  "sous_projets": ["apps", "packages"],
+  "ignorer": ["node_modules", ".git", ".next", ".expo", ".turbo", ".vercel", "dist", "build", "out", "Pods", "DerivedData", ".venv", "venv", "__pycache__", ".gradle"],
+  "types": {
+    "site-web": {
+      "nom": "site web",
+      "texte": "`package.json` avec next, astro, vite ou react, sans expo ni react-native ; ou un `index.html` à la racine",
+      "dependances": ["next", "astro", "vite", "react"],
+      "sauf_dependances": ["expo", "react-native"],
+      "fichiers": ["index.html"],
+      "mots": ["site", "site web", "landing", "landing page", "page d'accueil", "vitrine", "next.js", "nextjs", "astro"]
+    },
+    "ios": {
+      "nom": "iOS",
+      "texte": "`*.xcodeproj` ou `Package.swift`, sans `package.json` expo ou react-native",
+      "fichiers": ["*.xcodeproj", "Package.swift"],
+      "sauf_dependances": ["expo", "react-native"],
+      "mots": ["ios", "iphone", "ipad", "swiftui", "xcode", "app ios"]
+    },
+    "app-expo": {
+      "nom": "app Expo",
+      "texte": "`package.json` avec expo ou react-native, `app.json`, `eas.json`",
+      "dependances": ["expo", "react-native"],
+      "fichiers": ["eas.json"],
+      "mots": ["expo", "react native", "react-native", "app mobile"]
+    },
+    "android": {
+      "nom": "Android",
+      "texte": "`build.gradle(.kts)` avec Compose (`kotlin.compose`, `compose = true`)",
+      "contenus": [
+        {
+          "fichiers": ["build.gradle", "build.gradle.kts", "app/build.gradle", "app/build.gradle.kts", "gradle/libs.versions.toml"],
+          "motif": "kotlin\\.compose|compose\\s*=\\s*true|androidx\\.compose",
+          "indice": "Compose"
+        }
+      ],
+      "mots": ["android", "jetpack compose", "kotlin"]
+    },
+    "video": {
+      "nom": "vidéo",
+      "texte": "`remotion.config.*` ou une dépendance `@remotion/*`",
+      "fichiers": ["remotion.config.*"],
+      "dependances": ["remotion", "@remotion/*"],
+      "mots": ["video", "montage", "remotion", "motion design"]
+    },
+    "data": {
+      "nom": "data",
+      "texte": "`*.ipynb`, ou un `pyproject.toml` / `requirements.txt` avec pandas, polars, duckdb ou numpy",
+      "fichiers": ["*.ipynb"],
+      "contenus": [
+        {
+          "fichiers": ["pyproject.toml", "requirements.txt"],
+          "motif": "\\b(pandas|polars|duckdb|numpy)\\b"
+        }
+      ],
+      "mots": ["data", "donnees", "notebook", "jupyter", "pandas", "duckdb", "analyse de donnees"]
+    },
+    "outillage-claude-code": {
+      "nom": "outillage Claude Code",
+      "texte": "un `.claude-plugin/`, un `hooks/hooks.json`, des `skills/*/SKILL.md` ou un `marketplace.json`, jusqu'à 3 niveaux de profondeur",
+      "chemins": [".claude-plugin", "hooks/hooks.json", "skills/*/SKILL.md", "marketplace.json"],
+      "profondeur": 3,
+      "mots": ["claude code", "plugin claude", "mod", "skill", "skills", "serveur mcp"]
+    }
+  }
+}
