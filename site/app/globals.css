@@ -162,7 +162,7 @@ body {
     contain-intrinsic-size: auto 88px;
   }
   .srow > a {
-    @apply grid gap-x-6 gap-y-1.5 px-1 py-4 transition-colors duration-150 hover:bg-panel md:grid-cols-[minmax(0,17rem)_minmax(0,1fr)_7.5rem] md:px-3;
+    @apply grid gap-x-6 gap-y-1.5 px-1 py-4 transition-colors duration-150 hover:bg-panel md:grid-cols-[minmax(0,16rem)_minmax(0,1fr)_11rem] md:px-3;
   }
   .srow > a > div {
     @apply min-w-0;
@@ -183,7 +183,8 @@ body {
   .srow > a > span > :first-child {
     @apply text-fg;
   }
-  .srow > a > span > :nth-child(2) {
+  .srow > a > span > :nth-child(2),
+  .srow > a > span > :nth-child(4) {
     @apply text-muted;
   }
   .r-aucun { @apply text-muted; }

@@ -51,6 +51,16 @@ export function NoteBadge({ note }: { note: number | null }) {
   return <span className={`${base} text-fg tabular`}>note {note === null ? '—' : String(note).replace('.', ',')}/10</span>
 }
 
+// Étoiles GitHub du dépôt (pas du skill : plusieurs skills d'un même dépôt partagent ce chiffre).
+export function StarsBadge({ stars, compact }: { stars: number; compact: string }) {
+  return (
+    <span className={`${base} text-fg/85 tabular`} title={`${new Intl.NumberFormat('fr-FR').format(stars)} étoiles GitHub du dépôt`}>
+      <span aria-hidden>★</span>
+      {compact} <span className="text-muted">étoiles du dépôt</span>
+    </span>
+  )
+}
+
 export function TextBadge({ children }: { children: string }) {
   return <span className={`${base} text-fg/85`}>{children}</span>
 }

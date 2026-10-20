@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import { Container } from '@/components/Container'
 import { Label } from '@/components/Label'
 import { SkillsFilter } from '@/components/SkillsFilter'
-import { formatInt } from '@/lib/format'
+import { formatCompact, formatInt } from '@/lib/format'
 import { PACKS, getSkills, getTrustedIds, labelOf, skillHref } from '@/lib/library'
 import type { Gravite } from '@/lib/library'
 
@@ -65,6 +65,10 @@ export default function SkillsPage() {
                       <span>{labelOf(type === 'autre' ? null : type)}</span>
                       <span className={`r-${risk}`}>
                         <span aria-hidden>● </span>risque {RISK_SHORT[risk]}
+                      </span>
+                      <span>
+                        <span aria-hidden>★ </span>
+                        {formatCompact(skill.stars)} étoiles du dépôt
                       </span>
                     </span>
                   </a>

@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { ViewTransition } from 'react'
 import { skillHref, transitionName, type PackSkill, type Skill } from '@/lib/library'
-import { NoteBadge, PinnedBadge, RiskBadge, TrustBadge } from './Badges'
+import { formatCompact } from '@/lib/format'
+import { NoteBadge, PinnedBadge, RiskBadge, StarsBadge, TrustBadge } from './Badges'
 import { Resume } from './Resume'
 
 // Ligne d'un skill dans un pack. Le nom porte un <ViewTransition> : il glisse jusqu'au titre
@@ -28,6 +29,7 @@ export function SkillLine({ skill, place, dense = false }: { skill: Skill; place
         <div className="flex flex-wrap gap-2">
           <NoteBadge note={skill.note} />
           <RiskBadge gravite={skill.risqueMax} />
+          <StarsBadge stars={skill.stars} compact={formatCompact(skill.stars)} />
           {place.confiance && <TrustBadge />}
           {place.epingle && <PinnedBadge />}
         </div>

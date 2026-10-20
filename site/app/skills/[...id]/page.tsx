@@ -2,14 +2,14 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ViewTransition, type ReactNode } from 'react'
-import { NoteBadge, PinnedBadge, RiskBadge, TextBadge, TrustBadge } from '@/components/Badges'
+import { NoteBadge, PinnedBadge, RiskBadge, StarsBadge, TextBadge, TrustBadge } from '@/components/Badges'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Frame } from '@/components/Frame'
 import { Label } from '@/components/Label'
 import { Resume } from '@/components/Resume'
 import { Section } from '@/components/Section'
-import { formatDate, formatInt } from '@/lib/format'
+import { formatCompact, formatDate, formatInt } from '@/lib/format'
 import { getFiches, getSkillBySlug, getSkills, getTrustedIds, labelOf, placesOf, skillHref, transitionName, type Risque, type Skill } from '@/lib/library'
 
 export const dynamicParams = false
@@ -118,6 +118,7 @@ export default async function SkillPage({ params }: { params: Promise<{ id: stri
           <div className="flex flex-wrap gap-2">
             <NoteBadge note={skill.note} />
             <RiskBadge gravite={skill.risqueMax} />
+            <StarsBadge stars={skill.stars} compact={formatCompact(skill.stars)} />
             {trusted && <TrustBadge />}
             {pinned && <PinnedBadge />}
             {skill.statut === 'archive' && <TextBadge>archivé</TextBadge>}

@@ -202,6 +202,12 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Condition :** à tester seulement si le classement par Haiku reste instable après la v3.1.
   - **Avant d'adopter :** le mesurer contre Haiku sur une centaine de skills.
 
+- **Nombre d'installations des skills** (écarté le 2026-10-20).
+  - **Seule source fiable et autorisée** : l'API officielle de skills.sh (`GET /api/v1/skills?source=<owner>/<repo>`), une requête par dépôt, soit environ 400 par semaine.
+  - **Limite** : le chiffre ne compte que les installations faites par `npx skills`.
+  - **Pourquoi c'est écarté** : l'API exige un jeton OIDC Vercel, donc un `VERCEL_TOKEN` qui, sur l'offre Hobby, donne accès à tout le compte Vercel. C'est trop de risque pour un chiffre partiel.
+  - **Condition pour reprendre** : que skills.sh propose une clé publique en lecture seule, ou un accès limité à un seul projet. Le champ `installs` de `skills.json` est déjà prévu.
+
 ## Décisions encore ouvertes
 
 - Publier l'outil plus tard (repo public, contenu pour sa chaîne) ?
