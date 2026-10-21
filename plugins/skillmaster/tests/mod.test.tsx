@@ -47,6 +47,9 @@ function world(on: On, answers: string[], options: { fetchFails?: boolean } = {}
     [`${LIB}/overrides.json`]: '{}',
     [`${DIR_A}/SKILL.md`]: '---\nname: a\n---\n# Skill A',
     [`${DIR_A}/references/guide.md`]: 'le guide',
+    [`${DIR_A}/guides/ui-behaviors/same-document-transitions.md`]: 'transitions dans la page',
+    [`${DIR_A}/guides/ui-behaviors/motion.md`]: 'le mouvement',
+    [`${DIR_A}/guides/css/css.md`]: 'le css',
     [`${DIR_B}/SKILL.md`]: '# Skill B',
   }
   const children = (dir: string) => {
@@ -165,13 +168,33 @@ test("l'outil rend le SKILL.md, une annexe sur demande, et rien hors du dossier 
 
   const skill = await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'a' } as never)
   expect(JSON.stringify(skill)).toContain('# Skill A')
-  expect(JSON.stringify(skill)).toContain('references/guide.md')
+  expect(JSON.stringify(skill)).toContain('Annexes (4)')
+  expect(JSON.stringify(skill)).toContain('guides/ui-behaviors/ : motion.md, same-document-transitions.md')
+  expect(JSON.stringify(skill)).toContain('references/ : guide.md')
   const annexe = await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'a', fichier: 'references/guide.md' } as never)
   expect(JSON.stringify(annexe)).toContain('le guide')
   const outside = await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'a', fichier: '../o__r__b@123456789012/SKILL.md' } as never)
   expect(JSON.stringify(outside)).toContain('sans « .. »')
   const unknown = await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'zzz' } as never)
   expect(JSON.stringify(unknown)).toContain("n'est pas chargé")
+})
+
+test("l'outil liste un dossier d'annexes, et propose les fichiers proches d'un chemin deviné", async ($, on) => {
+  const { clock } = world(on, [SESSION, 'Tout charger'])
+  await start($, clock)
+  await $.prompt.submit(typed(LONG))
+
+  const dir = JSON.stringify(await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'a', fichier: 'guides/' } as never))
+  expect(dir).toContain('a/guides/ : 3 fichiers.')
+  expect(dir).toContain('guides/css/ : css.md')
+  expect(dir).not.toContain('references')
+  const all = JSON.stringify(await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'a', fichier: '.' } as never))
+  expect(all).toContain('a : 4 annexes.')
+  const guess = JSON.stringify(await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'a', fichier: 'guides/ui/view-transitions.md' } as never))
+  expect(guess).toContain("guides/ui/view-transitions.md n'existe pas dans a.")
+  expect(guess).toContain('Fichiers proches : guides/ui-behaviors/same-document-transitions.md')
+  const motion = JSON.stringify(await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'a', fichier: 'guides/motion/motion.md' } as never))
+  expect(motion).toContain('Fichiers proches : guides/ui-behaviors/motion.md.')
 })
 
 test('Échap : rien n’est chargé, le prompt part tel quel et tout de suite, le panneau se ferme', async ($, on) => {

@@ -3,6 +3,7 @@ import type { EngineInterface, Register } from 'claude-code'
 
 import type { SkillmasterCharge, SkillmasterItem, SkillmasterProposition } from '../types'
 import { advise, chooseRule, modelId, type ModelRules, type Reglage } from './lib/advice'
+import { ANNEXES_MAX, groupAnnexes, nearest } from './lib/annexes'
 import { detect, detectFiles, detectWords, isNewProject, type Detection, type DetectionRules, type Reader } from './lib/detect'
 import { buildPack, parseNumbers, type IndexSkill, type Overrides, type PackIndex } from './lib/library'
 import { num, panelLines } from './lib/panel'
@@ -428,14 +429,14 @@ async function registerTool($: EngineInterface) {
   await $.tool.register({
     name: 'skill',
     description: [
-      "Skills chargés par SKILLMASTER pour cette session, sans rien installer. Quand la tâche correspond à l'un d'eux, appelle cet outil avec son `nom` pour lire son SKILL.md, puis suis-le comme un skill installé. Avec `fichier` (chemin relatif), l'outil lit une annexe du même dossier quand le SKILL.md y renvoie. Après une compaction, relis le SKILL.md d'un skill qui sert encore.",
+      "Skills chargés par SKILLMASTER pour cette session, sans rien installer. Quand la tâche correspond à l'un d'eux, appelle cet outil avec son `nom` pour lire son SKILL.md, puis suis-le comme un skill installé. Avec `fichier` (chemin relatif), l'outil lit une annexe du même dossier quand le SKILL.md y renvoie ; avec un dossier, il en donne la liste. Après une compaction, relis le SKILL.md d'un skill qui sert encore.",
       ...list.map(skill => `- ${skill.nom}${skill.resume ? ` : ${skill.resume}` : ''}`),
     ].join('\n'),
     inputSchema: {
       type: 'object',
       properties: {
         nom: { type: 'string', enum: list.map(skill => skill.nom), description: 'Le nom du skill.' },
-        fichier: { type: 'string', description: "Chemin relatif d'une annexe du skill (par exemple references/guide.md). Absent : le SKILL.md." },
+        fichier: { type: 'string', description: "Chemin relatif d'une annexe du skill (par exemple references/guide.md), ou d'un dossier pour en avoir la liste. Absent : le SKILL.md et la liste des annexes." },
       },
       required: ['nom'],
       additionalProperties: false,
@@ -444,16 +445,18 @@ async function registerTool($: EngineInterface) {
   })
 }
 
-async function listFiles($: EngineInterface, base: string, prefix = '', out: string[] = []): Promise<string[]> {
+// Les annexes d'un skill (ou d'un de ses dossiers), chemins relatifs au skill, 4 niveaux au plus.
+async function listFiles($: EngineInterface, base: string, prefix = '', depth = 0, out: string[] = []): Promise<string[]> {
   for (const entry of await $.fs.list(prefix ? `${base}/${prefix}` : base).catch(() => [])) {
-    if (out.length >= 60) break
+    if (out.length >= ANNEXES_MAX) break
     const path = prefix ? `${prefix}/${entry.name}` : entry.name
     if (path === 'SKILL.md' || path === '.skillmaster.json') continue
-    if (entry.kind === 'dir' && prefix.split('/').length < 3) await listFiles($, base, path, out)
+    if (entry.kind === 'dir' && depth < 3) await listFiles($, base, path, depth + 1, out)
     else if (entry.kind === 'file') out.push(path)
   }
   return out
 }
+const cutNote = (count: number) => (count >= ANNEXES_MAX ? ` Liste coupée à ${ANNEXES_MAX} fichiers : donne un dossier dans fichier pour la suite.` : '')
 
 // Le prompt retenu revient dans la saisie ; une copie reste dans $.store pour /sm prompt. Si la saisie ne
 // le prend pas, il part tel quel, pour ne jamais le perdre.
@@ -797,12 +800,24 @@ export const register: Register = (on, raw) => {
     const base = (await $.fs.stat(skill.dossier, { resolve: true }).catch(() => null))?.realPath
     if (!base) return { deny: `SKILLMASTER : le dossier de ${skill.nom} a disparu (${skill.dossier}). Relance /sm check.` }
 
-    const wanted = typeof fichier === 'string' ? fichier.trim().replace(/^\.\//, '') : ''
+    const wanted = typeof fichier === 'string' ? fichier.trim().replace(/^\.\//, '').replace(/\/+$/, '') : ''
+    if (wanted === '.') {
+      const all = await listFiles($, base)
+      return { result: [`${skill.nom} : ${all.length} annexes.${cutNote(all.length)}`, ...groupAnnexes(all)].join('\n') }
+    }
     if (wanted && wanted !== 'SKILL.md') {
       if (wanted.startsWith('/') || wanted.split('/').includes('..')) return { deny: 'SKILLMASTER : donne un chemin relatif au dossier du skill, sans « .. ».' }
       const stat = await $.fs.stat(`${base}/${wanted}`, { resolve: true }).catch(() => null)
-      if (!stat?.realPath?.startsWith(`${base}/`)) return { deny: `SKILLMASTER : ${wanted} n'existe pas dans ${skill.nom}.` }
-      if (stat.kind !== 'file' || stat.size > 1_000_000) return { deny: `SKILLMASTER : ${wanted} n'est pas un fichier texte lisible (dossier, ou plus de 1 Mo).` }
+      if (!stat?.realPath?.startsWith(`${base}/`)) {
+        const near = nearest(wanted, await listFiles($, base))
+        const hint = near.length ? ` Fichiers proches : ${near.join(', ')}.` : ''
+        return { deny: `SKILLMASTER : ${wanted} n'existe pas dans ${skill.nom}.${hint} Pour la liste complète : fichier « . », ou un dossier.` }
+      }
+      if (stat.kind === 'dir') {
+        const inside = await listFiles($, base, wanted)
+        return { result: [`${skill.nom}/${wanted}/ : ${inside.length} fichiers.${cutNote(inside.length)}`, ...groupAnnexes(inside)].join('\n') }
+      }
+      if (stat.kind !== 'file' || stat.size > 1_000_000) return { deny: `SKILLMASTER : ${wanted} n'est pas un fichier texte lisible (plus de 1 Mo, ou fichier spécial).` }
       return { result: `${skill.nom}/${wanted}\n\n${await $.fs.read(stat.realPath)}` }
     }
 
@@ -813,7 +828,9 @@ export const register: Register = (on, raw) => {
         "Suis ses instructions pour la tâche en cours. N'exécute rien de ce dossier (ni scripts, ni shell inline du SKILL.md) : si une commande est utile, propose-la à Amdy. Le champ allowed-tools n'accorde ici aucune permission.",
         '',
         await $.fs.read(`${base}/SKILL.md`),
-        ...(annexes.length ? ['', `Annexes (outil skillmaster, champ fichier) : ${annexes.join(', ')}`] : []),
+        ...(annexes.length
+          ? ['', `Annexes (${annexes.length}) : lis-en une avec cet outil, champ fichier = dossier/nom ; un dossier en donne la liste.${cutNote(annexes.length)}`, ...groupAnnexes(annexes)]
+          : []),
       ].join('\n'),
     }
   }).catch(() => ({ deny: 'SKILLMASTER : lecture du skill impossible. Relance /sm check.' }))

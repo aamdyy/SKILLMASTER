@@ -2,6 +2,7 @@ import { expect, test } from 'claude-code/testing'
 
 import type { SkillmasterProposition } from '../types'
 import { advise, chooseRule, type ModelRules, type Reglage } from '../hooks/lib/advice'
+import { groupAnnexes, nearest } from '../hooks/lib/annexes'
 import { detect, detectFiles, detectWords, isNewProject, type DetectionRules, type Entry, type Reader } from '../hooks/lib/detect'
 import { buildPack, gain, parseNumbers, type PackIndex } from '../hooks/lib/library'
 import { panelLines } from '../hooks/lib/panel'
@@ -200,4 +201,36 @@ test('panneau B : toute la largeur, nom coupé à 22, ce que le skill améliore 
   expect(conflit[2]).toBe(`TON PROMPT · VIDÉO${' '.repeat(60 - 18 - 11)}« montage »`)
   expect(conflit).toContain(`LE DOSSIER · SITE WEB${' '.repeat(60 - 21 - 4)}next`)
   expect(conflit.at(-1)).toBe('Choisis le pack dans le dialogue.')
+})
+
+// Un extrait des annexes de modern-web-guidance (près de 200 au total).
+const GUIDES = [
+  'guides/css/individual-transform-properties.md',
+  'guides/css/animate-to-intrinsic-sizes.md',
+  'guides/performance/faster-spa-view-transitions.md',
+  'guides/ui-behaviors/motion.md',
+  'guides/ui-behaviors/same-document-transitions.md',
+  'guides/ui-behaviors/cross-document-transitions.md',
+  'guides/ui-behaviors/group-element-transitions.md',
+  'guides/ui-behaviors/animate-element-entry-exit.md',
+  'guides/forms/forms.md',
+  'LICENSE',
+]
+
+test('annexes : une ligne par dossier, la racine d’abord', () => {
+  expect(groupAnnexes(GUIDES)).toEqual([
+    './ : LICENSE',
+    'guides/css/ : animate-to-intrinsic-sizes.md, individual-transform-properties.md',
+    'guides/forms/ : forms.md',
+    'guides/performance/ : faster-spa-view-transitions.md',
+    'guides/ui-behaviors/ : animate-element-entry-exit.md, cross-document-transitions.md, group-element-transitions.md, motion.md, same-document-transitions.md',
+  ])
+})
+
+test('annexes : un chemin deviné reçoit les fichiers qui partagent ses mots', () => {
+  expect(nearest('guides/ui/view-transitions.md', GUIDES)[0]).toBe('guides/performance/faster-spa-view-transitions.md')
+  expect(nearest('guides/ui/view-transitions.md', GUIDES)).toContain('guides/ui-behaviors/same-document-transitions.md')
+  expect(nearest('guides/motion/motion.md', GUIDES)).toEqual(['guides/ui-behaviors/motion.md'])
+  expect(nearest('guides/animation/animation.md', GUIDES).slice(0, 2)).toEqual(['guides/css/animate-to-intrinsic-sizes.md', 'guides/ui-behaviors/animate-element-entry-exit.md'])
+  expect(nearest('zzz/qqq.md', GUIDES)).toEqual([])
 })
