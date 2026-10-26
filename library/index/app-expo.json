@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-20T13:35:05.843Z",
+  "genere_le": "2026-10-26T11:30:59.651Z",
   "type": "app-expo",
   "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -26,9 +26,9 @@
       "repo": "expo/skills",
       "chemin_skill": "plugins/expo/skills/expo-ui",
       "skill_md": "plugins/expo/skills/expo-ui/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "construit feuilles, sélecteurs et listes natifs → rendu fidèle iOS et Android, sans bibliothèques tierces",
-      "note": 9,
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "affiche feuilles, sliders et menus SwiftUI ou Compose → rendu natif sur iOS et Android",
+      "note": 8,
       "editeur_confiance": true,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
@@ -49,8 +49,8 @@
         {
           "gravite": "eleve",
           "source": "juge",
-          "categorie": "reseau",
-          "code": "Le bloc « Submitting Feedback » demande à l'agent d'exécuter `npx --yes submit-expo-feedback@latest` avec un sujet et un contenu libres : cela envoie des données de session à un tiers et télécharge d…"
+          "categorie": "execution",
+          "code": "Consigne d'exécuter le script list-components.js sur le projet ; autorisation Bash(node *) large dans allowed-tools malgré le périmètre limité"
         }
       ]
     },
@@ -61,8 +61,8 @@
       "repo": "expo/skills",
       "chemin_skill": "plugins/expo/skills/eas-app-stores",
       "skill_md": "plugins/expo/skills/eas-app-stores/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "lance builds et envois App Store et Play → moins de rejets à la soumission",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "compile et soumet tes apps iOS et Android aux stores → moins d'erreurs de signature",
       "note": 9,
       "editeur_confiance": true,
       "risque_max": "eleve",
@@ -72,13 +72,7 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Le skill demande de lancer `npx --yes submit-expo-feedback@latest` avec un texte libre : exécution d'un paquet npm distant non épinglé et envoi de contenu à un tiers (Expo) sans validation explicite."
-        },
-        {
-          "gravite": "moyen",
-          "source": "juge",
-          "categorie": "donnees",
-          "code": "Le skill invite à créer des identifiants ASC et une clé .p8 et à gérer des comptes de service Google : risque de fuite si ces fichiers sont mal placés, même si le texte recommande de les garder hors …"
+          "code": "La section « Submitting Feedback » demande d'exécuter npx --yes @expo/agent-cli@latest, téléchargement et exécution d'un paquet distant non épinglé, avec envoi de contenu à un tiers"
         }
       ]
     },
@@ -89,9 +83,9 @@
       "repo": "expo/skills",
       "chemin_skill": "plugins/expo/skills/expo-dev-client",
       "skill_md": "plugins/expo/skills/expo-dev-client/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "compile un client Expo de test → teste le code natif sur appareil, sans store",
-      "note": 9,
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "compile un client de développement Expo → teste le code natif sur appareil sans tout recompiler",
+      "note": 8,
       "editeur_confiance": true,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
@@ -100,35 +94,7 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "La section « Submitting Feedback » exécute `npx --yes submit-expo-feedback@latest` : c'est l'exécution d'un paquet npm distant non épinglé, qui envoie du texte rédigé par l'agent à un service tiers, …"
-        }
-      ]
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/expo-animation",
-      "nom": "expo-animation",
-      "place": "recommande",
-      "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-animation",
-      "skill_md": "plugins/expo/skills/expo-animation/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "choisit l'outil le plus léger, anime sur le thread UI → fluidité même sur téléphones modestes",
-      "note": 9,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Section « Submitting Feedback » : exécution via npx --yes submit-expo-feedback@latest, c'est-à-dire un paquet distant non épinglé, avec envoi de contexte de l'agent vers un tiers"
-        },
-        {
-          "gravite": "moyen",
-          "source": "juge",
-          "categorie": "consigne",
-          "code": "Demande à l'agent de charger un autre skill (expo-skill-feedback) en cas d'échec répété, ce qui est une instruction adressée à l'agent"
+          "code": "La commande `npx --yes @expo/agent-cli@latest feedback` télécharge et exécute un paquet npm distant sans confirmation, et envoie du contexte de l'environnement à un tiers."
         }
       ]
     },
@@ -161,8 +127,8 @@
       "repo": "expo/skills",
       "chemin_skill": "plugins/expo/skills/expo-router",
       "skill_md": "plugins/expo/skills/expo-router/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "organise routes, modales et onglets natifs → navigation plus fluide, conforme aux usages iOS",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "te guide dans routes, onglets et menus natifs → moins d'erreurs de navigation",
       "note": 9,
       "editeur_confiance": true,
       "risque_max": "eleve",
@@ -172,7 +138,7 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Le bloc « Submitting Feedback » demande à l'agent d'exécuter `npx --yes submit-expo-feedback@latest` (paquet npm distant, envoi de données vers un tiers) de sa propre initiative lorsqu'il rencontre u…"
+          "code": "Le skill demande d'exécuter `npx --yes @expo/agent-cli@latest feedback` : téléchargement et exécution d'un paquet distant, et envoi de contenu de contexte à un tiers, sans garde-fou ni demande de con…"
         }
       ]
     },
@@ -183,8 +149,8 @@
       "repo": "expo/skills",
       "chemin_skill": "plugins/expo/skills/expo-overview",
       "skill_md": "plugins/expo/skills/expo-overview/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "oriente chaque tâche Expo ou EAS vers le bon skill → évite les erreurs de configuration",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "oriente chaque tâche Expo ou EAS vers le bon skill → évite les mauvais départs",
       "note": 9,
       "editeur_confiance": true,
       "risque_max": "eleve",
@@ -194,59 +160,106 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Commande `npx --yes submit-expo-feedback@latest` : exécute un paquet npm distant non épinglé et envoie du contexte de session à un tiers"
+          "code": "Commande `npx --yes @expo/agent-cli@latest feedback` : exécute un paquet distant non épinglé, sans confirmation."
         },
         {
           "gravite": "eleve",
           "source": "juge",
-          "categorie": "execution",
-          "code": "Annexe : modifie les préférences système du simulateur iOS via PlistBuddy (approbation de schémas d'URL)"
+          "categorie": "reseau",
+          "code": "Le skill demande de soumettre à Expo des rapports de feedback (tâche, erreurs, contexte projet) : risque de fuite de données du projet vers un tiers."
         }
       ]
-    }
-  ],
-  "ajouts": [
+    },
     {
-      "id": "expo/skills/plugins/expo/skills/expo-design-system",
-      "nom": "expo-design-system",
-      "place": "ajout",
+      "id": "expo/skills/plugins/expo/skills/eas-update",
+      "nom": "eas-update",
+      "place": "recommande",
       "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-design-system",
-      "skill_md": "plugins/expo/skills/expo-design-system/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "centralise couleurs et espacements dans un thème partagé → écrans cohérents, sans valeurs en dur",
+      "chemin_skill": "plugins/expo/skills/eas-update",
+      "skill_md": "plugins/expo/skills/eas-update/SKILL.md",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "publie des mises à jour JavaScript sans nouveau build → livre les corrections aux apps installées",
       "note": 10,
       "editeur_confiance": true,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
       "risques": [
         {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash(npx expo *), Bash(npx *eas-cli@*), Bash(eas *)"
+        },
+        {
           "gravite": "eleve",
           "source": "juge",
-          "categorie": "reseau",
-          "code": "Instruction de soumission de feedback via npx submit-expo-feedback@latest : exécution d'un paquet npm distant non épinglé, à faire seulement sur demande"
+          "categorie": "execution",
+          "code": "Publication en production possible sur demande : le skill encadre la commande mais des actions à effets distants restent décrites"
         }
       ]
-    },
+    }
+  ],
+  "ajouts": [
     {
-      "id": "expo/skills/plugins/expo/skills/expo-project-structure",
-      "nom": "expo-project-structure",
+      "id": "expo/skills/plugins/expo/skills/expo-upgrade",
+      "nom": "expo-upgrade",
       "place": "ajout",
       "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-project-structure",
-      "skill_md": "plugins/expo/skills/expo-project-structure/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "te propose une structure pour nouveau projet Expo → fichiers faciles à localiser dès le départ",
+      "chemin_skill": "plugins/expo/skills/expo-upgrade",
+      "skill_md": "plugins/expo/skills/expo-upgrade/SKILL.md",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "te guide les montées Expo SDK → évite builds cassés et conflits de dépendances",
       "note": 9,
       "editeur_confiance": true,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
       "risques": [
         {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier)"
+        },
+        {
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Le skill demande à l'agent d'exécuter « npx --yes submit-expo-feedback@latest » avec du contenu libre, ce qui envoie des données à un tiers et exécute un paquet distant sans validation explicite de l…"
+          "code": "Le skill demande de lancer automatiquement 'npx --yes @expo/agent-cli@latest feedback' : exécution d'un paquet distant sans confirmation, avec envoi de contexte projet vers un tiers."
+        }
+      ]
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-examples",
+      "nom": "expo-examples",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/expo-examples",
+      "skill_md": "plugins/expo/skills/expo-examples/SKILL.md",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "te donne le modèle officiel Expo pour une intégration → évite de bricoler sans référence",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read,Bash(gh api:*),Bash(git clone:*),Bash(npx create-expo:*),Bash(npx degit:*),"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La commande de feedback exécute npx --yes @expo/agent-cli@latest (package distant non épinglé) et peut transmettre du contexte de session à un tiers."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "allowed-tools autorise npx create-expo, npx degit et bun create, qui exécutent du code distant à l'installation d'un exemple."
         }
       ]
     },
@@ -266,180 +279,14 @@
       "risques": []
     },
     {
-      "id": "expo/skills/plugins/expo/skills/eas-update",
-      "nom": "eas-update",
-      "place": "ajout",
-      "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/eas-update",
-      "skill_md": "plugins/expo/skills/eas-update/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "publie des mises à jour JavaScript sans nouveau build → corrections livrées sans attendre les stores",
-      "note": 9,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "info",
-          "gravite_projet": "eleve",
-          "source": "scan",
-          "code": "frontmatter allowed-tools",
-          "detail": "Bash(npx expo *), Bash(npx *eas-cli@*), Bash(eas *)"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "La section « Submitting Feedback » demande d'exécuter « npx --yes submit-expo-feedback@latest » : exécution d'un paquet distant sans confirmation et envoi de texte libre (contexte de projet possible)…"
-        },
-        {
-          "gravite": "moyen",
-          "source": "juge",
-          "categorie": "consigne",
-          "code": "Le skill incite à soumettre du feedback automatiquement en cas d'erreur, sans demander l'accord de l'utilisateur."
-        }
-      ]
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/expo-upgrade",
-      "nom": "expo-upgrade",
-      "place": "ajout",
-      "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-upgrade",
-      "skill_md": "plugins/expo/skills/expo-upgrade/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "guide les montées de version Expo et corrige les dépendances → évite les builds cassés",
-      "note": 9,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "moyen",
-          "source": "scan",
-          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier)"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Commande 'npx --yes submit-expo-feedback@latest' : exécute un paquet distant sans confirmation et envoie du contexte de projet à un tiers."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Consigne d'envoyer du contexte d'erreur (« include as much relevant context ») vers un service externe, risque de fuite de code ou de secrets."
-        }
-      ]
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/expo-examples",
-      "nom": "expo-examples",
-      "place": "ajout",
-      "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-examples",
-      "skill_md": "plugins/expo/skills/expo-examples/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "copie le modèle officiel Expo d'une intégration tierce → évite les configs Expo obsolètes",
-      "note": 9,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "info",
-          "gravite_projet": "eleve",
-          "source": "scan",
-          "code": "frontmatter allowed-tools",
-          "detail": "Read,Bash(gh api:*),Bash(git clone:*),Bash(npx create-expo:*),Bash(npx degit:*),"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "La commande `npx --yes submit-expo-feedback@latest` exécute un paquet npm non épinglé et envoie du texte à un tiers ; le contexte de session peut donc partir hors de la machine."
-        },
-        {
-          "gravite": "moyen",
-          "source": "juge",
-          "categorie": "consigne",
-          "code": "L'instruction de charger expo-skill-feedback et de suivre son flux d'évaluation est une consigne vers un autre skill, à vérifier avant usage."
-        }
-      ]
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/eas-observe",
-      "nom": "eas-observe",
-      "place": "ajout",
-      "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/eas-observe",
-      "skill_md": "plugins/expo/skills/eas-observe/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "mesure démarrage, navigation et erreurs de ton app Expo → repères de performance en production",
-      "note": 10,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Le SKILL.md demande d'exécuter npx --yes submit-expo-feedback@latest, qui télécharge et exécute un paquet tiers et envoie du contenu à un service externe ; à faire uniquement sur accord explicite"
-        }
-      ]
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/eas-workflows",
-      "nom": "eas-workflows",
-      "place": "ajout",
-      "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/eas-workflows",
-      "skill_md": "plugins/expo/skills/eas-workflows/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "rédige et valide tes workflows EAS → évite les erreurs de syntaxe dans tes pipelines",
-      "note": 9,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "scripts/fetch.js"
-        },
-        {
-          "gravite": "info",
-          "gravite_projet": "eleve",
-          "source": "scan",
-          "code": "frontmatter allowed-tools",
-          "detail": "Read,Write,Bash(node:*),Bash(npx *eas-cli@*)"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Exécution de paquets non épinglés (npx eas-cli@latest, npx submit-expo-feedback@latest) : code distant lancé à chaque appel, sans version fixée."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Soumission automatique de retours à un service tiers (submit-expo-feedback) pouvant inclure du contexte projet ou des données sensibles, sans garde-fou explicite."
-        }
-      ]
-    },
-    {
       "id": "expo/skills/plugins/expo/skills/expo-module",
       "nom": "expo-module",
       "place": "ajout",
       "repo": "expo/skills",
       "chemin_skill": "plugins/expo/skills/expo-module",
       "skill_md": "plugins/expo/skills/expo-module/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "guide les modules natifs Expo iOS et Android → évite les erreurs de structure",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "guide la création de modules natifs Expo → évite les erreurs de configuration native",
       "note": 9,
       "editeur_confiance": true,
       "risque_max": "eleve",
@@ -449,7 +296,7 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Commande `npx --yes submit-expo-feedback@latest` : exécute un paquet npm distant non épinglé sans confirmation, et envoie du contenu (contexte de session) à un tiers. Déclenchement à surveiller."
+          "code": "Instruction d'exécuter « npx --yes @expo/agent-cli@latest feedback » avec un contenu libre, ce qui exécute un paquet distant non épinglé et envoie des données de session à un tiers, y compris en cas …"
         }
       ]
     },
@@ -469,15 +316,15 @@
       "risques": []
     },
     {
-      "id": "expo/skills/plugins/expo/skills/expo-dom",
-      "nom": "expo-dom",
+      "id": "expo/skills/plugins/expo/skills/eas-observe",
+      "nom": "eas-observe",
       "place": "ajout",
       "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/expo-dom",
-      "skill_md": "plugins/expo/skills/expo-dom/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "embarque du code web dans une webview native → réutilise bibliothèques web comme recharts sans réécriture",
-      "note": 9,
+      "chemin_skill": "plugins/expo/skills/eas-observe",
+      "skill_md": "plugins/expo/skills/eas-observe/SKILL.md",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "mesure démarrages, navigations et erreurs de ton app Expo → repère les lenteurs avant tes utilisateurs",
+      "note": 10,
       "editeur_confiance": true,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
@@ -486,19 +333,7 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "La section feedback exécute 'npx --yes submit-expo-feedback@latest' : exécution d'un paquet distant non épinglé, sans confirmation."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Le skill demande d'inclure 'as much relevant context as possible' dans un envoi à un tiers, ce qui peut faire fuiter du code ou des données du projet."
-        },
-        {
-          "gravite": "moyen",
-          "source": "juge",
-          "categorie": "consigne",
-          "code": "Le skill oriente vers le chargement d'un autre skill (expo-skill-feedback) et un flux 'eval-candidate' non décrit, ouvrant une chaîne d'instructions non contrôlée."
+          "code": "Le skill demande d'exécuter `npx --yes @expo/agent-cli@latest feedback` : téléchargement et exécution d'un paquet distant non épinglé, avec envoi de texte libre (contexte projet) à un tiers. Il faut …"
         }
       ]
     },
@@ -509,8 +344,31 @@
       "repo": "expo/skills",
       "chemin_skill": "plugins/expo/skills/eas-update-insights",
       "skill_md": "plugins/expo/skills/eas-update-insights/SKILL.md",
-      "sha_epingle": "55ec65cd16499f20f14fb10fe99a2e62901b00a1",
-      "resume_fr": "mesure les crashs et installs de tes EAS Update → repère vite une régression après publication",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "suit crashs et installations d'un EAS Update → repère les régressions avant tout le monde",
+      "note": 10,
+      "editeur_confiance": true,
+      "risque_max": "info",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash(eas *)"
+        }
+      ]
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/eas-simulator",
+      "nom": "eas-simulator",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/eas-simulator",
+      "skill_md": "plugins/expo/skills/eas-simulator/SKILL.md",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "pilote ton app sur simulateur cloud → teste iOS sans Mac ni Xcode",
       "note": 9,
       "editeur_confiance": true,
       "risque_max": "eleve",
@@ -521,19 +379,125 @@
           "gravite_projet": "eleve",
           "source": "scan",
           "code": "frontmatter allowed-tools",
-          "detail": "Bash(eas *)"
+          "detail": "Bash(npx *eas-cli@*), Bash(npx *agent-device@*), Bash(npx expo *), Bash(eas *), "
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Le tunnel Metro expose le code de développement à un relais tiers ; les instructions demandent de reporter l'autorisation existante sur la création du tunnel, ce qui peut contourner une revue d'appro…"
         },
         {
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "La commande `npx --yes submit-expo-feedback@latest` exécute un paquet non épinglé et envoie du texte libre (contexte du projet compris) à un tiers, sans demande de confirmation explicite."
+          "code": "Les builds et captures d'écran de l'app sont envoyés vers l'infrastructure cloud d'Expo et un daemon distant protégé par token"
         },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Le skill manipule un jeton d'accès (EXPO_TOKEN et l'URL de l'API de prévisualisation) : risque de fuite dans les logs ou le dépôt malgré les consignes"
+        }
+      ]
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-dom",
+      "nom": "expo-dom",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/expo-dom",
+      "skill_md": "plugins/expo/skills/expo-dom/SKILL.md",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "embarque du code web dans Expo sans réécriture → migration progressive vers le natif",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
         {
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "L'instruction de soumission de feedback incite l'agent à transmettre automatiquement des informations du projet, hors du périmètre de `allowed-tools` (Bash(eas *))."
+          "code": "Consigne d'exécuter `npx --yes @expo/agent-cli@latest feedback` (téléchargement et exécution d'un paquet npm distant non épinglé) qui transmet à un tiers le contexte de la tâche et les erreurs, sans …"
+        }
+      ]
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/expo-app-clip",
+      "nom": "expo-app-clip",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/expo-app-clip",
+      "skill_md": "plugins/expo/skills/expo-app-clip/SKILL.md",
+      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
+      "resume_fr": "ajoute une App Clip iOS à ton app Expo → lancement léger depuis une URL",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Section de feedback : exécution via npx --yes @expo/agent-cli@latest, donc code distant non épinglé, et envoi de contexte de tâche à un tiers"
+        }
+      ]
+    },
+    {
+      "id": "callstackincubator/agent-skills/skills/upgrading-react-native",
+      "nom": "upgrading-react-native",
+      "place": "ajout",
+      "repo": "callstackincubator/agent-skills",
+      "chemin_skill": "skills/upgrading-react-native",
+      "skill_md": "skills/upgrading-react-native/SKILL.md",
+      "sha_epingle": "59e9d17446a248b21d86f078fcd0bd2d36db1ca4",
+      "resume_fr": "te guide dans la montée React Native, diff et dépendances → moins de builds cassés",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le skill télécharge un diff via curl depuis raw.githubusercontent.com puis l'applique au projet sans vérification de somme : risque faible, la source est celle de rn-diff-purge."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "upgrade-verification.md demande d'installer agent-device « par un chemin approuvé » sans préciser lequel : une installation tierce pourrait suivre une source non vérifiée."
+        }
+      ]
+    },
+    {
+      "id": "sickn33/agentic-awesome-skills/skills/add-app-clip",
+      "nom": "add-app-clip",
+      "place": "ajout",
+      "repo": "sickn33/agentic-awesome-skills",
+      "chemin_skill": "skills/add-app-clip",
+      "skill_md": "skills/add-app-clip/SKILL.md",
+      "sha_epingle": "e8d346bcb691225fb6ae51a49c353bcedb2ef61d",
+      "resume_fr": "ajoute une App Clip iOS et son AASA → lancer l'app sans installation depuis une URL",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Exécute des paquets tiers non épinglés (bunx setup-safari, bunx testflight) qui se connectent au compte Apple Developer et créent des enregistrements et entrées App Store."
+        },
+        {
+          "gravite": "info",
+          "source": "juge",
+          "categorie": "autre",
+          "code": "Recommande de recopier toutes les clés de permissions du parent dans l'Info.plist de la Clip, ce qui peut élargir les permissions au-delà du besoin."
         }
       ]
     }

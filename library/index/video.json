@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-20T13:35:05.847Z",
+  "genere_le": "2026-10-26T11:30:59.680Z",
   "type": "video",
   "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -11,9 +11,9 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-best-practices",
       "skill_md": "skills/remotion-best-practices/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "te guide dans la création de vidéos Remotion avec aperçu interactif → évite les rendus inutiles",
-      "note": 7,
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "oriente vers le bon guide Remotion selon ta tâche → évite erreurs et pertes de temps",
+      "note": 5,
       "editeur_confiance": true,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
@@ -28,7 +28,7 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Les commandes npx create-video@latest et npx remotion studio/render exécutent du code npm distant sans version figée."
+          "code": "La annexe remotion-docs demande d'utiliser une clé API Algolia publique codée en dur et d'envoyer des requêtes à un tiers, risque faible"
         }
       ]
     },
@@ -39,8 +39,8 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-captions",
       "skill_md": "skills/remotion-captions/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "transcrit et affiche des sous-titres animés dans Remotion → rend tes vidéos accessibles et plus lisibles",
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "te guide pour transcrire, afficher et importer des sous-titres → synchronisation vidéo plus rapide",
       "note": 9,
       "editeur_confiance": true,
       "risque_max": "eleve",
@@ -50,13 +50,7 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Les instructions demandent de récupérer basic-captions.tsx depuis une URL distante et de le copier « unchanged » dans le projet : risque de chaîne d'approvisionnement, sans contrôle d'intégrité."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Le téléchargement de modèles Whisper (downloadWhisperModel) depuis un tiers n'est pas épinglé par hash ni version."
+          "code": "Le skill demande de récupérer basic-captions.tsx depuis une URL distante puis de le copier tel quel dans le projet : exécution de code tiers non vérifiée."
         }
       ]
     },
@@ -89,59 +83,19 @@
       ]
     },
     {
-      "id": "remotion-dev/skills/skills/remotion-interactivity",
-      "nom": "remotion-interactivity",
+      "id": "remotion-dev/skills/skills/remotion-docs",
+      "nom": "remotion-docs",
       "place": "recommande",
       "repo": "remotion-dev/skills",
-      "chemin_skill": "skills/remotion-interactivity",
-      "skill_md": "skills/remotion-interactivity/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "organise le code Remotion en éléments éditables dans Studio → contrôle indépendant de chaque élément",
-      "note": 8,
+      "chemin_skill": "skills/remotion-docs",
+      "skill_md": "skills/remotion-docs/SKILL.md",
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "cherche la doc Remotion à jour via Algolia → évite les API obsolètes de ta mémoire",
+      "note": 9,
       "editeur_confiance": true,
       "risque_max": null,
       "risque_max_projet": null,
       "risques": []
-    },
-    {
-      "id": "heygen-com/hyperframes/skills/product-launch-video",
-      "nom": "product-launch-video",
-      "place": "recommande",
-      "repo": "heygen-com/hyperframes",
-      "chemin_skill": "skills/product-launch-video",
-      "skill_md": "skills/product-launch-video/SKILL.md",
-      "sha_epingle": "30f514b13a00953ef9e23c64de009a122236d12f",
-      "resume_fr": "transforme une URL produit en vidéo de lancement → promo prête sans montage manuel",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "scripts/assemble-index.mjs, scripts/audio.mjs, scripts/build-frame.mjs, scripts/captions.mjs, scripts/frame-packets.mjs"
-        },
-        {
-          "gravite": "info",
-          "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
-          "detail": "scripts/assemble-index.test.mjs, scripts/audio.test.mjs, scripts/build-frame-colors.test.mjs, scripts/build-frame-subse…"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Étape 0 et Step 1 : `npx hyperframes init` et `npx hyperframes skills update` mettent à jour le jeu global de skills depuis GitHub, avec exécution de paquets npm ; la confirmation demandée n'est pas …"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Le script de l'utilisateur et les assets sont envoyés à des services tiers (TTS et musique HeyGen, recherche d'assets), et une URL est crawlée automatiquement, ce qui doit être accepté explicitement."
-        }
-      ]
     },
     {
       "id": "remotion-dev/skills/skills/remotion-markup",
@@ -150,9 +104,9 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-markup",
       "skill_md": "skills/remotion-markup/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "guide les animations Remotion avec useCurrentFrame et interpolate → évite les transitions CSS cassées au rendu",
-      "note": 8,
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "animations Remotion pilotées par useCurrentFrame et interpolate → vidéos éditables dans Studio et rendu fiable",
+      "note": 7,
       "editeur_confiance": true,
       "risque_max": "info",
       "risque_max_projet": "info",
@@ -172,8 +126,8 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-render",
       "skill_md": "skills/remotion-render/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "exporte vidéos, images fixes et séquences Remotion en ligne de commande → rendus automatisables sans interface",
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "exporte vidéos et images Remotion en une commande → rendus fiables sans options à retenir",
       "note": 7,
       "editeur_confiance": true,
       "risque_max": null,
@@ -213,19 +167,17 @@
           "code": "Instructions d'installation par git clone ou npx skills add d'un dépôt tiers (video-shotcraft) sans épinglage de version ni revue, donc exécution de code distant non vérifié."
         }
       ]
-    }
-  ],
-  "ajouts": [
+    },
     {
       "id": "remotion-dev/skills/skills/remotion-create",
       "nom": "remotion-create",
-      "place": "ajout",
+      "place": "recommande",
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-create",
       "skill_md": "skills/remotion-create/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "crée un projet Remotion et ouvre le Studio → tu vois la vidéo évoluer en direct",
-      "note": 5,
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "crée un projet Remotion et ouvre le Studio → aperçu immédiat et retours visuels en continu",
+      "note": 8,
       "editeur_confiance": true,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
@@ -234,15 +186,41 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Commande npx create-video@latest exécute un paquet distant non épinglé"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "destruction",
-          "code": "Instruction de supprimer des fichiers de métadonnées dans le dossier courant (action destructrice limitée)"
+          "code": "Exécution de code distant non épinglé : npx create-video@latest, suivi de npm i, sans version fixée ni vérification."
         }
       ]
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "remotion-dev/skills/skills/remotion-interactivity",
+      "nom": "remotion-interactivity",
+      "place": "ajout",
+      "repo": "remotion-dev/skills",
+      "chemin_skill": "skills/remotion-interactivity",
+      "skill_md": "skills/remotion-interactivity/SKILL.md",
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "rend chaque élément Remotion éditable dans Studio → timeline claire et contrôles par instance",
+      "note": 8,
+      "editeur_confiance": true,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-studio",
+      "nom": "remotion-studio",
+      "place": "ajout",
+      "repo": "remotion-dev/skills",
+      "chemin_skill": "skills/remotion-studio",
+      "skill_md": "skills/remotion-studio/SKILL.md",
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "ouvre un aperçu en direct de ta vidéo → suis chaque changement en temps réel",
+      "note": 6,
+      "editeur_confiance": true,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     },
     {
       "id": "trunghaiy/appshot/skills/appshot-videos",
@@ -267,15 +245,30 @@
       ]
     },
     {
-      "id": "remotion-dev/skills/skills/remotion-studio",
-      "nom": "remotion-studio",
+      "id": "kajisho5/ffmpeg-skill/ffmpeg-skill",
+      "nom": "ffmpeg-skill",
+      "place": "ajout",
+      "repo": "kajisho5/ffmpeg-skill",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "36d023ec9a718d93b75de4dfebca070b9bbede39",
+      "resume_fr": "découpe, recadre et sous-titre tes vidéos en local → exports prêts pour les réseaux sociaux",
+      "note": 10,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-multimedia",
+      "nom": "remotion-multimedia",
       "place": "ajout",
       "repo": "remotion-dev/skills",
-      "chemin_skill": "skills/remotion-studio",
-      "skill_md": "skills/remotion-studio/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "ouvre un aperçu Remotion dès le départ → suivre et ajuster la vidéo en temps réel",
-      "note": 6,
+      "chemin_skill": "skills/remotion-multimedia",
+      "skill_md": "skills/remotion-multimedia/SKILL.md",
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "lit durée et dimensions de médias dans le navigateur → évite de charger les fichiers entiers",
+      "note": 7,
       "editeur_confiance": true,
       "risque_max": null,
       "risque_max_projet": null,
@@ -316,6 +309,28 @@
       ]
     },
     {
+      "id": "remotion-dev/skills/skills/remotion-upgrade",
+      "nom": "remotion-upgrade",
+      "place": "ajout",
+      "repo": "remotion-dev/skills",
+      "chemin_skill": "skills/remotion-upgrade",
+      "skill_md": "skills/remotion-upgrade/SKILL.md",
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "met à jour Remotion et ses paquets → une seule version, moins de conflits",
+      "note": 8,
+      "editeur_confiance": true,
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "L'étape 4 lance npx skills update avec --yes, ce qui met à jour des skills tiers sans confirmation ; à faire avec relecture."
+        }
+      ]
+    },
+    {
       "id": "vincentwei1021/anything2explainer/anything2explainer",
       "nom": "anything2explainer",
       "place": "ajout",
@@ -350,67 +365,15 @@
       ]
     },
     {
-      "id": "remotion-dev/skills/skills/remotion-docs",
-      "nom": "remotion-docs",
-      "place": "ajout",
-      "repo": "remotion-dev/skills",
-      "chemin_skill": "skills/remotion-docs",
-      "skill_md": "skills/remotion-docs/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "cherche la doc Remotion à jour et la lit en Markdown → évite les API obsolètes",
-      "note": 8,
-      "editeur_confiance": true,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "kajisho5/ffmpeg-skill/ffmpeg-skill",
-      "nom": "ffmpeg-skill",
-      "place": "ajout",
-      "repo": "kajisho5/ffmpeg-skill",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "f02bab420312cde013f02602007654b9d381fe8d",
-      "resume_fr": "monte tes vidéos et audio en local, sous-titres compris → exports prêts pour YouTube, Reels, TikTok",
-      "note": 10,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Le skill exécute des scripts Python locaux appelant ffmpeg sur des fichiers utilisateur; des options de sortie peuvent écraser des fichiers (--overwrite), à garder en tête pour les actions destructri…"
-        }
-      ]
-    },
-    {
-      "id": "remotion-dev/skills/skills/remotion-multimedia",
-      "nom": "remotion-multimedia",
-      "place": "ajout",
-      "repo": "remotion-dev/skills",
-      "chemin_skill": "skills/remotion-multimedia",
-      "skill_md": "skills/remotion-multimedia/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "lit durée et dimensions de médias dans le navigateur → évite d'installer un outil serveur",
-      "note": 7,
-      "editeur_confiance": true,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
       "id": "remotion-dev/skills/skills/remotion-maps",
       "nom": "remotion-maps",
       "place": "ajout",
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-maps",
       "skill_md": "skills/remotion-maps/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "guide le choix d'une technique de carte animée → évite les outils inadaptés au plan",
-      "note": 7,
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "choisit une seule technique de carte pour Remotion → évite de charger toute la doc",
+      "note": 8,
       "editeur_confiance": true,
       "risque_max": "moyen",
       "risque_max_projet": "moyen",
@@ -425,24 +388,15 @@
           "gravite": "moyen",
           "source": "juge",
           "categorie": "donnees",
-          "code": "Le code exemple lit des clés (REMOTION_MAPTILER_KEY, tokens Mapbox) via process.env dans du code bundlé côté client, donc exposées dans le rendu ; l'annexe MapTiler recommande une clé « unrestricted …"
+          "code": "La doc MapTiler recommande une clé REMOTION_MAPTILER_KEY « unrestricted », et l'annexe Google suggère d'assouplir les restrictions de clé : incitation à des clés exposées."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Les clés d'API lues via process.env puis utilisées dans le code bundlé côté navigateur peuvent être exposées dans le rendu client."
         }
       ]
-    },
-    {
-      "id": "remotion-dev/skills/skills/remotion-upgrade",
-      "nom": "remotion-upgrade",
-      "place": "ajout",
-      "repo": "remotion-dev/skills",
-      "chemin_skill": "skills/remotion-upgrade",
-      "skill_md": "skills/remotion-upgrade/SKILL.md",
-      "sha_epingle": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "resume_fr": "met à jour Remotion, ses paquets liés et skills → évite les conflits de versions",
-      "note": 7,
-      "editeur_confiance": true,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
     },
     {
       "id": "feitangyuan/onetake/onetake",
@@ -451,8 +405,8 @@
       "repo": "feitangyuan/onetake",
       "chemin_skill": "",
       "skill_md": "SKILL.md",
-      "sha_epingle": "415758128aa45cc54340df40d8109363447f582e",
-      "resume_fr": "transforme tes écrans en vidéo de lancement rythmée → démos produit plus soignées",
+      "sha_epingle": "013a61ac8d98883c73733f59c06e49e9ba444f14",
+      "resume_fr": "transforme tes captures d'écran en vidéo de lancement animée → rythme cinématique au lieu d'un diaporama",
       "note": 8,
       "editeur_confiance": false,
       "risque_max": "eleve",
@@ -462,9 +416,30 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Installe plusieurs dépendances et modèles tiers (Playwright, Kokoro, faster-whisper, ffmpeg) et télécharge des banques sonores et des IR sans indication de source vérifiée ni de somme de contrôle."
+          "code": "Le skill télécharge des sources audio et des modèles (Kokoro, faster-whisper, Kenney, Voxengo) depuis Internet ; provenance à vérifier avant exécution."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le skill exécute des scripts Python/Node et un navigateur Playwright sur le poste local ; à lancer uniquement depuis un dépôt de confiance."
         }
       ]
+    },
+    {
+      "id": "remotion-dev/skills/skills/remotion-saas",
+      "nom": "remotion-saas",
+      "place": "ajout",
+      "repo": "remotion-dev/skills",
+      "chemin_skill": "skills/remotion-saas",
+      "skill_md": "skills/remotion-saas/SKILL.md",
+      "sha_epingle": "6c67adcd9cdbe6eb84d76342da89b225f9161cb2",
+      "resume_fr": "te guide vers un template SaaS Remotion → apps vidéo livrées plus vite",
+      "note": 6,
+      "editeur_confiance": true,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     },
     {
       "id": "devin-axis/ipollowork/.agents/skills/ipollowork-video-compose",
@@ -473,7 +448,7 @@
       "repo": "Devin-AXIS/iPolloWork",
       "chemin_skill": ".agents/skills/ipollowork-video-compose",
       "skill_md": ".agents/skills/ipollowork-video-compose/SKILL.md",
-      "sha_epingle": "05fe4e2d8d99518004360ef08d95ba3c1a07eb4f",
+      "sha_epingle": "0de1cc50c24395fed7cfbb21ff6d933cdce1f52e",
       "resume_fr": "aide à composer les visuels vidéo et leurs animations → modifications locales sans casser la chronologie",
       "note": 5,
       "editeur_confiance": false,

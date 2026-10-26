@@ -1,12 +1,12 @@
 {
   "type": "site-web",
-  "genere_le": "2026-10-20T13:33:23.304Z",
+  "genere_le": "2026-10-26T11:28:47.277Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
   "regles": "finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json",
   "tenants_de": "tour précédent",
-  "reclasse": false,
+  "reclasse": true,
   "finalistes": [
     "agricidaniel/claude-seo/skills/seo-drift",
     "athevon/genjutsu/skills/paint",
@@ -16,6 +16,7 @@
     "cloudflare/skills/skills/nextjs-on-cloudflare",
     "cloudflare/skills/skills/turnstile-spin",
     "composio-community/awesome-claude-plugins/senior-frontend/skills/senior-frontend",
+    "expo/skills/plugins/expo/skills/eas-hosting",
     "gmickel/flow-next/plugins/flow-next/skills/flow-next-drive",
     "googlechrome/modern-web-guidance/skills/modern-web-guidance",
     "greensock/gsap-skills/skills/gsap-react",
@@ -32,10 +33,16 @@
     "vercel-labs/agent-skills/skills/react-best-practices"
   ],
   "changements": [],
-  "ecartes": [],
+  "ecartes": [
+    {
+      "nom": "elastic-beanstalk",
+      "raison": "Déploiement AWS Elastic Beanstalk/EC2/EKS : hors de sa stack (Cloudflare), pas de cloud AWS."
+    }
+  ],
   "stabilite": {
-    "tirages": 0,
-    "note": "classement Sonnet indisponible pour ce pack"
+    "tirages": 3,
+    "meme_composition_sans_tenants": true,
+    "raison_tirage_1": "Les bonnes pratiques React/Next.js de Vercel et les guides web modernes couvrent directement ses sites Next.js, et les tenants restent les plus pertinents, sans challenger nettement meilleur."
   },
   "recommandes": [
     {
@@ -82,14 +89,14 @@
       "id": "chromedevtools/chrome-devtools-mcp/skills/a11y-debugging",
       "nom": "a11y-debugging",
       "repo": "ChromeDevTools/chrome-devtools-mcp",
-      "resume_fr": "audite l'accessibilité web → repère contrastes, focus clavier et cibles tactiles trop petites",
-      "note": 9,
+      "resume_fr": "audite ton accessibilité web via Chrome DevTools → repère contrastes, focus et libellés manquants",
+      "note": 8,
       "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
+      "score_pack": 6.4,
+      "note_juge": 8,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Skill ciblé et officiel, avec workflows propres au MCP (pageId, uid, rapport Lighthouse) et snippets réutilisables. Notes retirées pour un contraste simplifié et un chemin de rapport à remplacer."
+      "raison": "Déclenchement précis et workflow MCP concret avec snippets testables. Valeur partiellement connue (checklist a11y classique). Snippet de contraste simplifié et faux sur fonds transparents (alpha ignoré, rgba(0,0,0,0) lu comme noir)."
     },
     {
       "id": "greensock/gsap-skills/skills/gsap-react",
@@ -121,14 +128,14 @@
       "id": "agricidaniel/claude-seo/skills/seo-drift",
       "nom": "seo-drift",
       "repo": "AgriciDaniel/claude-seo",
-      "resume_fr": "compare tes pages à une référence → repère vite les régressions SEO après chaque déploiement",
-      "note": 9,
+      "resume_fr": "compare tes balises SEO à une référence → repère vite ce qui casse après chaque déploiement",
+      "note": 7,
       "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
+      "score_pack": 5.8,
+      "note_juge": 7,
       "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Sujet net et déclencheurs précis. Règles de comparaison avec seuils et actions utiles, commandes exactes. Note limitée par les scripts du plugin parent non fournis, annexe tronquée (règles 15 à 17 absentes) et version datée."
+      "risque_max": null,
+      "raison": "Déclenchement précis et périmètre net. Règles de comparaison concrètes, mais peu de savoir-faire spécifique à Claude Code. Annexe tronquée, et plusieurs scripts référencés ne sont pas fournis. Pas de risque nouveau."
     },
     {
       "id": "textura-agency/next16-claude-starter/.claude/skills/mobile-device-qa",
@@ -250,43 +257,30 @@
       "raison": "Méthode riche (gates de validation, anti-slop, règles d'animation) mais tronquée à 24 000 car. sur 66 665, dépend de modules _jutsu absents. Périmètre large et déclenchement vague."
     },
     {
+      "id": "expo/skills/plugins/expo/skills/eas-hosting",
+      "nom": "eas-hosting",
+      "repo": "expo/skills",
+      "resume_fr": "déploie ton site Expo et tes routes API → mises en ligne rapides, previews de PR",
+      "note": 7,
+      "pertinence": 8,
+      "score_pack": 7.4,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement clair et commandes concrètes. Valeur partagée avec du générique (CORS, try/catch, routes). Incohérences de commandes (npx expo serve, eas-cli@latest), périmètre mêlé, affirmations non sourcées. Feedback via npx distant."
+    },
+    {
       "id": "plugin87/ux-ui-agent-skills/.claude/skills/token-build",
       "nom": "token-build",
       "repo": "plugin87/ux-ui-agent-skills",
-      "resume_fr": "génère les thèmes web et mobile depuis tes tokens → un design identique partout",
+      "resume_fr": "génère thèmes CSS, Tailwind, iOS et Android depuis tes tokens → évite les écarts entre plateformes",
       "note": 7,
       "pertinence": 6,
       "score_pack": 6.6,
       "note_juge": 7,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement précis et règles utiles (alias résolus, deltas de thème, validation). Mais il dépend de fichiers d'un kit absent de l'installation, et les étapes de génération restent peu concrètes."
-    },
-    {
-      "id": "gmickel/flow-next/plugins/flow-next/skills/flow-next-drive",
-      "nom": "flow-next-drive",
-      "repo": "gmickel/flow-next",
-      "resume_fr": "pilote l'interface comme un vrai utilisateur → repère les erreurs console et requêtes échouées",
-      "note": 5,
-      "pertinence": 6,
-      "score_pack": 5.4,
-      "note_juge": 5,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Processus bien pensé et pièges réels (refs périmées, CDP, console et réseau), mais la description liste des déclencheurs très larges, le périmètre est fourre-tout et de nombreuses annexes citées manquent ou sont tronquées."
-    },
-    {
-      "id": "composio-community/awesome-claude-plugins/senior-frontend/skills/senior-frontend",
-      "nom": "senior-frontend",
-      "repo": "composio-community/awesome-claude-plugins",
-      "resume_fr": "optimise React et Next.js, analyse le bundle, vérifie l'accessibilité → pages plus rapides, interfaces accessibles",
-      "note": 5,
-      "pertinence": 6,
-      "score_pack": 5.4,
-      "note_juge": 5,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement large (« reviewing frontend code quality »). Contenu surtout générique : patterns React et checklist a11y connus de Claude. Les options de scaffolding et de générateur citées n'existent pas dans le skill. Pas de licence."
+      "raison": "Déclenchement précis et périmètre net. Règles utiles (alias résolus, overrides en deltas, CI de non-régression). Mais dépend de fichiers du kit absents, donc chemins et commandes non vérifiables ici."
     },
     {
       "id": "molauu/svg-character-animator/svg-character-animator",
@@ -300,6 +294,19 @@
       "modele": "haiku",
       "risque_max": "moyen",
       "raison": "Déclenchement précis et savoir-faire réel : stratégie TRANSFORM/MORPH par chemin, normalisation, gestion des orphelins et de l'interruption. Lecture partielle seulement (SKILL.md tronqué), d'où confiance moyenne."
+    },
+    {
+      "id": "composio-community/awesome-claude-plugins/senior-frontend/skills/senior-frontend",
+      "nom": "senior-frontend",
+      "repo": "composio-community/awesome-claude-plugins",
+      "resume_fr": "optimise React et Next.js, analyse le bundle, vérifie l'accessibilité → pages plus rapides, interfaces accessibles",
+      "note": 5,
+      "pertinence": 6,
+      "score_pack": 5.4,
+      "note_juge": 5,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement large (« reviewing frontend code quality »). Contenu surtout générique : patterns React et checklist a11y connus de Claude. Les options de scaffolding et de générateur citées n'existent pas dans le skill. Pas de licence."
     }
   ]
 }

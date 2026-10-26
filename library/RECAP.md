@@ -1,13 +1,20 @@
-# Récapitulatif SKILLMASTER — 2026-10-20
+# Récapitulatif SKILLMASTER — 2026-10-26
 
-**2 pack(s) changent de tête.** 35 skill(s) nouveaux, 0 archivé(s), coût 0.45 $, 4 min.
+**3 pack(s) changent de tête.** 70 skill(s) nouveaux, 5 archivé(s), coût 1.08 $, 11 min.
 
 ## app-expo
-- engineer-react-native → **expo-router** : Toute app Expo passe par la navigation. expo-router couvre les routes fichiers, NativeTabs, les modales et les form sheets, et il est maintenu par Expo. engineer-react-native est générique et recoupe les autres tenants (performance, animation, build).
+- expo-animation → **eas-update** : plus éligible pour ce type ou absent de la sélection
+
+## data
+- dummy-dataset → **data-scientist** : Le skill data-scientist couvre analyse, validation de modèles et rapports avec pandas/scikit-learn, bien plus utile que la génération de données factices (note 6).
+- duckdb/duckdb-skills/skills/query → **dummy-dataset** : plus éligible pour ce type ou absent de la sélection
 
 ## video
-- baoyu-youtube-transcript → **motion-video** : Le skill YouTube extrait seulement des transcriptions et couvertures. Il ne sert pas à produire une vidéo. motion-video construit des vidéos Remotion (motion graphics, formats Reels/TikTok/Shorts), ce qui correspond à sa stack.
+- remotion-interactivity → **remotion-docs** : La doc Remotion à jour via Algolia sert à chaque tâche et évite les API obsolètes. Interactivity ne couvre que l'édition dans Studio, un besoin plus étroit.
+- heygen-com/hyperframes/skills/product-launch-video → **remotion-create** : plus éligible pour ce type ou absent de la sélection
 
-Écartés (hors stack) : using-duckdb (data), querying-fabric (data), fabric-cli (data), dsql (data), basin (data), dv-query (data), bigtable-basics (outillage-claude-code), confluent-skill-creator (outillage-claude-code), create-toolset (outillage-claude-code), remotion-saas (video)
+Écartés (hors stack) : using-duckdb (data), querying-fabric (data), fabric-cli (data), dsql (data), confluent-cloud-flink-sql (data), airflow (data), dv-query (data), basin (data), dt-app-notebooks (data), dt-obs-analytics (data), mongodb-schema-design (data), neon-realtime (data)…
 
-Têtes inchangées : android, data, ios, outillage-claude-code, site-web.
+Archivés : product-launch-video, duckdb-docs, spatial, query, expo-skill-feedback
+
+Têtes inchangées : android, ios, outillage-claude-code, site-web.

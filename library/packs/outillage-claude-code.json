@@ -1,6 +1,6 @@
 {
   "type": "outillage-claude-code",
-  "genere_le": "2026-10-20T13:35:05.464Z",
+  "genere_le": "2026-10-26T11:30:59.377Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
@@ -21,21 +21,22 @@
     "confident-ai/deepeval/skills/deepeval",
     "confluentinc/agent-skills/skills/confluent-skill-creator",
     "epicgames/unreal-engine-skills-for-claude-code-plugin/skills/create-toolset",
-    "expo/skills/plugins/expo/skills/expo-skill-feedback",
     "gaasher/agent-loop-skills/loops/optimize-loop",
     "googlecloudplatform/data-agent-kit-plugin/skills/bigtable-basics",
     "mattpocock/skills/skills/engineering/code-review",
-    "sickn33/agentic-awesome-skills/skills/aas-compose-stack"
+    "rossark0/rossark-motion-skill/rossark-motion-skill",
+    "sickn33/agentic-awesome-skills/skills/aas-compose-stack",
+    "xberg-io/xberg/skills/xberg"
   ],
   "changements": [],
   "ecartes": [
     {
       "nom": "bigtable-basics",
-      "raison": "Bigtable est une base cloud Google, hors de sa stack."
+      "raison": "Bigtable est une base cloud Google absente de sa stack."
     },
     {
       "nom": "confluent-skill-creator",
-      "raison": "Spécifique à Confluent/Kafka, absent de sa stack."
+      "raison": "Spécifique à Confluent/Kafka/Flink, hors stack (calcul distribué, cloud)."
     },
     {
       "nom": "create-toolset",
@@ -45,7 +46,7 @@
   "stabilite": {
     "tirages": 3,
     "meme_composition_sans_tenants": true,
-    "raison_tirage_1": "Les tenants généralistes (skill-creator, garde-fous de qualité, agents, MCP) servent directement son outillage Claude Code, et aucun challenger non écarté ne les dépasse nettement."
+    "raison_tirage_1": "Les skills qui aident à créer et fiabiliser ses propres skills et agents Claude Code passent devant, et tout ce qui touche une techno hors stack est écarté."
   },
   "recommandes": [
     {
@@ -207,30 +208,43 @@
       "raison": "Skill officiel Confident AI, ciblé et précis : commandes exactes, règles claires (deepeval test run, metrics.py). Annexes metrics, pytest, traces et templates absentes ; renvoie à des skills sœurs."
     },
     {
+      "id": "rossark0/rossark-motion-skill/rossark-motion-skill",
+      "nom": "rossark-motion-skill",
+      "repo": "rossark0/rossark-motion-skill",
+      "resume_fr": "anime illustrations, icônes et scènes avec un mouvement calme → rendu vivant sans effets chargés",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Description claire et précise, méthode détaillée et chiffrée avec templates et outils. SKILL.md tronqué, annexes partielles et domaine large (plus de 20 sujets) ; pas de risque nouveau repéré."
+    },
+    {
       "id": "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
       "nom": "cookbook-audit",
       "repo": "anthropics/claude-cookbooks",
-      "resume_fr": "note un notebook du Cookbook selon sa grille → améliore la clarté et l'exactitude technique",
+      "resume_fr": "audite un notebook du Cookbook selon une grille → notebooks plus clairs et exécutables",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Skill ciblé et utile aux mainteneurs du Cookbook : grille détaillée, commandes, conventions précises. Pénalisé pour l'annexe style_guide tronquée, les scripts référencés non fournis et la liste de modèles à maintenir."
+    },
+    {
+      "id": "xberg-io/xberg/skills/xberg",
+      "nom": "xberg",
+      "repo": "xberg-io/xberg",
+      "resume_fr": "extrait texte, tables et métadonnées de 107 formats → évite d'écrire un parseur par format",
       "note": 6,
       "pertinence": 6,
       "score_pack": 6,
       "note_juge": 6,
       "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Sujet net et officiel, mais niche : utile aux contributeurs du cookbook, pas à un usage courant de Claude Code. Déclenchement large, script de validation absent, annexe style_guide tronquée."
-    },
-    {
-      "id": "expo/skills/plugins/expo/skills/expo-skill-feedback",
-      "nom": "expo-skill-feedback",
-      "repo": "expo/skills",
-      "resume_fr": "envoie un retour ciblé sur un skill Expo → aide Expo à corriger ce qui bloque",
-      "note": 7,
-      "pertinence": 6,
-      "score_pack": 6.6,
-      "note_juge": 7,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Déclenchement précis et commandes exactes. Mais utilité limitée pour construire, périmètre mêlant retours et télémétrie, et appel répété à un paquet npm non épinglé (@latest) qui envoie des données à un tiers."
+      "risque_max": null,
+      "raison": "Skill officiel bien structuré avec exemples concrets et pièges utiles, mais description large, contenu générique sur une lib tierce, et annexes tronquées. Pas de risque de sécurité notable."
     },
     {
       "id": "sickn33/agentic-awesome-skills/skills/aas-compose-stack",
