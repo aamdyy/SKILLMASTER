@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-26T11:30:59.651Z",
+  "genere_le": "2026-11-02T13:57:04.414Z",
   "type": "data",
   "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -11,7 +11,7 @@
       "repo": "Jeffallan/claude-skills",
       "chemin_skill": "skills/pandas-pro",
       "skill_md": "skills/pandas-pro/SKILL.md",
-      "sha_epingle": "504bb9a067c5c7ea6bf868c7cc337164b213fa57",
+      "sha_epingle": "078a25cc5bfd8011459be7b91d004e900c1d02d3",
       "resume_fr": "règles pandas pour nettoyer, joindre et agréger → évite les boucles lentes et les erreurs silencieuses",
       "note": 8,
       "editeur_confiance": false,
@@ -26,7 +26,7 @@
       "repo": "K-Dense-AI/scientific-agent-skills",
       "chemin_skill": "skills/polars",
       "skill_md": "skills/polars/SKILL.md",
-      "sha_epingle": "5f2bc0341354fd5590aef76a533ada1e1e5b4e62",
+      "sha_epingle": "a25cf9ec00e2745d03f8704acf6f6919694ccd9a",
       "resume_fr": "te guide sur Polars en lazy et expressions → ETL plus rapides que pandas",
       "note": 9,
       "editeur_confiance": false,
@@ -54,7 +54,7 @@
       "repo": "Jeffallan/claude-skills",
       "chemin_skill": "skills/sql-pro",
       "skill_md": "skills/sql-pro/SKILL.md",
-      "sha_epingle": "504bb9a067c5c7ea6bf868c7cc337164b213fa57",
+      "sha_epingle": "078a25cc5bfd8011459be7b91d004e900c1d02d3",
       "resume_fr": "optimise tes requêtes SQL et lit les EXPLAIN → requêtes plus rapides, index mieux placés",
       "note": 7,
       "editeur_confiance": false,
@@ -69,7 +69,7 @@
       "repo": "K-Dense-AI/scientific-agent-skills",
       "chemin_skill": "skills/scientific-visualization",
       "skill_md": "skills/scientific-visualization/SKILL.md",
-      "sha_epingle": "5f2bc0341354fd5590aef76a533ada1e1e5b4e62",
+      "sha_epingle": "a25cf9ec00e2745d03f8704acf6f6919694ccd9a",
       "resume_fr": "crée et audite des figures scientifiques honnêtes → évite les graphiques trompeurs avant publication",
       "note": 10,
       "editeur_confiance": false,
@@ -110,7 +110,7 @@
       "repo": "K-Dense-AI/scientific-agent-skills",
       "chemin_skill": "skills/aeon",
       "skill_md": "skills/aeon/SKILL.md",
-      "sha_epingle": "5f2bc0341354fd5590aef76a533ada1e1e5b4e62",
+      "sha_epingle": "a25cf9ec00e2745d03f8704acf6f6919694ccd9a",
       "resume_fr": "classe, prévoit et détecte les anomalies en séries temporelles → évite les algorithmes faits maison",
       "note": 9,
       "editeur_confiance": false,
@@ -133,7 +133,7 @@
       "repo": "anthropics/skills",
       "chemin_skill": "skills/xlsx",
       "skill_md": "skills/xlsx/SKILL.md",
-      "sha_epingle": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "sha_epingle": "ca45fc496a3436251f191354091d557da31c15b5",
       "resume_fr": "crée et corrige des fichiers Excel avec formules vérifiées → tableurs sans erreurs de calcul",
       "note": 10,
       "editeur_confiance": true,
@@ -161,7 +161,7 @@
       "repo": "tronghieu/agent-skills",
       "chemin_skill": "skills/data-scientist",
       "skill_md": "skills/data-scientist/SKILL.md",
-      "sha_epingle": "f923333754b1fcf45c443cae1ebe8c9886162207",
+      "sha_epingle": "831d1ae5c686a81b10f9c5b9cca04a7b8b97303d",
       "resume_fr": "guide toute analyse de données → conclusions vérifiées, moins de faux résultats",
       "note": 9,
       "editeur_confiance": false,
@@ -189,7 +189,7 @@
       "repo": "phuryn/pm-skills",
       "chemin_skill": "pm-execution/skills/dummy-dataset",
       "skill_md": "pm-execution/skills/dummy-dataset/SKILL.md",
-      "sha_epingle": "07b34f64ee828df08953f505b7f747aef85ae7c6",
+      "sha_epingle": "2a12295a7717569baa7be181b4cfebe3ca38a6bb",
       "resume_fr": "génère des jeux de données factices réalistes → testes ton code sans vraies données",
       "note": 6,
       "editeur_confiance": false,
@@ -199,6 +199,34 @@
     }
   ],
   "ajouts": [
+    {
+      "id": "jimliu/baoyu-design/skills/dataviz",
+      "nom": "dataviz",
+      "place": "ajout",
+      "repo": "JimLiu/baoyu-design",
+      "chemin_skill": "skills/dataviz",
+      "skill_md": "skills/dataviz/SKILL.md",
+      "sha_epingle": "6759e358eb88d83986c753b0fc60c84e4aabdb3a",
+      "resume_fr": "valide la palette de couleurs avant chaque graphique → évite les visuels illisibles pour les daltoniens",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/validate_palette.js"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "scripts/validate_palette.py"
+        }
+      ]
+    },
     {
       "id": "timescale/pg-aiguide/skills/schema-exploration",
       "nom": "schema-exploration",
@@ -221,7 +249,7 @@
       "repo": "datopian/portaljs",
       "chemin_skill": "skills/portaljs-add-geo",
       "skill_md": "skills/portaljs-add-geo/SKILL.md",
-      "sha_epingle": "06928821c661e68b4b318b845b58e6cbb75cd867",
+      "sha_epingle": "fc7ccd651459549a962c8b7aa08f60f8849fd9a5",
       "resume_fr": "convertit un fichier géo en carte et requêtes spatiales → portail prêt sans serveur",
       "note": 9,
       "editeur_confiance": false,
@@ -262,7 +290,7 @@
       "repo": "huggingface/skills",
       "chemin_skill": "skills/huggingface-trackio",
       "skill_md": "skills/huggingface-trackio/SKILL.md",
-      "sha_epingle": "fabc634a893f62ad5c2039830397efa35fa62715",
+      "sha_epingle": "25910b3d0ba31a2ba102f901cdc9e008c278a69c",
       "resume_fr": "journalise les métriques d'entraînement et déclenche des alertes → repère vite les runs qui divergent",
       "note": 9,
       "editeur_confiance": false,
@@ -284,6 +312,43 @@
       ]
     },
     {
+      "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
+      "nom": "astropy",
+      "place": "ajout",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "chemin_skill": "skills/astropy",
+      "skill_md": "skills/astropy/SKILL.md",
+      "sha_epingle": "a25cf9ec00e2745d03f8704acf6f6919694ccd9a",
+      "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, WCS → moins d'erreurs d'unités et de conversion",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "mahanaicoach/google-maps-scraper-kit/.claude/skills/google-maps-scraper",
+      "nom": "google-maps-scraper",
+      "place": "ajout",
+      "repo": "Mahanaicoach/google-maps-scraper-kit",
+      "chemin_skill": ".claude/skills/google-maps-scraper",
+      "skill_md": ".claude/skills/google-maps-scraper/SKILL.md",
+      "sha_epingle": "15dd80b584dfeab550271ba383b540af8f44d1d2",
+      "resume_fr": "te génère une liste de commerces locaux avec emails et réseaux → prospection plus rapide",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "--verify-emails envoie les noms de domaine des emails collectés à un tiers (dns.google) ; données personnelles potentiellement transmises hors machine."
+        }
+      ]
+    },
+    {
       "id": "pydantic/skills/skills/logfire-query",
       "nom": "logfire-query",
       "place": "ajout",
@@ -299,19 +364,60 @@
       "risques": []
     },
     {
-      "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
-      "nom": "astropy",
+      "id": "neondatabase/agent-skills/skills/neon-realtime",
+      "nom": "neon-realtime",
       "place": "ajout",
-      "repo": "K-Dense-AI/scientific-agent-skills",
-      "chemin_skill": "skills/astropy",
-      "skill_md": "skills/astropy/SKILL.md",
-      "sha_epingle": "5f2bc0341354fd5590aef76a533ada1e1e5b4e62",
-      "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, WCS → moins d'erreurs d'unités et de conversion",
+      "repo": "neondatabase/agent-skills",
+      "chemin_skill": "skills/neon-realtime",
+      "skill_md": "skills/neon-realtime/SKILL.md",
+      "sha_epingle": "d3da7cb5436edbb2bc8c00747fafd31ddf0644f4",
+      "resume_fr": "synchronise les requêtes SQL en direct dans l'UI → évite le polling et les rafraîchissements manuels",
       "note": 9,
       "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Les instructions d'installation utilisent `neon skills -s neon -y` (installation non interactive) et une récupération depuis une URL distante, sans vérification d'empreinte"
+        }
+      ]
+    },
+    {
+      "id": "sentioxyz/sentio-ai-kit/skills/sentio-platform",
+      "nom": "sentio-platform",
+      "place": "ajout",
+      "repo": "sentioxyz/sentio-ai-kit",
+      "chemin_skill": "skills/sentio-platform",
+      "skill_md": "skills/sentio-platform/SKILL.md",
+      "sha_epingle": "addd93dc6ac30c17ffbdfeac77a88726d54341c3",
+      "resume_fr": "pilote processors, requêtes SQL, alertes et dashboards Sentio → supervise tes données sans quitter le terminal",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "references/openapi.swagger.json"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "destruction",
+          "code": "Les commandes de suppression (projet, alerte, endpoint) et d'arrêt (processor stop, pause avec -y) sont données sans demande de confirmation préalable."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Le skill suggère de passer la clé API en argument de ligne de commande (--api-key), ce qui l'expose à l'historique shell et à la liste des processus."
+        }
+      ]
     },
     {
       "id": "confluentinc/agent-skills/skills/flink-udf",
@@ -320,7 +426,7 @@
       "repo": "confluentinc/agent-skills",
       "chemin_skill": "skills/flink-udf",
       "skill_md": "skills/flink-udf/SKILL.md",
-      "sha_epingle": "f3d95b7e6855b690b7670ecee033404e082ab169",
+      "sha_epingle": "204b36f10e9be41819557988e8f5291711fda986",
       "resume_fr": "guide la création d'UDF Flink en Java → étend Flink SQL avec tes propres fonctions",
       "note": 9,
       "editeur_confiance": false,
@@ -336,37 +442,19 @@
       ]
     },
     {
-      "id": "voxel51/fiftyone-skills/skills/fiftyone-create-notebook",
-      "nom": "fiftyone-create-notebook",
+      "id": "confluentinc/agent-skills/skills/confluent-cloud-flink-sql",
+      "nom": "confluent-cloud-flink-sql",
       "place": "ajout",
-      "repo": "voxel51/fiftyone-skills",
-      "chemin_skill": "skills/fiftyone-create-notebook",
-      "skill_md": "skills/fiftyone-create-notebook/SKILL.md",
-      "sha_epingle": "7617709dedf11d4b6151a151e935e94aade9fcf6",
-      "resume_fr": "crée des notebooks FiftyOne validés étape par étape → tutoriels clairs, code à jour",
+      "repo": "confluentinc/agent-skills",
+      "chemin_skill": "skills/confluent-cloud-flink-sql",
+      "skill_md": "skills/confluent-cloud-flink-sql/SKILL.md",
+      "sha_epingle": "204b36f10e9be41819557988e8f5291711fda986",
+      "resume_fr": "contrôle le SQL Flink de Confluent Cloud avant exécution → évite les écarts avec Apache Flink",
       "note": 9,
       "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "suppression récursive (rm -rf)"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Exécution du notebook généré via papermill et installation de paquets pip non épinglés dans un venv, sans garde-fou explicite sur le code exécuté."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Le skill demande de récupérer du contenu via WebFetch (docs.voxel51.com/llms.txt) et de s'en servir comme référence d'API : contenu distant non contrôlé influençant le code généré."
-        }
-      ]
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     },
     {
       "id": "netlify/context-and-tools/skills/netlify-database",
@@ -387,79 +475,6 @@
           "source": "juge",
           "categorie": "donnees",
           "code": "Les commandes --show-credentials et « connect --json » affichent les identifiants en clair, à réutiliser dans le shell (historique, logs)."
-        }
-      ]
-    },
-    {
-      "id": "supabase-community/supabase-plugin/skills/supabase-postgres-best-practices",
-      "nom": "supabase-postgres-best-practices",
-      "place": "ajout",
-      "repo": "supabase-community/supabase-plugin",
-      "chemin_skill": "skills/supabase-postgres-best-practices",
-      "skill_md": "skills/supabase-postgres-best-practices/SKILL.md",
-      "sha_epingle": "016bf5b36670f7ad189ca90223513bd10406392d",
-      "resume_fr": "te guide sur Postgres avant schémas, requêtes et RLS → évite lenteurs et fuites de données",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "brycewang-stanford/auto-empirical-research-skills/skills/00.1-full-empirical-analysis-skill_python",
-      "nom": "Full-empirical-analysis-skill",
-      "place": "ajout",
-      "repo": "brycewang-stanford/Auto-Empirical-Research-Skills",
-      "chemin_skill": "skills/00.1-Full-empirical-analysis-skill_Python",
-      "skill_md": "skills/00.1-Full-empirical-analysis-skill_Python/SKILL.md",
-      "sha_epingle": "068cd42c6fb46d15fd491355890235bce0e06d32",
-      "resume_fr": "enchaîne les 8 étapes d'analyse économétrique en Python → tableaux et figures prêts pour publication",
-      "note": 6,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "zlanqing/codex-claude-academic-skills/scientific-toolkit-skill/references/scientific-skills/matlab",
-      "nom": "matlab",
-      "place": "ajout",
-      "repo": "zLanqing/codex-claude-academic-skills",
-      "chemin_skill": "scientific-toolkit-skill/references/scientific-skills/matlab",
-      "skill_md": "scientific-toolkit-skill/references/scientific-skills/matlab/SKILL.md",
-      "sha_epingle": "7ed6377f0efb6a38951b48ef03b19d996e454b1f",
-      "resume_fr": "écrit et traduit des scripts MATLAB et Octave → calcul scientifique moins sujet aux erreurs",
-      "note": 8,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Dans executing-scripts.md, le modèle interpole des variables shell dans la chaîne de commande (matlab -batch \"myfunc(${N}, '${NAME}')\"). Si NAME vient d'une entrée non maîtrisée, cela ouvre une injec…"
-        }
-      ]
-    },
-    {
-      "id": "brycewang-stanford/auto-empirical-research-skills/skills/00-full-empirical-analysis-skill_statspai",
-      "nom": "StatsPAI_skill",
-      "place": "ajout",
-      "repo": "brycewang-stanford/Auto-Empirical-Research-Skills",
-      "chemin_skill": "skills/00-Full-empirical-analysis-skill_StatsPAI",
-      "skill_md": "skills/00-Full-empirical-analysis-skill_StatsPAI/SKILL.md",
-      "sha_epingle": "068cd42c6fb46d15fd491355890235bce0e06d32",
-      "resume_fr": "construit une analyse causale complète en Python → tableaux et figures prêts pour publication",
-      "note": 8,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "suppression récursive (rm -rf)"
         }
       ]
     }

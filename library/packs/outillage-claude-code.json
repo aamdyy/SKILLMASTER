@@ -1,6 +1,6 @@
 {
   "type": "outillage-claude-code",
-  "genere_le": "2026-10-26T11:30:59.377Z",
+  "genere_le": "2026-11-02T13:57:04.016Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
@@ -10,9 +10,6 @@
   "finalistes": [
     "addyosmani/agent-skills/skills/constraint-driven-development",
     "affaan-m/ecc/skills/agent-security-hardening",
-    "anthropics/claude-code/plugins/hookify/skills/writing-rules",
-    "anthropics/claude-code/plugins/plugin-dev/skills/agent-development",
-    "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration",
     "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
     "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcpb",
     "anthropics/skills/skills/claude-api",
@@ -22,31 +19,51 @@
     "confluentinc/agent-skills/skills/confluent-skill-creator",
     "epicgames/unreal-engine-skills-for-claude-code-plugin/skills/create-toolset",
     "gaasher/agent-loop-skills/loops/optimize-loop",
-    "googlecloudplatform/data-agent-kit-plugin/skills/bigtable-basics",
+    "heygen-com/hyperframes/skills/remotion-to-hyperframes",
+    "jeffallan/claude-skills/skills/code-reviewer",
     "mattpocock/skills/skills/engineering/code-review",
     "rossark0/rossark-motion-skill/rossark-motion-skill",
     "sickn33/agentic-awesome-skills/skills/aas-compose-stack",
-    "xberg-io/xberg/skills/xberg"
+    "xberg-io/xberg/skills/xberg",
+    "zlanqing/codex-claude-academic-skills/scientific-toolkit-skill/references/scientific-skills/scikit-learn"
   ],
-  "changements": [],
+  "changements": [
+    {
+      "entrant": "optimize-loop",
+      "sortant": "anthropics/claude-code/plugins/plugin-dev/skills/agent-development",
+      "raison": "plus éligible pour ce type ou absent de la sélection",
+      "entrant_id": "gaasher/agent-loop-skills/loops/optimize-loop",
+      "sortant_id": "anthropics/claude-code/plugins/plugin-dev/skills/agent-development"
+    },
+    {
+      "entrant": "rossark-motion-skill",
+      "sortant": "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration",
+      "raison": "plus éligible pour ce type ou absent de la sélection",
+      "entrant_id": "rossark0/rossark-motion-skill/rossark-motion-skill",
+      "sortant_id": "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration"
+    },
+    {
+      "entrant": "build-mcpb",
+      "sortant": "anthropics/claude-code/plugins/hookify/skills/writing-rules",
+      "raison": "plus éligible pour ce type ou absent de la sélection",
+      "entrant_id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcpb",
+      "sortant_id": "anthropics/claude-code/plugins/hookify/skills/writing-rules"
+    }
+  ],
   "ecartes": [
-    {
-      "nom": "bigtable-basics",
-      "raison": "Bigtable est une base cloud Google absente de sa stack."
-    },
-    {
-      "nom": "confluent-skill-creator",
-      "raison": "Spécifique à Confluent/Kafka/Flink, hors stack (calcul distribué, cloud)."
-    },
     {
       "nom": "create-toolset",
       "raison": "Spécifique à Unreal Engine, absent de sa stack."
+    },
+    {
+      "nom": "confluent-skill-creator",
+      "raison": "Dédié à Confluent/Kafka (data cloud), absent de sa stack."
     }
   ],
   "stabilite": {
     "tirages": 3,
-    "meme_composition_sans_tenants": true,
-    "raison_tirage_1": "Les skills qui aident à créer et fiabiliser ses propres skills et agents Claude Code passent devant, et tout ce qui touche une techno hors stack est écarté."
+    "meme_composition_sans_tenants": false,
+    "raison_tirage_1": "Les tenants skill-creator, mcp-builder et claude-api sont les plus directement utiles à l'outillage Claude Code, et aucun challenger n'est nettement meilleur."
   },
   "recommandes": [
     {
@@ -63,43 +80,17 @@
       "raison": "Skill officiel, ciblé sur la création et l'évaluation de skills, avec une méthode d'evals concrète et des schémas JSON. Note limitée car SKILL.md et annexes sont tronqués : la fin n'a pas été jugée."
     },
     {
-      "id": "anthropics/claude-code/plugins/plugin-dev/skills/agent-development",
-      "nom": "Agent Development",
-      "repo": "anthropics/claude-code",
-      "resume_fr": "te guide pour écrire des subagents → déclenchement précis, prompts plus solides",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Skill officiel Anthropic, ciblé et précis sur le format des agents (champs, règles de validation, exemples). Retrait d'un point : script test-agent-trigger.sh cité mais absent, annexes tronquées."
-    },
-    {
       "id": "anthropics/skills/skills/mcp-builder",
       "nom": "mcp-builder",
       "repo": "anthropics/skills",
-      "resume_fr": "te guide pour créer un serveur MCP → outils mieux conçus pour les LLM",
+      "resume_fr": "guide la création de serveurs MCP en Python ou TypeScript → outils mieux conçus, intégrations fiables",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "info",
-      "raison": "Skill officiel Anthropic, ciblé et précis : conventions de nommage, registerTool, annotations, pagination et évaluations. Note amputée par des annexes manquantes (Python, scripts) et une licence contradictoire."
-    },
-    {
-      "id": "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration",
-      "nom": "MCP Integration",
-      "repo": "anthropics/claude-code",
-      "resume_fr": "explique comment brancher des serveurs MCP dans un plugin → relie les services externes proprement",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
       "risque_max": "eleve",
-      "raison": "Skill officiel Anthropic, ciblé sur les plugins Claude Code, avec conventions précises (nommage mcp__plugin_…, ${CLAUDE_PLUGIN_ROOT}). Qualité réduite par des contradictions (démarrage vs lazy loading) et des checklists génériques."
+      "raison": "Skill officiel, déclenchement précis, conseils MCP concrets et commandes vérifiables. Retenues : licence contradictoire (dépôt « aucune », LICENSE Apache), guides v2 et Python non fournis."
     },
     {
       "id": "anthropics/skills/skills/claude-api",
@@ -118,43 +109,28 @@
       "id": "addyosmani/agent-skills/skills/constraint-driven-development",
       "nom": "constraint-driven-development",
       "repo": "addyosmani/agent-skills",
-      "resume_fr": "surveille les suppressions et tests sautés → Claude ne baisse plus la qualité en silence",
-      "note": 10,
-      "pertinence": 4,
-      "score_pack": 7.6,
-      "note_juge": 10,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement très précis, contenu actionnable : seuils justifiés, commandes exactes, garde-fou du diff et ratchets. Note de qualité amputée par l'annexe floor-guard tronquée à mon examen."
-    },
-    {
-      "id": "anthropics/claude-code/plugins/hookify/skills/writing-rules",
-      "nom": "Writing Hookify Rules",
-      "repo": "anthropics/claude-code",
-      "resume_fr": "t'aide à écrire des règles hookify pour signaler les commandes risquées → moins d'accidents en session",
+      "resume_fr": "surveille le diff, bloque les tests sautés → empêche les agents de baisser la barre",
       "note": 9,
       "pertinence": 4,
       "score_pack": 7,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis et syntaxe spécifique au plugin hookify, avec exemples et opérateurs listés. Note amputée : annexe d'exemples absente, champ action documenté mais absent des exemples, licence aucune."
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et seuils justifiés, pièges réels (--redact, ratchets, contrôles externes). Pénalisé par la longueur, des exemples de dates incohérents et l'annexe floor-guard tronquée."
     },
     {
       "id": "mattpocock/skills/skills/engineering/code-review",
       "nom": "code-review",
       "repo": "mattpocock/skills",
-      "resume_fr": "revoit tes changements aux normes du repo et au ticket → repère les écarts avant fusion",
+      "resume_fr": "revoit les changements contre les standards du repo et la spec → repère écarts et hors-périmètre",
       "note": 9,
       "pertinence": 4,
       "score_pack": 7,
       "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Processus précis et vérifiable (git diff à trois points, rev-parse, contrôle du diff vide) et séparation des axes, savoir-faire de mainteneur. Dépend d'un setup non fourni et d'une doc tracker absente."
-    }
-  ],
-  "ajouts": [
+      "raison": "Déclenchement précis et processus concret (vérification du ref, diff à trois points). Baseline de code smells de Fowler bien intégrée, avec règles de priorité. Note réduite par la dépendance à /setup-matt-pocock-skills et une annexe absente."
+    },
     {
       "id": "gaasher/agent-loop-skills/loops/optimize-loop",
       "nom": "optimize-loop",
@@ -169,17 +145,17 @@
       "raison": "Déclenchement précis, avec des exclusions claires. Règles testables (ordre lexicographique, ledger, patience) et conventions concrètes. Idée connue, outils tools/ non fournis, pas vérifiables."
     },
     {
-      "id": "affaan-m/ecc/skills/agent-security-hardening",
-      "nom": "agent-security-hardening",
-      "repo": "affaan-m/ECC",
-      "resume_fr": "valide identifiants, chemins et URLs avant chaque action d'agent → bloque fuites et écritures hors périmètre",
+      "id": "rossark0/rossark-motion-skill/rossark-motion-skill",
+      "nom": "rossark-motion-skill",
+      "repo": "rossark0/rossark-motion-skill",
+      "resume_fr": "anime illustrations, icônes et scènes avec un mouvement calme → rendu vivant sans effets chargés",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement précis et contenu technique concret (validation de chemins Windows, DNS rebinding, redirections). Note réduite : code Python sans annexes, certaines phrases denses et un passage sur la vérification sans commandes."
+      "raison": "Description claire et précise, méthode détaillée et chiffrée avec templates et outils. SKILL.md tronqué, annexes partielles et domaine large (plus de 20 sujets) ; pas de risque nouveau repéré."
     },
     {
       "id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcpb",
@@ -193,6 +169,60 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Skill officiel, ciblé sur MCPB, avec pièges réels (pas d'auto-préfixe d'env, pas de sandbox, validation de chemins), commandes exactes et déclencheurs clairs. Annexes tronquées à la fin."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "affaan-m/ecc/skills/agent-security-hardening",
+      "nom": "agent-security-hardening",
+      "repo": "affaan-m/ECC",
+      "resume_fr": "valide identifiants, chemins et URLs avant chaque action d'agent → bloque fuites et écritures hors périmètre",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et contenu technique concret (validation de chemins Windows, DNS rebinding, redirections). Note réduite : code Python sans annexes, certaines phrases denses et un passage sur la vérification sans commandes."
+    },
+    {
+      "id": "heygen-com/hyperframes/skills/remotion-to-hyperframes",
+      "nom": "remotion-to-hyperframes",
+      "repo": "heygen-com/hyperframes",
+      "resume_fr": "porte Remotion ou Lottie dans HyperFrames, vérifié image par image → moins de régressions visuelles",
+      "note": 8,
+      "pertinence": 6,
+      "score_pack": 7.2,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et savoir-faire réel (niveaux d'import, lint, seuils SSIM, pièges de box-sizing et polices). Périmètre un peu large, annexes tronquées, et scripts référencés non fournis."
+    },
+    {
+      "id": "zlanqing/codex-claude-academic-skills/scientific-toolkit-skill/references/scientific-skills/scikit-learn",
+      "nom": "scikit-learn",
+      "repo": "zLanqing/codex-claude-academic-skills",
+      "resume_fr": "guide prétraitement, pipelines et validation croisée → évite les fuites de données et scores trompeurs",
+      "note": 5,
+      "pertinence": 8,
+      "score_pack": 6.2,
+      "note_juge": 5,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Description large mais pertinente. Contenu surtout générique, bien structuré, avec exemples exacts ; peu de pièges propres à Claude Code. Annexes tronquées, scripts non lus. Note moyenne."
+    },
+    {
+      "id": "jeffallan/claude-skills/skills/code-reviewer",
+      "nom": "code-reviewer",
+      "repo": "Jeffallan/claude-skills",
+      "resume_fr": "relit tes diffs pour trouver bugs et failles → revues de PR plus sûres",
+      "note": 5,
+      "pertinence": 6,
+      "score_pack": 5.4,
+      "note_juge": 5,
+      "modele": "haiku",
+      "risque_max": "info",
+      "raison": "Skill générique : checklists et exemples classiques (SQL injection, N+1, constantes magiques) déjà connus de Claude. Déclenchement large, peu de conventions propres. Annexes utiles mais génériques ; une annexe tronquée."
     },
     {
       "id": "confident-ai/deepeval/skills/deepeval",
@@ -206,19 +236,6 @@
       "modele": "haiku",
       "risque_max": "eleve",
       "raison": "Skill officiel Confident AI, ciblé et précis : commandes exactes, règles claires (deepeval test run, metrics.py). Annexes metrics, pytest, traces et templates absentes ; renvoie à des skills sœurs."
-    },
-    {
-      "id": "rossark0/rossark-motion-skill/rossark-motion-skill",
-      "nom": "rossark-motion-skill",
-      "repo": "rossark0/rossark-motion-skill",
-      "resume_fr": "anime illustrations, icônes et scènes avec un mouvement calme → rendu vivant sans effets chargés",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Description claire et précise, méthode détaillée et chiffrée avec templates et outils. SKILL.md tronqué, annexes partielles et domaine large (plus de 20 sujets) ; pas de risque nouveau repéré."
     },
     {
       "id": "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
@@ -237,14 +254,14 @@
       "id": "xberg-io/xberg/skills/xberg",
       "nom": "xberg",
       "repo": "xberg-io/xberg",
-      "resume_fr": "extrait texte, tables et métadonnées de 107 formats → évite d'écrire un parseur par format",
+      "resume_fr": "extrait texte, tableaux et métadonnées de 107 formats → une seule API pour tous vos documents",
       "note": 6,
       "pertinence": 6,
       "score_pack": 6,
       "note_juge": 6,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Skill officiel bien structuré avec exemples concrets et pièges utiles, mais description large, contenu générique sur une lib tierce, et annexes tronquées. Pas de risque de sécurité notable."
+      "raison": "Skill d'API de bibliothèque d'extraction de documents, précis avec exemples et pièges utiles, mais description large, pas de lien clair avec Claude et pas de sources vérifiées. Annexes tronquées."
     },
     {
       "id": "sickn33/agentic-awesome-skills/skills/aas-compose-stack",

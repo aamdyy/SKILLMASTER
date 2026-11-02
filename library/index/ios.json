@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-26T11:30:59.652Z",
+  "genere_le": "2026-11-02T13:57:04.414Z",
   "type": "ios",
   "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -11,7 +11,7 @@
       "repo": "figma/mcp-server-guide",
       "chemin_skill": "skills-figquery/figma-swiftui",
       "skill_md": "skills-figquery/figma-swiftui/SKILL.md",
-      "sha_epingle": "056adaf7564d3dc5fa2e1c7828bbec925d5fa6bb",
+      "sha_epingle": "f3f264d9cbae059d9b96289ee33ce444b5c8e7e6",
       "resume_fr": "traduit Figma en SwiftUI dans les deux sens → moins d'écarts entre design et code iOS",
       "note": 10,
       "editeur_confiance": false,
@@ -60,25 +60,13 @@
       "repo": "twostraws/SwiftUI-Agent-Skill",
       "chemin_skill": "swiftui-pro",
       "skill_md": "swiftui-pro/SKILL.md",
-      "sha_epingle": "1eac100257af9068d5f041c1a1540b1790233716",
+      "sha_epingle": "f2920b63995263f57b3e198674e89a602efba6d2",
       "resume_fr": "relit ton SwiftUI : API modernes, performance → code plus à jour et plus rapide",
       "note": 9,
       "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "plugin.json : chargé comme plugin"
-        },
-        {
-          "gravite": "moyen",
-          "source": "scan",
-          "code": "lien symbolique",
-          "detail": "skills/swiftui-pro/references"
-        }
-      ]
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     },
     {
       "id": "avdlee/swift-concurrency-agent-skill/skills/swift-concurrency",
@@ -136,21 +124,6 @@
       ]
     },
     {
-      "id": "truongduy2611/app-store-preflight-skills/app-store-preflight-skills",
-      "nom": "app-store-preflight-skills",
-      "place": "recommande",
-      "repo": "truongduy2611/app-store-preflight-skills",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "cfd9c73577300f9310ca892fefd38fbe1abd73cb",
-      "resume_fr": "vérifie un projet iOS avant soumission → moins de rejets sur l'App Store",
-      "note": 8,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
       "id": "flowritescode/fwc-swiftui-skills/skills/swiftui-liquid-glass",
       "nom": "swiftui-liquid-glass",
       "place": "recommande",
@@ -172,7 +145,7 @@
       "repo": "EveryInc/compound-engineering-plugin",
       "chemin_skill": "skills/ce-test-xcode",
       "skill_md": "skills/ce-test-xcode/SKILL.md",
-      "sha_epingle": "9f5b16fc617fb5bf4817c8f42537b626c17abd05",
+      "sha_epingle": "77cc431daaebea7ee9f33ac530a66eec5404572b",
       "resume_fr": "lance l'app iOS dans le simulateur et garde les preuves → évite les bugs avant livraison",
       "note": 9,
       "editeur_confiance": false,
@@ -192,13 +165,11 @@
           "code": "L'outil peut ouvrir une URL arbitraire dans le simulateur via « xcrun simctl openurl » et arrêter un simulateur démarré par le run, sans garde-fou explicite sur l'URL."
         }
       ]
-    }
-  ],
-  "ajouts": [
+    },
     {
       "id": "superagents-lab/xcode27-skills/swiftui-specialist",
       "nom": "swiftui-specialist",
-      "place": "ajout",
+      "place": "recommande",
       "repo": "superagents-lab/xcode27-skills",
       "chemin_skill": "swiftui-specialist",
       "skill_md": "swiftui-specialist/SKILL.md",
@@ -216,7 +187,9 @@
           "code": "Tentative de contournement des instructions : le SKILL.md déclare que ses directives « supplantent inconditionnellement » tout entraînement antérieur du modèle. C'est une instruction adressée à l'age…"
         }
       ]
-    },
+    }
+  ],
+  "ajouts": [
     {
       "id": "mintuz/skills/src/app/skills/swiftui-architecture",
       "nom": "swiftui-architecture",
@@ -224,7 +197,7 @@
       "repo": "mintuz/skills",
       "chemin_skill": "src/app/skills/swiftui-architecture",
       "skill_md": "src/app/skills/swiftui-architecture/SKILL.md",
-      "sha_epingle": "e04b469da09961704a185ef44582097eaad02592",
+      "sha_epingle": "4e0a12b5048eac78a3ace4feee657873cdd530ef",
       "resume_fr": "guide l'état SwiftUI sans ViewModel, tâches async annulées → flux de données clair et sûr",
       "note": 9,
       "editeur_confiance": false,
@@ -256,28 +229,13 @@
       ]
     },
     {
-      "id": "prisma-labs-dev/apple-skills/disabled-skills/guide-swiftui-animations",
-      "nom": "guide-swiftui-animations",
-      "place": "ajout",
-      "repo": "Prisma-Labs-Dev/apple-skills",
-      "chemin_skill": "disabled-skills/guide-swiftui-animations",
-      "skill_md": "disabled-skills/guide-swiftui-animations/SKILL.md",
-      "sha_epingle": "498626005e65783ebe8570a103b2335cf397768c",
-      "resume_fr": "guide les animations SwiftUI, transitions et Animatable → mouvements fluides et performants",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
       "id": "rgmez/apple-accessibility-skills/skills/swiftui-accessibility-auditor",
       "nom": "swiftui-accessibility-auditor",
       "place": "ajout",
       "repo": "rgmez/apple-accessibility-skills",
       "chemin_skill": "skills/swiftui-accessibility-auditor",
       "skill_md": "skills/swiftui-accessibility-auditor/SKILL.md",
-      "sha_epingle": "c3b76e6d7eff2560358bfcc1c28cf928f92289c2",
+      "sha_epingle": "e469fe9b613c50a7beb13e7e1b9202f8041af116",
       "resume_fr": "repère les failles VoiceOver, Dynamic Type et focus clavier → propose des correctifs prêts à appliquer",
       "note": 9,
       "editeur_confiance": false,
@@ -301,14 +259,14 @@
       "risques": []
     },
     {
-      "id": "mintuz/skills/src/app/skills/app-intent-driven-development",
-      "nom": "app-intent-driven-development",
+      "id": "prisma-labs-dev/apple-skills/disabled-skills/guide-swiftui-animations",
+      "nom": "guide-swiftui-animations",
       "place": "ajout",
-      "repo": "mintuz/skills",
-      "chemin_skill": "src/app/skills/app-intent-driven-development",
-      "skill_md": "src/app/skills/app-intent-driven-development/SKILL.md",
-      "sha_epingle": "e04b469da09961704a185ef44582097eaad02592",
-      "resume_fr": "conçoit les intents iOS avant l'UI → évite la logique dupliquée entre Siri et écrans",
+      "repo": "Prisma-Labs-Dev/apple-skills",
+      "chemin_skill": "disabled-skills/guide-swiftui-animations",
+      "skill_md": "disabled-skills/guide-swiftui-animations/SKILL.md",
+      "sha_epingle": "498626005e65783ebe8570a103b2335cf397768c",
+      "resume_fr": "guide les animations SwiftUI, transitions et Animatable → mouvements fluides et performants",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
@@ -331,13 +289,28 @@
       "risques": []
     },
     {
+      "id": "mintuz/skills/src/app/skills/app-intent-driven-development",
+      "nom": "app-intent-driven-development",
+      "place": "ajout",
+      "repo": "mintuz/skills",
+      "chemin_skill": "src/app/skills/app-intent-driven-development",
+      "skill_md": "src/app/skills/app-intent-driven-development/SKILL.md",
+      "sha_epingle": "4e0a12b5048eac78a3ace4feee657873cdd530ef",
+      "resume_fr": "conçoit les intents iOS avant l'UI → évite la logique dupliquée entre Siri et écrans",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
       "id": "kimeur/duology/plugins/duology-design/skills/duo-design-system",
       "nom": "duo-design-system",
       "place": "ajout",
       "repo": "Kimeur/duology",
       "chemin_skill": "plugins/duology-design/skills/duo-design-system",
       "skill_md": "plugins/duology-design/skills/duo-design-system/SKILL.md",
-      "sha_epingle": "1a8154f69de0ffa9893f906997b185c44577225c",
+      "sha_epingle": "49d4658705d31b49c4b1d6e0aaa4012ab38c2290",
       "resume_fr": "tokens d'espacement, grille et couleurs par classe de taille → interface cohérente sur les deux écrans",
       "note": 9,
       "editeur_confiance": false,
@@ -352,23 +325,8 @@
       "repo": "Kimeur/duology",
       "chemin_skill": "plugins/duology-design/skills/duo-patterns",
       "skill_md": "plugins/duology-design/skills/duo-patterns/SKILL.md",
-      "sha_epingle": "1a8154f69de0ffa9893f906997b185c44577225c",
+      "sha_epingle": "49d4658705d31b49c4b1d6e0aaa4012ab38c2290",
       "resume_fr": "construit des mises en page iPhone Duo adaptées → évite les contenus coupés par le pli",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "kimeur/duology/plugins/duology-design/skills/duo-transitions",
-      "nom": "duo-transitions",
-      "place": "ajout",
-      "repo": "Kimeur/duology",
-      "chemin_skill": "plugins/duology-design/skills/duo-transitions",
-      "skill_md": "plugins/duology-design/skills/duo-transitions/SKILL.md",
-      "sha_epingle": "1a8154f69de0ffa9893f906997b185c44577225c",
-      "resume_fr": "anime les pliages et rotations de l'iPhone Duo sans rechargement → écran fluide, sans clignotements",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
@@ -403,6 +361,36 @@
           "code": "Le mode fix peut modifier le code (Edit/Write), et « fix --apply-anyway » contourne le contrôle d'arbre git sale : des corrections peuvent être appliquées sans relecture."
         }
       ]
+    },
+    {
+      "id": "kimeur/duology/plugins/duology-design/skills/duo-transitions",
+      "nom": "duo-transitions",
+      "place": "ajout",
+      "repo": "Kimeur/duology",
+      "chemin_skill": "plugins/duology-design/skills/duo-transitions",
+      "skill_md": "plugins/duology-design/skills/duo-transitions/SKILL.md",
+      "sha_epingle": "49d4658705d31b49c4b1d6e0aaa4012ab38c2290",
+      "resume_fr": "anime les pliages et rotations de l'iPhone Duo sans rechargement → écran fluide, sans clignotements",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "dembsky/propmotion/scenekit-product-stages",
+      "nom": "scenekit-product-stages",
+      "place": "ajout",
+      "repo": "dembsky/PropMotion",
+      "chemin_skill": "scenekit-product-stages",
+      "skill_md": "scenekit-product-stages/SKILL.md",
+      "sha_epingle": "be7017ec8a6f76551c0630b742cb126ddf20448d",
+      "resume_fr": "fait évoluer un objet 3D dans SwiftUI → ombres réelles, animations fluides, retours haptiques",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     }
   ]
 }

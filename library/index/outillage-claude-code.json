@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-26T11:30:59.652Z",
+  "genere_le": "2026-11-02T13:57:04.415Z",
   "type": "outillage-claude-code",
   "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -11,7 +11,7 @@
       "repo": "anthropics/skills",
       "chemin_skill": "skills/skill-creator",
       "skill_md": "skills/skill-creator/SKILL.md",
-      "sha_epingle": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "sha_epingle": "ca45fc496a3436251f191354091d557da31c15b5",
       "resume_fr": "crée et teste tes skills → des skills fiables, déclenchés au bon moment",
       "note": 9,
       "editeur_confiance": true,
@@ -33,74 +33,30 @@
       ]
     },
     {
-      "id": "anthropics/claude-code/plugins/plugin-dev/skills/agent-development",
-      "nom": "Agent Development",
-      "place": "recommande",
-      "repo": "anthropics/claude-code",
-      "chemin_skill": "plugins/plugin-dev/skills/agent-development",
-      "skill_md": "plugins/plugin-dev/skills/agent-development/SKILL.md",
-      "sha_epingle": "2eff7a8d21c80be48904f62ebdea36d945d7b504",
-      "resume_fr": "te guide pour écrire des subagents → déclenchement précis, prompts plus solides",
-      "note": 9,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "scripts/validate-agent.sh"
-        }
-      ]
-    },
-    {
       "id": "anthropics/skills/skills/mcp-builder",
       "nom": "mcp-builder",
       "place": "recommande",
       "repo": "anthropics/skills",
       "chemin_skill": "skills/mcp-builder",
       "skill_md": "skills/mcp-builder/SKILL.md",
-      "sha_epingle": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
-      "resume_fr": "te guide pour créer un serveur MCP → outils mieux conçus pour les LLM",
-      "note": 9,
-      "editeur_confiance": true,
-      "risque_max": "info",
-      "risque_max_projet": "info",
-      "risques": [
-        {
-          "gravite": "info",
-          "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
-          "detail": "scripts/connections.py, scripts/evaluation.py"
-        }
-      ]
-    },
-    {
-      "id": "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration",
-      "nom": "MCP Integration",
-      "place": "recommande",
-      "repo": "anthropics/claude-code",
-      "chemin_skill": "plugins/plugin-dev/skills/mcp-integration",
-      "skill_md": "plugins/plugin-dev/skills/mcp-integration/SKILL.md",
-      "sha_epingle": "2eff7a8d21c80be48904f62ebdea36d945d7b504",
-      "resume_fr": "explique comment brancher des serveurs MCP dans un plugin → relie les services externes proprement",
+      "sha_epingle": "ca45fc496a3436251f191354091d557da31c15b5",
+      "resume_fr": "guide la création de serveurs MCP en Python ou TypeScript → outils mieux conçus, intégrations fiables",
       "note": 9,
       "editeur_confiance": true,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Le skill présente headersHelper comme un script exécuté par Claude Code pour produire des en-têtes d'authentification : à valider avant usage sur un plugin tiers."
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "scripts/connections.py, scripts/evaluation.py"
         },
         {
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Les exemples utilisent npx -y sur des paquets non épinglés, ce qui encourage l'exécution de code distant sans version fixée."
+          "code": "Le skill recommande d'exécuter `npx @modelcontextprotocol/codemod@latest` sans version épinglée : exécution de paquet npm distant non vérifié."
         }
       ]
     },
@@ -111,7 +67,7 @@
       "repo": "anthropics/skills",
       "chemin_skill": "skills/claude-api",
       "skill_md": "skills/claude-api/SKILL.md",
-      "sha_epingle": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+      "sha_epingle": "ca45fc496a3436251f191354091d557da31c15b5",
       "resume_fr": "te donne les bons modèles et paramètres de l'API Claude → évite le code daté",
       "note": 8,
       "editeur_confiance": true,
@@ -150,37 +106,18 @@
       "repo": "addyosmani/agent-skills",
       "chemin_skill": "skills/constraint-driven-development",
       "skill_md": "skills/constraint-driven-development/SKILL.md",
-      "sha_epingle": "aeac41d4d005999432bb7312f7ff06383a91d59d",
-      "resume_fr": "surveille les suppressions et tests sautés → Claude ne baisse plus la qualité en silence",
-      "note": 10,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "anthropics/claude-code/plugins/hookify/skills/writing-rules",
-      "nom": "Writing Hookify Rules",
-      "place": "recommande",
-      "repo": "anthropics/claude-code",
-      "chemin_skill": "plugins/hookify/skills/writing-rules",
-      "skill_md": "plugins/hookify/skills/writing-rules/SKILL.md",
-      "sha_epingle": "2eff7a8d21c80be48904f62ebdea36d945d7b504",
-      "resume_fr": "t'aide à écrire des règles hookify pour signaler les commandes risquées → moins d'accidents en session",
+      "sha_epingle": "301b02b12bff98e4688e6984af6556802322bbde",
+      "resume_fr": "surveille le diff, bloque les tests sautés → empêche les agents de baisser la barre",
       "note": 9,
-      "editeur_confiance": true,
-      "risque_max": "moyen",
-      "risque_max_projet": "moyen",
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "moyen",
+          "gravite": "eleve",
           "source": "scan",
-          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier)"
-        },
-        {
-          "gravite": "info",
-          "source": "scan",
-          "code": "exécution dynamique de code (dans un exemple de code, à vérifier)"
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/quality-gate.mjs"
         }
       ]
     },
@@ -191,20 +128,18 @@
       "repo": "mattpocock/skills",
       "chemin_skill": "skills/engineering/code-review",
       "skill_md": "skills/engineering/code-review/SKILL.md",
-      "sha_epingle": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
-      "resume_fr": "revoit tes changements aux normes du repo et au ticket → repère les écarts avant fusion",
+      "sha_epingle": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+      "resume_fr": "revoit les changements contre les standards du repo et la spec → repère écarts et hors-périmètre",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
       "risque_max_projet": null,
       "risques": []
-    }
-  ],
-  "ajouts": [
+    },
     {
       "id": "gaasher/agent-loop-skills/loops/optimize-loop",
       "nom": "optimize-loop",
-      "place": "ajout",
+      "place": "recommande",
       "repo": "gaasher/Agent-Loop-Skills",
       "chemin_skill": "loops/optimize-loop",
       "skill_md": "loops/optimize-loop/SKILL.md",
@@ -230,14 +165,14 @@
       ]
     },
     {
-      "id": "affaan-m/ecc/skills/agent-security-hardening",
-      "nom": "agent-security-hardening",
-      "place": "ajout",
-      "repo": "affaan-m/ECC",
-      "chemin_skill": "skills/agent-security-hardening",
-      "skill_md": "skills/agent-security-hardening/SKILL.md",
-      "sha_epingle": "25278e7d7b6cf6e6a4e7a6c8e10f14ff22f0eb5b",
-      "resume_fr": "valide identifiants, chemins et URLs avant chaque action d'agent → bloque fuites et écritures hors périmètre",
+      "id": "rossark0/rossark-motion-skill/rossark-motion-skill",
+      "nom": "rossark-motion-skill",
+      "place": "recommande",
+      "repo": "rossark0/rossark-motion-skill",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "9b20964e32f07f8ac7e2948cd175746fa4a7712f",
+      "resume_fr": "anime illustrations, icônes et scènes avec un mouvement calme → rendu vivant sans effets chargés",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
@@ -247,17 +182,118 @@
     {
       "id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcpb",
       "nom": "build-mcpb",
-      "place": "ajout",
+      "place": "recommande",
       "repo": "anthropics/claude-plugins-official",
       "chemin_skill": "plugins/mcp-server-dev/skills/build-mcpb",
       "skill_md": "plugins/mcp-server-dev/skills/build-mcpb/SKILL.md",
-      "sha_epingle": "58267944f92187b7d6a1c822165c96c81c864806",
+      "sha_epingle": "a7ba5b93db0c7c8d17f3f1d25853adca79598a1a",
       "resume_fr": "empaquette un serveur MCP local avec son runtime → installable sans Node ni Python",
       "note": 10,
       "editeur_confiance": true,
       "risque_max": null,
       "risque_max_projet": null,
       "risques": []
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "affaan-m/ecc/skills/agent-security-hardening",
+      "nom": "agent-security-hardening",
+      "place": "ajout",
+      "repo": "affaan-m/ECC",
+      "chemin_skill": "skills/agent-security-hardening",
+      "skill_md": "skills/agent-security-hardening/SKILL.md",
+      "sha_epingle": "b38be6a7f6350964d59328b52f0624e1d1d552d1",
+      "resume_fr": "valide identifiants, chemins et URLs avant chaque action d'agent → bloque fuites et écritures hors périmètre",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "heygen-com/hyperframes/skills/remotion-to-hyperframes",
+      "nom": "remotion-to-hyperframes",
+      "place": "ajout",
+      "repo": "heygen-com/hyperframes",
+      "chemin_skill": "skills/remotion-to-hyperframes",
+      "skill_md": "skills/remotion-to-hyperframes/SKILL.md",
+      "sha_epingle": "036e41fa09e6670f155fa3f2c361b58b8ed77e02",
+      "resume_fr": "porte Remotion ou Lottie dans HyperFrames, vérifié image par image → moins de régressions visuelles",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/lint_source.py"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "detail": "assets/test-corpus/run.sh, assets/test-corpus/tier-1-title-card/remotion-src/remotion.config.ts, assets/test-corpus/tie…"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Les fonts Google sont chargées depuis un tiers (fonts.googleapis.com) lors du rendu, transmission de requêtes externes"
+        }
+      ]
+    },
+    {
+      "id": "zlanqing/codex-claude-academic-skills/scientific-toolkit-skill/references/scientific-skills/scikit-learn",
+      "nom": "scikit-learn",
+      "place": "ajout",
+      "repo": "zLanqing/codex-claude-academic-skills",
+      "chemin_skill": "scientific-toolkit-skill/references/scientific-skills/scikit-learn",
+      "skill_md": "scientific-toolkit-skill/references/scientific-skills/scikit-learn/SKILL.md",
+      "sha_epingle": "7ed6377f0efb6a38951b48ef03b19d996e454b1f",
+      "resume_fr": "guide prétraitement, pipelines et validation croisée → évite les fuites de données et scores trompeurs",
+      "note": 5,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md",
+          "detail": "scripts/classification_pipeline.py, scripts/clustering_analysis.py"
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Les scripts lancés par le SKILL.md (python scripts/...) s'exécutent sans contrôle de contenu ; scripts non fournis, donc non vérifiables"
+        }
+      ]
+    },
+    {
+      "id": "jeffallan/claude-skills/skills/code-reviewer",
+      "nom": "code-reviewer",
+      "place": "ajout",
+      "repo": "Jeffallan/claude-skills",
+      "chemin_skill": "skills/code-reviewer",
+      "skill_md": "skills/code-reviewer/SKILL.md",
+      "sha_epingle": "078a25cc5bfd8011459be7b91d004e900c1d02d3",
+      "resume_fr": "relit tes diffs pour trouver bugs et failles → revues de PR plus sûres",
+      "note": 5,
+      "editeur_confiance": false,
+      "risque_max": "info",
+      "risque_max_projet": "info",
+      "risques": [
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read Grep Glob"
+        }
+      ]
     },
     {
       "id": "confident-ai/deepeval/skills/deepeval",
@@ -266,7 +302,7 @@
       "repo": "confident-ai/deepeval",
       "chemin_skill": "skills/deepeval",
       "skill_md": "skills/deepeval/SKILL.md",
-      "sha_epingle": "5410e3822dda5f889d5f35de3325a3738004aeb1",
+      "sha_epingle": "b791a0f86d44324f912786650521663e9d6877d3",
       "resume_fr": "guide une évaluation pytest d'agents IA → repère les échecs et améliore leur fiabilité",
       "note": 9,
       "editeur_confiance": false,
@@ -294,28 +330,13 @@
       ]
     },
     {
-      "id": "rossark0/rossark-motion-skill/rossark-motion-skill",
-      "nom": "rossark-motion-skill",
-      "place": "ajout",
-      "repo": "rossark0/rossark-motion-skill",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "9b20964e32f07f8ac7e2948cd175746fa4a7712f",
-      "resume_fr": "anime illustrations, icônes et scènes avec un mouvement calme → rendu vivant sans effets chargés",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
       "id": "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
       "nom": "cookbook-audit",
       "place": "ajout",
       "repo": "anthropics/claude-cookbooks",
       "chemin_skill": ".claude/skills/cookbook-audit",
       "skill_md": ".claude/skills/cookbook-audit/SKILL.md",
-      "sha_epingle": "bfe50e59dbb4f5546a0af9ca36ebb77e637c9ce1",
+      "sha_epingle": "c43f56d0360b9b1f631bd090fd199231d4c880cc",
       "resume_fr": "audite un notebook du Cookbook selon une grille → notebooks plus clairs et exécutables",
       "note": 9,
       "editeur_confiance": true,
@@ -337,8 +358,8 @@
       "repo": "xberg-io/xberg",
       "chemin_skill": "skills/xberg",
       "skill_md": "skills/xberg/SKILL.md",
-      "sha_epingle": "fed42bd967ec022688a5563c56a47f7b7c2986ce",
-      "resume_fr": "extrait texte, tables et métadonnées de 107 formats → évite d'écrire un parseur par format",
+      "sha_epingle": "ddb241673564ce669c848f14f6274b98e6e22e18",
+      "resume_fr": "extrait texte, tableaux et métadonnées de 107 formats → une seule API pour tous vos documents",
       "note": 6,
       "editeur_confiance": false,
       "risque_max": null,
@@ -352,7 +373,7 @@
       "repo": "sickn33/agentic-awesome-skills",
       "chemin_skill": "skills/aas-compose-stack",
       "skill_md": "skills/aas-compose-stack/SKILL.md",
-      "sha_epingle": "e8d346bcb691225fb6ae51a49c353bcedb2ef61d",
+      "sha_epingle": "8aa412398110762dfbf7a88af66cadcf3985f64e",
       "resume_fr": "compose une pile de skills AAS validée → garde une trace vérifiable sans installation automatique",
       "note": 5,
       "editeur_confiance": false,

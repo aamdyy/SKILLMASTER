@@ -1,6 +1,6 @@
 {
   "type": "android",
-  "genere_le": "2026-10-26T11:29:44.323Z",
+  "genere_le": "2026-11-02T13:55:58.992Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
@@ -9,8 +9,8 @@
   "reclasse": true,
   "finalistes": [
     "aldefy/compose-skill/skills/compose-expert",
+    "athevon/genjutsu/skills/_jutsu/compose-graphics",
     "athevon/genjutsu/skills/_jutsu/compose-motion",
-    "athevon/genjutsu/skills/_jutsu/compose-multiplatform",
     "chrisbanes/skills/skills/compose-animations",
     "chrisbanes/skills/skills/compose-component-design",
     "chrisbanes/skills/skills/compose-focus-navigation",
@@ -34,12 +34,20 @@
     "skydoves/compose-performance-skills/measurement/testing-compose-in-release-mode",
     "skydoves/compose-performance-skills/modifiers/migrating-to-modifier-node"
   ],
-  "changements": [],
+  "changements": [
+    {
+      "entrant": "compose-state-and-effects",
+      "sortant": "compose-motion",
+      "raison": "L'état et les effets Compose (hoisting, LaunchedEffect, collecte de Flow) servent à chaque écran, alors que les animations avancées sont un besoin ponctuel.",
+      "entrant_id": "chrisbanes/skills/skills/compose-state-and-effects",
+      "sortant_id": "athevon/genjutsu/skills/_jutsu/compose-motion"
+    }
+  ],
   "ecartes": [],
   "stabilite": {
     "tirages": 3,
-    "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "Les skills Compose et Kotlin les plus transversaux (état, effets, coroutines, performance) passent devant les skills de niche."
+    "meme_composition_sans_tenants": true,
+    "raison_tirage_1": "Les skills Compose généralistes et fiables (compose-agent, performance, concurrence Kotlin) dominent car le développeur écrit surtout du Compose à partir de maquettes Figma."
   },
   "recommandes": [
     {
@@ -121,17 +129,17 @@
       "raison": "Skill ciblé Jetpack Compose : règles testables, exemples avant/après, API dépréciées listées, cible récente (Strong Skipping, Nav3). Plusieurs références ne sont pas fournies au juge, d'où la confiance moyenne."
     },
     {
-      "id": "athevon/genjutsu/skills/_jutsu/compose-motion",
-      "nom": "compose-motion",
-      "repo": "AThevon/genjutsu",
-      "resume_fr": "guide les animations Jetpack Compose, du simple fondu aux transitions partagées → évite les bricolages",
+      "id": "chrisbanes/skills/skills/compose-state-and-effects",
+      "nom": "compose-state-and-effects",
+      "repo": "chrisbanes/skills",
+      "resume_fr": "place l'état Compose et ses effets au bon endroit → évite bugs et fuites",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement net et exemples de code exacts, avec pièges réels (animateItem, graphicsLayer, derivedStateOf). Qualité ternie par une phrase cassée, des renvois vers des fichiers absents et des versions non vérifiables."
+      "raison": "Skill Compose ciblé, à jour et précis : choix d'effets par cycle de vie, clés, rememberUpdatedState, séparation écran/contenu. Procédure dense et répétitive, avec quelques règles tortueuses (revue de contrat)."
     },
     {
       "id": "rcosteira79/android-skills/plugins/android-skills/skills/android-debugging",
@@ -149,17 +157,17 @@
   ],
   "ajouts": [
     {
-      "id": "chrisbanes/skills/skills/compose-state-and-effects",
-      "nom": "compose-state-and-effects",
-      "repo": "chrisbanes/skills",
-      "resume_fr": "place l'état Compose et ses effets au bon endroit → évite bugs et fuites",
-      "note": 9,
+      "id": "athevon/genjutsu/skills/_jutsu/compose-motion",
+      "nom": "compose-motion",
+      "repo": "AThevon/genjutsu",
+      "resume_fr": "te guide pour animer Compose avec AnimatedVisibility, updateTransition et transitions partagées → animations fluides sans bricolage",
+      "note": 8,
       "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
+      "score_pack": 7.2,
+      "note_juge": 8,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Skill Compose ciblé, à jour et précis : choix d'effets par cycle de vie, clés, rememberUpdatedState, séparation écran/contenu. Procédure dense et répétitive, avec quelques règles tortueuses (revue de contrat)."
+      "raison": "Skill Compose ciblé, avec API récentes (1.7+), springs chiffrées, anti-patterns et exemples vérifiables. Pénalisé pour une phrase de version corrompue, des contradictions dans les anti-patterns et des références manquantes."
     },
     {
       "id": "aldefy/compose-skill/skills/compose-expert",
@@ -173,6 +181,19 @@
       "modele": "haiku",
       "risque_max": "eleve",
       "raison": "Déclencheurs précis et contenu technique dense, avec exemples et pièges réels. Qualité pénalisée : annexes tronquées, la plupart des références absentes, licence non précisée, bannière de migration."
+    },
+    {
+      "id": "skydoves/compose-performance-skills/audit/auditing-compose-performance",
+      "nom": "auditing-compose-performance",
+      "repo": "skydoves/compose-performance-skills",
+      "resume_fr": "te fait mesurer avant de corriger → gains de fluidité prouvés par des chiffres",
+      "note": 10,
+      "pertinence": 6,
+      "score_pack": 8.4,
+      "note_juge": 10,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis (symptôme large, sprint perf, audit). Méthode concrète : jalons Measure→Verify, exemple Macrobenchmark, versions minimales, gabarit de rapport. Périmètre net Compose. Réserve : 25 skills frères absents."
     },
     {
       "id": "rcosteira79/android-skills/plugins/android-skills/skills/android-testing",
@@ -201,19 +222,6 @@
       "raison": "Déclenchement précis et savoir-faire réel : LocalPlatformContext en KMP, interdiction de SubcomposeAsyncImage dans LazyColumn, taille obligatoire avec rememberAsyncImagePainter. Exemples de code concrets, périmètre net."
     },
     {
-      "id": "skydoves/compose-performance-skills/audit/auditing-compose-performance",
-      "nom": "auditing-compose-performance",
-      "repo": "skydoves/compose-performance-skills",
-      "resume_fr": "te fait mesurer avant de corriger → gains de fluidité prouvés par des chiffres",
-      "note": 10,
-      "pertinence": 6,
-      "score_pack": 8.4,
-      "note_juge": 10,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis (symptôme large, sprint perf, audit). Méthode concrète : jalons Measure→Verify, exemple Macrobenchmark, versions minimales, gabarit de rapport. Périmètre net Compose. Réserve : 25 skills frères absents."
-    },
-    {
       "id": "chrisbanes/skills/skills/compose-animations",
       "nom": "compose-animations",
       "repo": "chrisbanes/skills",
@@ -225,19 +233,6 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Déclenchement précis et pièges réels (identité AnimatedContent, contentKey). Exemples Kotlin vérifiables. Note limitée par la procédure étape 4, touffue, et des renvois vers des skills frères absents."
-    },
-    {
-      "id": "rcosteira79/android-skills/plugins/android-skills/skills/android-ux",
-      "nom": "android-ux",
-      "repo": "rcosteira79/android-skills",
-      "resume_fr": "audite tes écrans Android selon Material Design 3 → moins de fautes d'accessibilité et d'ergonomie",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis et savoir-faire réel (postures pliables, réduction du mouvement, niveaux de contraste M3). Note tirée vers le bas par des greps invalides (--type kt) et une dépendance à un skill compose absent."
     },
     {
       "id": "skydoves/compose-performance-skills/measurement/generating-baseline-profiles",
@@ -277,6 +272,19 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Déclenchement précis et pièges réels (debug, Live Literals, CompilationMode.None), commandes concrètes. Retrait pour des affirmations non sourcées (gains 75 %/60 %, devirtualisation de ComposerImpl) et des renvois vers des annexes absentes."
+    },
+    {
+      "id": "rcosteira79/android-skills/plugins/android-skills/skills/android-ux",
+      "nom": "android-ux",
+      "repo": "rcosteira79/android-skills",
+      "resume_fr": "audite tes écrans Android selon Material Design 3 → moins de fautes d'accessibilité et d'ergonomie",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et savoir-faire réel (postures pliables, réduction du mouvement, niveaux de contraste M3). Note tirée vers le bas par des greps invalides (--type kt) et une dépendance à un skill compose absent."
     },
     {
       "id": "meet-miyani/compose-skill/skills/compose-feature",

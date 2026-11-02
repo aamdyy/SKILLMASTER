@@ -1,6 +1,6 @@
 {
   "type": "ios",
-  "genere_le": "2026-10-26T11:29:07.855Z",
+  "genere_le": "2026-11-02T13:55:07.595Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
@@ -12,6 +12,10 @@
     "avdlee/swift-concurrency-agent-skill/skills/swift-concurrency",
     "avdlee/swiftui-agent-skill/skills/swiftui-expert-skill",
     "conorluddy/ios-simulator-skill/ios-simulator-skill/skills/ios-simulator-skill",
+    "daveebbelaar/bama/skills/code/swift-swiftui",
+    "daveebbelaar/bama/skills/design/design-from-app",
+    "daveebbelaar/bama/skills/design/layout-grid",
+    "daveebbelaar/bama/skills/design/mac-design",
     "dembsky/propmotion/scenekit-product-stages",
     "dpearson2699/swift-ios-skills/skills/avkit",
     "everyinc/compound-engineering-plugin/skills/ce-test-xcode",
@@ -21,25 +25,34 @@
     "kimeur/duology/plugins/duology-design/skills/duo-design-system",
     "kimeur/duology/plugins/duology-design/skills/duo-patterns",
     "kimeur/duology/plugins/duology-design/skills/duo-transitions",
-    "mhaviv/swift-focusengine-agent-skill/swift-focusengine-pro",
     "mintuz/skills/src/app/skills/app-intent-driven-development",
     "mintuz/skills/src/app/skills/swiftui-architecture",
     "prisma-labs-dev/apple-skills/disabled-skills/guide-swiftui-animations",
     "rgmez/apple-accessibility-skills/skills/swiftui-accessibility-auditor",
     "rshankras/claude-code-apple-skills/skills/performance",
-    "scandit/skills/skills/barcode-capture-kmp",
-    "scandit/skills/skills/barcode-selection-kmp",
     "superagents-lab/xcode27-skills/swiftui-specialist",
     "terryc21/workflow-audit/skills/workflow-audit",
-    "truongduy2611/app-store-preflight-skills/app-store-preflight-skills",
     "twostraws/swiftui-agent-skill/swiftui-pro"
   ],
-  "changements": [],
-  "ecartes": [],
+  "changements": [
+    {
+      "entrant": "swiftui-specialist",
+      "sortant": "truongduy2611/app-store-preflight-skills/app-store-preflight-skills",
+      "raison": "plus éligible pour ce type ou absent de la sélection",
+      "entrant_id": "superagents-lab/xcode27-skills/swiftui-specialist",
+      "sortant_id": "truongduy2611/app-store-preflight-skills/app-store-preflight-skills"
+    }
+  ],
+  "ecartes": [
+    {
+      "nom": "apollo-ios",
+      "raison": "GraphQL Apollo : hors de sa stack (pas de GraphQL)."
+    }
+  ],
   "stabilite": {
     "tirages": 3,
-    "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "Le pack est dominé par le passage Figma→SwiftUI et par les skills SwiftUI généralistes (écriture moderne, revue), suivis des outils de test simulateur et de concurrence."
+    "meme_composition_sans_tenants": true,
+    "raison_tirage_1": "Le pont Figma→SwiftUI et les skills SwiftUI généralistes de référence répondent directement à son flux maquette→code iOS, et aucun challenger ne les surpasse nettement."
   },
   "recommandes": [
     {
@@ -78,7 +91,7 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "eleve",
+      "risque_max": null,
       "raison": "Skill ciblé et précis : règles testables, pièges réels (@State non privé, @Entry instable, onChange), cadre iOS 27. Annexes partielles (api et data tronqués) et doublons dans le bundle : -1 en qualité."
     },
     {
@@ -108,19 +121,6 @@
       "raison": "Déclenchement précis et commandes exactes, avec pièges idb et variables d'env documentés. Note amputée : SKILL.md tronqué au tiers et scripts non lus."
     },
     {
-      "id": "truongduy2611/app-store-preflight-skills/app-store-preflight-skills",
-      "nom": "app-store-preflight-skills",
-      "repo": "truongduy2611/app-store-preflight-skills",
-      "resume_fr": "vérifie un projet iOS avant soumission → moins de rejets sur l'App Store",
-      "note": 8,
-      "pertinence": 4,
-      "score_pack": 6.4,
-      "note_juge": 8,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Skill ciblé et utile : règles Apple précises (abonnements, confidentialité, Sign in with Apple, pièges récents). Les fichiers references/ ne sont pas fournis et le README est tronqué, d'où une précision et une qualité limitées."
-    },
-    {
       "id": "flowritescode/fwc-swiftui-skills/skills/swiftui-liquid-glass",
       "nom": "swiftui-liquid-glass",
       "repo": "FloWritesCode/fwc-swiftui-skills",
@@ -145,9 +145,7 @@
       "modele": "haiku",
       "risque_max": "eleve",
       "raison": "Skill iOS ciblé : pipeline XcodeBuildMCP, statuts dérivés des preuves, rapport au format fixe, piège SwiftUI (liens inline AttributedString) avec repli simctl. Points perdus : ce-debug et agents/openai.yaml non fournis, verbosité."
-    }
-  ],
-  "ajouts": [
+    },
     {
       "id": "superagents-lab/xcode27-skills/swiftui-specialist",
       "nom": "swiftui-specialist",
@@ -160,7 +158,9 @@
       "modele": "haiku",
       "risque_max": "moyen",
       "raison": "Déclenchement clair et annexes techniques précises (identité ForEach, pièges d'environnement, @Animatable). Note limitée par l'attribution trompeuse à Apple, l'ordre de primauté sur l'entraînement, la licence absente et des annexes manquantes."
-    },
+    }
+  ],
+  "ajouts": [
     {
       "id": "mintuz/skills/src/app/skills/swiftui-architecture",
       "nom": "swiftui-architecture",
@@ -186,19 +186,6 @@
       "modele": "haiku",
       "risque_max": "info",
       "raison": "Déclenchement précis et savoir-faire réel (seuils Apple, pièges SwiftUI, exemples Swift). Note bridée par des références annexes absentes, un nom de skill incohérent et des annexes tronquées."
-    },
-    {
-      "id": "prisma-labs-dev/apple-skills/disabled-skills/guide-swiftui-animations",
-      "nom": "guide-swiftui-animations",
-      "repo": "Prisma-Labs-Dev/apple-skills",
-      "resume_fr": "guide les animations SwiftUI, transitions et Animatable → mouvements fluides et performants",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis et contenu SwiftUI spécifique (KeyframeTrack, phaseAnimator, pièges de placement des modifiers). Note amputée par une annexe tronquée, une précédence d'animations discutable et un dossier disabled-skills."
     },
     {
       "id": "rgmez/apple-accessibility-skills/skills/swiftui-accessibility-auditor",
@@ -227,17 +214,17 @@
       "raison": "Déclencheurs précis, pièges iOS réels (sous-classement interdit, PiP et session audio, distinction tvOS/iOS). Instructions concrètes et cohérentes. Annexe partiellement lue."
     },
     {
-      "id": "mintuz/skills/src/app/skills/app-intent-driven-development",
-      "nom": "app-intent-driven-development",
-      "repo": "mintuz/skills",
-      "resume_fr": "conçoit les intents iOS avant l'UI → évite la logique dupliquée entre Siri et écrans",
+      "id": "prisma-labs-dev/apple-skills/disabled-skills/guide-swiftui-animations",
+      "nom": "guide-swiftui-animations",
+      "repo": "Prisma-Labs-Dev/apple-skills",
+      "resume_fr": "guide les animations SwiftUI, transitions et Animatable → mouvements fluides et performants",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement précis et savoir-faire réel (identifiants stables, requêtes contextuelles, cache Raccourcis, Button(intent:)). Défauts : renvois à des identifiants « principle-… » inexistants et texte dense."
+      "raison": "Déclenchement précis et contenu SwiftUI spécifique (KeyframeTrack, phaseAnimator, pièges de placement des modifiers). Note amputée par une annexe tronquée, une précédence d'animations discutable et un dossier disabled-skills."
     },
     {
       "id": "flowritescode/fwc-swiftui-skills/skills/swiftui-iphone-duo",
@@ -251,6 +238,19 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Déclenchement précis et règles concrètes (API Duo, pièges UIScreen/size classes, checklist). Annexe reference.md tronquée à 5000 caractères sur 36000 ; API 27.1 non vérifiables ici."
+    },
+    {
+      "id": "mintuz/skills/src/app/skills/app-intent-driven-development",
+      "nom": "app-intent-driven-development",
+      "repo": "mintuz/skills",
+      "resume_fr": "conçoit les intents iOS avant l'UI → évite la logique dupliquée entre Siri et écrans",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et savoir-faire réel (identifiants stables, requêtes contextuelles, cache Raccourcis, Button(intent:)). Défauts : renvois à des identifiants « principle-… » inexistants et texte dense."
     },
     {
       "id": "kimeur/duology/plugins/duology-design/skills/duo-design-system",
@@ -279,6 +279,19 @@
       "raison": "Skill de mainteneur, très ciblé sur iPhone Duo. Déclencheur précis, recettes SwiftUI et mesures simulateur concrètes. Note amputée par annexes absentes ou tronquées et renvois à d'autres skills non fournis."
     },
     {
+      "id": "terryc21/workflow-audit/skills/workflow-audit",
+      "nom": "workflow-audit",
+      "repo": "Terryc21/workflow-audit",
+      "resume_fr": "trouve les impasses et boutons morts SwiftUI → évite les écrans sans sortie",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et méthodologie spécifique à SwiftUI, avec greps et taxonomie d'erreurs utiles. Note amputée par la troncature du SKILL.md et du fichier hérité, et par la longueur."
+    },
+    {
       "id": "kimeur/duology/plugins/duology-design/skills/duo-transitions",
       "nom": "duo-transitions",
       "repo": "Kimeur/duology",
@@ -292,17 +305,17 @@
       "raison": "Sujet net et précis, avec mesures sur simulateur (Xcode 27.1) et exemples SwiftUI/UIKit testables. Note limitée par la troncature de SKILL.md, l'absence de test matériel et des renvois vers d'autres skills non fournis."
     },
     {
-      "id": "terryc21/workflow-audit/skills/workflow-audit",
-      "nom": "workflow-audit",
-      "repo": "Terryc21/workflow-audit",
-      "resume_fr": "trouve les impasses et boutons morts SwiftUI → évite les écrans sans sortie",
+      "id": "dembsky/propmotion/scenekit-product-stages",
+      "nom": "scenekit-product-stages",
+      "repo": "dembsky/PropMotion",
+      "resume_fr": "fait évoluer un objet 3D dans SwiftUI → ombres réelles, animations fluides, retours haptiques",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis et méthodologie spécifique à SwiftUI, avec greps et taxonomie d'erreurs utiles. Note amputée par la troncature du SKILL.md et du fichier hérité, et par la longueur."
+      "risque_max": null,
+      "raison": "Skill iOS très précis, avec pièges réels et code Swift vérifiable (v1.9.0). Périmètre large pour un seul sujet, et SceneKit est en maintenance. Jugement limité : SKILL.md et annexes tronqués, confiance basse."
     }
   ]
 }

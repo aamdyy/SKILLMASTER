@@ -1,20 +1,26 @@
-# Récapitulatif SKILLMASTER — 2026-10-26
+# Récapitulatif SKILLMASTER — 2026-11-02
 
-**3 pack(s) changent de tête.** 70 skill(s) nouveaux, 5 archivé(s), coût 1.08 $, 11 min.
+**5 pack(s) changent de tête.** 82 skill(s) nouveaux, 4 archivé(s), coût 1.24 $, 13 min.
+
+## android
+- compose-motion → **compose-state-and-effects** : L'état et les effets Compose (hoisting, LaunchedEffect, collecte de Flow) servent à chaque écran, alors que les animations avancées sont un besoin ponctuel.
 
 ## app-expo
-- expo-animation → **eas-update** : plus éligible pour ce type ou absent de la sélection
+- eas-update → **expo-animation** : Le dev utilise Reanimated et Gesture Handler dans toutes ses apps Expo. expo-animation couvre ces outils et les gestes. Elle sert plus souvent que l'OTA, qui est un besoin ponctuel.
 
-## data
-- dummy-dataset → **data-scientist** : Le skill data-scientist couvre analyse, validation de modèles et rapports avec pandas/scikit-learn, bien plus utile que la génération de données factices (note 6).
-- duckdb/duckdb-skills/skills/query → **dummy-dataset** : plus éligible pour ce type ou absent de la sélection
+## ios
+- truongduy2611/app-store-preflight-skills/app-store-preflight-skills → **swiftui-specialist** : plus éligible pour ce type ou absent de la sélection
+
+## outillage-claude-code
+- anthropics/claude-code/plugins/plugin-dev/skills/agent-development → **optimize-loop** : plus éligible pour ce type ou absent de la sélection
+- anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration → **rossark-motion-skill** : plus éligible pour ce type ou absent de la sélection
+- anthropics/claude-code/plugins/hookify/skills/writing-rules → **build-mcpb** : plus éligible pour ce type ou absent de la sélection
 
 ## video
-- remotion-interactivity → **remotion-docs** : La doc Remotion à jour via Algolia sert à chaque tâche et évite les API obsolètes. Interactivity ne couvre que l'édition dans Studio, un besoin plus étroit.
-- heygen-com/hyperframes/skills/product-launch-video → **remotion-create** : plus éligible pour ce type ou absent de la sélection
+- remotion-create → **sn-code-video** : sn-code-video (qualité 9) couvre la création de vidéos par code avec Remotion, la capture d'images déterministe et la vérification MP4. remotion-create (qualité 5) se limite au scaffold du projet, déjà couvert par le routeur best-practices.
 
-Écartés (hors stack) : using-duckdb (data), querying-fabric (data), fabric-cli (data), dsql (data), confluent-cloud-flink-sql (data), airflow (data), dv-query (data), basin (data), dt-app-notebooks (data), dt-obs-analytics (data), mongodb-schema-design (data), neon-realtime (data)…
+Écartés (hors stack) : using-duckdb (data), basin (data), bigtable-basics (data), querying-fabric (data), fabric-cli (data), dsql (data), airflow (data), dt-app-notebooks (data), dt-obs-analytics (data), dv-query (data), mongodb-schema-design (data), apollo-ios (ios)…
 
-Archivés : product-launch-video, duckdb-docs, spatial, query, expo-skill-feedback
+Archivés : Writing Hookify Rules, Agent Development, MCP Integration, app-store-preflight-skills
 
-Têtes inchangées : android, ios, outillage-claude-code, site-web.
+Têtes inchangées : data, site-web.

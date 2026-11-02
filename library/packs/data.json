@@ -1,6 +1,6 @@
 {
   "type": "data",
-  "genere_le": "2026-10-26T11:30:40.369Z",
+  "genere_le": "2026-11-02T13:56:47.181Z",
   "version_juge": "v3",
   "proposition_auto": true,
   "statut": "a_valider_par_amdy",
@@ -11,99 +11,80 @@
     "anthropics/skills/skills/xlsx",
     "astronomer/agents/skills/airflow",
     "awslabs/agent-plugins/plugins/databases-on-aws/skills/dsql",
-    "confluentinc/agent-skills/skills/confluent-cloud-flink-sql",
+    "cloudflare/skills/skills/basin",
     "data-goblin/power-bi-agentic-development/plugins/dashboards/skills/querying-fabric",
     "data-goblin/power-bi-agentic-development/plugins/etl/skills/using-duckdb",
     "data-goblin/power-bi-agentic-development/plugins/fabric-cli/skills/fabric-cli",
     "datopian/portaljs/skills/portaljs-add-geo",
     "dynatrace/dynatrace-for-ai/skills/dt-app-notebooks",
     "dynatrace/dynatrace-for-ai/skills/dt-obs-analytics",
-    "fcakyon/claude-codex-settings/plugins/cloudflare-skills/skills/basin",
+    "googlecloudplatform/data-agent-kit-plugin/skills/bigtable-basics",
     "huggingface/skills/skills/huggingface-trackio",
     "jeffallan/claude-skills/skills/pandas-pro",
     "jeffallan/claude-skills/skills/sql-pro",
+    "jimliu/baoyu-design/skills/dataviz",
     "k-dense-ai/scientific-agent-skills/skills/aeon",
     "k-dense-ai/scientific-agent-skills/skills/astropy",
     "k-dense-ai/scientific-agent-skills/skills/polars",
     "k-dense-ai/scientific-agent-skills/skills/scientific-visualization",
+    "mahanaicoach/google-maps-scraper-kit/.claude/skills/google-maps-scraper",
     "microsoft/dataverse-skills/.github/plugins/dataverse/skills/dv-query",
     "mongodb/agent-skills/skills/mongodb-schema-design",
-    "neondatabase/agent-skills/skills/neon-realtime",
     "phuryn/pm-skills/pm-execution/skills/dummy-dataset",
-    "pydantic/skills/skills/logfire-query",
     "timescale/pg-aiguide/skills/schema-exploration",
     "tronghieu/agent-skills/skills/data-scientist"
   ],
-  "changements": [
-    {
-      "entrant": "data-scientist",
-      "sortant": "dummy-dataset",
-      "raison": "Le skill data-scientist couvre analyse, validation de modèles et rapports avec pandas/scikit-learn, bien plus utile que la génération de données factices (note 6).",
-      "entrant_id": "tronghieu/agent-skills/skills/data-scientist",
-      "sortant_id": "phuryn/pm-skills/pm-execution/skills/dummy-dataset"
-    },
-    {
-      "entrant": "dummy-dataset",
-      "sortant": "duckdb/duckdb-skills/skills/query",
-      "raison": "plus éligible pour ce type ou absent de la sélection",
-      "entrant_id": "phuryn/pm-skills/pm-execution/skills/dummy-dataset",
-      "sortant_id": "duckdb/duckdb-skills/skills/query"
-    }
-  ],
+  "changements": [],
   "ecartes": [
     {
       "nom": "using-duckdb",
-      "raison": "DuckDB sur Fabric/OneLake : data warehouse cloud Microsoft, absent de sa stack"
-    },
-    {
-      "nom": "querying-fabric",
-      "raison": "Microsoft Fabric/Power BI, absent de sa stack"
-    },
-    {
-      "nom": "fabric-cli",
-      "raison": "Microsoft Fabric, absent de sa stack"
-    },
-    {
-      "nom": "dsql",
-      "raison": "Aurora DSQL : base SQL distribuée cloud, hors stack"
-    },
-    {
-      "nom": "confluent-cloud-flink-sql",
-      "raison": "Flink SQL sur Confluent Cloud : calcul distribué cloud, hors stack"
-    },
-    {
-      "nom": "airflow",
-      "raison": "Airflow : orchestration de pipelines distribués, hors stack"
-    },
-    {
-      "nom": "dv-query",
-      "raison": "Dataverse : plateforme cloud Microsoft, hors stack"
+      "raison": "Cible OneLake/Fabric (cloud, Spark), pas le DuckDB local."
     },
     {
       "nom": "basin",
-      "raison": "Basin : SQL distribué sur Iceberg/R2, type data warehouse cloud"
+      "raison": "Iceberg R2 avec SQL distribué : data warehouse cloud, absent de sa stack."
+    },
+    {
+      "nom": "bigtable-basics",
+      "raison": "Bigtable est une base cloud Google, hors stack."
+    },
+    {
+      "nom": "querying-fabric",
+      "raison": "Microsoft Fabric/Power BI : entrepôt cloud, hors stack."
+    },
+    {
+      "nom": "fabric-cli",
+      "raison": "Microsoft Fabric : plateforme data cloud, hors stack."
+    },
+    {
+      "nom": "dsql",
+      "raison": "Aurora DSQL est une base SQL distribuée cloud, hors stack."
+    },
+    {
+      "nom": "airflow",
+      "raison": "Airflow orchestre des pipelines de data warehouse, hors stack."
     },
     {
       "nom": "dt-app-notebooks",
-      "raison": "Notebooks Dynatrace/DQL, techno absente de sa stack"
+      "raison": "Notebooks Dynatrace et DQL : plateforme d'observabilité cloud, hors stack."
     },
     {
       "nom": "dt-obs-analytics",
-      "raison": "Dynatrace/DQL, techno absente de sa stack"
+      "raison": "Analyse de dashboards Dynatrace, hors stack."
+    },
+    {
+      "nom": "dv-query",
+      "raison": "Dataverse est une plateforme de données cloud Microsoft, hors stack."
     },
     {
       "nom": "mongodb-schema-design",
-      "raison": "MongoDB NoSQL, hors stack"
-    },
-    {
-      "nom": "neon-realtime",
-      "raison": "Neon/Lakebase Postgres cloud, hors stack"
+      "raison": "MongoDB n'est pas dans sa stack."
     }
   ],
   "stabilite": {
     "tirages": 3,
-    "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "Les skills pandas, SQL généraliste, matplotlib et scikit-learn collent à sa stack Python/data, tandis que Fabric, Dynatrace, Confluent, AWS et MongoDB sont écartés."
+    "meme_composition_sans_tenants": true,
+    "raison_tirage_1": "Les tenants pandas, SQL généraliste et visualisation matplotlib collent directement à sa stack Python/data, alors que les skills cloud (Fabric, Dynatrace, DSQL, Bigtable, Basin) sont écartés."
   },
   "recommandes": [
     {
@@ -213,6 +194,19 @@
   ],
   "ajouts": [
     {
+      "id": "jimliu/baoyu-design/skills/dataviz",
+      "nom": "dataviz",
+      "repo": "JimLiu/baoyu-design",
+      "resume_fr": "valide la palette de couleurs avant chaque graphique → évite les visuels illisibles pour les daltoniens",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et méthode concrète avec validateur CVD exécutable et règles testables. Retenu : palette.md absente, annexes tronquées, et specs de style imposées (choix visuels fixes)."
+    },
+    {
       "id": "timescale/pg-aiguide/skills/schema-exploration",
       "nom": "schema-exploration",
       "repo": "timescale/pg-aiguide",
@@ -252,6 +246,32 @@
       "raison": "Skill officiel Hugging Face, ciblé et déclencheur précis, avec API et commandes CLI exactes. Note amputée par des annexes tronquées et un exemple avec variable non définie."
     },
     {
+      "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
+      "nom": "astropy",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, WCS → moins d'erreurs d'unités et de conversion",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Skill ciblé et précis : pièges réels (z positionnel, WCS 0/1, w0wzCDM, réseau signalé). Note de qualité réduite : texte verbeux, avertissements « illustratifs » répétés, section de citation hors sujet."
+    },
+    {
+      "id": "mahanaicoach/google-maps-scraper-kit/.claude/skills/google-maps-scraper",
+      "nom": "google-maps-scraper",
+      "repo": "Mahanaicoach/google-maps-scraper-kit",
+      "resume_fr": "te génère une liste de commerces locaux avec emails et réseaux → prospection plus rapide",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et commandes concrètes propres au kit, savoir-faire pratique (quotas, proxies, pièges). Note réduite par la longueur répétitive et la dépendance à des scripts absents."
+    },
+    {
       "id": "pydantic/skills/skills/logfire-query",
       "nom": "logfire-query",
       "repo": "pydantic/skills",
@@ -265,17 +285,30 @@
       "raison": "Déclenchement précis avec routage explicite vers logfire-ui. Schéma Logfire, limites (14 jours, 10 000 lignes) et exemples SQL concrets. Note amputée par des restes écrits pour Codex et des annexes tronquées."
     },
     {
-      "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
-      "nom": "astropy",
-      "repo": "K-Dense-AI/scientific-agent-skills",
-      "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, WCS → moins d'erreurs d'unités et de conversion",
+      "id": "neondatabase/agent-skills/skills/neon-realtime",
+      "nom": "neon-realtime",
+      "repo": "neondatabase/agent-skills",
+      "resume_fr": "synchronise les requêtes SQL en direct dans l'UI → évite le polling et les rafraîchissements manuels",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": null,
-      "raison": "Skill ciblé et précis : pièges réels (z positionnel, WCS 0/1, w0wzCDM, réseau signalé). Note de qualité réduite : texte verbeux, avertissements « illustratifs » répétés, section de citation hors sujet."
+      "risque_max": "eleve",
+      "raison": "Skill officiel Neon, API bêta absente des données d'entraînement, avec code, commandes et pièges (sealing, txid, SSR). Note limitée par annexes tronquées, subscribing.md absent et dépendance au skill parent neon."
+    },
+    {
+      "id": "sentioxyz/sentio-ai-kit/skills/sentio-platform",
+      "nom": "sentio-platform",
+      "repo": "sentioxyz/sentio-ai-kit",
+      "resume_fr": "pilote processors, requêtes SQL, alertes et dashboards Sentio → supervise tes données sans quitter le terminal",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclenchement précis et commandes CLI Sentio concrètes et spécifiques à la plateforme. Qualité réduite par l'usage mêlé de npx et de la commande nue « sentio », « @latest » non épinglé, et annexe absente."
     },
     {
       "id": "confluentinc/agent-skills/skills/flink-udf",
@@ -291,17 +324,17 @@
       "raison": "Déclenchement précis, avec exclusions nettes. Commandes Confluent CLI et API PTF utiles. Exemples PTF incohérents (StayState non défini, imports manquants) et dépendances absentes."
     },
     {
-      "id": "voxel51/fiftyone-skills/skills/fiftyone-create-notebook",
-      "nom": "fiftyone-create-notebook",
-      "repo": "voxel51/fiftyone-skills",
-      "resume_fr": "crée des notebooks FiftyOne validés étape par étape → tutoriels clairs, code à jour",
+      "id": "confluentinc/agent-skills/skills/confluent-cloud-flink-sql",
+      "nom": "confluent-cloud-flink-sql",
+      "repo": "confluentinc/agent-skills",
+      "resume_fr": "contrôle le SQL Flink de Confluent Cloud avant exécution → évite les écarts avec Apache Flink",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Skill ciblé et utile pour FiftyOne, avec gabarits, conventions d'alias et pièges connus. Note freinée par une mécanique d'insertion de cellules peu fiable, des annexes tronquées et une dépendance à un llms.txt externe."
+      "risque_max": null,
+      "raison": "Skill officiel Confluent, ciblé, avec pièges de dialecte CC vs OSS, commandes CLI exactes et boucle de vérification. Note réduite : annexes principales tronquées (dialect-traps, cli-reference, sql-patterns) et annexes manquantes."
     },
     {
       "id": "netlify/context-and-tools/skills/netlify-database",
@@ -315,58 +348,6 @@
       "modele": "haiku",
       "risque_max": "moyen",
       "raison": "Déclencheurs précis, règles de migration et pièges réels bien documentés, commandes exactes. Retenue : date de tarification périmée, annexes tronquées, operational-footguns.md absent."
-    },
-    {
-      "id": "supabase-community/supabase-plugin/skills/supabase-postgres-best-practices",
-      "nom": "supabase-postgres-best-practices",
-      "repo": "supabase-community/supabase-plugin",
-      "resume_fr": "te guide sur Postgres avant schémas, requêtes et RLS → évite lenteurs et fuites de données",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis et règles SQL concrètes (index, RLS, pooling). Note limitée par un gabarit résiduel dans _sections.md, un CHANGELOG tronqué et une licence absente du dépôt."
-    },
-    {
-      "id": "brycewang-stanford/auto-empirical-research-skills/skills/00.1-full-empirical-analysis-skill_python",
-      "nom": "Full-empirical-analysis-skill",
-      "repo": "brycewang-stanford/Auto-Empirical-Research-Skills",
-      "resume_fr": "enchaîne les 8 étapes d'analyse économétrique en Python → tableaux et figures prêts pour publication",
-      "note": 6,
-      "pertinence": 10,
-      "score_pack": 7.6,
-      "note_juge": 6,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Code exécutable et détaillé, mais SKILL.md tronqué (24k sur 113k), périmètre trop large (trois modes), API parfois douteuses et texte bruité. Apport réel limité face aux connaissances de Claude."
-    },
-    {
-      "id": "zlanqing/codex-claude-academic-skills/scientific-toolkit-skill/references/scientific-skills/matlab",
-      "nom": "matlab",
-      "repo": "zLanqing/codex-claude-academic-skills",
-      "resume_fr": "écrit et traduit des scripts MATLAB et Octave → calcul scientifique moins sujet aux erreurs",
-      "note": 8,
-      "pertinence": 6,
-      "score_pack": 7.2,
-      "note_juge": 8,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Déclenchement précis et commandes exactes (matlab -batch, octave --no-gui). Savoir généraliste déjà connu de Claude, peu de pièges propres. Quatre annexes absentes, quatre tronquées."
-    },
-    {
-      "id": "brycewang-stanford/auto-empirical-research-skills/skills/00-full-empirical-analysis-skill_statspai",
-      "nom": "StatsPAI_skill",
-      "repo": "brycewang-stanford/Auto-Empirical-Research-Skills",
-      "resume_fr": "construit une analyse causale complète en Python → tableaux et figures prêts pour publication",
-      "note": 8,
-      "pertinence": 6,
-      "score_pack": 7.2,
-      "note_juge": 8,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Déclenchement très précis et API vérifiables (signatures, pièges sur les résultats). Périmètre large (trois modes), README marqué déprécié, SKILL.md tronqué au sixième : confiance basse."
     }
   ]
 }

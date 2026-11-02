@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-10-26T11:30:59.680Z",
+  "genere_le": "2026-11-02T13:57:04.415Z",
   "type": "site-web",
   "bareme": "b1",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -26,7 +26,7 @@
       "repo": "GoogleChrome/modern-web-guidance",
       "chemin_skill": "skills/modern-web-guidance",
       "skill_md": "skills/modern-web-guidance/SKILL.md",
-      "sha_epingle": "65e7edd67e77420eaf02c5df00fdc0521417d809",
+      "sha_epingle": "4f2b13e25c5815b3f080ca0d983e828d96561a0f",
       "resume_fr": "consulte les guides web modernes avant tout code front → évite les patterns obsolètes",
       "note": 7,
       "editeur_confiance": false,
@@ -48,7 +48,7 @@
       "repo": "vercel-labs/agent-skills",
       "chemin_skill": "skills/react-best-practices",
       "skill_md": "skills/react-best-practices/SKILL.md",
-      "sha_epingle": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "sha_epingle": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
       "resume_fr": "applique 70 règles de performance React et Next.js → pages plus rapides, moins de re-rendus",
       "note": 9,
       "editeur_confiance": true,
@@ -63,7 +63,7 @@
       "repo": "ChromeDevTools/chrome-devtools-mcp",
       "chemin_skill": "skills/a11y-debugging",
       "skill_md": "skills/a11y-debugging/SKILL.md",
-      "sha_epingle": "cdc493b1704d32c07103d5e17edbbe9558d8d04e",
+      "sha_epingle": "aade3be8f65d8afc941c97b498b9752ef562f181",
       "resume_fr": "audite ton accessibilité web via Chrome DevTools → repère contrastes, focus et libellés manquants",
       "note": 8,
       "editeur_confiance": false,
@@ -93,7 +93,7 @@
       "repo": "vercel-labs/agent-skills",
       "chemin_skill": "skills/composition-patterns",
       "skill_md": "skills/composition-patterns/SKILL.md",
-      "sha_epingle": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "sha_epingle": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
       "resume_fr": "te fait préférer la composition aux props booléennes → composants plus lisibles et évolutifs",
       "note": 8,
       "editeur_confiance": true,
@@ -154,7 +154,7 @@
       "repo": "vercel-labs/agent-skills",
       "chemin_skill": "skills/web-design-guidelines",
       "skill_md": "skills/web-design-guidelines/SKILL.md",
-      "sha_epingle": "063bee94c3f4df8453406c830b0a7df0f2860278",
+      "sha_epingle": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
       "resume_fr": "audite ton UI selon les règles web → moins de soucis d'accessibilité et d'UX",
       "note": 7,
       "editeur_confiance": true,
@@ -176,13 +176,50 @@
       "repo": "Jeffallan/claude-skills",
       "chemin_skill": "skills/nextjs-developer",
       "skill_md": "skills/nextjs-developer/SKILL.md",
-      "sha_epingle": "504bb9a067c5c7ea6bf868c7cc337164b213fa57",
+      "sha_epingle": "078a25cc5bfd8011459be7b91d004e900c1d02d3",
       "resume_fr": "configure App Router, Server Components et Server Actions → apps Next.js plus rapides, mieux référencées",
       "note": 7,
       "editeur_confiance": false,
       "risque_max": null,
       "risque_max_projet": null,
       "risques": []
+    },
+    {
+      "id": "vercel-labs/agent-skills/skills/react-view-transitions",
+      "nom": "vercel-react-view-transitions",
+      "place": "ajout",
+      "repo": "vercel-labs/agent-skills",
+      "chemin_skill": "skills/react-view-transitions",
+      "skill_md": "skills/react-view-transitions/SKILL.md",
+      "sha_epingle": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+      "resume_fr": "implémente les transitions natives entre pages et états React → animations fluides sans bibliothèque tierce",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "cloudflare/skills/skills/nextjs-on-cloudflare",
+      "nom": "nextjs-on-cloudflare",
+      "place": "ajout",
+      "repo": "cloudflare/skills",
+      "chemin_skill": "skills/nextjs-on-cloudflare",
+      "skill_md": "skills/nextjs-on-cloudflare/SKILL.md",
+      "sha_epingle": "1a33048817d06df12882cb881dfc754e7039954a",
+      "resume_fr": "guide la migration Next.js vers Workers avec vinext → évite les erreurs de compatibilité",
+      "note": 7,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La commande npx skills add installe à la demande du code distant non épinglé (dépôt cloudflare/vinext) sans vérification de version ni de hash."
+        }
+      ]
     },
     {
       "id": "sangrokjung/claude-forge/skills/cache-components",
@@ -215,36 +252,14 @@
       "risques": []
     },
     {
-      "id": "cloudflare/skills/skills/nextjs-on-cloudflare",
-      "nom": "nextjs-on-cloudflare",
-      "place": "ajout",
-      "repo": "cloudflare/skills",
-      "chemin_skill": "skills/nextjs-on-cloudflare",
-      "skill_md": "skills/nextjs-on-cloudflare/SKILL.md",
-      "sha_epingle": "86505e44f87d801aa1864a3c4109e9a8ae5c409f",
-      "resume_fr": "te guide pour déployer Next.js sur Cloudflare Workers → garde l'API Next.js familière",
-      "note": 7,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Commande `npx skills add cloudflare/vinext` lancée automatiquement « si absent » : elle télécharge et installe du contenu distant dans le projet sans validation explicite de l'utilisateur."
-        }
-      ]
-    },
-    {
       "id": "cloudflare/skills/skills/turnstile-spin",
       "nom": "turnstile-spin",
       "place": "ajout",
       "repo": "cloudflare/skills",
       "chemin_skill": "skills/turnstile-spin",
       "skill_md": "skills/turnstile-spin/SKILL.md",
-      "sha_epingle": "86505e44f87d801aa1864a3c4109e9a8ae5c409f",
-      "resume_fr": "branche Turnstile au front et au serveur → bloque les bots sans captcha pénible",
+      "sha_epingle": "1a33048817d06df12882cb881dfc754e7039954a",
+      "resume_fr": "installe Turnstile côté front et back, avec vérification serveur → moins de bots sur tes formulaires",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": "eleve",
@@ -266,19 +281,35 @@
           "gravite": "moyen",
           "source": "juge",
           "categorie": "donnees",
-          "code": "Le skill fait créer aux utilisateurs un token API Cloudflare, puis propose de le stocker en clair dans ~/.cf-turnstile-token (fichier utilisateur en umask 077, mais persistant)."
+          "code": "Le wizard demande à l'utilisateur de stocker son token API Cloudflare dans un fichier en clair (~/.cf-turnstile-token), ce qui expose un identifiant à large portée sur disque."
         },
         {
           "gravite": "eleve",
           "source": "juge",
           "categorie": "execution",
-          "code": "Récupération et écriture du secret du widget via Wrangler et des scripts shell (widget-create.sh, auth-probe.sh) non fournis à relire ; permissions Account.Turnstile:Edit sur le compte."
-        },
+          "code": "Le skill fait exécuter à l'agent un binaire Wrangler approuvé par chemin absolu avec des identifiants de compte, ce qui donne une forte capacité d'action sur le compte Cloudflare."
+        }
+      ]
+    },
+    {
+      "id": "gmickel/flow-next/plugins/flow-next/skills/flow-next-drive",
+      "nom": "flow-next-drive",
+      "place": "ajout",
+      "repo": "gmickel/flow-next",
+      "chemin_skill": "plugins/flow-next/skills/flow-next-drive",
+      "skill_md": "plugins/flow-next/skills/flow-next-drive/SKILL.md",
+      "sha_epingle": "259dbe6fc60e19e0d6c592e0c205b5b1843f0017",
+      "resume_fr": "pilote l'interface comme un utilisateur réel → repère les erreurs console et réseau avant livraison",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
+      "risques": [
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
           "source": "juge",
-          "categorie": "reseau",
-          "code": "La version hébergée annonce une fonction fetch_spin_script qui télécharge des scripts à la demande depuis developers.cloudflare.com : exécution de code distant non vérifiable localement."
+          "categorie": "donnees",
+          "code": "Commande 'agent-browser state save ./auth.json' : enregistre cookies et session d'authentification dans un fichier local sans avertissement sur la protection ou la suppression de ce fichier."
         }
       ]
     },
@@ -289,7 +320,7 @@
       "repo": "Jeffallan/claude-skills",
       "chemin_skill": "skills/react-expert",
       "skill_md": "skills/react-expert/SKILL.md",
-      "sha_epingle": "504bb9a067c5c7ea6bf868c7cc337164b213fa57",
+      "sha_epingle": "078a25cc5bfd8011459be7b91d004e900c1d02d3",
       "resume_fr": "crée des composants React typés et guide Server Components → moins de re-rendus, code plus robuste",
       "note": 8,
       "editeur_confiance": false,
@@ -298,13 +329,35 @@
       "risques": []
     },
     {
+      "id": "expo/skills/plugins/expo/skills/eas-hosting",
+      "nom": "eas-hosting",
+      "place": "ajout",
+      "repo": "expo/skills",
+      "chemin_skill": "plugins/expo/skills/eas-hosting",
+      "skill_md": "plugins/expo/skills/eas-hosting/SKILL.md",
+      "sha_epingle": "a9e5bd3fa00b4e61f632e43f85da73aee1942582",
+      "resume_fr": "déploie ton site Expo et tes routes API → previews de PR et domaines gérés",
+      "note": 7,
+      "editeur_confiance": true,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "La section feedback fait exécuter un paquet distant via npx --yes @expo/agent-cli@latest et envoie du contexte de session à un tiers, sans garde-fou."
+        }
+      ]
+    },
+    {
       "id": "athevon/genjutsu/skills/paint",
       "nom": "paint",
       "place": "ajout",
       "repo": "AThevon/genjutsu",
       "chemin_skill": "skills/paint",
       "skill_md": "skills/paint/SKILL.md",
-      "sha_epingle": "1f518a71378b15d423389e546e767cffc86e14c3",
+      "sha_epingle": "ac9ca74156946be8e449f0d6acc8043a105a38f3",
       "resume_fr": "te fait valider la direction visuelle avant de coder → évite les designs génériques",
       "note": 6,
       "editeur_confiance": false,
@@ -333,49 +386,6 @@
       ]
     },
     {
-      "id": "expo/skills/plugins/expo/skills/eas-hosting",
-      "nom": "eas-hosting",
-      "place": "ajout",
-      "repo": "expo/skills",
-      "chemin_skill": "plugins/expo/skills/eas-hosting",
-      "skill_md": "plugins/expo/skills/eas-hosting/SKILL.md",
-      "sha_epingle": "d5caf7fdf8b4854351f05841a7e315ac87ad7d24",
-      "resume_fr": "déploie ton site Expo et tes routes API → mises en ligne rapides, previews de PR",
-      "note": 7,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Section « Submitting Feedback » : fait exécuter un paquet npm distant (npx --yes @expo/agent-cli@latest) sans version figée, et incite à envoyer du contexte de session à un tiers."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Exemple d'API proxy qui interpole le paramètre « city » non validé dans une URL avec la clé API, risque d'injection de paramètres."
-        }
-      ]
-    },
-    {
-      "id": "plugin87/ux-ui-agent-skills/.claude/skills/token-build",
-      "nom": "token-build",
-      "place": "ajout",
-      "repo": "plugin87/ux-ui-agent-skills",
-      "chemin_skill": ".claude/skills/token-build",
-      "skill_md": ".claude/skills/token-build/SKILL.md",
-      "sha_epingle": "594b26204d92cbf02e635195e5ebe0d83c7ed3ac",
-      "resume_fr": "génère thèmes CSS, Tailwind, iOS et Android depuis tes tokens → évite les écarts entre plateformes",
-      "note": 7,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
       "id": "molauu/svg-character-animator/svg-character-animator",
       "nom": "svg-character-animator",
       "place": "ajout",
@@ -395,21 +405,6 @@
           "code": "exécution dynamique de code"
         }
       ]
-    },
-    {
-      "id": "composio-community/awesome-claude-plugins/senior-frontend/skills/senior-frontend",
-      "nom": "senior-frontend",
-      "place": "ajout",
-      "repo": "composio-community/awesome-claude-plugins",
-      "chemin_skill": "senior-frontend/skills/senior-frontend",
-      "skill_md": "senior-frontend/skills/senior-frontend/SKILL.md",
-      "sha_epingle": "e521f7ada8d89abea888e67b93b4dcfbb977041f",
-      "resume_fr": "optimise React et Next.js, analyse le bundle, vérifie l'accessibilité → pages plus rapides, interfaces accessibles",
-      "note": 5,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
     }
   ]
 }
