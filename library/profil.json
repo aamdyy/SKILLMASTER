@@ -1,5 +1,5 @@
 {
-  "note": "Profil de référence pour le score de pertinence (0 à 10), séparé de la qualité. Éditable à la main. Calcul sur le nom et la description : 0 si une techno de « exclusions » apparaît ; sinon +4 si le skill a un type confirmé parmi les types, +2 par élément de la stack (6 au plus), −4 par domaine hors sujet. « SQL » veut dire SQL généraliste. Les exclusions sont aussi données à Sonnet, qui écarte tout skill lié à une techno absente de la stack.",
+  "note": "Profil de référence pour le score de pertinence (0 à 10), séparé de la qualité. Éditable à la main. Calcul sur le nom et la description : 0 si une techno de « exclusions » est la cible du skill (citée à côté d’une techno de la stack, elle ne compte pas) ; sinon +4 si le skill a un type confirmé parmi les types, +2 par élément de la stack (6 au plus), −4 par domaine hors sujet. « SQL » veut dire SQL généraliste. Les exclusions sont aussi données à Sonnet, qui écarte tout skill lié à une techno absente de la stack.",
   "types": [
     "site-web",
     "ios",
@@ -7,9 +7,11 @@
     "android",
     "video",
     "data",
-    "outillage-claude-code"
+    "outillage-claude-code",
+    "methode"
   ],
   "stack": {
+    "React": "\\breact\\b",
     "Next.js": "\\bnext\\.?js\\b",
     "Expo": "\\b(expo|eas)\\b",
     "SwiftUI": "\\bswiftui\\b",
@@ -20,6 +22,7 @@
     "pandas": "\\bpandas\\b",
     "Jupyter": "\\b(jupyter|notebooks?)\\b",
     "SQL": "\\b(sql|postgres(ql)?|sqlite|mysql)\\b",
+    "Supabase": "\\bsupabase\\b",
     "DuckDB (SQL local)": "\\bduckdb\\b",
     "scikit-learn": "\\b(scikit-learn|sklearn)\\b",
     "matplotlib": "\\bmatplotlib\\b"

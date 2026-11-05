@@ -16,7 +16,7 @@ const T = {
   fr: {
     meta: (skill: Skill) => `Skill Claude Code ${skill.nom} (${skill.repo}).`,
     breadcrumb: "Fil d'Ariane",
-    statuts: { nouveau: 'nouveau', en_test: 'en test', valide: 'validé', archive: 'archivé', revue_manuelle: 'à revoir' } as Record<string, string>,
+    statuts: { nouveau: 'nouveau', valide: 'validé', faible: 'note faible', archive: 'archivé', revue_manuelle: 'à revoir' } as Record<string, string>,
     sousNotes: { declenchement: 'Déclenchement', valeur_ajoutee: 'Valeur ajoutée', precision: 'Précision', perimetre: 'Périmètre', qualite: 'Qualité' },
     categories: { reseau: 'Réseau', execution: 'Exécution', destruction: 'Destruction', donnees: 'Données', consigne: 'Consigne', autre: 'Autre' } as Record<string, string>,
     scan: 'Scan statique',
@@ -42,7 +42,7 @@ const T = {
   en: {
     meta: (skill: Skill) => `Claude Code skill ${skill.nom} (${skill.repo}).`,
     breadcrumb: 'Breadcrumb',
-    statuts: { nouveau: 'new', en_test: 'in testing', valide: 'validated', archive: 'archived', revue_manuelle: 'to review' } as Record<string, string>,
+    statuts: { nouveau: 'new', valide: 'validated', faible: 'low score', archive: 'archived', revue_manuelle: 'to review' } as Record<string, string>,
     sousNotes: { declenchement: 'Triggering', valeur_ajoutee: 'Added value', precision: 'Precision', perimetre: 'Scope', qualite: 'Quality' },
     categories: { reseau: 'Network', execution: 'Execution', destruction: 'Destruction', donnees: 'Data', consigne: 'Instruction', autre: 'Other' } as Record<string, string>,
     scan: 'Static scan',
@@ -131,8 +131,7 @@ export function SkillView({ lang, skill }: { lang: Lang; skill: Skill | null }) 
       ),
     },
     { label: t.facts.publisher, value: skill.repo.split('/')[0] },
-    // Le statut ne s'affiche que s'il dit quelque chose : les autres valeurs attendent le cycle de vie du lot 2.
-    ...(skill.statut === 'archive' ? [{ label: t.facts.status, value: t.statuts[skill.statut] ?? skill.statut }] : []),
+    { label: t.facts.status, value: t.statuts[skill.statut] ?? skill.statut },
     {
       label: t.facts.pinned,
       value: (

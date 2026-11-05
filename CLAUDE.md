@@ -234,7 +234,9 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Plafond par dépôt :** aucun pour les éditeurs officiels et de confiance, 2 pour les autres, exception `chrisbanes/skills`.
   - **Packs :** ajout de `methode` (relecture, débogage, tests) et de `radar-viral` (hors détection). Pack data recentré sur Supabase/Postgres, DuckDB, pandas.
   - **Moteur open source :** licence MIT sur notre code, README, textes publics sans nom ni usage. `profil.json` local à la machine viendra plus tard.
-  - **`/sm rate` passe en réserve :** les signaux locaux d'abord. Le statut public ne dépend pas de l'usage.
+  - **`/sm rate` passe en réserve :** les signaux locaux d'abord. Le statut public ne dépend pas de l'usage : `nouveau` pendant 4 semaines, puis `valide` (note ≥ 6) ou `faible` ; `archive` est durable ; `en_test` n'est plus utilisé.
+  - **Garde-fous avant publication** (`collector/regles.ts`) : le tour échoue si le catalogue perd plus de 10 %, si plus de 20 % des dépôts en tête manquent, si plus de 5 % des skills n'ont pas de verdict, ou au-delà de 6 $. Un jugement raté garde le verdict et la version d'avant. Une tête de pack ne tombe sur un verdict neuf qu'après un second tirage.
+  - **Plafond de changements :** 2 décisions de Sonnet par pack et par tour, écartés compris. Un skill disparu est remplacé en plus, et un sortant ne revient pas dans le même tour.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard

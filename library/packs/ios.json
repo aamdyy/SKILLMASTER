@@ -146,17 +146,17 @@
       "raison": "Skill iOS ciblé : pipeline XcodeBuildMCP, statuts dérivés des preuves, rapport au format fixe, piège SwiftUI (liens inline AttributedString) avec repli simctl. Points perdus : ce-debug et agents/openai.yaml non fournis, verbosité."
     },
     {
-      "id": "superagents-lab/xcode27-skills/swiftui-specialist",
-      "nom": "swiftui-specialist",
-      "repo": "superagents-lab/xcode27-skills",
-      "resume_fr": "relit et écrit du SwiftUI selon les règles d'Apple → moins de re-rendus, code plus idiomatique",
-      "note": 9,
-      "pertinence": 6,
+      "id": "truongduy2611/app-store-preflight-skills/app-store-preflight-skills",
+      "nom": "app-store-preflight-skills",
+      "repo": "truongduy2611/app-store-preflight-skills",
+      "resume_fr": "vérifie un projet iOS avant soumission → moins de rejets sur l'App Store",
+      "note": 8,
+      "pertinence": 4,
       "score_pack": 7.8,
-      "note_juge": 9,
+      "note_juge": 8,
       "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement clair et annexes techniques précises (identité ForEach, pièges d'environnement, @Animatable). Note limitée par l'attribution trompeuse à Apple, l'ordre de primauté sur l'entraînement, la licence absente et des annexes manquantes."
+      "risque_max": null,
+      "raison": "Skill ciblé et utile : règles Apple précises (abonnements, confidentialité, Sign in with Apple, pièges récents). Les fichiers references/ ne sont pas fournis et le README est tronqué, d'où une précision et une qualité limitées."
     }
   ],
   "ajouts": [

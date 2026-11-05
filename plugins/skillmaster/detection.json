@@ -62,6 +62,10 @@
       "chemins": [".claude-plugin", "hooks/hooks.json", "skills/*/SKILL.md", "marketplace.json"],
       "profondeur": 3,
       "mots": ["claude code", "plugin claude", "mod", "skill", "skills", "serveur mcp"]
+    },
+    "methode": {
+      "nom": "méthode",
+      "texte": "aucun fichier : ce pack vaut pour tous les projets, quelle que soit la techno"
     }
   }
 }

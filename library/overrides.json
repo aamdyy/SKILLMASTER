@@ -1,5 +1,5 @@
 {
-  "note": "Décisions du mainteneur, appliquées par le juge à chaque tour. epingles : toujours en tête des recommandés du pack. epingles_ajout : toujours en tête des ajouts du pack. jamais : jamais proposé. exclus : retiré d'un pack précis. ajout_garanti : pour chaque motif, le meilleur skill correspondant (hors tête) est toujours en ajout.",
+  "note": "Décisions du mainteneur, appliquées par le juge à chaque tour. epingles : toujours en tête des recommandés du pack. epingles_ajout : toujours en tête des ajouts du pack. jamais : jamais proposé. exclus : retiré d'un pack précis. ajout_garanti : pour chaque motif, le meilleur skill correspondant (hors tête) est toujours en ajout. plafond_exceptions : dépôts sans plafond par dépôt dans un pack.",
   "epingles": {
     "site-web": [
       {
@@ -15,7 +15,46 @@
     "premium-frontend-ui",
     "find-skills"
   ],
-  "exclus": {},
+  "exclus": {
+    "data": [
+      {
+        "repo": "K-Dense-AI/scientific-agent-skills",
+        "nom": "polars",
+        "decide_le": "2026-11-05",
+        "raison": "Polars n’est pas dans la stack"
+      },
+      {
+        "repo": "K-Dense-AI/scientific-agent-skills",
+        "nom": "aeon",
+        "decide_le": "2026-11-05",
+        "raison": "séries temporelles, hors besoin"
+      },
+      {
+        "repo": "K-Dense-AI/scientific-agent-skills",
+        "nom": "astropy",
+        "decide_le": "2026-11-05",
+        "raison": "astronomie, hors besoin"
+      },
+      {
+        "repo": "phuryn/pm-skills",
+        "nom": "dummy-dataset",
+        "decide_le": "2026-11-05",
+        "raison": "note faible, hors de la stack"
+      },
+      {
+        "repo": "confluentinc/agent-skills",
+        "nom": "flink-udf",
+        "decide_le": "2026-11-05",
+        "raison": "calcul distribué, hors stack"
+      },
+      {
+        "repo": "confluentinc/agent-skills",
+        "nom": "confluent-cloud-flink-sql",
+        "decide_le": "2026-11-05",
+        "raison": "calcul distribué, hors stack"
+      }
+    ]
+  },
   "epingles_ajout": {
     "site-web": [
       {
@@ -34,5 +73,8 @@
         "decide_le": "2026-10-19"
       }
     ]
-  }
+  },
+  "plafond_exceptions": [
+    "chrisbanes/skills"
+  ]
 }

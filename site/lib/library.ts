@@ -60,7 +60,7 @@ export type DernierTour = { le: string; coutUsd: number | null; dureeMin: number
 export type Tour = { date: string; resume: string; sections: { pack: string; lignes: string[] }[]; ecartes: string | null; archives: string | null; inchangees: string | null }
 
 // Ordre et noms d'affichage des packs, en français et en anglais.
-export const PACKS: { type: string; label: string; en: string }[] = [
+const ALL_PACKS: { type: string; label: string; en: string }[] = [
   { type: 'site-web', label: 'Site web', en: 'Website' },
   { type: 'ios', label: 'iOS', en: 'iOS' },
   { type: 'app-expo', label: 'App Expo', en: 'Expo app' },
@@ -68,9 +68,12 @@ export const PACKS: { type: string; label: string; en: string }[] = [
   { type: 'video', label: 'Vidéo', en: 'Video' },
   { type: 'data', label: 'Data', en: 'Data' },
   { type: 'outillage-claude-code', label: 'Construire avec Claude', en: 'Building with Claude' },
+  { type: 'methode', label: 'Méthode', en: 'Method' },
 ]
+// Un pack n'existe qu'une fois publié : le site suit la bibliothèque, pas l'inverse.
+export const PACKS = ALL_PACKS.filter(pack => existsSync(join(LIBRARY, 'packs', `${pack.type}.json`)) && existsSync(join(LIBRARY, 'index', `${pack.type}.json`)))
 export const labelOf = (type: string | null, lang: Lang = 'fr') => {
-  const pack = type ? PACKS.find(item => item.type === type) : null
+  const pack = type ? ALL_PACKS.find(item => item.type === type) : null
   if (pack) return lang === 'en' ? pack.en : pack.label
   return type ?? (lang === 'en' ? 'Other' : 'Autre')
 }
@@ -259,6 +262,6 @@ export const getStats = once(() => {
     retenus: retenus.size,
     packs: getPacks().length,
     depots: new Set(vivants.map(skill => skill.repo.toLowerCase())).size,
-    alertes: vivants.reduce((sum, skill) => sum + skill.risques.filter(risk => risk.source === 'juge').length, 0),
+    alertes: vivants.reduce((sum, skill) => sum + skill.risques.length, 0),
   }
 })
