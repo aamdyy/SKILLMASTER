@@ -10,7 +10,8 @@ import { execFileSync } from 'node:child_process'
 import { readFile, readdir } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { CACHE, LIBRARY, ROOT, OFFICIAL, REFERENCES, KEYWORDS, typesOf, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
+import { CACHE, LIBRARY, ROOT, OFFICIAL, REFERENCES, NO_PUSH_LIMIT, KEYWORDS, typesOf, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
+import { movedTarget, type RepoEtat } from './regles.ts'
 import { BAREME, SCRIPT_FILE, TEXT_FILE, isFirstParty, isSafeName, isTrustedPublisher, scanSkill, type Risk, type SkillFile, type SkillText } from './scan.ts'
 
 const argv = process.argv.slice(2)
@@ -40,7 +41,7 @@ since.setMonth(since.getMonth() - PUSHED_MONTHS)
 const SINCE = since.toISOString().slice(0, 10)
 
 const QUOTAS: Record<string, number> = {
-  'site-web': 0.22, ios: 0.12, 'app-expo': 0.09, android: 0.09, video: 0.11, data: 0.14, 'outillage-claude-code': 0.14, autre: 0.09,
+  'site-web': 0.22, ios: 0.12, 'app-expo': 0.09, android: 0.09, video: 0.11, data: 0.14, 'outillage-claude-code': 0.1, methode: 0.04, autre: 0.09,
 }
 const PACK_QUERIES: Record<string, string[]> = {
   'site-web': ['nextjs skills', 'react skills claude', 'frontend skills claude', 'tailwind skill'],
@@ -48,8 +49,9 @@ const PACK_QUERIES: Record<string, string[]> = {
   'app-expo': ['expo skills', 'react native skills'],
   android: ['jetpack compose skills', 'android skills claude', 'kotlin skills claude'],
   video: ['remotion skills', 'video skills claude', 'ffmpeg skills'],
-  data: ['data analysis skills claude', 'data science skills claude', 'sql skills claude'],
+  data: ['data analysis skills claude', 'data science skills claude', 'sql skills claude', 'supabase skills', 'postgres skills claude', 'duckdb skills', 'pandas skills claude'],
   'outillage-claude-code': ['claude code plugin', 'claude code hooks', 'claude code skills toolkit'],
+  methode: ['code review skill claude', 'debugging skill claude', 'tdd skill claude'],
 }
 const TOPICS = ['claude-skills', 'agent-skills', 'claude-code-skills', 'claude-skill', 'claude-code-plugin', 'claude-code-plugins', 'claude-code-marketplace']
 const AWESOME = ['hesreallyhim/awesome-claude-code', 'ComposioHQ/awesome-claude-skills', 'VoltAgent/awesome-agent-skills', 'travisvn/awesome-claude-skills']
@@ -138,10 +140,15 @@ async function metadata() {
       })
       .join('\n')} }`
     let data: Record<string, RepoNode> = {}
-    try {
-      data = await graphql<Record<string, RepoNode>>(query)
-    } catch (error) {
-      log('GraphQL métadonnées :', String(error).slice(0, 200))
+    // Un lot perdu ferait disparaître 40 dépôts d'un coup : on insiste avant d'abandonner.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        data = await graphql<Record<string, RepoNode>>(query)
+        break
+      } catch (error) {
+        log(`GraphQL métadonnées (essai ${attempt + 1}) :`, String(error).slice(0, 200))
+        await sleep(5_000 * (attempt + 1))
+      }
     }
     batch.forEach((repo, i) => {
       const node = data[`r${i}`]
@@ -244,8 +251,9 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
       hash: sha256(text),
       empreinte: sha256(files.map(file => `${file.path} ${file.mode} ${file.sha ?? ''}`).sort().join('\n')),
       treeIsPartial,
-      types: typesOf(`${entry.path} ${name} ${description}`),
-      contentTypes: typesOf(`${entry.path} ${name} ${description} ${text.slice(0, 4_000)}`),
+      // Nom et description : le chemin contient toujours « SKILL.md », et ne dit donc rien du type.
+      types: typesOf(`${name} ${description}`),
+      contentTypes: typesOf(`${name} ${description} ${text.slice(0, 4_000)}`),
       prescore,
       risks: scanSkill(text, files),
       repoStars: stars,
@@ -271,6 +279,8 @@ async function loadPublishers() {
   publishers = new Set((profile.editeurs_confiance ?? []).map(owner => owner.toLowerCase()))
 }
 let keepIds = new Set<string>()
+// Skills des packs : leur dépôt est toujours parcouru, hors plafond, et un skill déplacé est retrouvé.
+const keepItems = new Map<string, { id: string; repo: string; nom: string; hash?: string }>()
 async function loadKeepIds() {
   const types = (await readdir(join(LIBRARY, 'packs')).catch(() => [] as string[])).filter(file => file.endsWith('.json'))
   for (const file of types) {
@@ -278,10 +288,17 @@ async function loadKeepIds() {
       const text = KEEP_REF
         ? execFileSync('git', ['-C', ROOT, 'show', `${KEEP_REF}:library/packs/${file}`], { encoding: 'utf8' })
         : await readFile(join(LIBRARY, 'packs', file), 'utf8')
-      const pack = JSON.parse(text) as { recommandes?: { id: string }[]; ajouts?: { id: string }[] }
-      for (const item of [...(pack.recommandes ?? []), ...(pack.ajouts ?? [])]) keepIds.add(item.id)
+      const pack = JSON.parse(text) as { recommandes?: { id: string; repo?: string; nom?: string }[]; ajouts?: { id: string; repo?: string; nom?: string }[] }
+      for (const item of [...(pack.recommandes ?? []), ...(pack.ajouts ?? [])]) {
+        keepIds.add(item.id)
+        if (!item.repo) continue
+        discovered(item.repo, 'pack')
+        keepItems.set(item.id, { id: item.id, repo: item.repo, nom: item.nom ?? item.id.split('/').pop()! })
+      }
     } catch {}
   }
+  const published = await readJson<{ skills: { id: string; hash_contenu?: string }[] }>(join(LIBRARY, 'skills.json'), { skills: [] })
+  for (const skill of published.skills) if (keepItems.has(skill.id)) keepItems.get(skill.id)!.hash = skill.hash_contenu
 }
 async function loadPriorityNames() {
   const manifest = await readJson<{ entrees?: { name: string }[] }>(join(homedir(), '.claude', 'skills-archive', 'MANIFEST.json'), {})
@@ -311,6 +328,17 @@ function select(candidates: Candidate[]) {
     }
     byHash.set(candidate.hash, candidate)
     byIdentity.set(identity, candidate)
+  }
+  // Un skill des packs qui a quitté son chemin : on le suit chez son éditeur, plutôt que de le perdre.
+  const uniqueList = [...byHash.values()]
+  const uniqueIds = new Set(uniqueList.map(candidate => candidate.id))
+  const moved: Record<string, string> = {}
+  for (const item of keepItems.values()) {
+    if (uniqueIds.has(item.id) || alias[item.id]) continue
+    const target = movedTarget(item, uniqueList)
+    if (!target) continue
+    alias[item.id] = target.id
+    moved[item.id] = target.id
   }
   // La sélection reprend l'ordre de présélection : l'ordre ci-dessus ne sert qu'à choisir l'original.
   const unique = [...byHash.values()].sort((a, b) =>
@@ -349,7 +377,7 @@ function select(candidates: Candidate[]) {
   }
   // Seules les copies de skills des packs comptent pour la suite.
   const keptAlias = Object.fromEntries(Object.entries(alias).filter(([id]) => keepIds.has(id)))
-  return { chosen, unique: unique.length, merged, alias: keptAlias }
+  return { chosen, unique: unique.length, merged, alias: keptAlias, moved }
 }
 
 type HistoryNode = { object: { history: { nodes: { committedDate: string }[] } } | null } | null
@@ -437,8 +465,8 @@ async function scanChosen(chosen: Candidate[]) {
 }
 
 async function main() {
-  await loadKeepIds()
   await loadPublishers()
+  await loadKeepIds()
   log(`${keepIds.size} skills des packs précédents à garder`)
   log(`seuils : ≥ ${MIN_STARS} étoiles, push depuis le ${SINCE}, ${MAX_SKILLS} skills au plus`)
   if (WITH_DIRECTORY) log('annuaire Anthropic non documenté : demandé, mais pas encore branché dans cette version')
@@ -454,19 +482,25 @@ async function main() {
 
   await metadata()
   const excluded = { introuvables: 0, forks: 0, archives: 0, sous_seuil_etoiles: 0, push_trop_ancien: 0 }
+  // État des dépôts des packs : publish.ts donne ainsi la vraie raison d'une absence.
+  const repoEtat: Record<string, RepoEtat> = {}
+  const noted = (repo: Repo, etat: RepoEtat) => {
+    if (repo.sources.has('pack')) repoEtat[repo.name.toLowerCase()] = etat
+    return etat === 'ok'
+  }
   const kept = [...repos.values()]
     .filter(repo => {
       const isOfficial = OFFICIAL.includes(repo.name)
-      if (!repo.sha) return excluded.introuvables++, false
-      if (repo.isFork) return excluded.forks++, false
-      if (repo.isArchived) return excluded.archives++, false
-      if (!isOfficial && repo.stars < MIN_STARS) return excluded.sous_seuil_etoiles++, false
-      if (!isOfficial && repo.pushedAt < SINCE) return excluded.push_trop_ancien++, false
-      return true
+      if (!repo.sha) return excluded.introuvables++, noted(repo, 'introuvable')
+      if (repo.isFork) return excluded.forks++, noted(repo, 'fork')
+      if (repo.isArchived) return excluded.archives++, noted(repo, 'archive')
+      if (!isOfficial && repo.stars < MIN_STARS) return excluded.sous_seuil_etoiles++, noted(repo, 'sous_seuil')
+      if (!isOfficial && !NO_PUSH_LIMIT.includes(repo.name) && repo.pushedAt < SINCE) return excluded.push_trop_ancien++, noted(repo, 'push_ancien')
+      return noted(repo, 'ok')
     })
     .sort((a, b) => b.stars - a.stars)
   const searched = kept.filter(repo =>
-    [...repo.sources].some(source => source.startsWith('recherche:') || ['officiel', 'marketplace-officielle', 'reference'].includes(source)),
+    [...repo.sources].some(source => source.startsWith('recherche:') || ['officiel', 'marketplace-officielle', 'reference', 'pack'].includes(source)),
   )
   const scanned = [...new Set([...searched, ...kept.slice(0, MAX_REPOS)])]
   log(`${kept.length} dépôts passent les seuils, ${scanned.length} sont parcourus ; écartés :`, excluded)
@@ -474,9 +508,9 @@ async function main() {
   const candidates = (await pool(scanned, 6, skillsOf)).flat()
   log(`${candidates.length} SKILL.md lus`)
   await loadPriorityNames()
-  const { chosen, unique, merged, alias } = select(candidates)
+  const { chosen, unique, merged, alias, moved } = select(candidates)
   log(`${unique} skills uniques (${merged.hash} copies identiques et ${merged.identity} quasi-copies fusionnées), ${chosen.length} retenus pour le juge`)
-  for (const [copy, origin] of Object.entries(alias)) log(`copie d'un skill des packs remplacée par l'original : ${copy} → ${origin}`)
+  for (const [copy, origin] of Object.entries(alias)) log(`${moved[copy] ? 'skill des packs déplacé' : 'copie d\'un skill des packs remplacée par l\'original'} : ${copy} → ${origin}`)
 
   await scanChosen(chosen)
   await lastCommits(chosen)
@@ -492,6 +526,8 @@ async function main() {
     stats: { discovered: repos.size, kept: kept.length, excluded, scanned: scanned.length, skillMds: candidates.length, unique, merged, chosen: output.length, perType },
     repoStars: Object.fromEntries(kept.map(repo => [repo.name, repo.stars])),
     alias,
+    moved,
+    repoEtat,
     skills: output,
   })
   log('écrit : collector/.cache/selection.json', perType)

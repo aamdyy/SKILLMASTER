@@ -17,8 +17,10 @@ export const OFFICIAL = ['anthropics/skills', 'anthropics/claude-plugins-officia
 export const REFERENCES = [
   'remotion-dev/skills', 'vercel-labs/agent-skills', 'expo/skills', 'greensock/gsap-skills', 'obra/superpowers',
   'twostraws/SwiftUI-Agent-Skill', 'hamen/material-3-skill', 'nextlevelbuilder/ui-ux-pro-max-skill',
-  'ceorkm/mobile-app-ui-design', 'bencium/bencium-marketplace',
+  'ceorkm/mobile-app-ui-design', 'bencium/bencium-marketplace', 'duckdb/duckdb-skills',
 ]
+// Dépôts de référence gardés même sans push récent : le SQL local n'a pas d'autre source sérieuse.
+export const NO_PUSH_LIMIT = ['duckdb/duckdb-skills']
 // Mots qui détectent les types de projet ; le juge doit confirmer. « outillage-claude-code »
 // couvre tout ce qui sert à construire avec Claude : plugins, mods, skills, API, Agent SDK, MCP.
 export const KEYWORDS: Record<string, RegExp> = {
@@ -28,7 +30,10 @@ export const KEYWORDS: Record<string, RegExp> = {
   android: /\b(android|jetpack compose|kotlin|material ?3|gradle)\b/i,
   video: /\b(remotion|video|ffmpeg|motion graphics|subtitles?|captions?|youtube|whisper|editing)\b/i,
   data: /\b(data analysis|pandas|polars|sql|duckdb|notebooks?|jupyter|csv|dataframes?|data ?viz|visuali[sz]ation|analytics|statistics|machine learning|dbt|spreadsheets?|excel)\b/i,
-  'outillage-claude-code': /\b(claude code|claude api|anthropic|messages api|plugins?|mods?|hooks?|mcp|skills?|skill[- ]creator|subagents?|slash commands?|agent sdk|marketplace|claude\.md)\b/i,
+  // Des termes propres à Claude : « skill », « hook » ou « plugin » seuls se lisent partout.
+  'outillage-claude-code': /\b(claude[- ]code|claude api|claude plugins?|anthropic|messages api|mcp|skill[- ](creator|authoring|development)|agent skills?|subagents?|sub-agents?|slash commands?|agent sdk|plugin marketplace|hookify|claude\.md)\b/i,
+  // Méthode de travail générale, utile quelle que soit la techno.
+  methode: /\b(code[- ]review|review (the |your )?(changes|diff|pr|pull request|code)|debug(ging)?|root cause|tdd|test[- ]driven|regressions?|refactor(ing)?|commit messages?|pull requests?|quality bar|implementation plans?|tests? pass|verification before)\b/i,
 }
 
 export function typesOf(text: string) {
@@ -105,7 +110,8 @@ function headers(accept = 'application/vnd.github+json'): Record<string, string>
 async function request(url: string, init: RequestInit = {}, accept?: string): Promise<Response> {
   for (let attempt = 0; ; attempt++) {
     const response = await fetch(url, { ...init, headers: { ...headers(accept), ...(init.headers ?? {}) } })
-    const isLimited = response.status === 429 || (response.status === 403 && response.headers.get('x-ratelimit-remaining') === '0')
+    // Limite secondaire : un 403 avec retry-after, sans que le quota soit à zéro.
+    const isLimited = response.status === 429 || (response.status === 403 && (response.headers.get('x-ratelimit-remaining') === '0' || response.headers.has('retry-after')))
     if (isLimited && attempt < 5) {
       const reset = Number(response.headers.get('x-ratelimit-reset') ?? 0) * 1000
       const retryAfter = Number(response.headers.get('retry-after') ?? 0) * 1000
@@ -124,7 +130,10 @@ async function request(url: string, init: RequestInit = {}, accept?: string): Pr
 
 export async function rest<T>(path: string): Promise<T | null> {
   const response = await request(path.startsWith('http') ? path : `https://api.github.com${path}`)
-  if (!response.ok) return null
+  if (!response.ok) {
+    if (response.status !== 404) log(`GitHub ${response.status} sur ${path.split('?')[0]}`)
+    return null
+  }
   return (await response.json()) as T
 }
 
