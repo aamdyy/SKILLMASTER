@@ -13,8 +13,8 @@ const TONE: Record<Gravite | 'aucun', string> = {
   critique: 'text-risk-eleve',
 }
 const RISK: Record<Lang, Record<Gravite | 'aucun', string>> = {
-  fr: { aucun: 'aucun risque', info: 'risque info', moyen: 'risque moyen', eleve: 'risque élevé', critique: 'risque critique' },
-  en: { aucun: 'no risk', info: 'info risk', moyen: 'medium risk', eleve: 'high risk', critique: 'critical risk' },
+  fr: { aucun: 'aucun risque détecté', info: 'risque info', moyen: 'risque moyen', eleve: 'risque élevé', critique: 'risque critique' },
+  en: { aucun: 'no risk detected', info: 'info risk', moyen: 'medium risk', eleve: 'high risk', critique: 'critical risk' },
 }
 
 export const riskLabel = (gravite: Gravite | null, lang: Lang = 'fr') => RISK[lang][gravite ?? 'aucun']

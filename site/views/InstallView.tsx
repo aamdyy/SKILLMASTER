@@ -373,7 +373,7 @@ export function InstallView({ lang }: { lang: Lang }) {
             </div>
             <div className="flex min-w-0 flex-col gap-3">
               <p className="text-[15px] text-fg/85">{t.maintain.remove}</p>
-              <CodeBlock lang={lang} lines={['claude plugin uninstall skillmaster@skillmaster', 'claude plugin marketplace remove skillmaster', 'rm -rf ~/.cache/skillmaster']} />
+              <CodeBlock lang={lang} lines={['claude plugin uninstall skillmaster@skillmaster', 'claude plugin marketplace remove skillmaster', 'chmod -R u+w ~/.cache/skillmaster && rm -rf ~/.cache/skillmaster']} />
             </div>
           </div>
         </div>

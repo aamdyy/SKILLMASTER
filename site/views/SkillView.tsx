@@ -131,7 +131,8 @@ export function SkillView({ lang, skill }: { lang: Lang; skill: Skill | null }) 
       ),
     },
     { label: t.facts.publisher, value: skill.repo.split('/')[0] },
-    { label: t.facts.status, value: t.statuts[skill.statut] ?? skill.statut },
+    // Le statut ne s'affiche que s'il dit quelque chose : les autres valeurs attendent le cycle de vie du lot 2.
+    ...(skill.statut === 'archive' ? [{ label: t.facts.status, value: t.statuts[skill.statut] ?? skill.statut }] : []),
     {
       label: t.facts.pinned,
       value: (

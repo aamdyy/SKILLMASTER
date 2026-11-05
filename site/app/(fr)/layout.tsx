@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: 'skillmaster — les bons skills Claude Code', template: '%s · skillmaster' },
   description: 'Bibliothèque de skills Claude Code triée par type de projet, notée et mise à jour chaque lundi.',
+  openGraph: {
+    type: 'website',
+    siteName: 'skillmaster',
+    locale: 'fr_FR',
+    alternateLocale: 'en_US',
+    images: [{ url: '/video/skillmaster-teaser.jpg', width: 1280, height: 720, alt: 'Le teaser de skillmaster' }],
+  },
+  twitter: { card: 'summary_large_image', images: ['/video/skillmaster-teaser.jpg'] },
 }
 
 export const viewport: Viewport = { themeColor: '#070707', colorScheme: 'dark' }

@@ -16,7 +16,7 @@ const T = {
     trusted: ' · confiance',
     risk: 'risque',
     stars: 'étoiles du dépôt',
-    risks: { aucun: 'aucun', info: 'info', moyen: 'moyen', eleve: 'élevé', critique: 'critique' } as Record<Gravite | 'aucun', string>,
+    risks: { aucun: 'non détecté', info: 'info', moyen: 'moyen', eleve: 'élevé', critique: 'critique' } as Record<Gravite | 'aucun', string>,
     filter: { label: 'Filtrer par nom, dépôt ou usage', placeholder: 'nom, dépôt ou usage', legend: 'Filtrer par type de projet', all: 'Tous', shown: '{n} skill{s} sur {total}' },
   },
   en: {
@@ -27,7 +27,7 @@ const T = {
     trusted: ' · trusted',
     risk: 'risk',
     stars: 'repo stars',
-    risks: { aucun: 'none', info: 'info', moyen: 'medium', eleve: 'high', critique: 'critical' } as Record<Gravite | 'aucun', string>,
+    risks: { aucun: 'none detected', info: 'info', moyen: 'medium', eleve: 'high', critique: 'critical' } as Record<Gravite | 'aucun', string>,
     filter: { label: 'Filter by name, repository or use', placeholder: 'name, repository or use', legend: 'Filter by project type', all: 'All', shown: '{n} skill{s} of {total}' },
   },
 }
