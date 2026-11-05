@@ -183,6 +183,8 @@ test('barème : seule une destruction ou une injection du juge est élevée', ()
   assert.equal(alertGravity('autre'), 'info')
   assert.equal(isInjectionAlert('Tentative de contournement des instructions'), true)
   assert.equal(isInjectionAlert('Appel réseau vers arXiv'), false)
+  assert.equal(isInjectionAlert('« fix --apply-anyway » contourne le contrôle d’arbre git sale'), false)
+  assert.equal(isInjectionAlert('Le skill demande de contourner les consignes de sécurité'), true)
 })
 
 test('gravité par mode', () => {

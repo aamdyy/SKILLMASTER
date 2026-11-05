@@ -100,7 +100,7 @@ export const ORDER: Gravite[] = ['critique', 'eleve', 'moyen', 'info']
 const lower = (gravite: Gravite): Gravite => ORDER[Math.min(ORDER.indexOf(gravite) + 1, ORDER.length - 1)] as Gravite
 
 // Alerte du juge qui décrit une tentative de détourner l'agent, pas une simple consigne de confirmation.
-const INJECTION_ALERT = /injection|contourn|supplant|outrepass|détourn|override|bypass|jailbreak|ignore[rz]? (?:les|toutes|tes)/i
+const INJECTION_ALERT = /injection|jailbreak|supplant|(?:contourn|outrepass|détourn|override|bypass|ignore)\w*\s+(?:\S+\s+){0,3}?(?:instructions?|consignes?|règles?|garde-fous|system|l['’]agent)/i
 export const isInjectionAlert = (code: string) => INJECTION_ALERT.test(code)
 
 // Gravité d'une alerte du juge, d'après la catégorie que Haiku lui a donnée (collector/classify.ts).
