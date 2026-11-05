@@ -1,0 +1,39 @@
+# Tests à chaque push : scanner et sm.ts (Node), plugin (claude plugin test), build du site.
+# Les mises à jour de library/ par l'Action hebdomadaire ne le relancent pas.
+name: tests
+
+on:
+  push:
+    paths-ignore:
+      - 'library/**'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+
+      - name: Scanner et sm.ts
+        run: node --test "tests/*.test.ts"
+
+      - name: Plugin
+        run: |
+          npm install --global @anthropic-ai/claude-code@2.1.318
+          cd plugins/skillmaster && claude plugin test .
+
+      - name: Build du site
+        working-directory: site
+        run: |
+          npm ci
+          npx next build

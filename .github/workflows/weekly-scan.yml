@@ -31,6 +31,9 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Tester le scanner et sm.ts
+        run: node --test "tests/*.test.ts"
+
       # Cache du collecteur et du juge (SKILL.md lus, verdicts, résumés, classements) :
       # seuls les skills nouveaux ou modifiés sont rejugés d'une semaine à l'autre.
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
