@@ -11,7 +11,7 @@ import { readFile, readdir } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { CACHE, LIBRARY, ROOT, OFFICIAL, REFERENCES, KEYWORDS, typesOf, frontmatter, graphql, log, pool, rawFile, readJson, rest, sha256, sleep, writeJson } from './lib.ts'
-import { isFirstParty, isTrustedPublisher, scanSkill, type Risk, type SkillFile } from './scan.ts'
+import { BAREME, SCRIPT_FILE, TEXT_FILE, isFirstParty, isSafeName, isTrustedPublisher, scanSkill, type Risk, type SkillFile, type SkillText } from './scan.ts'
 
 const argv = process.argv.slice(2)
 const option = (name: string, fallback: number) => {
@@ -25,6 +25,9 @@ const MAX_REPOS = option('max-repos', 400)
 const PER_REPO_FETCH = 15
 const PER_REFERENCE_FETCH = 60
 const PER_REPO_SELECT = 10
+// Scan des annexes et des scripts d'un skill retenu : au plus 60 fichiers de 200 Ko.
+const MAX_SCAN_FILES = 60
+const MAX_SCAN_SIZE = 200_000
 const WITH_DIRECTORY = argv.includes('--with-anthropic-directory')
 // Skills des packs du tour précédent (têtes et ajouts) : toujours retenus, pour que l'avantage
 // au tenant s'applique. --keep-from <commit> les lit dans un commit, sinon dans library/packs.
@@ -156,7 +159,7 @@ async function metadata() {
   }
 }
 
-type TreeEntry = { path: string; mode: string; type: string; size?: number }
+type TreeEntry = { path: string; mode: string; type: string; size?: number; sha?: string }
 type Candidate = {
   id: string
   repo: string
@@ -168,6 +171,9 @@ type Candidate = {
   description: string
   frontmatterKeys: string[]
   hash: string
+  // Empreinte de tout le dossier du skill (chemins, modes et contenus) : verdict et pin en dépendent.
+  empreinte: string
+  treeIsPartial: boolean
   types: string[]
   contentTypes: string[]
   prescore: number
@@ -204,15 +210,22 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
     const text = await rawFile(repo.name, repo.sha, entry.path)
     if (!text) return null
     const dir = entry.path.includes('/') ? entry.path.slice(0, entry.path.lastIndexOf('/')) : ''
-    const files: SkillFile[] = entries
-      .filter(file => file.type === 'blob' && (dir === '' ? !file.path.includes('/') || file.path === entry.path : file.path.startsWith(`${dir}/`)))
-      .map(file => ({ path: dir ? file.path.slice(dir.length + 1) : file.path, mode: file.mode, size: file.size }))
-      .slice(0, 400)
+    // Arbre du dépôt trop gros pour GitHub : on relit le dossier du skill seul.
+    const subtree = tree?.truncated && dir ? await rest<{ tree?: TreeEntry[]; truncated?: boolean }>(`/repos/${repo.name}/git/trees/${encodeURIComponent(`${repo.sha}:${dir}`)}?recursive=1`) : null
+    const treeIsPartial = !!tree?.truncated && (!subtree?.tree || !!subtree.truncated)
+    // Un skill à la racine contient tout le dépôt : hooks/, scripts/ ou bin/ comptent aussi.
+    const files: SkillFile[] = subtree?.tree
+      ? subtree.tree.filter(file => file.type === 'blob').map(file => ({ path: file.path, mode: file.mode, size: file.size, sha: file.sha }))
+      : entries
+          .filter(file => file.type === 'blob' && (dir === '' || file.path.startsWith(`${dir}/`)))
+          .map(file => ({ path: dir ? file.path.slice(dir.length + 1) : file.path, mode: file.mode, size: file.size, sha: file.sha }))
     // Officiel et éditeur de confiance se jugent au chemin : pas de contenu tiers hébergé chez Anthropic.
     const isOfficial = isFirstParty(repo.name, entry.path)
     const isPublisher = isTrustedPublisher(repo.name, entry.path, publishers)
     const { fields } = frontmatter(text)
-    const name = fields.name || dir.split('/').pop() || repo.name.split('/')[1] || 'skill'
+    // Le nom passe dans le prompt système, un commit ou un nom de dossier : jamais de texte libre.
+    const fallbackName = (dir.split('/').pop() || repo.name.split('/')[1] || 'skill').replace(/[^\w.:-]+/g, '-').slice(0, 64)
+    const name = isSafeName(fields.name ?? '') ? (fields.name as string) : fallbackName
     const description = (fields.description ?? '').slice(0, 1_536)
     const stars = repo.stars
     const fresh = (now.getTime() - new Date(repo.pushedAt).getTime()) / 86_400_000 < 60 ? 1 : 0
@@ -229,6 +242,8 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
       description,
       frontmatterKeys: Object.keys(fields),
       hash: sha256(text),
+      empreinte: sha256(files.map(file => `${file.path} ${file.mode} ${file.sha ?? ''}`).sort().join('\n')),
+      treeIsPartial,
       types: typesOf(`${entry.path} ${name} ${description}`),
       contentTypes: typesOf(`${entry.path} ${name} ${description} ${text.slice(0, 4_000)}`),
       prescore,
@@ -386,6 +401,41 @@ async function starVelocity(repoNames: string[]) {
   return velocity
 }
 
+// Le scan complet ne porte que sur les skills retenus, et son résultat suit l'empreinte du dossier :
+// seuls les dossiers qui ont changé sont relus. Les annexes ne restent pas dans le cache disque.
+async function scanChosen(chosen: Candidate[]) {
+  let read = 0
+  await pool(chosen, 12, async skill => {
+    const cachePath = join(CACHE, 'scan', `${BAREME}-${skill.empreinte}.json`)
+    const cached = await readJson<Risk[] | null>(cachePath, null)
+    if (cached) {
+      skill.risks = cached
+      return
+    }
+    const partial: Risk[] = skill.treeIsPartial ? [{ code: 'arbre tronqué par GitHub : scan incomplet', gravite: 'moyen', source: 'scan' }] : []
+    const pathOf = (path: string) => (skill.dir ? `${skill.dir}/${path}` : path)
+    try {
+      const wanted = skill.files
+        .filter(file => file.path !== 'SKILL.md' && file.mode !== '120000' && file.mode !== '160000' && (file.size ?? 0) <= MAX_SCAN_SIZE && (TEXT_FILE.test(file.path) || SCRIPT_FILE.test(file.path)))
+        .sort((a, b) => Number(TEXT_FILE.test(b.path)) - Number(TEXT_FILE.test(a.path)) || a.path.split('/').length - b.path.split('/').length)
+        .slice(0, MAX_SCAN_FILES)
+      const texts = (await pool(wanted, 4, async file => {
+        const text = await rawFile(skill.repo, skill.sha, pathOf(file.path), { keep: false })
+        return text === null ? null : { path: file.path, text }
+      })).filter((item): item is SkillText => item !== null)
+      const skillMd = (await rawFile(skill.repo, skill.sha, skill.skillMdPath)) ?? ''
+      skill.risks = [...scanSkill(skillMd, skill.files, texts), ...partial]
+      read++
+      await writeJson(cachePath, skill.risks)
+    } catch (error) {
+      // Lecture interrompue : le scan du SKILL.md reste, on le dit, et on réessaiera au tour suivant.
+      log(`scan des annexes interrompu pour ${skill.id} :`, String(error).slice(0, 120))
+      skill.risks = [...skill.risks, { code: 'annexes non lues pendant ce tour', gravite: 'moyen', source: 'scan' }]
+    }
+  })
+  log(`scan complet : ${read} dossiers relus, ${chosen.length - read} repris du cache`)
+}
+
 async function main() {
   await loadKeepIds()
   await loadPublishers()
@@ -428,9 +478,11 @@ async function main() {
   log(`${unique} skills uniques (${merged.hash} copies identiques et ${merged.identity} quasi-copies fusionnées), ${chosen.length} retenus pour le juge`)
   for (const [copy, origin] of Object.entries(alias)) log(`copie d'un skill des packs remplacée par l'original : ${copy} → ${origin}`)
 
+  await scanChosen(chosen)
   await lastCommits(chosen)
   const velocity = await starVelocity([...new Set(chosen.map(skill => skill.repo))])
-  const output = chosen.map(skill => ({ ...skill, stars30d: velocity.get(skill.repo) ?? null }))
+  // Le collecteur a tout vu ; la sélection garde 400 fichiers par skill, sans leurs empreintes.
+  const output = chosen.map(skill => ({ ...skill, files: skill.files.slice(0, 400).map(({ path, mode, size }) => ({ path, mode, size })), stars30d: velocity.get(skill.repo) ?? null }))
 
   const perType: Record<string, number> = {}
   for (const skill of output) for (const type of skill.types) perType[type] = (perType[type] ?? 0) + 1

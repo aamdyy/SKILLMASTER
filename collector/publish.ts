@@ -20,6 +20,8 @@ type Skill = {
   chemin_skill: string
   skill_md: string
   sha_epingle: string
+  empreinte?: string
+  licence?: string | null
   resume_fr: string | null
   dernier_commit: string | null
   note_qualite: number | null
@@ -99,7 +101,7 @@ const brief = (item: PackItem, place: string) => {
   return skill
     ? {
         id: skill.id, nom: skill.nom, place, repo: skill.repo, chemin_skill: skill.chemin_skill, skill_md: skill.skill_md,
-        sha_epingle: skill.sha_epingle, resume_fr: skill.resume_fr, note: skill.note_qualite,
+        sha_epingle: skill.sha_epingle, empreinte: skill.empreinte, licence: skill.licence ?? null, resume_fr: skill.resume_fr, note: skill.note_qualite,
         editeur_confiance: isTrustedPublisher(skill.repo, skill.chemin_skill, trusted),
         risque_max: skill.risque_max, risque_max_projet: skill.risque_max_projet ?? skill.risque_max,
         risques: skill.risques.map(risk => ({

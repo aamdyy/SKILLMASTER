@@ -140,7 +140,7 @@ export async function graphql<T>(query: string): Promise<T> {
 }
 
 // Fichier brut d'un dépôt à un commit précis, mis en cache sur disque.
-export async function rawFile(repo: string, sha: string, path: string): Promise<string | null> {
+export async function rawFile(repo: string, sha: string, path: string, { keep = true } = {}): Promise<string | null> {
   const cached = join(CACHE, 'raw', repo.replace('/', '__'), sha, path)
   try {
     return await readFile(cached, 'utf8')
@@ -149,6 +149,7 @@ export async function rawFile(repo: string, sha: string, path: string): Promise<
   const response = await request(url, {}, '*/*')
   if (!response.ok) return null
   const text = await response.text()
+  if (!keep) return text
   await mkdir(dirname(cached), { recursive: true })
   await writeFile(cached, text)
   return text
