@@ -208,10 +208,11 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
     .map(entry => ({
       entry,
       isKept: keepIds.has(`${repo.name}/${entry.path.includes('/') ? entry.path.slice(0, entry.path.lastIndexOf('/')) : ''}`.toLowerCase()),
+      isKnown: publishedIds.has(`${repo.name}/${entry.path.includes('/') ? entry.path.slice(0, entry.path.lastIndexOf('/')) : ''}`.toLowerCase()),
       hint: typesOf(entry.path)[0] !== 'autre' ? 0 : 1,
       depth: entry.path.split('/').length,
     }))
-    .sort((a, b) => Number(b.isKept) - Number(a.isKept) || a.hint - b.hint || a.depth - b.depth || a.entry.path.localeCompare(b.entry.path))
+    .sort((a, b) => Number(b.isKept) - Number(a.isKept) || Number(b.isKnown) - Number(a.isKnown) || a.hint - b.hint || a.depth - b.depth || a.entry.path.localeCompare(b.entry.path))
     .slice(0, isOfficialRepo || isPublisherRepo || isReference || [...keepIds].some(id => id.startsWith(`${repo.name.toLowerCase()}/`)) ? PER_REFERENCE_FETCH : PER_REPO_FETCH)
   const found = await pool(ranked, 8, async ({ entry }) => {
     const text = await rawFile(repo.name, repo.sha, entry.path)
@@ -236,10 +237,12 @@ async function skillsOf(repo: Repo): Promise<Candidate[]> {
     const description = (fields.description ?? '').slice(0, 1_536)
     const stars = repo.stars
     const fresh = (now.getTime() - new Date(repo.pushedAt).getTime()) / 86_400_000 < 60 ? 1 : 0
+    const id = `${repo.name}/${dir || name}`.toLowerCase()
+    // Un skill déjà jugé garde sa place à valeur proche : un catalogue stable coûte moins et garde ses fiches.
     const prescore =
-      Math.log10(stars + 1) * 2 + fresh + (isOfficial ? 3 : 0) + (isReference ? 2 : 0) + (description.length >= 40 ? 0.5 : -1) - (skillMds.length > 60 ? 1 : 0)
+      Math.log10(stars + 1) * 2 + fresh + (isOfficial ? 3 : 0) + (isReference ? 2 : 0) + (description.length >= 40 ? 0.5 : -1) - (skillMds.length > 60 ? 1 : 0) + (publishedIds.has(id) ? KNOWN_BONUS : 0)
     return {
-      id: `${repo.name}/${dir || name}`.toLowerCase(),
+      id,
       repo: repo.name,
       dir,
       skillMdPath: entry.path,
@@ -279,6 +282,8 @@ async function loadPublishers() {
   publishers = new Set((profile.editeurs_confiance ?? []).map(owner => owner.toLowerCase()))
 }
 let keepIds = new Set<string>()
+const publishedIds = new Set<string>()
+const KNOWN_BONUS = 2
 // Skills des packs : leur dépôt est toujours parcouru, hors plafond, et un skill déplacé est retrouvé.
 const keepItems = new Map<string, { id: string; repo: string; nom: string; hash?: string }>()
 async function loadKeepIds() {
@@ -298,7 +303,10 @@ async function loadKeepIds() {
     } catch {}
   }
   const published = await readJson<{ skills: { id: string; hash_contenu?: string }[] }>(join(LIBRARY, 'skills.json'), { skills: [] })
-  for (const skill of published.skills) if (keepItems.has(skill.id)) keepItems.get(skill.id)!.hash = skill.hash_contenu
+  for (const skill of published.skills) {
+    publishedIds.add(skill.id)
+    if (keepItems.has(skill.id)) keepItems.get(skill.id)!.hash = skill.hash_contenu
+  }
 }
 async function loadPriorityNames() {
   const manifest = await readJson<{ entrees?: { name: string }[] }>(join(homedir(), '.claude', 'skills-archive', 'MANIFEST.json'), {})
