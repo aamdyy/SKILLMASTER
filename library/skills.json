@@ -115340,7 +115340,7 @@
       "bareme": "b1",
       "packs": {},
       "statut": "archive",
-      "remplace_par": "build-mcpb",
+      "remplace_par": "writing-hookify-rules",
       "date_ajout": "2026-10-18",
       "licence": null,
       "cout_contexte": 191,
@@ -115354,7 +115354,7 @@
         "modele": "haiku",
         "le": "2026-10-19T10:36:39.968Z"
       },
-      "raison_statut": "absent de ce tour (dépôt archivé, sous le seuil, ou skill supprimé)"
+      "raison_statut": "déplacé vers anthropics/claude-plugins-official/plugins/hookify/skills/writing-rules"
     },
     {
       "id": "anthropics/claude-code/plugins/plugin-dev/skills/agent-development",
@@ -115414,7 +115414,7 @@
       "bareme": "b1",
       "packs": {},
       "statut": "archive",
-      "remplace_par": "optimize-loop",
+      "remplace_par": "agent-development",
       "date_ajout": "2026-10-18",
       "licence": null,
       "cout_contexte": 357,
@@ -115428,7 +115428,7 @@
         "modele": "haiku",
         "le": "2026-10-19T10:36:41.002Z"
       },
-      "raison_statut": "absent de ce tour (dépôt archivé, sous le seuil, ou skill supprimé)"
+      "raison_statut": "déplacé vers anthropics/claude-plugins-official/plugins/plugin-dev/skills/agent-development"
     },
     {
       "id": "anthropics/claude-code/plugins/plugin-dev/skills/mcp-integration",
@@ -115495,7 +115495,7 @@
       "bareme": "b1",
       "packs": {},
       "statut": "archive",
-      "remplace_par": "rossark-motion-skill",
+      "remplace_par": "mcp-integration",
       "date_ajout": "2026-10-18",
       "licence": null,
       "cout_contexte": 438,
@@ -115509,7 +115509,7 @@
         "modele": "haiku",
         "le": "2026-10-19T10:36:49.104Z"
       },
-      "raison_statut": "absent de ce tour (dépôt archivé, sous le seuil, ou skill supprimé)"
+      "raison_statut": "déplacé vers anthropics/claude-plugins-official/plugins/plugin-dev/skills/mcp-integration"
     },
     {
       "id": "truongduy2611/app-store-preflight-skills/app-store-preflight-skills",
