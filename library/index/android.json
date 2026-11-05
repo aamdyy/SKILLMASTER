@@ -185,7 +185,7 @@
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau",
-          "code": "La bannière de SKILL.md invite à exécuter `/plugin marketplace add aldefy/compose-skill` puis `/plugin install`, ce qui installe un plugin tiers non sandboxé. À signaler à Amdy avant toute installati…"
+          "code": "La bannière de SKILL.md invite à exécuter `/plugin marketplace add aldefy/compose-skill` puis `/plugin install`, ce qui installe un plugin tiers non sandboxé. À signaler à l'utilisateur avant toute installati…"
         }
       ]
     },

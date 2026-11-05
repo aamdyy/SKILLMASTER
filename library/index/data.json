@@ -301,7 +301,7 @@
           "gravite": "moyen",
           "source": "juge",
           "categorie": "donnees",
-          "code": "Par défaut, trackio.init avec space_id crée un Space public : les métriques (et la config) partent chez un tiers (Hugging Face) et peuvent être exposées si l'Amdy ne passe pas private=True."
+          "code": "Par défaut, trackio.init avec space_id crée un Space public : les métriques (et la config) partent chez un tiers (Hugging Face) et peuvent être exposées si l'utilisateur ne passe pas private=True."
         },
         {
           "gravite": "eleve",
