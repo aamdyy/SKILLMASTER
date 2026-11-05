@@ -12,27 +12,27 @@
 // les alertes du juge sont reprises de l'index.
 //
 // Décision, par skill :
-//   ecarte      risque critique : jamais chargé ;
-//   une_ligne   éditeur de confiance (library/profil.json) à sa version épinglée, ou risque
-//               « info » au plus : le risque s'affiche en une ligne, sans question ;
+//   ecarte      risque critique : jamais chargé, quel que soit l'éditeur ;
+//   une_ligne   en session : éditeur de confiance (library/profil.json) à sa version épinglée,
+//               ou risque « moyen » au plus. Pour garder dans le projet : aucun risque au-dessus
+//               de « info » et une licence claire. Le risque s'affiche en une ligne ;
 //   question    le reste : une seule question groupée par proposition.
 //
 // Le repo de dev ne bouge jamais. On ne télécharge que des skills présents dans library/index/,
 // jamais une adresse libre. Les fichiers écrits sont en lecture seule et jamais exécutables.
 import { execFileSync } from 'node:child_process'
 import { chmod, lstat, mkdir, mkdtemp, readdir, readFile, realpath, rename, rm, writeFile } from 'node:fs/promises'
-import { homedir, tmpdir } from 'node:os'
+import { homedir } from 'node:os'
 import { dirname, join, relative, resolve } from 'node:path'
-import { BAREME, type Gravite, isTrustedPublisher, type Mode, type Risk, scanSkill, type SkillFile, worst } from './scan.ts'
+import { BAREME, BINARY_FILE, type Gravite, isSafeName, isTrustedPublisher, type Mode, type Risk, SCRIPT_FILE, scanSkill, type SkillFile, type SkillText, TEXT_FILE, worst } from './scan.ts'
 
-const REPO = process.env.SM_REPO ?? 'aamdyy/SKILLMASTER'
+const REPO = 'aamdyy/SKILLMASTER'
 const HOME_CACHE = join(homedir(), '.cache', 'skillmaster')
 const LIBRARY = join(HOME_CACHE, 'library')
 const SKILLS = join(HOME_CACHE, 'skills')
 const ARCHIVE_MANIFEST = join(homedir(), '.claude', 'skills-archive', 'MANIFEST.json')
 const MAX_FILES = 200
 const MAX_SIZE = 1_000_000
-const BINARY = /\.(exe|dll|so|dylib|bin|jar|wasm|class|app|pkg|dmg|zip|tar|gz|tgz|7z)$/i
 
 type IndexEntry = {
   id: string
@@ -46,6 +46,7 @@ type IndexEntry = {
   risque_max: Gravite | null
   risque_max_projet?: Gravite | null
   risques: Risk[] | string[]
+  licence?: string | null
 }
 type TreeEntry = { path: string; mode: string; type: string; size?: number }
 type Download = { dossier: string; files: SkillFile[]; ignores: { chemin: string; raison: string }[]; depuis_le_cache: boolean }
@@ -109,7 +110,8 @@ async function sync() {
   if (local.split(' ')[0] === remote.sha) return { etat: 'a_jour', commit: remote.sha, date: remote.date, dossier: LIBRARY }
 
   await mkdir(HOME_CACHE, { recursive: true })
-  const work = await mkdtemp(join(tmpdir(), 'skillmaster-'))
+  // Sur le même volume que la destination : rename échoue d'un volume à l'autre.
+  const work = await mkdtemp(join(HOME_CACHE, 'tmp-'))
   try {
     const archive = join(work, 'repo.tgz')
     await writeFile(archive, Buffer.from(await (await github(`/repos/${REPO}/tarball/${remote.sha}`)).arrayBuffer()))
@@ -135,9 +137,10 @@ async function loadIndex() {
   let bareme: string | undefined
   for (const file of await readdir(dir).catch(() => [] as string[])) {
     if (!file.endsWith('.json')) continue
-    const index = await readJsonFile<{ bareme?: string; recommandes: IndexEntry[]; ajouts: IndexEntry[] }>(join(dir, file), { recommandes: [], ajouts: [] })
+    const index = await readJsonFile<{ bareme?: string; recommandes?: unknown; ajouts?: unknown }>(join(dir, file), {})
     bareme ??= index.bareme
-    entries.push(...index.recommandes, ...index.ajouts)
+    // Un index abîmé ne fait pas tomber les autres.
+    for (const list of [index.recommandes, index.ajouts]) if (Array.isArray(list)) entries.push(...(list as IndexEntry[]).filter(item => item && typeof item.id === 'string'))
   }
   return { entries, bareme }
 }
@@ -145,6 +148,7 @@ async function loadIndex() {
 // Télécharge le dossier du skill à son commit épinglé, une fois : le dossier porte le commit.
 async function download(entry: IndexEntry): Promise<Download> {
   if (!/^[0-9a-f]{40}$/.test(entry.sha_epingle)) throw new Error(`commit épinglé invalide pour ${entry.id}`)
+  if (!/^[\w.-]+\/[\w.-]+$/.test(entry.repo) || entry.repo.split('/').includes('..') || entry.chemin_skill.split('/').includes('..')) throw new Error(`dépôt ou chemin invalide pour ${entry.id}`)
   const dest = join(SKILLS, `${entry.repo.replace('/', '__')}__${entry.chemin_skill.replaceAll('/', '__') || 'racine'}@${entry.sha_epingle.slice(0, 12)}`)
   const cached = await readJsonFile<{ files?: SkillFile[]; ignores?: Download['ignores'] } | null>(join(dest, '.skillmaster.json'), null)
   if (cached?.files) return { dossier: dest, files: cached.files, ignores: cached.ignores ?? [], depuis_le_cache: true }
@@ -165,7 +169,7 @@ async function download(entry: IndexEntry): Promise<Download> {
       relative(work, target).startsWith('..') ? 'chemin hors du dossier' :
       file.mode === '120000' ? 'lien symbolique, non suivi' :
       file.mode === '160000' ? 'sous-module' :
-      BINARY.test(file.path) ? 'fichier binaire' :
+      BINARY_FILE.test(file.path) ? 'fichier binaire' :
       (file.size ?? 0) > MAX_SIZE ? 'plus de 1 Mo' :
       wanted.length >= MAX_FILES ? `plus de ${MAX_FILES} fichiers` : null
     if (skip) ignores.push({ chemin: file.path, raison: skip })
@@ -208,12 +212,33 @@ async function listLocal(dir: string, prefix = ''): Promise<SkillFile[]> {
   return files
 }
 
+// Le texte des annexes et des scripts téléchargés, pour le scan.
+async function readTexts(dossier: string, files: SkillFile[]) {
+  const texts: SkillText[] = []
+  for (const file of files) {
+    if (file.path === 'SKILL.md' || file.mode === '120000' || !(TEXT_FILE.test(file.path) || SCRIPT_FILE.test(file.path))) continue
+    const text = await readFile(join(dossier, file.path), 'utf8').catch(() => null)
+    if (text !== null) texts.push({ path: file.path, text })
+  }
+  return texts
+}
+
+// Licence à vérifier avant de copier un skill dans un projet. Absente du champ : index d'avant ce champ.
+function licenceRisk(entry: IndexEntry | undefined): Risk[] {
+  if (!entry || !('licence' in entry)) return []
+  const licence = entry.licence ?? null
+  if (licence && licence !== 'NOASSERTION' && !/GPL/i.test(licence)) return []
+  const label = licence && licence !== 'NOASSERTION' ? licence : 'absente ou non reconnue'
+  return [{ code: `licence ${label} : à vérifier avant de garder ce skill`, gravite: 'info', gravite_projet: 'moyen', source: 'licence' }]
+}
+
 const juryAlerts = (entry: IndexEntry | undefined): Risk[] =>
   (entry?.risques ?? []).filter((risk): risk is Risk => typeof risk === 'object' && risk.source === 'juge')
 
 async function prepare(id: string, mode: Mode, index: { entries: IndexEntry[]; bareme?: string }, trusted: Set<string>) {
   const entry = index.entries.find(item => item.id === id) ?? index.entries.find(item => item.nom === id)
   const name = entry?.nom ?? id
+  if (!isSafeName(name)) return { id, nom: id.slice(0, 64), decision: 'indisponible', erreur: 'nom de skill refusé' }
   let source: 'bibliotheque' | 'archive'
   let skillMd: string
   let dossier: string
@@ -236,20 +261,28 @@ async function prepare(id: string, mode: Mode, index: { entries: IndexEntry[]; b
     const local = manifest.entrees.find(item => item.name === name && item.skill_md)
     if (!local?.skill_md) return { id, nom: name, decision: 'indisponible', erreur: failure }
     source = 'archive'
-    const real = await realpath(local.skill_md)
-    dossier = dirname(real)
-    files = await listLocal(dossier)
-    skillMd = await readFile(real, 'utf8')
+    try {
+      const real = await realpath(local.skill_md)
+      dossier = dirname(real)
+      files = await listLocal(dossier)
+      skillMd = await readFile(real, 'utf8')
+    } catch (archiveError) {
+      return { id, nom: name, decision: 'indisponible', erreur: `${failure} ; archive locale : ${(archiveError as Error).message}` }
+    }
     extra = { kind: local.kind, depend_de: local.depend_de ?? [], ...(entry ? { erreur_bibliotheque: failure } : {}) }
   }
 
-  const risks = [...scanSkill(skillMd, files), ...juryAlerts(entry)]
+  const partial: Risk[] = (extra.ignores as { chemin: string }[] | undefined)?.some(item => item.chemin === '*') ? [{ code: 'arbre tronqué par GitHub : scan incomplet', gravite: 'moyen', source: 'scan' }] : []
+  const risks = [...scanSkill(skillMd, files, await readTexts(dossier, files)), ...juryAlerts(entry), ...licenceRisk(entry), ...partial]
   const riskMax = worst(risks, mode)
   const isTrusted = source === 'bibliotheque' && !!entry && isTrustedPublisher(entry.repo, entry.chemin_skill, trusted)
-  const decision = riskMax === 'critique' ? 'ecarte' : isTrusted || riskMax === null || riskMax === 'info' ? 'une_ligne' : 'question'
+  // Garder dans le projet rend le skill natif : même un éditeur de confiance passe par une question s'il y a un risque ou une licence à voir.
+  const isQuiet = mode === 'projet' ? riskMax === null || riskMax === 'info' : isTrusted || riskMax !== 'eleve'
+  const decision = riskMax === 'critique' ? 'ecarte' : isQuiet ? 'une_ligne' : 'question'
   // Le scan est refait sur le même commit que l'index : un écart signale un problème.
   const indexMax = mode === 'projet' ? entry?.risque_max_projet ?? entry?.risque_max : entry?.risque_max
-  const divergence = source === 'bibliotheque' && index.bareme === BAREME && indexMax !== undefined && (indexMax ?? null) !== riskMax
+  const scanMax = worst(risks.filter(risk => risk.source !== 'licence'), mode)
+  const divergence = source === 'bibliotheque' && index.bareme === BAREME && indexMax !== undefined && (indexMax ?? null) !== scanMax
   return {
     id: entry?.id ?? id,
     nom: name,
