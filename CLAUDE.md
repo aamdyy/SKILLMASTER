@@ -17,7 +17,7 @@ Amdy utilise Claude Code pour tous ses projets : sites web, apps iOS, montage vi
    Dans les deux cas, l'outil affiche :
    - la **sélection recommandée** pour le type de projet détecté sur le moment (8 skills maximum), avec une **liste d'ajouts possibles**. Chaque skill y est présenté par son `resume_fr`, une phrase de 15 mots au plus : « ce qu'il fait → ce qu'il améliore » ;
    - un **conseil modèle et effort** : par exemple « Opus 5.5 · xhigh · ultracode ON », avec une phrase qui explique pourquoi. Il est affiché seulement : Amdy tape lui-même `/model` ou `/effort`.
-3. **Il propose, Amdy valide.** Rien ne s'installe ou ne se change sans accord. Toutes les commandes passent sous le préfixe `/sm` : `/sm check`, `/sm install`, `/sm clean`, `/sm status`, `/sm prompt` et, en phase 4, `/sm rate`.
+3. **Il propose, Amdy valide, au moins une fois.** Rien ne s'installe ou ne se change sans accord. Cet accord peut être donné une fois pour toutes par le réglage `mode` (V2, décision du 2026-11-05) ; le mode par défaut reste la proposition. Toutes les commandes passent sous le préfixe `/sm` : `/sm check`, `/sm install`, `/sm clean`, `/sm status`, `/sm prompt`, et `/sm radar` en V2.
 
 ## Principes non négociables
 
@@ -117,7 +117,7 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Étape 1 : ménage des skills globaux.** On définit un socle global de 10 skills maximum, et le reste est réparti en packs par projet (proposition : `docs/local/phase-1-menage-skills.md`). Amdy valide avant tout déplacement.
   - **Étape 2 :** collecteur et juge lancés une première fois à la main (plan : `docs/phase-1-etape2-plan-collecteur-juge.md`). Premier `skills.json` et packs par type. Amdy relit les notes et les packs.
 - **Phase 2** : le mod conseiller, le skill `skill-master` et les commandes `/sm`. Faite le 2026-10-20 : voir `docs/phase-2-plan.md`.
-- **Phase 3** : GitHub Action hebdomadaire, cycle de vie automatique, mise à jour écrite directement sur `main`.
+- **Phase 3** : GitHub Action hebdomadaire, cycle de vie automatique, mise à jour écrite directement sur `main`. Faite le 2026-10-19.
 - **Phase 4** : boucle de retours qui influence les notes. `/sm rate` demande une note sur 5 étoiles en fin de session, pour 3 skills au plus, réellement utilisés pendant la session, et les signaux automatiques comptent aussi. Page web de la bibliothèque (GitHub Pages) **à partir des maquettes Figma d'Amdy**.
 
 ## Décisions prises
@@ -224,6 +224,16 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
 - 2026-10-20 : **nettoyage du dépôt public.**
   - **Plus de bonus d'usage** : la bibliothèque publique classe uniquement sur la qualité (note du juge), la pertinence et les épinglages d'`overrides.json`. `note_qualite` vaut la note du juge. L'usage réel d'Amdy reste en local (`docs/local/usage-amdy.json`), pour un éventuel classement perso côté `skill-master`.
   - **Historique réécrit** (`git filter-repo`, sauvegarde miroir dans `docs/local/`) : e-mail des commits passé en adresse noreply GitHub, usage retiré de toutes les versions de `library/`, noms des autres projets d'Amdy retirés des plans. La config git d'Amdy utilise l'adresse noreply.
+- 2026-11-05 : **V2 décidée**, après un audit de la V1 et un deuxième avis d'Argon (plan et audit : `docs/local/plan-v2.md`, `docs/local/audit-v1-2026-11-05.md`). Passage d'un chargeur de packs à un **routeur par prompt doublé d'un radar de tendances**, en lots : hygiène, sécurité, fiabilité des packs, routeur, nano-règles, radar, rotation, moteur public.
+  - **Accord donné une fois :** réglage `mode` dans `/config`, `proposer` par défaut (la V1), `ombre` (le routeur calcule sans rien injecter), `auto`.
+  - **Routeur :** socle de 2 à 3 skills après déduplication, puis un indice par prompt, tiré d'une réserve de skills sans question de risque. Le contenu n'arrive que si Claude appelle l'outil. Une ligne discrète signale chaque indice. Jamais de skill du radar.
+  - **Nano-règles à l'essai :** règles filtrées (ni URL, ni chemin, ni commande), coupées si moins de 70 % de 50 injections relues sont pertinentes.
+  - **Pin :** il n'avance que si l'empreinte du dossier du skill change, et après un nouveau scan et un nouveau jugement.
+  - **Risque :** les hooks restent critiques pour tout le monde. Éditeurs de confiance : sans question en session, confirmation avec licence pour garder dans le projet. Alerte GPL, AGPL ou licence absente à la copie.
+  - **Plafond par dépôt :** aucun pour les éditeurs officiels et de confiance, 2 pour les autres, exception `chrisbanes/skills`.
+  - **Packs :** ajout de `methode` (relecture, débogage, tests) et de `radar-viral` (hors détection). Pack data recentré sur Supabase/Postgres, DuckDB, pandas.
+  - **Moteur open source :** licence MIT sur notre code, README, textes publics sans nom ni usage. `profil.json` local à la machine viendra plus tard.
+  - **`/sm rate` passe en réserve :** les signaux locaux d'abord. Le statut public ne dépend pas de l'usage.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard
@@ -241,4 +251,3 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
 ## Décisions encore ouvertes
 
 - Contenu pour sa chaîne à partir de l'outil ?
-- Packs supplémentaires à créer après les 3 premiers.
