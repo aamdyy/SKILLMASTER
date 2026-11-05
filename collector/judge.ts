@@ -1,14 +1,13 @@
-// Juge SKILLMASTER, v2. Deux temps, via `claude -p` sur l'abonnement d'Amdy (phase 1) :
-//   1. Claude Haiku note tous les skills présélectionnés ;
-//   2. Claude Sonnet rejuge les finalistes de chaque pack.
+// Juge SKILLMASTER. Claude Haiku note les skills nouveaux ou modifiés, puis Claude Sonnet range les
+// finalistes de chaque pack (rank.ts), via `claude -p`.
 // Le juge n'a aucun outil, aucun hook, aucun MCP, ne garde aucun transcript, et lit le
 // SKILL.md et ses annexes comme des données. Les verdicts sont en cache par version de
-// grille, modèle et hash : seuls les skills nouveaux ou modifiés sont rejugés.
+// grille, modèle et empreinte du dossier : seuls les skills nouveaux ou modifiés sont rejugés.
 // La note est celle du juge seul : l'usage réel d'Amdy n'entre pas dans la bibliothèque publique
 // (il reste en local, collector/usage.ts). Les packs sont décidés par type sur la qualité et la
 // pertinence : les 5 à 8 meilleurs, note minimale de 6, plus les épinglages d'Amdy (overrides.json).
 //
-//   node collector/judge.ts [--concurrency 5] [--limit N] [--finalists 12] [--no-sonnet]
+//   node collector/judge.ts [--concurrency 5] [--limit N] [--finalists 25] [--rank-runs 3] [--budget 6]
 import { spawn } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
 import { mkdir } from 'node:fs/promises'
@@ -18,6 +17,7 @@ import { BAREME, alertGravity, isInjectionAlert, scanSkill, worst, type Categori
 import { alertKey, classifyAlerts, classifyCost } from './classify.ts'
 import { execFileSync } from 'node:child_process'
 import { MAX_CHANGES, rankCost, rankPack, type Finalist, type Ranking } from './rank.ts'
+import { applyRepoCap, isExcludedTarget } from './regles.ts'
 import { resumeCost, summarize } from './resume.ts'
 
 const argv = process.argv.slice(2)
@@ -32,6 +32,8 @@ const FINALISTS = option('finalists', 25)
 const TENANTS_AT = argv.indexOf('--tenants')
 const TENANTS_REF = TENANTS_AT >= 0 ? argv[TENANTS_AT + 1] : undefined
 const RANK_RUNS = option('rank-runs', 3)
+// Coût maximal d'un tour en dollars : au-delà, le tour échoue au lieu de continuer à dépenser.
+const BUDGET = option('budget', Infinity)
 const STARTED = Date.now()
 // Haiku seul depuis la v3 (Sonnet n'écartait la note que de 0,11 point en moyenne) ; --with-sonnet le réactive.
 const WITH_SONNET = argv.includes('--with-sonnet')
@@ -41,7 +43,10 @@ const MAX_ANNEX_FILES = 6
 const MAX_ANNEX_CHARS = 5_000
 const MAX_ANNEX_TOTAL = 20_000
 
-const TYPES = ['site-web', 'ios', 'app-expo', 'android', 'video', 'data', 'outillage-claude-code']
+const TYPES = ['site-web', 'ios', 'app-expo', 'android', 'video', 'data', 'outillage-claude-code', 'methode']
+// Sans stack à reconnaître : la pertinence ne peut pas y dépasser 4.
+const STACKLESS_TYPES = new Set(['outillage-claude-code', 'methode'])
+const MAX_PER_REPO = 2
 const VISUAL_TYPES = new Set(['site-web', 'ios', 'app-expo', 'android'])
 const NATIVE_TYPES = new Set(['ios', 'android'])
 const CRITERIA = ['declenchement', 'valeur_ajoutee', 'precision', 'perimetre', 'qualite'] as const
@@ -98,7 +103,8 @@ true si le skill pousse Claude à décider seul de l'esthétique : imposer un st
 - android : Android natif en Kotlin ou Jetpack Compose. PAS React Native ni Expo.
 - video : production ou montage vidéo (Remotion, ffmpeg, sous-titres, motion design vidéo).
 - data : analyse, transformation ou visualisation de données (SQL, pandas, polars, notebooks, dashboards).
-- outillage-claude-code : construire avec Claude : plugins, mods, skills, hooks, MCP, sous-agents, Agent SDK, API Claude (Messages API, SDK Anthropic), workflows d'agents.
+- outillage-claude-code : construire POUR Claude : plugins, mods, skills, hooks, MCP, sous-agents, Agent SDK, API Claude (Messages API, SDK Anthropic). Pas un skill qui s'utilise simplement avec Claude.
+- methode : méthode de travail générale, utile quelle que soit la techno : relecture de code, débogage, tests, garde-fous, plans, git.
 - autre : tout le reste. Un diagramme d'architecture n'est pas « data », Figma n'est pas « video ».
 
 ## Le reste
@@ -143,13 +149,18 @@ type Verdict = {
   confiance: 'haute' | 'moyenne' | 'basse'
 }
 
-type Judged = { verdict: Verdict | null; error?: string; costUsd: number; judgedAt: string; model: string; version: string; fromCache?: boolean }
+type Judged = {
+  verdict: Verdict | null; error?: string; costUsd: number; judgedAt: string; model: string; version: string; fromCache?: boolean
+  // Le juge a échoué sur ce dossier modifié : verdict et version d'avant sont gardés, il sera rejugé au tour suivant.
+  isStale?: boolean
+}
 type Overrides = {
   epingles?: Record<string, { repo: string; nom: string }[]>
   epingles_ajout?: Record<string, { repo: string; nom: string }[]>
   ajout_garanti?: Record<string, { motif: string; raison?: string }[]>
   jamais?: string[]
   exclus?: Record<string, { repo: string; nom: string }[]>
+  plafond_exceptions?: string[]
 }
 
 const CWD = join(CACHE, 'judge-cwd')
@@ -235,6 +246,8 @@ function isValid(verdict: Verdict | null): verdict is Verdict {
 // Verdicts déjà publiés dans library/skills.json (même hash, même grille, même modèle) : ils servent
 // de cache durable, utile quand le cache des Actions a expiré.
 const published = new Map<string, Judged>()
+// Dernier verdict connu d'un skill, quel que soit son contenu : le filet quand le juge échoue.
+const previousVerdicts = new Map<string, Judged>()
 
 async function judge(model: string, skill: Selected, risks: Risk[]): Promise<Judged> {
   // Le verdict suit l'empreinte de tout le dossier : un script ou une annexe modifiés relancent le juge.
@@ -243,23 +256,33 @@ async function judge(model: string, skill: Selected, risks: Risk[]): Promise<Jud
   const cached = (await readJson<Judged | null>(cachePath, null)) ?? published.get(`${model}|${skill.empreinte}`) ?? published.get(`${model}|hash:${skill.hash}`) ?? null
   // Verdict en cache : aucun appel, donc aucun coût (le costUsd stocké est celui d'origine).
   if (cached?.verdict) return { ...cached, costUsd: 0, fromCache: true }
+  const judged = await askJudge(model, skill, risks)
+  if (judged.verdict) {
+    await writeJson(cachePath, judged)
+    return judged
+  }
+  const before = previousVerdicts.get(`${model}|${skill.id}`)
+  return before ? { ...before, costUsd: judged.costUsd, error: judged.error, isStale: true } : judged
+}
+
+async function askJudge(model: string, skill: Selected, risks: Risk[]): Promise<Judged> {
   const text = (await rawFile(skill.repo, skill.sha, skill.skillMdPath)) ?? ''
   const input = await prompt(skill, text, risks)
   let last: { verdict: Verdict | null; costUsd: number; error?: string } = { verdict: null, costUsd: 0, error: 'non lancé' }
+  let cost = 0
   for (let attempt = 0; attempt < 2; attempt++) {
     last = await runClaude(model, input)
+    cost += last.costUsd
     if (isValid(last.verdict)) break
   }
-  const judged: Judged = {
+  return {
     verdict: isValid(last.verdict) ? last.verdict : null,
     error: isValid(last.verdict) ? undefined : last.error,
-    costUsd: last.costUsd,
+    costUsd: cost,
     judgedAt: new Date().toISOString(),
     model,
     version: VERSION,
   }
-  if (judged.verdict) await writeJson(cachePath, judged)
-  return judged
 }
 
 type Profile = {
@@ -277,8 +300,8 @@ function relevance(profile: Profile, skill: Selected, verdict: Verdict | null, t
   const haystack = `${skill.name} ${skill.description}`
   const hasType = (verdict?.categories ?? []).some(category => profile.types.includes(category))
   const stack = Object.values(profile.stack).filter(source => new RegExp(source, 'i').test(haystack)).length
-  // Une techno exclue de la stack (Vue, BigQuery…) annule la pertinence : le skill n'entre pas en finale.
-  if (Object.values(profile.exclusions ?? {}).some(source => new RegExp(source, 'i').test(haystack))) return 0
+  // Une techno exclue de la stack (Vue, BigQuery…) annule la pertinence quand elle est la cible du skill.
+  if (isExcludedTarget(Object.values(profile.exclusions ?? {}), Object.values(profile.stack), skill.name, skill.description)) return 0
   const off = profile.hors_sujet.filter(source => new RegExp(source, 'i').test(haystack)).length
   return Math.max(0, Math.min(10, (hasType ? 4 : 0) + Math.min(6, stack * 2) - off * 4))
 }
@@ -320,13 +343,15 @@ async function main() {
     const text = (await rawFile(skill.repo, skill.sha, skill.skillMdPath)) ?? ''
     texts.set(skill.id, text)
     scans.set(skill.id, skill.risks ?? scanSkill(text, skill.files))
-    detectedTypes.set(skill.id, typesOf(`${skill.skillMdPath} ${skill.name} ${skill.description} ${text.slice(0, 4_000)}`))
+    // Outillage et méthode se lisent sur le nom et la description : un corps de skill cite Claude Code ou des tests partout.
+    const announced = typesOf(`${skill.name} ${skill.description}`)
+    detectedTypes.set(skill.id, typesOf(`${skill.name} ${skill.description} ${text.slice(0, 4_000)}`).filter(type => !STACKLESS_TYPES.has(type) || announced.includes(type)))
   }
   const profile = await readJson<Profile>(join(LIBRARY, 'profil.json'), { types: [], stack: {}, exclusions: {}, hors_sujet: [], poids: { qualite: 1, pertinence: 0 } })
   const relevanceOf = (skill: Selected, verdict: Verdict | null) => relevance(profile, skill, verdict, texts.get(skill.id) ?? '')
 
   type Published = {
-    hash_contenu: string; empreinte?: string; categories: string[]; sous_notes: Verdict['sous_notes'] | null; description_courte: string | null
+    id: string; hash_contenu: string; empreinte?: string; categories: string[]; sous_notes: Verdict['sous_notes'] | null; description_courte: string | null
     justification: string | null; reserves?: string[]; risques: Risk[]; choix_visuels_autonomes: boolean | null
     confiance: Verdict['confiance'] | null; resume_fr?: string | null; juge?: { version?: string; modele?: string; le?: string | null }
   }
@@ -336,7 +361,7 @@ async function main() {
     if (entry.resume_fr) publishedResumes.set(entry.hash_contenu, entry.resume_fr)
     for (const risk of entry.risques) if (risk.source === 'juge' && risk.categorie) publishedCategories.set(alertKey(entry.repo, risk.code), risk.categorie)
     if (entry.juge?.version !== VERSION || !entry.sous_notes || entry.choix_visuels_autonomes === null || !entry.confiance) continue
-    published.set(`${entry.juge.modele ?? 'haiku'}|${entry.empreinte ?? `hash:${entry.hash_contenu}`}`, {
+    const known: Judged = {
       verdict: {
         categories: entry.categories, sous_notes: entry.sous_notes, description_courte: entry.description_courte ?? '',
         justification: entry.justification ?? '', reserves: entry.reserves ?? [],
@@ -344,10 +369,37 @@ async function main() {
         choix_visuels_autonomes: entry.choix_visuels_autonomes, confiance: entry.confiance,
       },
       costUsd: 0, judgedAt: entry.juge.le ?? '', model: entry.juge.modele ?? 'haiku', version: VERSION,
-    })
+    }
+    published.set(`${known.model}|${entry.empreinte ?? `hash:${entry.hash_contenu}`}`, known)
+    previousVerdicts.set(`${known.model}|${entry.id}`, known)
+  }
+  // Têtes du tour précédent (tenants) et contexte donné à Sonnet.
+  type PackFile = { recommandes: { id: string }[]; ajouts?: { id: string }[]; finalistes?: string[] }
+  const previousPacks = new Map<string, PackFile>()
+  for (const type of TYPES) {
+    let previous: PackFile | null = null
+    try {
+      previous = TENANTS_REF
+        ? (JSON.parse(execFileSync('git', ['-C', ROOT, 'show', `${TENANTS_REF}:library/packs/${type}.json`], { encoding: 'utf8' })) as PackFile)
+        : await readJson<PackFile | null>(join(LIBRARY, 'packs', `${type}.json`), null)
+    } catch {}
+    // L'original reprend la place de tenant de sa copie.
+    if (previous) {
+      previousPacks.set(type, {
+        ...previous,
+        recommandes: previous.recommandes.map(item => ({ ...item, id: resolveId(item.id) })),
+        ajouts: previous.ajouts?.map(item => ({ ...item, id: resolveId(item.id) })),
+        finalistes: previous.finalistes?.map(resolveId),
+      })
+    }
   }
   log(`temps 1 : ${skills.length} skills, Claude Haiku, ${CONCURRENCY} en parallèle`)
   const haiku = await judgeAll('haiku', skills, scans, CONCURRENCY)
+  let sonnet = { verdicts: new Map<string, Judged>(), cost: 0 }
+  const costSoFar = () => haiku.cost + sonnet.cost + resumeCost.usd + rankCost.usd + classifyCost.usd
+  const checkBudget = (step: string) => {
+    if (costSoFar() > BUDGET) throw new Error(`budget de ${BUDGET} $ dépassé après ${step} : ${costSoFar().toFixed(2)} $. Rien n'est publié.`)
+  }
 
   const pinned = (type: string, skill: Selected) => (overrides.epingles?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
   const pinnedAddition = (type: string, skill: Selected) => (overrides.epingles_ajout?.[type] ?? []).some(pin => key(pin.repo, pin.nom) === key(skill.repo, skill.name))
@@ -370,10 +422,14 @@ async function main() {
     if (!verdict) return null
     const detected = detectedTypes.get(skill.id) ?? skill.types
     const isRn = verdict.categories.includes('app-expo') || detected.includes('app-expo')
-    return verdict.categories.find(category => TYPES.includes(category) && detected.includes(category) && !(NATIVE_TYPES.has(category) && isRn)) ?? null
+    const found = verdict.categories.find(category => TYPES.includes(category) && detected.includes(category) && !(NATIVE_TYPES.has(category) && isRn))
+    if (found) return found
+    // Verdicts d'avant le type « methode » : le juge les rangeait dans l'outillage ou ailleurs.
+    return detected.includes('methode') && verdict.categories.some(category => category === 'outillage-claude-code' || category === 'autre') ? 'methode' : null
   }
   const isEligible = (type: string, skill: Selected, verdict: Verdict | null) => {
-    if (pinned(type, skill) || pinnedAddition(type, skill)) return true
+    // Un épinglage passe avant la note et le type, jamais avant un risque critique.
+    if (pinned(type, skill) || pinnedAddition(type, skill)) return worst(riskOf(skill, verdict)) !== 'critique'
     if (!verdict || never.has(skill.name.toLowerCase()) || excluded(type, skill)) return false
     if (primaryType(skill, verdict) !== type) return false
     const risks = riskOf(skill, verdict)
@@ -383,7 +439,24 @@ async function main() {
     return !(VISUAL_TYPES.has(type) && verdict.choix_visuels_autonomes)
   }
 
-  let sonnet = { verdicts: new Map<string, Judged>(), cost: 0 }
+  // Haiku se trompe parfois sur un verdict neuf. Avant d'éjecter un tenant pour ça : un second tirage,
+  // et le doute profite au tenant.
+  const canStay = (type: string, skill: Selected, verdict: Verdict | null) => isEligible(type, skill, verdict) && (!verdict || noteOf(verdict) >= 6)
+  for (const type of TYPES) {
+    for (const { id } of previousPacks.get(type)?.recommandes ?? []) {
+      const skill = skills.find(item => item.id === id)
+      const first = haiku.verdicts.get(id)
+      if (!skill || !first?.verdict || first.fromCache || first.isStale || canStay(type, skill, first.verdict)) continue
+      const second = await askJudge('haiku', skill, scans.get(id) ?? [])
+      haiku.cost += second.costUsd
+      if (!second.verdict || !canStay(type, skill, second.verdict)) continue
+      log(`${skill.name} : le second tirage le garde en tête de ${type}`)
+      haiku.verdicts.set(id, second)
+      await writeJson(join(CACHE, 'judge', `${VERSION}-haiku-${skill.empreinte}.json`), second)
+    }
+  }
+
+  checkBudget('les notes')
   if (WITH_SONNET) {
     const finalists = new Map<string, Selected>()
     for (const type of TYPES) {
@@ -419,8 +492,11 @@ async function main() {
     if (resumes.size % 50 === 0 || resumes.size === skills.length) log(`résumés : ${resumes.size}/${skills.length}`)
   })
 
-  const previous = await readJson<{ skills: { id: string; date_ajout: string; statut: string; empreinte?: string; sha_epingle: string }[] }>(join(LIBRARY, 'skills.json'), { skills: [] })
+  checkBudget('les résumés')
+  const previous = await readJson<{ skills: { id: string; date_ajout: string; statut: string; empreinte?: string; hash_contenu?: string; sha_epingle: string }[] }>(join(LIBRARY, 'skills.json'), { skills: [] })
   const known = new Map(previous.skills.map(entry => [entry.id, entry]))
+  // Date de première apparition, même pour un skill sorti du catalogue puis revenu.
+  const firstSeen = await readJson<Record<string, string>>(join(LIBRARY, 'history', 'vus.json'), {})
   const today = new Date().toISOString().slice(0, 10)
 
   const entries = skills.map(skill => {
@@ -430,6 +506,7 @@ async function main() {
     const risks = riskOf(skill, verdict)
     const noteJuge = verdict ? noteOf(verdict) : null
     const before = known.get(skill.id)
+    const isStale = !!(fromSonnet ?? fromHaiku)?.isStale
     return {
       skill,
       verdict,
@@ -440,9 +517,10 @@ async function main() {
         chemin_skill: skill.dir,
         skill_md: skill.skillMdPath,
         // Le pin n'avance que si le dossier du skill a changé : ce qui n'a pas bougé reste à la version déjà jugée.
-        sha_epingle: before?.empreinte === skill.empreinte && before?.sha_epingle ? before.sha_epingle : skill.sha,
-        hash_contenu: skill.hash,
-        empreinte: skill.empreinte,
+        // Un jugement raté n'avance pas non plus le pin : le dossier reste à la version déjà jugée.
+        sha_epingle: (isStale || before?.empreinte === skill.empreinte) && before?.sha_epingle ? before.sha_epingle : skill.sha,
+        hash_contenu: isStale ? before?.hash_contenu ?? skill.hash : skill.hash,
+        empreinte: isStale ? before?.empreinte ?? null : skill.empreinte,
         description_originale: skill.description.slice(0, 300),
         resume_fr: resumes.get(skill.id) ?? null,
         description_courte: verdict?.description_courte ? neutre(verdict.description_courte) : null,
@@ -469,9 +547,9 @@ async function main() {
         risque_max_projet: worst(risks, 'projet'),
         bareme: BAREME,
         packs: {} as Record<string, 'recommande' | 'ajout' | 'epingle' | 'ajout_epingle'>,
-        statut: before?.statut ?? (verdict ? 'nouveau' : 'revue_manuelle'),
+        statut: verdict ? 'nouveau' : 'revue_manuelle', // publish.ts décide du statut final
         remplace_par: null,
-        date_ajout: before?.date_ajout ?? today,
+        date_ajout: before?.date_ajout ?? firstSeen[skill.id] ?? today,
         licence: skill.license,
         cout_contexte: skill.description.length,
         officiel: skill.isOfficial,
@@ -482,27 +560,10 @@ async function main() {
     }
   })
 
-  // Têtes du tour précédent (tenants) et contexte donné à Sonnet.
-  type PackFile = { recommandes: { id: string }[]; ajouts?: { id: string }[]; finalistes?: string[] }
-  const previousPacks = new Map<string, PackFile>()
-  for (const type of TYPES) {
-    let previous: PackFile | null = null
-    try {
-      previous = TENANTS_REF
-        ? (JSON.parse(execFileSync('git', ['-C', ROOT, 'show', `${TENANTS_REF}:library/packs/${type}.json`], { encoding: 'utf8' })) as PackFile)
-        : await readJson<PackFile | null>(join(LIBRARY, 'packs', `${type}.json`), null)
-    } catch {}
-    // L'original reprend la place de tenant de sa copie.
-    if (previous) {
-      previousPacks.set(type, {
-        ...previous,
-        recommandes: previous.recommandes.map(item => ({ ...item, id: resolveId(item.id) })),
-        ajouts: previous.ajouts?.map(item => ({ ...item, id: resolveId(item.id) })),
-        finalistes: previous.finalistes?.map(resolveId),
-      })
-    }
-  }
   const rankContext = { stack: Object.keys(profile.stack), exclusions: Object.keys(profile.exclusions ?? {}) }
+  const trustedOwners = new Set(((profile as Profile & { editeurs_confiance?: string[] }).editeurs_confiance ?? []).map(owner => owner.toLowerCase()))
+  const capExceptions = new Set((overrides.plafond_exceptions ?? []).map(repo => repo.toLowerCase()))
+  const capExempt = (repo: string) => capExceptions.has(repo.toLowerCase()) || trustedOwners.has(repo.split('/')[0]!.toLowerCase())
   // Classement en pack : qualité (note du juge) et pertinence, pondérées par le profil.
   const packScore = (entry: { note_qualite: number | null; pertinence: number }) =>
     (entry.note_qualite ?? 0) * profile.poids.qualite + entry.pertinence * profile.poids.pertinence
@@ -513,16 +574,19 @@ async function main() {
     // Tenants : les recommandés du tour précédent (hors épinglés), dans leur ordre.
     const byId = new Map(ranked.map(item => [item.entry.id, item]))
     const previousIds = (previousPacks.get(type)?.recommandes ?? []).map(item => item.id)
-    const tenants = previousIds.map(id => byId.get(id)).filter((item): item is (typeof entries)[number] => !!item && !pinned(type, item.skill) && !pinnedAddition(type, item.skill))
+    const tenants = previousIds.map(id => byId.get(id)).filter((item): item is (typeof entries)[number] => !!item && !pinned(type, item.skill) && !pinnedAddition(type, item.skill) && (item.entry.note_qualite ?? 0) >= 6)
     const lostTenants = previousIds
       .filter(id => !tenants.some(item => item.entry.id === id) && !entries.some(({ entry, skill }) => entry.id === id && (pinned(type, skill) || pinnedAddition(type, skill))))
       .map(id => ({ id, nom: entries.find(({ entry }) => entry.id === id)?.entry.nom ?? id, raison: 'plus éligible pour ce type ou absent de la sélection' }))
     // Finalistes (25 au plus) : épinglés, tenants, puis les meilleurs au score de pack parmi ceux
-    // dont la pertinence est d'au moins 6.
+    // dont la pertinence est d'au moins 6 (4 pour un type sans stack).
+    const minRelevance = STACKLESS_TYPES.has(type) ? 4 : 6
+    const isCapExempt = (repo: string) => capExempt(repo)
+    const repoOfId = (id: string) => byId.get(id)?.entry.repo ?? id
     const finalists = [...new Set([
       ...ranked.filter(item => pinned(type, item.skill)),
       ...tenants,
-      ...ranked.filter(item => item.entry.pertinence >= 6 && (item.entry.note_qualite ?? 0) >= 5),
+      ...ranked.filter(item => item.entry.pertinence >= minRelevance && (item.entry.note_qualite ?? 0) >= 5),
     ])].filter(item => !pinnedAddition(type, item.skill)).slice(0, FINALISTS)
     const tenantIds = new Set(tenants.map(item => item.entry.id))
     const asFinalist = ({ entry }: (typeof entries)[number]): Finalist => ({
@@ -535,8 +599,15 @@ async function main() {
     const finalistIds = finalists.map(item => item.entry.id).sort()
     const isUnchanged = !!previousPack?.finalistes && JSON.stringify([...previousPack.finalistes].sort()) === JSON.stringify(finalistIds)
       && [...previousPack.recommandes, ...(previousPack.ajouts ?? [])].every(item => byId.has(item.id))
+      // Un pack hors des règles se reclasse, même si sa finale n'a pas bougé.
+      && applyRepoCap(previousPack.recommandes.map(item => item.id), repoOfId, isCapExempt, MAX_PER_REPO).length === previousPack.recommandes.length
     const runs: (Ranking | null)[] = []
-    if (!isUnchanged) for (let run = 1; run <= RANK_RUNS; run++) runs.push(rankable.length > 1 ? await rankPack(type, rankable.map(asFinalist), rankContext, run) : null)
+    if (!isUnchanged) {
+      for (let run = 1; run <= RANK_RUNS; run++) {
+        runs.push(rankable.length > 1 ? await rankPack(type, rankable.map(asFinalist), rankContext, run) : null)
+        checkBudget(`le classement de ${type}`)
+      }
+    }
     const done = runs.filter((run): run is Ranking => run !== null)
     const majority = Math.floor(done.length / 2) + 1
     // Décisions retenues à la majorité des tirages : écartés, puis changements (au plus 2).
@@ -560,23 +631,31 @@ async function main() {
     const changelog: { entrant: string; sortant: string | null; raison: string; entrant_id?: string; sortant_id?: string }[] = []
     if (tenants.length) {
       // Avantage au tenant : chacun garde sa place, sauf changement retenu ou tenant écarté.
+      // Au plus MAX_CHANGES décisions de Sonnet par tour, écartés compris ; seul un tenant disparu passe en plus.
       const applied = new Set<string>()
+      const sortants = new Set(lostTenants.map(lost => lost.id))
+      let decisions = 0
       for (const tenant of tenants) {
         const id = tenant.entry.id
         const change = changes.find(item => item.sortant === id && !applied.has(item.entrant) && !head.includes(item.entrant))
-        if (change && changelog.length < MAX_CHANGES) {
+        if (change && decisions < MAX_CHANGES) {
+          decisions++
           head.push(change.entrant)
           applied.add(change.entrant)
+          sortants.add(id)
           changelog.push({ entrant: byId.get(change.entrant)!.entry.nom, sortant: tenant.entry.nom, raison: change.raisons[0]!, entrant_id: change.entrant, sortant_id: id })
-        } else if (removed.has(id)) {
+        } else if (removed.has(id) && decisions < MAX_CHANGES) {
+          decisions++
+          sortants.add(id)
           changelog.push({ entrant: '', sortant: tenant.entry.nom, raison: `écarté : ${removed.get(id)}`, sortant_id: id })
         } else {
           head.push(id)
         }
       }
-      // Places libérées (tenant écarté ou disparu) : le mieux classé par Sonnet qui n'est pas encore en tête.
+      // Places libérées (tenant écarté ou disparu) : le mieux classé par Sonnet qui n'est pas en tête et ne vient pas d'en sortir.
+      const nextUp = () => order.find(id => !head.includes(id) && !sortants.has(id) && !removed.has(id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6)
       for (const freed of changelog.filter(item => !item.entrant)) {
-        const next = order.find(id => !head.includes(id) && !removed.has(id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6)
+        const next = nextUp()
         if (next) {
           head.push(next)
           freed.entrant = byId.get(next)!.entry.nom
@@ -584,7 +663,7 @@ async function main() {
         }
       }
       for (const lost of lostTenants) {
-        const next = order.find(id => !head.includes(id) && !removed.has(id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6)
+        const next = nextUp()
         if (next && head.length < 8) {
           head.push(next)
           changelog.push({ entrant: byId.get(next)!.entry.nom, sortant: lost.nom, raison: lost.raison, entrant_id: next, sortant_id: lost.id })
@@ -594,9 +673,19 @@ async function main() {
       head.push(...order.filter(id => !removed.has(id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6))
     }
     const pins = finalists.filter(item => pinned(type, item.skill))
+    // Plafond par dépôt : les places libérées vont au suivant du classement.
+    const pinIds = pins.map(item => item.entry.id)
+    const spare = order.filter(id => !head.includes(id) && !pinIds.includes(id) && !removed.has(id) && !changelog.some(item => item.sortant_id === id) && (byId.get(id)?.entry.note_qualite ?? 0) >= 6)
+    const capped = applyRepoCap([...pinIds, ...head, ...spare], repoOfId, isCapExempt, MAX_PER_REPO).slice(0, 8)
+    if (!isUnchanged) {
+      for (const id of head) {
+        if (capped.includes(id) || !tenantIds.has(id)) continue
+        changelog.push({ entrant: '', sortant: byId.get(id)!.entry.nom, raison: `plafond de ${MAX_PER_REPO} skills par dépôt`, sortant_id: id })
+      }
+    }
     const recommended = isUnchanged
       ? previousPack!.recommandes.map(item => byId.get(item.id)!)
-      : [...pins, ...head.map(id => byId.get(id)!)].slice(0, 8)
+      : capped.map(id => byId.get(id)!)
     const chosen = new Set(recommended.map(item => item.entry.id))
     // Ajouts garantis : pour chaque motif (ex. SEO), le meilleur skill correspondant hors de la tête.
     const guaranteed = (overrides.ajout_garanti?.[type] ?? [])
@@ -605,11 +694,12 @@ async function main() {
           && new RegExp(rule.motif, 'i').test(`${item.entry.nom} ${item.entry.description_originale}`)))
       .filter((item): item is (typeof entries)[number] => !!item)
     const forcedAdditions = [...ranked.filter(item => pinnedAddition(type, item.skill)), ...guaranteed.filter(item => !pinnedAddition(type, item.skill))]
-    const additions = isUnchanged ? (previousPack!.ajouts ?? []).map(item => byId.get(item.id)!) : [
+    const additions: (typeof entries) = isUnchanged ? (previousPack!.ajouts ?? []).map(item => byId.get(item.id)!) : [
       ...forcedAdditions,
       ...[...order.map(id => byId.get(id)!), ...ranked.filter(item => !finalists.includes(item))]
-        .filter(item => !chosen.has(item.entry.id) && !removed.has(item.entry.id) && !forcedAdditions.includes(item) && item.entry.pertinence >= 6 && (item.entry.note_qualite ?? 0) >= 5),
-    ].slice(0, 12)
+        .filter(item => !chosen.has(item.entry.id) && !removed.has(item.entry.id) && !forcedAdditions.includes(item) && item.entry.pertinence >= minRelevance && (item.entry.note_qualite ?? 0) >= 5),
+    ]
+    const additionsCapped = isUnchanged ? additions : applyRepoCap(additions, item => item.entry.repo, isCapExempt, MAX_PER_REPO).slice(0, 12)
     const headOf = (ordre: string[]) => ordre.filter(id => !removed.has(id)).slice(0, Math.max(1, recommended.length - pins.length))
     const sets = done.map(run => JSON.stringify(headOf(run.ordre).sort()))
     const stabilite = done.length > 1
@@ -618,7 +708,7 @@ async function main() {
     const changements = changelog
     const ecartes = [...removed].map(([id, raison]) => ({ nom: byId.get(id)?.entry.nom ?? id, raison }))
     for (const item of recommended) item.entry.packs[type] = pinned(type, item.skill) ? 'epingle' : 'recommande'
-    for (const item of additions) item.entry.packs[type] = pinnedAddition(type, item.skill) ? 'ajout_epingle' : 'ajout'
+    for (const item of additionsCapped) item.entry.packs[type] = pinnedAddition(type, item.skill) ? 'ajout_epingle' : 'ajout'
     const brief = ({ entry, skill }: (typeof entries)[number]) => ({
       id: entry.id,
       nom: entry.nom,
@@ -637,11 +727,10 @@ async function main() {
       type,
       genere_le: new Date().toISOString(),
       version_juge: VERSION,
-      proposition_auto: true,
       regles:
         'finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ' +
         'ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; ' +
-        '3 skills par dépôt au plus ; épinglages et exclusions dans library/overrides.json',
+        `${MAX_PER_REPO} skills par dépôt au plus, sauf éditeurs de confiance et exceptions ; épinglages et exclusions dans library/overrides.json`,
       moins_de_5_recommandes: recommended.length < 5 || undefined,
       tenants_de: TENANTS_REF ?? 'tour précédent',
       reclasse: !isUnchanged,
@@ -650,7 +739,7 @@ async function main() {
       ecartes,
       stabilite,
       recommandes: recommended.map(brief),
-      ajouts: additions.map(brief),
+      ajouts: additionsCapped.map(brief),
     })
   }
 

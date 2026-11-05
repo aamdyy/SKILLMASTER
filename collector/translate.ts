@@ -157,6 +157,10 @@ async function main() {
     modele: 'haiku',
     textes,
   })
+  // Le coût du tour compte aussi la traduction, qui tourne après publish.ts.
+  const runPath = join(LIBRARY, 'history', 'last-run.json')
+  const run = await readJson<{ cout?: { total: number } & Record<string, number> } | null>(runPath, null)
+  if (run?.cout) await writeJson(runPath, { ...run, cout: { ...run.cout, total: run.cout.total + translateCost.usd, traduction: translateCost.usd } })
   log(`traduction : ${Object.keys(done).length} nouveaux, ${todo.length} échecs (le site garde le français), ${Object.keys(textes).length} en tout, coût ${translateCost.usd.toFixed(2)} $`)
 }
 

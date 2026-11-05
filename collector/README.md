@@ -6,11 +6,10 @@ Il faut Node 24, qui lit le TypeScript sans build, et aucune dépendance. Il fau
 # 1. Découvrir, lire les SKILL.md au commit épinglé, scanner, présélectionner
 GITHUB_TOKEN=$(gh auth token) node collector/fetch.ts --max-skills 450 --min-stars 20 --pushed-months 6
 
-# 2. Juger en deux temps (Haiku sur tout, puis Sonnet sur les finalistes de chaque pack),
-#    puis écrire library/
-node collector/judge.ts --concurrency 5 --finalists 12
+# 2. Noter avec Haiku, ranger chaque pack avec Sonnet, puis écrire library/
+node collector/judge.ts --concurrency 5 --finalists 25 --rank-runs 3 --budget 6
 
-# 3. Cycle de vie, index et récapitulatif
+# 3. Cycle de vie, index, récapitulatif et garde-fous (échoue si le tour est abîmé)
 node collector/publish.ts
 
 # 4. Version anglaise du site : traduire les textes nouveaux ou modifiés
@@ -26,7 +25,8 @@ node collector/calibrate.ts --avant <commit> --min 5
 |---|---|
 | `fetch.ts` | Découverte (topics, recherches par type, marketplace officielle, listes awesome, dépôts de référence), métadonnées, arbres git, lecture des SKILL.md, déduplication, présélection par type, dernier commit par chemin, étoiles sur 30 jours |
 | `scan.ts` | Réexporte le scanner de `plugins/skillmaster/skills/skill-master/scripts/scan.ts`, partagé avec skill-master. Risques détectés sans LLM ni exécution. Un motif trouvé dans un bloc de code d'exemple descend d'un cran, et une phrase d'injection citée pour mettre en garde n'est qu'une mention |
-| `judge.ts` | Grille v2 : 5 sous-notes de 0 à 2 sur le SKILL.md et ses annexes. Types stricts confirmés par la détection, drapeau « choix visuels autonomes » séparé de la note, réserves de qualité séparées des risques de sécurité. Note = note du juge seul. Packs : les 5 à 8 meilleurs par type (note ≥ 6), plus les épinglages |
+| `regles.ts` | Règles pures, testées : plafond par dépôt, déménagements, statut, exclusions de stack, garde-fous avant publication |
+| `judge.ts` | Grille : 5 sous-notes de 0 à 2 sur le SKILL.md et ses annexes. Types stricts confirmés par la détection, drapeau « choix visuels autonomes » séparé de la note, réserves de qualité séparées des risques de sécurité. Note = note du juge seul. Packs : les 5 à 8 meilleurs par type (note ≥ 6), plus les épinglages |
 | `resume.ts` | `resume_fr` : une phrase, 15 mots au plus, « ce qu'il fait → ce qu'il améliore ». Troisième temps du juge (Sonnet pour les finalistes, Haiku pour les autres). `node collector/resume.ts --archive` remplit aussi le manifeste de la bibliothèque locale |
 | `publish.ts` | Après le juge : cycle de vie (archive des skills disparus du tour qui comptaient, `remplace_par`), index léger `library/index/<type>.json` pour skill-master, récapitulatif `library/RECAP.md`, signal « tête changée » pour l'issue |
 | `translate.ts` | Version anglaise du site : Haiku traduit par lots les textes affichés (résumés, jugements, réserves, alertes, raisons, critères de détection). La table `library/i18n/en.json` est indexée par l'empreinte du texte français : seuls les textes nouveaux ou modifiés sont traduits, ceux qui disparaissent sont retirés. Sans traduction, le site garde le français |
@@ -39,7 +39,7 @@ Les décisions d'Amdy (épinglages, « jamais », exclusions) sont dans `library
 
 ## Sécurité
 
-- Le contenu des skills tiers est lu comme du texte, **jamais exécuté**. Il est gardé dans `collector/.cache/`, qui n'est pas versionné, et n'est jamais copié dans `library/`.
+- Le contenu des skills tiers est lu comme du texte, **jamais exécuté**. Il est gardé dans `collector/.cache/`, qui n'est pas versionné. Dans `library/`, seuls les 300 premiers caractères de la description d'origine sont repris.
 - Le juge n'a **aucun outil, aucun hook, aucun MCP**, ne garde aucun transcript, et lit le SKILL.md comme une donnée non fiable.
 - Aucun secret dans le code : le jeton GitHub vient de `gh auth token`, et le juge passe par la session `claude` d'Amdy.
 - L'usage réel d'Amdy ne quitte pas sa machine : `node collector/usage.ts` l'écrit dans `docs/local/usage-amdy.json`, ignoré par git. Il n'entre ni dans la note ni dans le classement des packs.
@@ -51,6 +51,6 @@ Les décisions d'Amdy (épinglages, « jamais », exclusions) sont dans `library
 - `claude --bare` (`SM_CLAUDE_BARE=1`).
 
 Le coût reste minimal parce que trois choses sont réutilisées :
-- **les verdicts et les résumés déjà publiés dans `library/skills.json`** (même hash, même grille), qui servent de cache durable même quand le cache des Actions a expiré ;
+- **les verdicts déjà publiés dans `library/skills.json`** (même empreinte de dossier, même grille) et les résumés (même `SKILL.md`), qui servent de cache durable même quand le cache des Actions a expiré ;
 - **la tête et les ajouts d'un pack** quand sa finale n'a pas changé, sans appel à Sonnet ;
 - **les traductions anglaises** de `library/i18n/en.json`, par empreinte du texte français.

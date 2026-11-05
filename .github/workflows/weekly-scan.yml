@@ -54,7 +54,7 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SM_CLAUDE_BARE: '1'
-        run: node collector/judge.ts --concurrency 6 --finalists 25 --rank-runs 3
+        run: node collector/judge.ts --concurrency 6 --finalists 25 --rank-runs 3 --budget 6
 
       - name: Cycle de vie, index et récapitulatif
         run: node collector/publish.ts >> "$GITHUB_STEP_SUMMARY"

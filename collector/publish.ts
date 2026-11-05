@@ -1,7 +1,8 @@
 // Après le juge : cycle de vie, index léger pour skill-master, récapitulatif hebdomadaire.
 // Compare la bibliothèque produite au dernier commit (HEAD).
-//   - library/skills.json : statut « archive » (disparu du tour alors qu'il était dans un pack :
-//     dépôt archivé, sans push depuis 6 mois ou sous le seuil), remplace_par.
+//   - library/skills.json : statut (âge et note), archive durable d'un skill sorti d'un pack avec la
+//     vraie raison de son absence, remplace_par pour une copie ou un déménagement.
+//   - garde-fous : un tour abîmé échoue ici, avant la publication (--force pour passer outre).
 //   - library/index/<type>.json : les skills de chaque pack, avec juste ce qu'il faut pour les proposer.
 //   - library/RECAP.md : changements de têtes et raisons, lisible en 30 secondes.
 //
@@ -10,6 +11,7 @@ import { execFileSync } from 'node:child_process'
 import { readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { CACHE, LIBRARY, ROOT, readJson, writeJson } from './lib.ts'
+import { absenceReason, checkFloors, checkSchema, statutOf, type RepoEtat } from './regles.ts'
 import { BAREME, isTrustedPublisher } from './scan.ts'
 
 type Risk = { code: string; gravite: string; source: string; detail?: string; categorie?: string; gravite_projet?: string }
@@ -37,7 +39,7 @@ type Skill = {
 type PackItem = { id: string; nom: string }
 type Pack = {
   type: string
-  recommandes: PackItem[]
+  recommandes: (PackItem & { repo?: string })[]
   ajouts: PackItem[]
   changements?: { entrant: string; sortant: string | null; raison: string; entrant_id?: string; sortant_id?: string }[]
   ecartes?: { nom: string; raison: string }[]
@@ -60,37 +62,51 @@ const previousPacks = types.map(type => fromHead<Pack>(`library/packs/${type}.js
 const run = await readJson<{ le?: string; duree_min?: number; cout?: { total: number } } | null>(join(CACHE, 'last-run.json'), null)
 const overrides = await readJson<{ jamais?: string[] }>(join(LIBRARY, 'overrides.json'), {})
 // Copies de skills des packs remplacées par la version de l'éditeur d'origine (collector/fetch.ts).
-const alias = (await readJson<{ alias?: Record<string, string> }>(join(CACHE, 'selection.json'), {})).alias ?? {}
+const selection = await readJson<{ alias?: Record<string, string>; moved?: Record<string, string>; repoEtat?: Record<string, RepoEtat> }>(join(CACHE, 'selection.json'), {})
+const alias = selection.alias ?? {}
+const moved = selection.moved ?? {}
+const repoEtat = selection.repoEtat ?? {}
 const never = new Set((overrides.jamais ?? []).map(name => name.toLowerCase()))
 const profile = await readJson<{ editeurs_confiance?: string[] }>(join(LIBRARY, 'profil.json'), {})
 const trusted = new Set((profile.editeurs_confiance ?? []).map(owner => owner.toLowerCase()))
 
 // Cycle de vie. L'inactivité se juge au niveau du dépôt : le collecteur écarte déjà les dépôts
-// sans push depuis 6 mois. Un skill qui disparaît du tour alors qu'il comptait (dans un pack)
-// passe en archive ; un vieux dossier dans un dépôt vivant n'est pas archivé. Un skill de la
-// liste « jamais » d'Amdy est archivé pour cette raison-là, même s'il était déjà archivé.
+// sans push depuis 6 mois. Un skill qui disparaît du tour alors qu'il était dans un pack passe en
+// archive, et y reste : sa fiche ne devient pas une 404 au tour suivant. Un vieux dossier dans un
+// dépôt vivant n'est pas archivé. Un skill de la liste « jamais » est archivé, présent ou non.
 const archived: { nom: string; raison: string }[] = []
 const present = new Set(library.skills.map(skill => skill.id))
 const byIdNow = new Map(library.skills.map(skill => [skill.id, skill]))
 for (const old of before.skills) {
   if (present.has(old.id)) continue
-  const mattered = Object.keys(old.packs ?? {}).length > 0
+  const mattered = Object.keys(old.packs ?? {}).length > 0 || old.statut === 'archive'
   if (!mattered) continue
   const origin = alias[old.id] ? byIdNow.get(alias[old.id]!) : undefined
   const raison = never.has(old.nom.toLowerCase())
     ? 'liste « jamais » (library/overrides.json) : jamais proposé'
-    : origin ? `copie de ${origin.repo}/${origin.chemin_skill} : la version de l’éditeur d’origine la remplace`
-    : old.statut === 'archive' ? old.raison_statut : 'absent de ce tour (dépôt archivé, sous le seuil, ou skill supprimé)'
-  library.skills.push({ ...old, statut: 'archive', raison_statut: raison, packs: {}, ...(origin ? { remplace_par: origin.nom } : {}) })
+    : origin ? (moved[old.id] ? `déplacé vers ${origin.repo}/${origin.chemin_skill}` : `copie de ${origin.repo}/${origin.chemin_skill} : la version de l’éditeur d’origine la remplace`)
+    : old.statut === 'archive' ? old.raison_statut : absenceReason(repoEtat[old.repo.toLowerCase()])
+  library.skills.push({ ...old, statut: 'archive', raison_statut: raison, packs: {}, remplace_par: origin ? origin.nom : old.remplace_par ?? null })
   if (old.statut !== 'archive') archived.push({ nom: old.nom, raison: raison ?? '' })
 }
-const byId = new Map(library.skills.map(skill => [skill.id, skill]))
-for (const pack of packs) {
-  for (const change of pack.changements ?? []) {
-    const out = change.sortant_id ? byId.get(change.sortant_id) : undefined
-    if (out && change.entrant) out.remplace_par = change.entrant
-  }
+// Statut des skills présents : il repart à zéro à chaque tour, un revenant n'est donc plus « archivé ».
+for (const skill of library.skills) {
+  if (!present.has(skill.id)) continue
+  skill.statut = statutOf(skill, today, never)
+  delete skill.raison_statut
+  skill.remplace_par = null
+  if (skill.statut !== 'archive') continue
+  skill.raison_statut = 'liste « jamais » (library/overrides.json) : jamais proposé'
+  skill.packs = {}
+  const was = before.skills.find(old => old.id === skill.id)
+  if (was && was.statut !== 'archive') archived.push({ nom: skill.nom, raison: skill.raison_statut })
 }
+const byId = new Map(library.skills.map(skill => [skill.id, skill]))
+// Première apparition de chaque skill : un revenant retrouve sa date (collector/judge.ts).
+const firstSeenPath = join(LIBRARY, 'history', 'vus.json')
+const firstSeen = await readJson<Record<string, string>>(firstSeenPath, {})
+for (const skill of library.skills) firstSeen[skill.id] ??= skill.date_ajout
+await writeJson(firstSeenPath, Object.fromEntries(Object.entries(firstSeen).sort(([a], [b]) => a.localeCompare(b))))
 await writeJson(join(LIBRARY, 'skills.json'), library)
 
 // Index léger. Il transporte toutes les alertes, notées avec le barème partagé : skill-master
@@ -169,3 +185,13 @@ await writeJson(join(LIBRARY, 'history', 'last-run.json'), {
 })
 
 console.log(recap)
+
+// Garde-fous : le job s'arrête ici, et library/ n'est pas publiée.
+if (!process.argv.includes('--force')) {
+  const asFloor = (list: Skill[]) => list.map(skill => ({ ...skill, packs: skill.packs ?? {} }))
+  const problems = [...checkSchema(asFloor(library.skills), packs), ...checkFloors(asFloor(before.skills), asFloor(library.skills), previousPacks, packs)]
+  if (problems.length) {
+    console.log(`\n**Publication refusée :**\n${problems.slice(0, 30).map(problem => `- ${problem}`).join('\n')}${problems.length > 30 ? `\n- … et ${problems.length - 30} autres` : ''}`)
+    process.exitCode = 1
+  }
+}
