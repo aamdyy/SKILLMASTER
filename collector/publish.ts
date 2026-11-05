@@ -4,11 +4,10 @@
 //     dépôt archivé, sans push depuis 6 mois ou sous le seuil), remplace_par.
 //   - library/index/<type>.json : les skills de chaque pack, avec juste ce qu'il faut pour les proposer.
 //   - library/RECAP.md : changements de têtes et raisons, lisible en 30 secondes.
-//   - collector/out/issue.md et la sortie `tete_changee` (GitHub Actions) si une tête change.
 //
 //   node collector/publish.ts
 import { execFileSync } from 'node:child_process'
-import { appendFile, mkdir, readdir, writeFile } from 'node:fs/promises'
+import { readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { CACHE, LIBRARY, ROOT, readJson, writeJson } from './lib.ts'
 import { BAREME, isTrustedPublisher } from './scan.ts'
@@ -77,7 +76,7 @@ for (const old of before.skills) {
   if (!mattered) continue
   const origin = alias[old.id] ? byIdNow.get(alias[old.id]!) : undefined
   const raison = never.has(old.nom.toLowerCase())
-    ? 'liste « jamais » d’Amdy (library/overrides.json) : jamais proposé'
+    ? 'liste « jamais » (library/overrides.json) : jamais proposé'
     : origin ? `copie de ${origin.repo}/${origin.chemin_skill} : la version de l’éditeur d’origine la remplace`
     : old.statut === 'archive' ? old.raison_statut : 'absent de ce tour (dépôt archivé, sous le seuil, ou skill supprimé)'
   library.skills.push({ ...old, statut: 'archive', raison_statut: raison, packs: {}, ...(origin ? { remplace_par: origin.nom } : {}) })
@@ -145,7 +144,7 @@ for (const { pack, moved } of headChanges) {
   for (const change of pack.changements ?? []) lines.push(`- ${change.sortant ?? '—'} → **${change.entrant || '—'}** : ${change.raison}`)
   const swaps = (previousPacks[packs.indexOf(pack)]?.recommandes ?? []).filter(item => alias[item.id])
   for (const item of swaps) lines.push(`- ${item.nom} → **${byIdNow.get(alias[item.id]!)?.nom ?? alias[item.id]}** : version de l’éditeur d’origine à la place d’une copie`)
-  if (!(pack.changements ?? []).length && !swaps.length) lines.push('- composition modifiée (épinglage ou règle d’Amdy)')
+  if (!(pack.changements ?? []).length && !swaps.length) lines.push('- composition modifiée (épinglage ou règle de library/overrides.json)')
   lines.push('')
 }
 const removed = packs.flatMap(pack => (pack.ecartes ?? []).map(item => `${item.nom} (${pack.type})`))
@@ -167,9 +166,4 @@ await writeJson(join(LIBRARY, 'history', 'last-run.json'), {
   archives: archived.length,
 })
 
-if (changed.length) {
-  await mkdir(join(ROOT, 'collector', 'out'), { recursive: true })
-  await writeFile(join(ROOT, 'collector', 'out', 'issue.md'), recap)
-}
-if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT, `tete_changee=${changed.length ? 'true' : 'false'}\n`)
 console.log(recap)
