@@ -229,6 +229,7 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **Routeur :** socle de 2 à 3 skills après déduplication, puis un indice par prompt, tiré d'une réserve de skills sans question de risque. Le contenu n'arrive que si Claude appelle l'outil. Une ligne discrète signale chaque indice. Jamais de skill du radar.
   - **Nano-règles à l'essai :** règles filtrées (ni URL, ni chemin, ni commande), coupées si moins de 70 % de 50 injections relues sont pertinentes.
   - **Pin :** il n'avance que si l'empreinte du dossier du skill change, et après un nouveau scan et un nouveau jugement.
+  - **Barème b2 (remplace b1) :** il mesure ce qui peut agir selon le mode, car un skill en session n'est que du texte. Les annexes et les scripts sont scannés ; une annexe pose une question sans écarter le skill. Les alertes réseau et exécution du juge passent en « moyen », une ligne sans question. Sur le catalogue : « élevé » passe de 262 à 32 skills, « critique » de 37 à 14.
   - **Risque :** les hooks restent critiques pour tout le monde. Éditeurs de confiance : sans question en session, confirmation avec licence pour garder dans le projet. Alerte GPL, AGPL ou licence absente à la copie.
   - **Plafond par dépôt :** aucun pour les éditeurs officiels et de confiance, 2 pour les autres, exception `chrisbanes/skills`.
   - **Packs :** ajout de `methode` (relecture, débogage, tests) et de `radar-viral` (hors détection). Pack data recentré sur Supabase/Postgres, DuckDB, pandas.
