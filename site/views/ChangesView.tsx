@@ -54,7 +54,7 @@ export function ChangesView({ lang }: { lang: Lang }) {
         <Container>
           <ol className="flex flex-col">
             {tours.map((tour, index) => (
-              <li key={tour.date} className="grid grid-cols-[1.25rem_1fr] gap-x-5 md:grid-cols-[9rem_1.25rem_1fr]">
+              <li key={tour.date} className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-5 md:grid-cols-[9rem_1.25rem_minmax(0,1fr)]">
                 <p className="hidden pt-1 caps text-[12px] text-muted md:block">{formatDate(tour.date, lang)}</p>
                 <div aria-hidden className="relative flex justify-center">
                   <span className="absolute inset-y-0 w-px bg-line-strong" />

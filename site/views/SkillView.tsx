@@ -227,7 +227,7 @@ export function SkillView({ lang, skill }: { lang: Lang; skill: Skill | null }) 
 
       <Section labelledBy="titre-jugement">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-16">
-          <div className="flex flex-col gap-6">
+          <div className="flex min-w-0 flex-col gap-6 break-words">
             <Label as="h2" id="titre-jugement">{t.judgement}</Label>
             {skill.justification ? (
               <Translated lang={lang} text={skill.justification} className="text-[17px] leading-relaxed text-fg/90" />

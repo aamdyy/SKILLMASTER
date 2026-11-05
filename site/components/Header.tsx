@@ -30,7 +30,7 @@ export function Header({ lang }: { lang: Lang }) {
         </div>
         <nav aria-label={lang === 'en' ? 'Main navigation' : 'Navigation principale'} className="order-last -mx-3 flex w-[calc(100%+1.5rem)] overflow-x-auto md:order-none md:mx-0 md:mr-auto md:w-auto">
           {NAV[lang].map(item => (
-            <Link key={item.href} href={item.href} className="flex h-11 shrink-0 items-center px-3 font-mono text-[12.5px] uppercase tracking-[0.06em] text-fg/75 transition-colors duration-150 hover:text-fg">
+            <Link key={item.href} href={item.href} prefetch={false} className="flex h-11 shrink-0 items-center px-3 font-mono text-[12.5px] uppercase tracking-[0.06em] text-fg/75 transition-colors duration-150 hover:text-fg">
               {item.label}
             </Link>
           ))}

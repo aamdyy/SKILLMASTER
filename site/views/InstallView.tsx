@@ -32,7 +32,7 @@ const T: Record<Lang, {
       label: 'Avant de commencer',
       title: 'Trois prérequis.',
       items: [
-        'Claude Code 2.1.287 ou plus récent, la version qui a apporté les mods (en accès anticipé). Le plugin est testé avec la 2.1.304. Vérifie avec `claude --version`, mets à jour avec `claude update`.',
+        'Claude Code 2.1.287 ou plus récent, la version qui a apporté les mods (en accès anticipé). Le plugin est testé avec la 2.1.318. Vérifie avec `claude --version`, mets à jour avec `claude update`.',
         'Node 24 ou plus récent : le plugin s’en sert pour télécharger et vérifier les skills. Vérifie avec `node --version`.',
         'Conseillé : une session GitHub, avec `gh auth login` ou une variable `GITHUB_TOKEN`. Sans jeton, l’API GitHub s’arrête à 60 requêtes par heure.',
       ],
@@ -51,11 +51,11 @@ const T: Record<Lang, {
       legend: 'le dialogue',
       items: [
         ['Charger pour la session', 'recommandé : rien n’est écrit dans le projet. Les skills sont téléchargés à leur version épinglée dans `~/.cache/skillmaster/`.'],
-        ['Garder pour ce projet', 'copie les skills dans `.claude/skills/` du projet.'],
+        ['Garder pour ce projet', 'copie les skills dans `.claude/skills/` du projet. Une question s’affiche s’il reste un risque, ou si la licence est à vérifier.'],
         ['Choisir moi-même', 'le panneau montre chaque résumé en entier ; tape les numéros (`1 3 12`, `2-5`).'],
         ['Ne plus proposer dans ce projet', '`/sm check` reste disponible.'],
       ],
-      escape: 'Échap : rien n’est chargé.',
+      escape: 'Échap : rien n’est chargé. Dans `/sm check`, la dernière option devient « Ne rien charger », ou « Reprendre la proposition auto ici » si elle est coupée.',
     },
     triggers: {
       label: 'Au quotidien',
@@ -100,9 +100,11 @@ const T: Record<Lang, {
       label: 'Sécurité',
       title: 'Rien ne s’installe sans toi.',
       items: [
-        'Chaque skill est téléchargé à son commit épinglé, puis relu par le scan de sécurité avant d’être chargé.',
-        'Un risque critique n’est jamais chargé. Un risque élevé attend ta réponse, en une seule question pour toute la sélection ; chez un éditeur de confiance, il s’affiche en une ligne.',
+        'Chaque skill est téléchargé à son commit épinglé, puis scanné sur ta machine avant d’être chargé : son SKILL.md, ses annexes et ses scripts.',
+        'Un risque critique n’est jamais chargé, quel que soit l’éditeur. Un risque élevé attend ta réponse, en une seule question pour toute la sélection ; chez un éditeur de confiance, il s’affiche en une ligne, comme un risque moyen.',
+        'Garder un skill dans un projet le rend natif. Une question s’affiche donc s’il reste un risque, ou si sa licence est à vérifier (GPL, AGPL, absente). La copie retire hooks, bin, .mcp.json, CLAUDE.md et .claude.',
         'Le plugin n’exécute rien de ce qu’il télécharge et n’installe jamais de mod tiers.',
+        'Un scan réduit le risque, il ne prouve pas qu’un skill est sûr. Relis ce que tu gardes dans un projet.',
       ],
     },
     maintain: {
@@ -117,12 +119,12 @@ const T: Record<Lang, {
     title: 'Install',
     description: 'Install the SKILLMASTER plugin in Claude Code: requirements, two commands, first run, /sm commands and settings.',
     h1: 'Install SKILLMASTER in Claude Code.',
-    intro: 'One plugin, two commands. Then, whenever you start a project or send a long prompt, SKILLMASTER suggests the matching pack. Nothing gets loaded without your approval.',
+    intro: 'One plugin, two commands. Then, whenever you start a project or send a long prompt, SKILLMASTER suggests the matching pack. Nothing gets loaded without your approval. The plugin speaks French for now.',
     before: {
       label: 'Before you start',
       title: 'Three requirements.',
       items: [
-        'Claude Code 2.1.287 or later, the version that brought mods (in early access). The plugin is tested with 2.1.304. Check with `claude --version`, update with `claude update`.',
+        'Claude Code 2.1.287 or later, the version that brought mods (in early access). The plugin is tested with 2.1.318. Check with `claude --version`, update with `claude update`.',
         'Node 24 or later: the plugin uses it to download and check skills. Check with `node --version`.',
         'Recommended: a GitHub session, with `gh auth login` or a `GITHUB_TOKEN` variable. Without a token, the GitHub API stops at 60 requests per hour.',
       ],
@@ -140,12 +142,12 @@ const T: Record<Lang, {
     choices: {
       legend: 'the dialog',
       items: [
-        ['Load for the session', 'recommended: nothing is written to the project. Skills are downloaded at their pinned version into `~/.cache/skillmaster/`.'],
-        ['Keep for this project', 'copies the skills into the project’s `.claude/skills/`.'],
-        ['Choose myself', 'the panel shows each full summary; type the numbers (`1 3 12`, `2-5`).'],
-        ['Stop suggesting in this project', '`/sm check` stays available.'],
+        ['Charger pour la session', 'load for the session, recommended: nothing is written to the project. Skills are downloaded at their pinned version into `~/.cache/skillmaster/`.'],
+        ['Garder pour ce projet', 'keep for this project: copies the skills into the project’s `.claude/skills/`. A question appears if a risk remains, or if the license needs checking.'],
+        ['Choisir moi-même', 'choose myself: the panel shows each full summary; type the numbers (`1 3 12`, `2-5`).'],
+        ['Ne plus proposer dans ce projet', 'stop suggesting in this project: `/sm check` stays available.'],
       ],
-      escape: 'Esc: nothing is loaded.',
+      escape: 'Esc: nothing is loaded. In `/sm check`, the last option becomes “Ne rien charger” (load nothing), or “Reprendre la proposition auto ici” (resume suggestions here) if they are off.',
     },
     triggers: {
       label: 'Day to day',
@@ -190,9 +192,11 @@ const T: Record<Lang, {
       label: 'Security',
       title: 'Nothing installs without you.',
       items: [
-        'Each skill is downloaded at its pinned commit, then checked again by the security scan before it loads.',
-        'A critical risk never loads. A high risk waits for your answer, in a single question for the whole selection; for a trusted publisher, it shows as a single line.',
+        'Each skill is downloaded at its pinned commit, then scanned on your machine before it loads: its SKILL.md, its annexes and its scripts.',
+        'A critical risk never loads, whatever the publisher. A high risk waits for your answer, in a single question for the whole selection; for a trusted publisher, it shows as a single line, like a medium risk.',
+        'Keeping a skill in a project makes it native. So a question appears if a risk remains, or if its license needs checking (GPL, AGPL, missing). The copy removes hooks, bin, .mcp.json, CLAUDE.md and .claude.',
         'The plugin runs nothing it downloads and never installs a third-party mod.',
+        'A scan reduces the risk, it doesn’t prove that a skill is safe. Review what you keep in a project.',
       ],
     },
     maintain: {
@@ -373,7 +377,7 @@ export function InstallView({ lang }: { lang: Lang }) {
             </div>
             <div className="flex min-w-0 flex-col gap-3">
               <p className="text-[15px] text-fg/85">{t.maintain.remove}</p>
-              <CodeBlock lang={lang} lines={['claude plugin uninstall skillmaster@skillmaster', 'claude plugin marketplace remove skillmaster', 'chmod -R u+w ~/.cache/skillmaster && rm -rf ~/.cache/skillmaster']} />
+              <CodeBlock lang={lang} lines={['claude plugin uninstall skillmaster@skillmaster', 'claude plugin marketplace remove skillmaster', 'chmod -R u+w ~/.cache/skillmaster', 'rm -rf ~/.cache/skillmaster']} />
             </div>
           </div>
         </div>

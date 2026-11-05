@@ -22,6 +22,7 @@ type Skill = {
   chemin_skill: string
   skill_md: string
   sha_epingle: string
+  editeur_confiance?: boolean
   empreinte?: string
   licence?: string | null
   resume_fr: string | null
@@ -101,6 +102,8 @@ for (const skill of library.skills) {
   const was = before.skills.find(old => old.id === skill.id)
   if (was && was.statut !== 'archive') archived.push({ nom: skill.nom, raison: skill.raison_statut })
 }
+// Le site affiche ce badge sur toutes les fiches, sans lire profil.json.
+for (const skill of library.skills) skill.editeur_confiance = isTrustedPublisher(skill.repo, skill.chemin_skill, trusted)
 const byId = new Map(library.skills.map(skill => [skill.id, skill]))
 // Première apparition de chaque skill : un revenant retrouve sa date (collector/judge.ts).
 const firstSeenPath = join(LIBRARY, 'history', 'vus.json')

@@ -38,6 +38,7 @@ export type Skill = {
   risques: Risque[]
   risqueMax: Gravite | null
   packs: Record<string, string>
+  editeurConfiance: boolean
   statut: string
   remplacePar: string | null
   raisonStatut: string | null
@@ -105,6 +106,7 @@ type RawSkill = {
   id: string; nom: string; repo: string; chemin_skill: string; skill_md: string; sha_epingle: string
   resume_fr: string | null; description_courte: string | null; description_originale: string; type_principal: string | null
   categories: string[]; stars: number; dernier_commit: string | null; note_juge: number | null; sous_notes: SousNotes | null
+  editeur_confiance?: boolean
   justification: string | null; reserves?: string[]; risques: Risque[]; risque_max: Gravite | null; packs?: Record<string, string>
   statut: string; remplace_par: string | null; raison_statut?: string; officiel: boolean; licence: string | null; date_ajout: string
 }
@@ -132,6 +134,7 @@ export const getSkills = once((): Skill[] => {
     risques: raw.risques,
     risqueMax: raw.risque_max,
     packs: raw.packs ?? {},
+    editeurConfiance: raw.editeur_confiance ?? false,
     statut: raw.statut,
     remplacePar: raw.remplace_par,
     raisonStatut: raw.raison_statut ?? null,
@@ -194,8 +197,8 @@ export const getPacks = once((): Pack[] =>
 
 export const getPack = (type: string) => getPacks().find(pack => pack.type === type) ?? null
 
-// Éditeurs de confiance, d'après l'index publié (jamais profil.json).
-export const getTrustedIds = once(() => new Set(getPacks().flatMap(pack => [...pack.recommandes, ...pack.ajouts].filter(item => item.confiance).map(item => item.id))))
+// Éditeurs de confiance, d'après les fiches et l'index publiés (jamais profil.json).
+export const getTrustedIds = once(() => new Set([...getSkills().filter(skill => skill.editeurConfiance).map(skill => skill.id), ...getPacks().flatMap(pack => [...pack.recommandes, ...pack.ajouts].filter(item => item.confiance).map(item => item.id))]))
 
 // Places d'un skill dans les packs : « n° 3 en tête de Site web », « ajout de Data »…
 export const placesOf = (id: string) =>

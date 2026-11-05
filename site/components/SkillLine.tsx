@@ -12,6 +12,7 @@ export function SkillLine({ skill, place, dense = false, lang = 'fr' }: { skill:
   return (
     <Link
       href={skillHref(skill, lang)}
+      prefetch={false}
       className={`group grid gap-x-6 gap-y-3 px-5 transition-colors duration-150 hover:bg-panel md:grid-cols-[3rem_minmax(0,16rem)_minmax(0,1fr)] md:px-6 ${dense ? 'py-5' : 'py-6'}`}
     >
       <span className="font-mono text-[13px] text-muted tabular md:pt-0.5">{String(place.rang).padStart(2, '0')}</span>

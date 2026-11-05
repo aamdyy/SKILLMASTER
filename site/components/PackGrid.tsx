@@ -41,7 +41,7 @@ export function PackGrid({ packs, total, lang = 'fr' }: { packs: Pack[]; total: 
       ))}
       <li className="bg-bg">
         <Reveal index={packs.length} className="h-full">
-          <Link href={href.skills(lang)} className="group flex h-full min-h-40 flex-col justify-between gap-5 bg-panel p-6 sm:min-h-60 transition-colors duration-200 hover:bg-panel-2">
+          <Link href={href.skills(lang)} prefetch={false} className="group flex h-full min-h-40 flex-col justify-between gap-5 bg-panel p-6 sm:min-h-60 transition-colors duration-200 hover:bg-panel-2">
             <div className="flex items-start justify-between font-mono text-[11px] text-muted">
               <span>ALL</span>
               <span aria-hidden className="text-subtle transition-[color,transform] duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-fg">↗</span>

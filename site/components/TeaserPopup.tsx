@@ -24,6 +24,9 @@ export function TeaserPopup({ src, poster, text, install }: { src: string; poste
       if (!seen) localStorage.setItem(SEEN, '1')
     } catch {}
     if (seen) return
+    // Pas de fenêtre qui s'impose à qui a demandé moins de mouvement ou moins de données.
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || connection?.saveData) return
     const timer = setTimeout(() => node.showModal(), 700)
     return () => clearTimeout(timer)
   }, [])
@@ -35,7 +38,7 @@ export function TeaserPopup({ src, poster, text, install }: { src: string; poste
       onClick={event => event.target === dialog.current && dialog.current?.close()}
       className="teaser-dialog m-auto w-[min(1080px,calc(100vw-2rem))] max-w-none overflow-visible bg-transparent p-0 text-fg backdrop:bg-bg/85 backdrop:backdrop-blur-sm"
     >
-      <div className="relative border border-line-strong bg-bg">
+      <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col border border-line-strong bg-bg">
         <span aria-hidden className="frame-marks" />
         <div className="flex items-center justify-between gap-4 border-b border-line px-3 py-2 md:px-4">
           <span className="label-code text-[12px]">
@@ -52,7 +55,7 @@ export function TeaserPopup({ src, poster, text, install }: { src: string; poste
             </form>
           </div>
         </div>
-        <div className="p-2 md:p-3">
+        <div className="min-h-0 overflow-y-auto p-2 md:p-3">
           <Teaser src={src} poster={poster} text={text} />
           <p className="px-1 pb-1 pt-3 text-[13px] leading-relaxed text-muted md:px-0">{text.caption}</p>
         </div>
