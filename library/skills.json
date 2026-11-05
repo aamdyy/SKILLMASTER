@@ -2994,7 +2994,7 @@
       "justification": "Skill officiel Google, ciblé sur le GQL BigQuery, avec pièges réels (WHERE vs FILTER, racine GRAPH_EXPAND, AGG). Déclenchement précis, règles testables, annexes cohérentes.",
       "reserves": [
         "Fonctionnalités récentes (semantic graph, GRAPH_EXPAND, recherche hybride) : à revérifier selon la disponibilité BigQuery de chaque projet.",
-        "Niche : utile seulement si Amdy interroge des graphes BigQuery, ce qui n'apparaît pas dans son profil actuel."
+        "Niche : utile seulement si l'utilisateur interroge des graphes BigQuery, ce qui n'apparaît pas dans son profil actuel."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "haute",
@@ -4322,7 +4322,7 @@
         "Le CLI caveman (caveman learn, caveman mem) n'est pas fourni : les commandes citées ne sont pas vérifiables ici.",
         "L'annexe ../../mem/CLAUDE.md (cavemem) et ../caveman-explore/SKILL.md sont citées mais absentes.",
         "Les tests (tests/index.js, tests/skill-file.test.mjs) ne sont pas fournis, donc leur couverture n'est pas vérifiée.",
-        "Utilité limitée à qui utilise déjà caveman ; le skill suppose une installation du CLI que Amdy n'a pas forcément."
+        "Utilité limitée à qui utilise déjà caveman ; le skill suppose une installation du CLI que l'utilisateur n'a pas forcément."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -11742,7 +11742,7 @@
       "reserves": [
         "Annexes tronquées dans la version fournie : endpoint-and-exporter.md (5000 caractères sur 7274) et span-attributes.md (5000 sur 6112). La fin, dont « Export Only AI Spans », n'a pas pu être vérifiée.",
         "templates/confident_otel_setup.py est cité mais n'est pas fourni : son contenu et son éventuel code exécutable ne sont pas jugés.",
-        "Hors du périmètre Claude Code : utile seulement si Amdy instrumente une app IA avec OpenTelemetry et Confident AI. Le skill ne sert pas à construire avec Claude.",
+        "Hors du périmètre Claude Code : utile seulement si l'utilisateur instrumente une app IA avec OpenTelemetry et Confident AI. Le skill ne sert pas à construire avec Claude.",
         "Le skill est une fiche de référence : aucune vérification de version du SDK OpenTelemetry ni du endpoint actuel n'est possible depuis le contenu seul."
       ],
       "choix_visuels_autonomes": false,
@@ -13169,7 +13169,7 @@
       "confiance": "moyenne",
       "risques": [
         {
-          "code": "Par défaut, trackio.init avec space_id crée un Space public : les métriques (et la config) partent chez un tiers (Hugging Face) et peuvent être exposées si l'Amdy ne passe pas private=True.",
+          "code": "Par défaut, trackio.init avec space_id crée un Space public : les métriques (et la config) partent chez un tiers (Hugging Face) et peuvent être exposées si l'utilisateur ne passe pas private=True.",
           "gravite": "moyen",
           "source": "juge",
           "categorie": "donnees"
@@ -20589,7 +20589,7 @@
       "reserves": [
         "Fichiers absents du bundle : ../blog/references/visual-media.md et orchestration-details.md, dont dépend le skill pour fonctionner.",
         "Annexe references/chart-input-schema.md tronquée (5000 sur 5486 caractères).",
-        "Skill interne (user-invocable false) lié à un écosystème blog, hors des types de projets suivis par Amdy.",
+        "Skill interne (user-invocable false) lié à un écosystème blog, hors des types de projets suivis par l'utilisateur.",
         "Palette et police (Inter) imposées sans demander, ce qui contredit la règle Figma d'abord."
       ],
       "choix_visuels_autonomes": true,
@@ -22734,7 +22734,7 @@
       "reserves": [
         "Seules 4 annexes sur 24 sont fournies, et elles sont tronquées à 5000 caractères : une grande partie du contenu n'a pas pu être vérifiée.",
         "Le périmètre couvre des sujets très différents (JNA, signature macOS, détection de VM Windows, BuildKonfig) : le skill ressemble à une collection de notes plutôt qu'à un sujet net.",
-        "Le skill et ses annexes sont en anglais, alors que l'environnement de Amdy est francophone."
+        "Le skill et ses annexes sont en anglais, alors que l'environnement de l'utilisateur est francophone."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -22943,7 +22943,7 @@
       "note_qualite": 9,
       "justification": "Déclenchement net et commandes exactes pour un outil précis (Skills Hub), avec garde-fous de confirmation. Pénalisé pour sa longueur, ses répétitions et un CLI qu'on ne peut pas vérifier ici.",
       "reserves": [
-        "Dépend d'un CLI propriétaire (skillshub-cli) et de l'app desktop : utile seulement si Amdy utilise Skills Hub.",
+        "Dépend d'un CLI propriétaire (skillshub-cli) et de l'app desktop : utile seulement si l'utilisateur utilise Skills Hub.",
         "Très long et répétitif (règles de bridge, codes d'erreur, collections) : beaucoup de contexte pour peu de tâches courantes.",
         "Aucune annexe fournie ; les commandes et codes de sortie ne sont pas vérifiables depuis ce seul fichier."
       ],
@@ -23293,7 +23293,7 @@
       "confiance": "haute",
       "risques": [
         {
-          "code": "`npx create-react-native-library@latest` exécute un paquet npm distant non épinglé sur la machine. C'est le comportement attendu, mais il est à valider une fois par Amdy.",
+          "code": "`npx create-react-native-library@latest` exécute un paquet npm distant non épinglé sur la machine. C'est le comportement attendu, mais il est à valider une fois par l'utilisateur.",
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau"
@@ -26656,7 +26656,7 @@
       "reserves": [
         "SKILL.md tronqué à 24 000 caractères sur 38 985 : la fin (alur kerja, vérifications, rendu) n'a pas été jugée.",
         "Les références et starters cités (references/explainer.md, techniques.md, kartun-panggung.md, assets/starter-*.html, scripts/) ne sont pas fournis.",
-        "Rédigé en indonésien, avec un README tronqué : le skill reste lisible pour Claude mais difficile à vérifier pour Amdy.",
+        "Rédigé en indonésien, avec un README tronqué : le skill reste lisible pour Claude mais difficile à vérifier pour l'utilisateur.",
         "Très dense et répétitif (hukum, larangan, tables), ce qui pèse lourd en contexte pour un skill de motion."
       ],
       "choix_visuels_autonomes": true,
@@ -27894,7 +27894,7 @@
       "confiance": "moyenne",
       "risques": [
         {
-          "code": "La bannière de SKILL.md invite à exécuter `/plugin marketplace add aldefy/compose-skill` puis `/plugin install`, ce qui installe un plugin tiers non sandboxé. À signaler à Amdy avant toute installation.",
+          "code": "La bannière de SKILL.md invite à exécuter `/plugin marketplace add aldefy/compose-skill` puis `/plugin install`, ce qui installe un plugin tiers non sandboxé. À signaler à l'utilisateur avant toute installation.",
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau"
@@ -43462,7 +43462,7 @@
         "Les scripts annoncés (scripts/*.sh, scripts/lib/*) et leurs --self-test ne sont pas fournis : impossible de vérifier les affirmations d'exécution.",
         "Fichiers externes cités non fournis : script/agent/qa-docker.sh, script/qa/web-terminal-visual-qa.mjs, docs/reference/web-terminal-visual-qa.md.",
         "Incohérence de version : codex-cli 0.140.0 dans SKILL.md, 0.139.0 dans references/app-server.md.",
-        "Très spécifique au dépôt omo-codex : peu réutilisable pour un autre projet ou pour la bibliothèque de Amdy."
+        "Très spécifique au dépôt omo-codex : peu réutilisable pour un autre projet ou pour la bibliothèque de l'utilisateur."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -43713,7 +43713,7 @@
       "reserves": [
         "SKILL.md tronqué à 24000 caractères sur 32311 : les patterns 20 à 26 et la section F ne sont pas jugés.",
         "Annexes CHANGELOG.md et README.md tronquées ; le compte annoncé de 26 patterns n'est pas vérifiable ici.",
-        "Contenu de rédaction générique, sans lien direct avec Claude Code : utile seulement si Amdy rédige des textes."
+        "Contenu de rédaction générique, sans lien direct avec Claude Code : utile seulement si l'utilisateur rédige des textes."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "basse",
@@ -44375,7 +44375,7 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 8,
-      "justification": "Déclenchement net et commandes précises, mais le contenu est très spécifique au dépôt Cherry Studio (hotfix, backport, release). Utile surtout à ses contributeurs, peu pour les projets d'Amdy. Dépend d'outils et de fichiers absents.",
+      "justification": "Déclenchement net et commandes précises, mais le contenu est très spécifique au dépôt Cherry Studio (hotfix, backport, release). Utile surtout à ses contributeurs, peu pour les projets de l'utilisateur. Dépend d'outils et de fichiers absents.",
       "reserves": [
         "Dépend de fichiers non fournis : .github/pull_request_template.md, .agents/notes/README.md et .agents/skills/gh-stack/SKILL.md.",
         "Dépend de scripts propres au dépôt (pnpm change:scope, pnpm agent-notes:check-transition, pnpm skills:sync) qui ne sont pas dans le skill.",
@@ -47971,7 +47971,7 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 8,
-      "justification": "Skill de mainteneur précis (commandes just, pièges du packaging npm, validation), mais réservé au monorepo ccusage : peu utile pour les projets d'Amdy hors de ce dépôt.",
+      "justification": "Skill de mainteneur précis (commandes just, pièges du packaging npm, validation), mais réservé au monorepo ccusage : peu utile pour les projets de l'utilisateur hors de ce dépôt.",
       "reserves": [
         "Très spécifique au monorepo ccusage : utile aux contributeurs de ce dépôt, pas à un usage général.",
         "Renvoie à AGENTS.md racine, flake.nix et d'autres fichiers du dépôt non fournis : le contexte complet ne peut pas être vérifié."
@@ -53740,7 +53740,7 @@
       "justification": "Déclenchement et périmètre nets, commandes précises. Mais le skill dépend d'un CLI propriétaire (videocut-cli) et d'un runtime, et utile surtout à qui utilise cet outil. Annexes absentes, rédigé en chinois.",
       "reserves": [
         "Annexes absentes : references/business-workflow-contract.md, references/ai-term-dictionary.md et le skill chengfeng-check-updates ne sont pas fournis, donc la chaîne complète n'est pas vérifiable.",
-        "Dépend d'un CLI propriétaire (scripts/videocut-cli.cjs) et d'un runtime local, sans documentation publique : l'utilité pour Amdy dépend de l'usage de cet outil.",
+        "Dépend d'un CLI propriétaire (scripts/videocut-cli.cjs) et d'un runtime local, sans documentation publique : l'utilité pour l'utilisateur dépend de l'usage de cet outil.",
         "Entièrement rédigé en chinois, avec une part de texte d'argumentation qui alourdit le fichier."
       ],
       "choix_visuels_autonomes": false,
@@ -54179,7 +54179,7 @@
       "reserves": [
         "Les dossiers references/ et scripts/ cités par le SKILL.md ne sont pas fournis : impossible de vérifier les commandes et les seuils (motion_budget.py, image_job.py, profile.ts).",
         "Les annexes README sont tronquées (5000 caractères sur 11663 pour la version anglaise) et la version chinoise n'est pas complète non plus.",
-        "Le SKILL.md et sa description sont en chinois alors que le contexte d'Amdy est francophone ; le déclenchement est donc moins lisible pour lui.",
+        "Le SKILL.md et sa description sont en chinois alors que le contexte de l'utilisateur est francophone ; le déclenchement est donc moins lisible pour lui.",
         "Une recommandation promotionnelle d'un autre skill (oil-ui) figure dans le SKILL.md, à faible valeur pour la tâche."
       ],
       "choix_visuels_autonomes": false,
@@ -54741,7 +54741,7 @@
       "confiance": "basse",
       "risques": [
         {
-          "code": "Les replis proposent `npx skills add wondelai/skills/<slug> --global` : installation globale de code distant, à faire seulement avec l'accord explicite d'Amdy.",
+          "code": "Les replis proposent `npx skills add wondelai/skills/<slug> --global` : installation globale de code distant, à faire seulement avec l'accord explicite de l'utilisateur.",
           "gravite": "eleve",
           "source": "juge",
           "categorie": "reseau"
@@ -55764,7 +55764,7 @@
       "confiance": "moyenne",
       "risques": [
         {
-          "code": "Le guide demande d'installer agent-device « par le chemin approuvé de l'environnement » s'il manque : installation d'un outil tiers, à valider par Amdy avant exécution.",
+          "code": "Le guide demande d'installer agent-device « par le chemin approuvé de l'environnement » s'il manque : installation d'un outil tiers, à valider par l'utilisateur avant exécution.",
           "gravite": "eleve",
           "source": "juge",
           "categorie": "execution"
@@ -63534,12 +63534,12 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 8,
-      "justification": "Très précis et bien ancré (outils MCP, tags de version, pièges réels comme Process.myUid). Mais il dépend d'un MCP tiers non fourni, ses annexes sont tronquées et ses déclencheurs sont très larges. Hors du cœur d'usage d'Amdy.",
+      "justification": "Très précis et bien ancré (outils MCP, tags de version, pièges réels comme Process.myUid). Mais il dépend d'un MCP tiers non fourni, ses annexes sont tronquées et ses déclencheurs sont très larges. Hors du cœur d'usage de l'utilisateur.",
       "reserves": [
         "Annexes tronquées à 5000 caractères (security-bulletins, version-conventions, workflow-mcp-and-local) : le jugement de ces parties repose sur un extrait.",
         "Dépendance forte à un serveur MCP tiers (Lightrion) avec jeton : sans lui, le skill demande de s'arrêter, sans repli local.",
         "Déclencheurs très larges (« platform », « system/ », « vendor/ », « framework ») qui peuvent se déclencher hors AOSP.",
-        "Pertinent surtout pour les développeurs AOSP/AAOS ou de ROM ; hors du périmètre habituel d'Amdy (sites, iOS, Remotion, data)."
+        "Pertinent surtout pour les développeurs AOSP/AAOS ou de ROM ; hors du périmètre habituel de l'utilisateur (sites, iOS, Remotion, data)."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -67454,7 +67454,7 @@
       "pertinence": 2,
       "type_principal": null,
       "note_qualite": 7,
-      "justification": "Déclenchement net, scripts testés et requêtes SQL précises. Mais cible l'agent opencode, pas Claude Code, donc peu utile à Amdy. Version annoncée contradictoire (1.17.7 vs 1.15.13).",
+      "justification": "Déclenchement net, scripts testés et requêtes SQL précises. Mais cible l'agent opencode, pas Claude Code, donc peu utile à l'utilisateur. Version annoncée contradictoire (1.17.7 vs 1.15.13).",
       "reserves": [
         "Contradiction de version : SKILL.md dit v1.17.7, references/cli-commands.md dit v1.15.13.",
         "Scripts annoncés (scripts/*.sh, lib) partiellement fournis : leurs --self-test ne sont pas vérifiables ici.",
@@ -70365,7 +70365,7 @@
           "categorie": "reseau"
         },
         {
-          "code": "Le contenu distant est déclaré comme contenant « les instructions de format de sortie » : c'est une délégation d'instructions à une source non contrôlée par Amdy.",
+          "code": "Le contenu distant est déclaré comme contenant « les instructions de format de sortie » : c'est une délégation d'instructions à une source non contrôlée par l'utilisateur.",
           "gravite": "moyen",
           "source": "juge",
           "categorie": "consigne"
@@ -74405,7 +74405,7 @@
       "reserves": [
         "Aucune annexe fournie : les spécifications de plateformes et les sources de politique « actives » citées ne sont pas incluses, donc non vérifiables.",
         "Consignes abstraites (évaluer l'attention, la clarté, etc.) sans grille ni exemple concret, peu d'applicabilité directe.",
-        "Skill hors Claude Code et hors développement : intérêt limité pour les projets d'Amdy."
+        "Skill hors Claude Code et hors développement : intérêt limité pour les projets de l'utilisateur."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -74779,7 +74779,7 @@
       "reserves": [
         "Dépend de la CLI « um » (um kb search, um win shot, um kb check) et d'une base de connaissances absents du skill : non exécutable tel quel hors de cet écosystème.",
         "Renvoie à des fichiers non fournis (AGENTS.md, CONTRIBUTING.md, skills/mod-any-game/references/safety.md, knowledge/techniques/…) ; le jugement de ces règles est impossible.",
-        "Sujet de niche (modding de jeux) sans lien direct avec les catégories de Claude Code : intérêt limité pour le pack de Amdy."
+        "Sujet de niche (modding de jeux) sans lien direct avec les catégories de Claude Code : intérêt limité pour le pack de l'utilisateur."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -74851,7 +74851,7 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 7,
-      "justification": "Déclenchement précis et table de packaging par plateforme utile. Hors du périmètre des projets web, iOS, Expo, data ou vidéo d'Amdy. Dépend d'une CLI « um » et d'un skill showcase-video non fournis.",
+      "justification": "Déclenchement précis et table de packaging par plateforme utile. Hors du périmètre des projets web, iOS, Expo, data ou vidéo de l'utilisateur. Dépend d'une CLI « um » et d'un skill showcase-video non fournis.",
       "reserves": [
         "Le skill appelle la commande « um publish check », dont la syntaxe et le comportement ne sont pas documentés ici ni vérifiables dans le contenu fourni.",
         "Renvoie au skill « showcase-video » pour la vidéo, qui n'est pas fourni : la partie post reste incomplète seule.",
@@ -75212,7 +75212,7 @@
       "reserves": [
         "Annexes absentes : modules/mutation-attack/operators/*.md, scripts/*.py, data/eval_datasets, references et scripts cités mais non fournis ; la procédure ne peut pas être exécutée telle quelle.",
         "modules/mutation-attack/MODULE.md tronqué à 5000 caractères sur 10471 : jugement partiel sur ce module.",
-        "Description en chinois alors que l'utilisateur travaille en français ; déclenchement moins lisible pour Amdy.",
+        "Description en chinois alors que l'utilisateur travaille en français ; déclenchement moins lisible pour l'utilisateur.",
         "Très long et redondant (répétitions des règles de rapport, des seuils et des formats), ce qui pèse sur le contexte d'une session."
       ],
       "choix_visuels_autonomes": false,
@@ -82388,7 +82388,7 @@
       "note_qualite": 7,
       "justification": "Déclenchement précis et étapes testables, mais le skill est écrit pour l'agent mémoire de ktx (outils sl_discover, entity_details, emit_unmapped_fallback) et n'apporte rien à Claude Code. Qualité moyenne, règles parfois contradictoires.",
       "reserves": [
-        "Écrit pour l'agent mémoire de ktx : les outils cités (sl_discover, sl_write_source, entity_details, emit_unmapped_fallback) n'existent pas dans un Claude Code standard, donc hors de portée pour l'usage d'Amdy.",
+        "Écrit pour l'agent mémoire de ktx : les outils cités (sl_discover, sl_write_source, entity_details, emit_unmapped_fallback) n'existent pas dans un Claude Code standard, donc hors de portée pour l'usage de l'utilisateur.",
         "Règles contradictoires : une requête triviale ne donne lieu à aucune écriture, alors que « process every card » impose de traiter chaque carte.",
         "Le texte est très long et répète plusieurs règles (jointures, alias, placeholders), ce qui alourdit le contexte.",
         "Aucune annexe fournie ; le skill ne dépend d'aucun fichier externe, donc pas de réserve supplémentaire sur ce point."
@@ -82822,7 +82822,7 @@
       "confiance": "moyenne",
       "risques": [
         {
-          "code": "Escalade de privilèges : ht_run.py relance automatiquement les commandes avec `sudo -n` en cas de permission refusée, sans accord explicite d'Amdy.",
+          "code": "Escalade de privilèges : ht_run.py relance automatiquement les commandes avec `sudo -n` en cas de permission refusée, sans accord explicite de l'utilisateur.",
           "gravite": "eleve",
           "source": "juge",
           "categorie": "execution"
@@ -85119,7 +85119,7 @@
         "Aucune licence indiquée : réutilisation et adaptation incertaines.",
         "Contenu générique (checklists SEO et de content marketing) déjà connu de Claude, peu de pièges réels.",
         "Dépend d'outils de recherche et de SERP non précisés (« web search or a SERP API ») : la mise en œuvre reste à la charge de l'utilisateur.",
-        "Hors du cœur de SKILLMASTER (développement, outillage Claude Code) : intérêt limité pour les projets d'Amdy."
+        "Hors du cœur de SKILLMASTER (développement, outillage Claude Code) : intérêt limité pour les projets de l'utilisateur."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "haute",
@@ -85672,10 +85672,10 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 7,
-      "justification": "Déclenchement précis et sujet net, mais niche (hongrois uniquement, hors du périmètre des projets d'Amdy). Patterns utiles mais en partie subjectifs. Annexe tronquée à 5000 caractères sur 17902.",
+      "justification": "Déclenchement précis et sujet net, mais niche (hongrois uniquement, hors du périmètre des projets de l'utilisateur). Patterns utiles mais en partie subjectifs. Annexe tronquée à 5000 caractères sur 17902.",
       "reserves": [
         "L'annexe references/patterns.md n'est lue que jusqu'à 5000 caractères sur 17902 : les patterns 7 à 26 n'ont pas pu être vérifiés.",
-        "Sujet de niche : utile seulement pour du texte hongrois, sans lien avec les projets web, iOS, vidéo ou data d'Amdy.",
+        "Sujet de niche : utile seulement pour du texte hongrois, sans lien avec les projets web, iOS, vidéo ou data de l'utilisateur.",
         "Beaucoup de consignes de style sont subjectives (« élő », « személyiség »), sans critères testables pour décider qu'un pattern est présent.",
         "Pas de test ni d'exemple de validation ; la frontière entre tournure IA et choix d'auteur est laissée à l'appréciation du modèle."
       ],
@@ -87171,7 +87171,7 @@
       "reserves": [
         "SKILL.md tronqué à 24000 caractères sur 34128 : la fin (paywall, réglages, checklist) n'a pas été jugée.",
         "Licence contradictoire : le dépôt n'en a aucune, le README annonce MIT.",
-        "Règles « ALWAYS/NEVER » très prescriptives, avec design et parcours imposés (vidéo plein écran, paywall sélectionné par défaut), ce qui réduit la liberté de Claude et d'Amdy.",
+        "Règles « ALWAYS/NEVER » très prescriptives, avec design et parcours imposés (vidéo plein écran, paywall sélectionné par défaut), ce qui réduit la liberté de Claude et de l'utilisateur.",
         "Incohérence : le skill interdit npm/bun install puis liste « bun install » dans ses commandes de développement."
       ],
       "choix_visuels_autonomes": true,
@@ -88657,7 +88657,7 @@
       "pertinence": 6,
       "type_principal": "outillage-claude-code",
       "note_qualite": 7,
-      "justification": "Cadre de création de skills net et bien délimité, mais destiné aux auteurs de skills Confluent, peu utile à Amdy. Process long et en partie déclaratif, références de revue absentes, fallback headless vers des suppressions sans validation.",
+      "justification": "Cadre de création de skills net et bien délimité, mais destiné aux auteurs de skills Confluent, peu utile à l'utilisateur. Process long et en partie déclaratif, références de revue absentes, fallback headless vers des suppressions sans validation.",
       "reserves": [
         "Le reviewer confluent-skill-reviewer, skills-ref et le script scan_pii.py cités ne sont pas fournis : leur contenu ne peut pas être vérifié.",
         "Les scripts Python (produce, consume, cleanup, register_schema) ne sont pas lus : seule requirements.txt est fournie, donc le code embarqué n'est pas jugé.",
@@ -89221,7 +89221,7 @@
       "justification": "Déclenchement précis et commandes concrètes, mais le skill dépend d'une CLI privée non fournie et de chemins propres à une autre machine. Peu réutilisable hors de ce projet.",
       "reserves": [
         "Chemins absolus propres à une autre machine (/Users/jyo/...) et identifiant de projet GCP en dur : inutilisable tel quel.",
-        "La CLI `play` (/Users/jyo/projects/tools/play-cli) n'est pas publique ni fournie : le skill ne peut pas être vérifié ni utilisé par Amdy.",
+        "La CLI `play` (/Users/jyo/projects/tools/play-cli) n'est pas publique ni fournie : le skill ne peut pas être vérifié ni utilisé par l'utilisateur.",
         "Dépend de play/CLAUDE.md et des fichiers locaux du projet Moshi, non fournis.",
         "Aucune licence déclarée sur le dépôt."
       ],
@@ -89572,9 +89572,9 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 6,
-      "justification": "Déclenchement précis et périmètre net, mais le skill décrit un service cloud tiers (Caveman Cloud) sans lien avec les projets d'Amdy. Peu de savoir-faire Claude Code transférable. Procédure cohérente.",
+      "justification": "Déclenchement précis et périmètre net, mais le skill décrit un service cloud tiers (Caveman Cloud) sans lien avec les projets de l'utilisateur. Peu de savoir-faire Claude Code transférable. Procédure cohérente.",
       "reserves": [
-        "Skill entièrement lié à un service tiers (Caveman Cloud) et à des outils MCP caveman_* dont la doc n'est pas fournie, donc hors du besoin d'Amdy.",
+        "Skill entièrement lié à un service tiers (Caveman Cloud) et à des outils MCP caveman_* dont la doc n'est pas fournie, donc hors du besoin de l'utilisateur.",
         "Les garde-fous reposent sur la seule prose : aucune règle exécutable n'est fournie pour vérifier le comportement.",
         "Aucune annexe fournie ; le skill renvoie à control-api côté serveur, que le juge ne peut pas vérifier."
       ],
@@ -89982,7 +89982,7 @@
       "justification": "Guide d'installation pour la passerelle OpenClaw, pas pour Claude Code. Pas de frontmatter ni de quand l'utiliser. Config et commandes concrètes, mais surtout de la doc produit.",
       "reserves": [
         "Pas de frontmatter ni de description : le déclenchement n'est pas explicité.",
-        "Cible OpenClaw, pas Claude Code : utilité limitée pour Amdy.",
+        "Cible OpenClaw, pas Claude Code : utilité limitée pour l'utilisateur.",
         "Annexes skills/do et skills/make-plan pointant vers des fichiers absents ; TESTING.md tronqué.",
         "Doublons et incohérences de rédaction (phrase répétée sur l'observation, étapes de vérification redondantes)."
       ],
@@ -91121,10 +91121,10 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 6,
-      "justification": "Déclenchement précis, mais procédure interne au dépôt Cherry Studio (workflow CI, manifestes, scripts). Hors de ce dépôt, peu d'intérêt pour les projets d'Amdy. Annexes référencées absentes.",
+      "justification": "Déclenchement précis, mais procédure interne au dépôt Cherry Studio (workflow CI, manifestes, scripts). Hors de ce dépôt, peu d'intérêt pour les projets de l'utilisateur. Annexes référencées absentes.",
       "reserves": [
         "Annexes référencées absentes (tests/e2e/regression/README.md, scripts/e2e/regression/README.md, cases.ts, systemAutomation.ts, workflow) : impossible de vérifier les commandes et contrats cités.",
-        "Procédure spécifique au dépôt CherryHQ/cherry-studio : sans intérêt pour un projet d'Amdy hors de ce dépôt.",
+        "Procédure spécifique au dépôt CherryHQ/cherry-studio : sans intérêt pour un projet de l'utilisateur hors de ce dépôt.",
         "Ne documente pas le statut du dépôt ni la version de l'outillage Playwright ou Electron auxquels il se réfère."
       ],
       "choix_visuels_autonomes": false,
@@ -92509,7 +92509,7 @@
       "pertinence": 4,
       "type_principal": "outillage-claude-code",
       "note_qualite": 6,
-      "justification": "Méta-skill d'écriture de skills, propre au dépôt compound-engineering : il renvoie à des docs, tests et commandes bun absents ici. Texte dense, jargon Fable/Sol non expliqué. Peu de gain pour Amdy.",
+      "justification": "Méta-skill d'écriture de skills, propre au dépôt compound-engineering : il renvoie à des docs, tests et commandes bun absents ici. Texte dense, jargon Fable/Sol non expliqué. Peu de gain pour l'utilisateur.",
       "reserves": [
         "Renvoie à docs/solutions/skill-design/portable-agent-skill-authoring.md, à tests/ et aux commandes bun run test:skill-guards et test:skill-eval-cell, non fournis : impossible de vérifier ces mécanismes.",
         "Les annexes (edit, evaluate, new, review) sont tronquées à l'affichage ; le jugement porte sur le SKILL.md complet et les extraits visibles.",
@@ -92786,7 +92786,7 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 6,
-      "justification": "Déclenchement précis et règles testables, mais hors sujet pour les projets de développement d'Amdy. Imite le style d'une personne réelle. Annexe style_examples tronquée. Contradictions internes sur la ponctuation.",
+      "justification": "Déclenchement précis et règles testables, mais hors sujet pour les projets de développement de l'utilisateur. Imite le style d'une personne réelle. Annexe style_examples tronquée. Contradictions internes sur la ponctuation.",
       "reserves": [
         "L'annexe references/style_examples.md est tronquée (5000 caractères sur 6760), donc incomplète.",
         "Contradictions internes : la ponctuation est interdite (deux-points, tirets, guillemets) mais les exemples et le gabarit en utilisent.",
@@ -93214,7 +93214,7 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 6,
-      "justification": "Déclenchement précis mais sujet de niche (ontologies BDI, RDF) sans lien avec les projets d'Amdy. Exemples Turtle utiles, mais incohérences (hasComponent/hasPart) et annexes tronquées.",
+      "justification": "Déclenchement précis mais sujet de niche (ontologies BDI, RDF) sans lien avec les projets de l'utilisateur. Exemples Turtle utiles, mais incohérences (hasComponent/hasPart) et annexes tronquées.",
       "reserves": [
         "Annexes references/bdi-ontology-core.md, framework-integration.md, rdf-examples.md et sparql-competency.md tronquées : jugement partiel.",
         "Incohérences internes : bdi:hasPart et bdi:hasComponent utilisés pour les mêmes relations, et CQ13 trie sans ordre réel de tâches.",
@@ -93284,7 +93284,7 @@
       "justification": "Déclenchement net et garde-fous de provenance solides, mais méthode générique. Dépend d'un produit externe (claude-obsidian) dont le script et deux références ne sont pas fournis. Note 6/10.",
       "reserves": [
         "Les références ../wiki/references/provenance.md et operation-transactions.md citées par le skill ne sont pas fournies : le contrat de transaction ne peut pas être vérifié.",
-        "Le skill suppose un coffre Obsidian et le CLI scripts/claude-obsidian.py, absents du périmètre de Claude Code d'Amdy : utilité limitée hors de ce produit.",
+        "Le skill suppose un coffre Obsidian et le CLI scripts/claude-obsidian.py, absents du périmètre de Claude Code de l'utilisateur : utilité limitée hors de ce produit.",
         "Le contenu est en grande partie une méthodologie générale (sources primaires, budgets, statuts de preuve) que Claude applique déjà sans skill.",
         "Les triggers « investigate » et « research this topic » sont larges et peuvent déclencher la recherche sans que l'utilisateur ait demandé un dossier."
       ],
@@ -96701,7 +96701,7 @@
       "pertinence": 4,
       "type_principal": "video",
       "note_qualite": 6,
-      "justification": "Skill d'agent interne à l'éditeur OpenChatCut, pas pour Claude Code de Amdy. Les commandes sont précises (outils, étapes de finalisation), mais le périmètre est une seule application. Renvoie à un skill absent.",
+      "justification": "Skill d'agent interne à l'éditeur OpenChatCut, pas pour Claude Code de l'utilisateur. Les commandes sont précises (outils, étapes de finalisation), mais le périmètre est une seule application. Renvoie à un skill absent.",
       "reserves": [
         "Ne s'applique qu'à l'éditeur OpenChatCut et à ses outils internes (import_media, download_media, transcribe_track) : hors de ce contexte, il ne sert pas à Claude Code.",
         "Renvoie au skill create-motion-graphics, non fourni dans l'import.",
@@ -97145,7 +97145,7 @@
       "pertinence": 4,
       "type_principal": "video",
       "note_qualite": 6,
-      "justification": "Déclenchement clair (liens vidéo à résumer ou décortiquer). Mais dépend d'un outil local privé (crv-pro, chemins /Users/leo), renvoie à des notes absentes et ne sert pas à Amdy tel quel.",
+      "justification": "Déclenchement clair (liens vidéo à résumer ou décortiquer). Mais dépend d'un outil local privé (crv-pro, chemins /Users/leo), renvoie à des notes absentes et ne sert pas à l'utilisateur tel quel.",
       "reserves": [
         "Chemins personnels (/Users/leo/...) et binaire crv-pro local : non installable ni vérifiable par un tiers.",
         "Renvois à des notes internes absentes ([[reference_ig_post_full_read]], [[reference_reel_clone_pipeline]]) : des étapes manquent.",
@@ -98098,7 +98098,7 @@
       "note_qualite": 6,
       "justification": "Déclenchement précis et paramètres vérifiables, mais hors du périmètre de Claude Code. Installeurs copiés d'un autre pack Z-Image, poids sur un miroir tiers, origine de TextGenerate non vérifiée.",
       "reserves": [
-        "Hors sujet pour Claude Code : il s'agit de génération d'images dans ComfyUI, sans lien avec les projets web, iOS, vidéo ou data d'Amdy.",
+        "Hors sujet pour Claude Code : il s'agit de génération d'images dans ComfyUI, sans lien avec les projets web, iOS, vidéo ou data de l'utilisateur.",
         "Les installeurs décrits sont copiés d'un pack Z-Image (en-têtes et URL incohérents), ce qui rend la procédure peu fiable.",
         "Le nœud TextGenerate a une origine de pack non vérifiée, et le skill le reconnaît lui-même.",
         "Des chemins locaux Windows et des références à des fichiers de la machine de l'auteur rendent certaines sections non reproductibles."
@@ -98604,7 +98604,7 @@
       "note_qualite": 6,
       "justification": "Déclenchement clair, mais contenu de copywriting marketing générique : formule et leviers « dopamine » peu vérifiables, exemples promotionnels, périmètre large. Rien de spécifique à Claude Code ni au développement.",
       "reserves": [
-        "Périmètre large (landing, emails, posts, vidéo, SEO) et sans lien avec le développement : peu utile à Amdy dans ses projets Claude Code.",
+        "Périmètre large (landing, emails, posts, vidéo, SEO) et sans lien avec le développement : peu utile à l'utilisateur dans ses projets Claude Code.",
         "Affirmations pseudo-scientifiques sur la « dopamine » sans source, et chiffres d'exemple inventés (1 324 personnes).",
         "Renvoie à un skill externe (understand-customers) non fourni ; l'annexe n'a pas pu être vérifiée.",
         "Le scan a relevé des caractères invisibles ou bidirectionnels dans le fichier, à nettoyer avant tout usage."
@@ -99786,7 +99786,7 @@
         "Skills frères cités (brand-profile, goals-and-kpis, content-calendar, platform-specs-and-validation, etc.) non fournis : leur existence et leur cohérence ne sont pas vérifiables.",
         "Le fichier evals/evals.json est annoncé mais n'a pas été fourni : impossible de vérifier la qualité des cas de test.",
         "Chiffre « ~30 % de ventes le premier jour » issu d'un fournisseur (Waitlister), présenté comme repère malgré la mise en garde ; la section « reality » se dit à revérifier chaque trimestre sans date précise.",
-        "Hors périmètre de Claude Code et des projets d'Amdy (sites, iOS, vidéo, data) : intérêt faible pour sa bibliothèque, sauf usage marketing ponctuel."
+        "Hors périmètre de Claude Code et des projets de l'utilisateur (sites, iOS, vidéo, data) : intérêt faible pour sa bibliothèque, sauf usage marketing ponctuel."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -102170,7 +102170,7 @@
       "justification": "Process très spécifique au repo Archify (scripts, journal, rounds), peu transposable. Déclenchement clair mais niche ; procédure détaillée sans commandes testables hors du repo. Note moyenne basse.",
       "reserves": [
         "CONTRIBUTING.md et les scripts (collect.mjs, round.mjs, replay.mjs, shots.mjs, lib.mjs) sont référencés mais non fournis : impossible de vérifier les commandes.",
-        "Entièrement lié au projet Archify (diagrammes) : sans intérêt pour les projets de Claude Code d'Amdy.",
+        "Entièrement lié au projet Archify (diagrammes) : sans intérêt pour les projets de Claude Code de l'utilisateur.",
         "Métadonnée internal: true : le skill est destiné aux mainteneurs, pas à un usage général."
       ],
       "choix_visuels_autonomes": false,
@@ -102760,11 +102760,11 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 5,
-      "justification": "Déclenchement précis, mais procédure interne au repo Cherry Studio (outils pnpm, gh-stack, README absent). Sans intérêt pour les projets d'Amdy. Pas de valeur générale pour Claude Code.",
+      "justification": "Déclenchement précis, mais procédure interne au repo Cherry Studio (outils pnpm, gh-stack, README absent). Sans intérêt pour les projets de l'utilisateur. Pas de valeur générale pour Claude Code.",
       "reserves": [
         "Le lien ../../notes/README.md, dont dépend la procédure, n'est pas fourni : les règles de base restent introuvables.",
         "Les commandes pnpm (agent-notes:check-transition, docs:check-notes, change:scope) ne sont pas définies dans le skill et ne fonctionnent que dans le repo Cherry Studio.",
-        "Le skill ne s'applique qu'au workflow interne de Cherry Studio, sans intérêt pour les projets d'Amdy."
+        "Le skill ne s'applique qu'au workflow interne de Cherry Studio, sans intérêt pour les projets de l'utilisateur."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -104159,7 +104159,7 @@
       "reserves": [
         "Aucune annexe fournie : evals/scenarios.json est cité dans les fichiers mais n'a pas été transmis.",
         "Le workflow réel repose sur .claude/commands/update-infos-release.md et docs/workflows/*.md, qui ne sont pas fournis : impossible de vérifier les étapes.",
-        "Destiné à la maintenance d'un dépôt précis (copie canonique et régénération Codex), peu transposable à Amdy."
+        "Destiné à la maintenance d'un dépôt précis (copie canonique et régénération Codex), peu transposable à l'utilisateur."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -108697,9 +108697,9 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 4,
-      "justification": "Charte de ton de marque en ukrainien, sans lien avec le développement Claude Code. Règles de rédaction génériques, vocabulaire propre à une marque. Déclenchement large, peu de valeur pour Amdy.",
+      "justification": "Charte de ton de marque en ukrainien, sans lien avec le développement Claude Code. Règles de rédaction génériques, vocabulaire propre à une marque. Déclenchement large, peu de valeur pour l'utilisateur.",
       "reserves": [
-        "Écrit pour la marque d'un autre contexte (mission et valeurs propres), pas réutilisable tel quel par Amdy",
+        "Écrit pour la marque d'un autre contexte (mission et valeurs propres), pas réutilisable tel quel par l'utilisateur",
         "Déclenchement large (toute rédaction marketing ou communication) et user-invocable désactivé",
         "Règles de rédaction très générales, peu de pièges spécifiques à Claude Code"
       ],
@@ -109717,9 +109717,9 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 4,
-      "justification": "Skill écrit pour un agent interne d'OpenCreator, avec des outils creator_* absents de Claude Code. Règles précises mais hors de l'usage d'Amdy. Aucune valeur pour ses projets.",
+      "justification": "Skill écrit pour un agent interne d'OpenCreator, avec des outils creator_* absents de Claude Code. Règles précises mais hors de l'usage de l'utilisateur. Aucune valeur pour ses projets.",
       "reserves": [
-        "Écrit pour le Creator Agent interne d'OpenCreator, et non pour Claude Code : les outils creator_get_context, creator_apply_action et creator_wait_for_stage n'existent pas chez Amdy.",
+        "Écrit pour le Creator Agent interne d'OpenCreator, et non pour Claude Code : les outils creator_get_context, creator_apply_action et creator_wait_for_stage n'existent pas chez l'utilisateur.",
         "Contenu entièrement en chinois, sans équivalent français ; pas de commandes ni d'exemples utilisables hors de l'application.",
         "Annexe manifest.json citée dans le scan mais non fournie au juge ; jugement fait sur le SKILL.md seul."
       ],
@@ -109864,7 +109864,7 @@
         "Étapes très abstraites : aucun format de profil, aucun schéma de sortie ni critère de validation.",
         "Référence à un « project/run state directory » non défini, donc non exploitable tel quel.",
         "Aucune annexe fournie alors que le skill parle de validation et d'écriture atomique.",
-        "Hors du périmètre de développement de Claude Code : utilité limitée pour Amdy."
+        "Hors du périmètre de développement de Claude Code : utilité limitée pour l'utilisateur."
       ],
       "choix_visuels_autonomes": false,
       "confiance": "moyenne",
@@ -110790,7 +110790,7 @@
       "note_qualite": 4,
       "justification": "Table de détection connue de Claude, déclencheur vague. Priorités de détection incohérentes avec la table, commandes /build et /test non définies, et override par .claude/config.json non documenté. Note basse.",
       "reserves": [
-        "Contenu entièrement en coréen, alors que la bibliothèque est en français : peu exploitable par Amdy sans traduction.",
+        "Contenu entièrement en coréen, alors que la bibliothèque est en français : peu exploitable par l'utilisateur sans traduction.",
         "Priorités de détection incohérentes : package.json absent de la liste de priorité, package-lock.json utilisé alors que la table cite yarn.lock et pnpm-lock.yaml.",
         "Commandes /build et /test présentées comme natives sans définition ni fichier de commande fourni.",
         "Surcharge via .claude/config.json présentée comme un mécanisme de Claude Code, sans source officielle ni implémentation fournie."
@@ -111193,7 +111193,7 @@
       "note_qualite": 3,
       "justification": "Écrit pour un autre agent (OpenRouter, shim local), pas pour Claude Code. Contenu très court, sans commandes ni exemples vérifiables, et dépendant d'une infrastructure non décrite.",
       "reserves": [
-        "Destiné à un agent Grok Bot via OpenRouter et un shim local, pas à Claude Code : intérêt quasi nul pour Amdy",
+        "Destiné à un agent Grok Bot via OpenRouter et un shim local, pas à Claude Code : intérêt quasi nul pour l'utilisateur",
         "Trop court et dépendant de chemins (outbox/, inbox) et d'une API (/api/memory/save) non documentés dans le skill",
         "Aucune annexe fournie ; le format XML attendu n'est pas défini par un schéma",
         "Règles de sortie partiellement contradictoires (écrire un fichier OU renvoyer le XML) sans critère de choix"
@@ -112684,7 +112684,7 @@
       "hash_contenu": "fcd7e85153e835fdd4e12c8338a9c8bfdd4820e28b9a54df4485bffe4a1562c2",
       "description_originale": "Use DeepChat's bundled CLI control plane for model inference, image/video/speech generation, transcription, OCR, artifact inspection, public configuration, Skills, and MCP operations. Activate when a user asks to invoke DeepChat capabilities that are not already exposed as a more specific tool, comp",
       "resume_fr": "lance modèles, médias et OCR de DeepChat en CLI → évite les allers-retours entre outils",
-      "description_courte": "Mode d'emploi de la CLI `deepchat` pour l'agent interne de l'application DeepChat : inférence, médias, OCR, Skills et MCP. Sans lien avec les projets web, iOS, vidéo ou data d'Amdy.",
+      "description_courte": "Mode d'emploi de la CLI `deepchat` pour l'agent interne de l'application DeepChat : inférence, médias, OCR, Skills et MCP. Sans lien avec les projets web, iOS, vidéo ou data de l'utilisateur.",
       "categories": [
         "autre"
       ],
@@ -112712,9 +112712,9 @@
       "pertinence": 0,
       "type_principal": null,
       "note_qualite": 3,
-      "justification": "Document de contrôle pour un agent embarqué dans l'app DeepChat, pas pour Claude Code. Commandes concrètes mais liées à un binaire absent des projets d'Amdy. Aucun apport pour ses packs.",
+      "justification": "Document de contrôle pour un agent embarqué dans l'app DeepChat, pas pour Claude Code. Commandes concrètes mais liées à un binaire absent des projets de l'utilisateur. Aucun apport pour ses packs.",
       "reserves": [
-        "Écrit pour l'agent interne de DeepChat (commande `deepchat`, descripteur local, approbations du renderer), pas pour Claude Code ni pour les projets d'Amdy.",
+        "Écrit pour l'agent interne de DeepChat (commande `deepchat`, descripteur local, approbations du renderer), pas pour Claude Code ni pour les projets de l'utilisateur.",
         "Aucun lien avec les packs site-web, ios, app-expo, android, video, data ou outillage-claude-code ; utile seulement à quelqu'un qui utilise DeepChat.",
         "Aucune annexe fournie ; le skill renvoie à une commande externe dont la documentation complète n'est pas incluse."
       ],
@@ -113715,7 +113715,7 @@
       "pertinence": 2,
       "type_principal": null,
       "note_qualite": 2,
-      "justification": "Guide d'installation pour la plateforme Grok Bot, pas pour Claude Code : aucun apport pour Amdy. Commandes courtes, mais annexe host-observer absente et texte peu cohérent. Note basse.",
+      "justification": "Guide d'installation pour la plateforme Grok Bot, pas pour Claude Code : aucun apport pour l'utilisateur. Commandes courtes, mais annexe host-observer absente et texte peu cohérent. Note basse.",
       "reserves": [
         "Écrit pour la plateforme Grok Bot, sans lien avec Claude Code : hors périmètre pour SKILLMASTER.",
         "Renvoie à un skill « host-observer » non fourni, donc non vérifiable.",

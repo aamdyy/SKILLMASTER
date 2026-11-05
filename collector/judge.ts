@@ -12,7 +12,7 @@
 import { spawn } from 'node:child_process'
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
-import { CACHE, CLAUDE_MODE, LIBRARY, ROOT, isTrustedRepo, isoWeek, log, pool, rawFile, readJson, typesOf, writeJson } from './lib.ts'
+import { CACHE, CLAUDE_MODE, LIBRARY, ROOT, isTrustedRepo, isoWeek, log, neutre, pool, rawFile, readJson, typesOf, writeJson } from './lib.ts'
 import { BAREME, alertGravity, scanSkill, worst, type Categorie, type Risk } from './scan.ts'
 import { alertKey, classifyAlerts, classifyCost } from './classify.ts'
 import { execFileSync } from 'node:child_process'
@@ -352,7 +352,7 @@ async function main() {
     ...(scans.get(skill.id) ?? []),
     ...(verdict?.risques_securite ?? []).map(code => {
       const categorie = categoryOf(skill.repo, code)
-      return { code, gravite: alertGravity(categorie), source: 'juge' as const, ...(categorie ? { categorie } : {}) }
+      return { code: neutre(code), gravite: alertGravity(categorie), source: 'juge' as const, ...(categorie ? { categorie } : {}) }
     }),
   ]
   // Un seul type principal par skill : la première catégorie du juge que la détection confirme
@@ -431,7 +431,7 @@ async function main() {
         hash_contenu: skill.hash,
         description_originale: skill.description.slice(0, 300),
         resume_fr: resumes.get(skill.id) ?? null,
-        description_courte: verdict?.description_courte ?? null,
+        description_courte: verdict?.description_courte ? neutre(verdict.description_courte) : null,
         categories: verdict?.categories ?? skill.types,
         types_detectes: detectedTypes.get(skill.id) ?? skill.types,
         stars: skill.repoStars,
@@ -446,8 +446,8 @@ async function main() {
         type_principal: primaryType(skill, verdict),
         // note_qualite reste pour les lecteurs de la bibliothèque (index, classement) : c'est la note du juge.
         note_qualite: noteJuge,
-        justification: verdict?.justification ?? fromHaiku?.error ?? null,
-        reserves: verdict?.reserves ?? [],
+        justification: verdict?.justification ? neutre(verdict.justification) : fromHaiku?.error ?? null,
+        reserves: (verdict?.reserves ?? []).map(neutre),
         choix_visuels_autonomes: verdict?.choix_visuels_autonomes ?? null,
         confiance: verdict?.confiance ?? null,
         risques: risks,
@@ -624,11 +624,10 @@ async function main() {
       genere_le: new Date().toISOString(),
       version_juge: VERSION,
       proposition_auto: true,
-      statut: 'a_valider_par_amdy',
       regles:
         'finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ' +
         'ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; ' +
-        '3 skills par dépôt au plus ; épinglages et exclusions d’Amdy dans library/overrides.json',
+        '3 skills par dépôt au plus ; épinglages et exclusions dans library/overrides.json',
       moins_de_5_recommandes: recommended.length < 5 || undefined,
       tenants_de: TENANTS_REF ?? 'tour précédent',
       reclasse: !isUnchanged,

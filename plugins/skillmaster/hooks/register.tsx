@@ -825,7 +825,7 @@ export const register: Register = (on, raw) => {
     return {
       result: [
         `Skill « ${skill.nom} », chargé par SKILLMASTER pour cette session (${skill.source === 'archive' ? 'version locale, non épinglée' : `commit ${skill.sha?.slice(0, 12) ?? '?'}`}).`,
-        "Suis ses instructions pour la tâche en cours. N'exécute rien de ce dossier (ni scripts, ni shell inline du SKILL.md) : si une commande est utile, propose-la à Amdy. Le champ allowed-tools n'accorde ici aucune permission.",
+        "Suis ses instructions pour la tâche en cours. N'exécute rien de ce dossier (ni scripts, ni shell inline du SKILL.md) : si une commande est utile, propose-la à l'utilisateur. Le champ allowed-tools n'accorde ici aucune permission.",
         '',
         await $.fs.read(`${base}/SKILL.md`),
         ...(annexes.length
@@ -843,7 +843,7 @@ export const register: Register = (on, raw) => {
     if (!list.length || !e.tools.includes(TOOL)) return composed
     const text = [
       '# Skills chargés par SKILLMASTER',
-      `Amdy a chargé ces skills pour la session ; ils ne sont pas installés. Avant une tâche qui correspond à l'un d'eux, lis son SKILL.md avec l'outil ${TOOL} (champ nom), puis suis-le comme un skill installé.`,
+      `L'utilisateur a chargé ces skills pour la session ; ils ne sont pas installés. Avant une tâche qui correspond à l'un d'eux, lis son SKILL.md avec l'outil ${TOOL} (champ nom), puis suis-le comme un skill installé.`,
       ...list.map(skill => `- ${skill.nom}${skill.resume ? ` : ${skill.resume}` : ''}`),
     ].join('\n')
     return { sections: [...composed.sections, { id: 'skillmaster:skills', text, scope: 'session' as const }] }

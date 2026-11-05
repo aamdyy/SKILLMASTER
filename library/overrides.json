@@ -1,12 +1,12 @@
 {
-  "note": "Décisions d'Amdy, appliquées par le juge à chaque tour. epingles : toujours en tête des recommandés du pack. epingles_ajout : toujours en tête des ajouts du pack. jamais : jamais proposé. exclus : retiré d'un pack précis. ajout_garanti : pour chaque motif, le meilleur skill correspondant (hors tête) est toujours en ajout.",
+  "note": "Décisions du mainteneur, appliquées par le juge à chaque tour. epingles : toujours en tête des recommandés du pack. epingles_ajout : toujours en tête des ajouts du pack. jamais : jamais proposé. exclus : retiré d'un pack précis. ajout_garanti : pour chaque motif, le meilleur skill correspondant (hors tête) est toujours en ajout.",
   "epingles": {
     "site-web": [
       {
         "repo": "bencium/bencium-marketplace",
         "nom": "bencium-controlled-ux-designer",
         "decide_le": "2026-10-18",
-        "raison": "choix d'Amdy, revu après la v2"
+        "raison": "choix du mainteneur, revu après la v2"
       }
     ]
   },
@@ -22,7 +22,7 @@
         "repo": "vercel-labs/agent-skills",
         "nom": "web-design-guidelines",
         "decide_le": "2026-10-19",
-        "raison": "16 invocations ; règles distantes non épinglées, d'où un simple ajout"
+        "raison": "règles distantes non épinglées, d'où un simple ajout"
       }
     ]
   },

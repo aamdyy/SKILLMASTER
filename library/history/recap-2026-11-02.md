@@ -6,7 +6,7 @@
 - compose-motion → **compose-state-and-effects** : L'état et les effets Compose (hoisting, LaunchedEffect, collecte de Flow) servent à chaque écran, alors que les animations avancées sont un besoin ponctuel.
 
 ## app-expo
-- eas-update → **expo-animation** : Le dev utilise Reanimated et Gesture Handler dans toutes ses apps Expo. expo-animation couvre ces outils et les gestes. Elle sert plus souvent que l'OTA, qui est un besoin ponctuel.
+- eas-update → **expo-animation** : expo-animation couvre Reanimated, Gesture Handler et les gestes. Elle sert plus souvent que l'OTA, qui est un besoin ponctuel.
 
 ## ios
 - truongduy2611/app-store-preflight-skills/app-store-preflight-skills → **swiftui-specialist** : plus éligible pour ce type ou absent de la sélection

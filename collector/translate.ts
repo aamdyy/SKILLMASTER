@@ -39,7 +39,7 @@ const SYSTEM = `Tu traduis en anglais les textes de SKILLMASTER, une bibliothèq
 
 - Traduis fidèlement, sans rien ajouter ni retirer, dans un anglais naturel et sobre, sans ton marketing.
 - Garde tels quels les noms de skills, de dépôts, de fichiers, de commandes et de produits, et tout ce qui est entre accents graves.
-- Le tutoiement devient « you ». « sa stack » ou « la stack d'Amdy » devient « Amdy's stack ».
+- Le tutoiement devient « you ». « sa stack » devient « the reference stack ».
 - Entrées de type « resume » (« ce qu'il fait → ce qu'il améliore ») : une phrase, exactement une flèche →, ${MAX_RESUME_WORDS} mots au plus, sans point final.
 - Garde le même nombre de flèches → et d'accents graves que l'original.
 

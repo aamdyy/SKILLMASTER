@@ -1,5 +1,5 @@
 {
-  "note": "Profil d'Amdy pour le score de pertinence (0 à 10), séparé de la qualité. Éditable à la main. Calcul sur le nom et la description : 0 si une techno de « exclusions » apparaît ; sinon +4 si le skill a un type confirmé parmi les types, +2 par élément de la stack (6 au plus), −4 par domaine hors sujet. « SQL » veut dire SQL généraliste. Les exclusions sont aussi données à Sonnet, qui écarte tout skill lié à une techno absente de la stack.",
+  "note": "Profil de référence pour le score de pertinence (0 à 10), séparé de la qualité. Éditable à la main. Calcul sur le nom et la description : 0 si une techno de « exclusions » apparaît ; sinon +4 si le skill a un type confirmé parmi les types, +2 par élément de la stack (6 au plus), −4 par domaine hors sujet. « SQL » veut dire SQL généraliste. Les exclusions sont aussi données à Sonnet, qui écarte tout skill lié à une techno absente de la stack.",
   "types": [
     "site-web",
     "ios",
@@ -51,5 +51,5 @@
     "callstackincubator",
     "remotion-dev"
   ],
-  "note_editeurs_confiance": "Propriétaires de dépôt (la partie avant / dans repo). Pour eux, un skill à sa version épinglée et sans risque critique est chargé avec son risque affiché en une ligne, sans question. Amdy valide lui-même chaque ajout."
+  "note_editeurs_confiance": "Propriétaires de dépôt (la partie avant / dans repo). Pour eux, un skill à sa version épinglée et sans risque critique est chargé avec son risque affiché en une ligne, sans question. Le mainteneur valide chaque ajout."
 }

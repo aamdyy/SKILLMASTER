@@ -44,6 +44,17 @@ export const isTrustedRepo = (repo: string) =>
 // En CI (GitHub Action), `claude` tourne en mode --bare : clé API, ni hooks ni réglages locaux.
 export const CLAUDE_MODE = process.env.SM_CLAUDE_BARE === '1' ? ['--bare'] : []
 
+// Textes publics sans nom : d'anciens verdicts en cache citent encore le développeur par son prénom.
+export function neutre(text: string) {
+  return text
+    .replace(/\bl['’]Amdy\b/g, "l'utilisateur")
+    .replace(/\bde Amdy\b/g, "de l'utilisateur")
+    .replace(/\bd['’]Amdy\b/g, "de l'utilisateur")
+    .replace(/\bqu['’]Amdy\b/g, "que l'utilisateur")
+    .replace(/(^|[.!?:;]\s+)Amdy\b/g, "$1L'utilisateur")
+    .replace(/\bAmdy\b/g, "l'utilisateur")
+}
+
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export function sha256(text: string) {
