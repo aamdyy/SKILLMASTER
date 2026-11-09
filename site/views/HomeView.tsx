@@ -23,7 +23,11 @@ const TEASER = { src: '/video/skillmaster-teaser.mp4', poster: '/video/skillmast
 
 // Nouveautés du site lui-même, annoncées dans la pastille du héros le temps du tour qu'elles reprennent
 // (le détail est dans l'onglet Changements, cadre « Site »).
-const SITE_UPDATE = { date: '2026-11-09', fr: 'nouveau teaser et schémas', en: 'new teaser and diagrams' }
+const SITE_UPDATE = {
+  date: '2026-11-09',
+  pack: { fr: 'nouveau pack Méthode', en: 'new Method pack' },
+  site: { fr: 'nouveau teaser et schémas', en: 'new teaser and diagrams' },
+}
 
 type Stats = ReturnType<typeof getStats>
 type DernierTour = ReturnType<typeof getDernierTour>
@@ -123,8 +127,16 @@ export function HomeView({ lang }: { lang: Lang }) {
           <InfoPill href={href.changes(lang)}>
             <span>
               {t.update} {formatDate(tour.le, lang)}
-              {chiffres?.tetes ? <span className="hidden sm:inline">{` · ${t.tetes(chiffres.tetes)}`}</span> : null}
-              {latest?.date === SITE_UPDATE.date && <span className="hidden md:inline">{` · ${SITE_UPDATE[lang]}`}</span>}
+              {/* Du plus important au détail : chaque mention n'apparaît qu'à partir de la largeur où elle tient. */}
+              {latest?.date === SITE_UPDATE.date ? (
+                <>
+                  <span className="hidden sm:inline">{` · ${SITE_UPDATE.pack[lang]}`}</span>
+                  <span className="hidden md:inline">{` · ${SITE_UPDATE.site[lang]}`}</span>
+                  {chiffres?.tetes ? <span className="hidden lg:inline">{` · ${t.tetes(chiffres.tetes)}`}</span> : null}
+                </>
+              ) : (
+                chiffres?.tetes ? <span className="hidden sm:inline">{` · ${t.tetes(chiffres.tetes)}`}</span> : null
+              )}
             </span>
             <span aria-hidden className="text-muted">→</span>
           </InfoPill>
