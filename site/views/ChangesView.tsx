@@ -32,7 +32,21 @@ const T = {
   },
 }
 
-export const changesMetadata = (lang: Lang) => ({ title: T[lang].title, description: T[lang].description, alternates: alternatesFor(lang, '/changements/') })
+// Mises à jour du site lui-même (hors bibliothèque), rangées sous le tour dont elles reprennent les données.
+const SITE_NOTES: Record<string, Record<Lang, string[]>> = {
+  '2026-11-09': {
+    fr: [
+      'Le teaser de l’accueil reprend la bibliothèque de ce tour : 1 493 skills dans 422 dépôts, 160 retenus dans 8 packs.',
+      'Le pack Méthode (relecture, débogage, tests) entre dans la vidéo, et les têtes de pack affichées sont celles de ce tour.',
+    ],
+    en: [
+      'The home page teaser now shows this run’s library: 1,493 skills from 422 repositories, 160 selected across 8 packs.',
+      'The Method pack (review, debugging, tests) joins the video, and the pack heads shown are this run’s.',
+    ],
+  },
+}
+
+export const changesMetadata =(lang: Lang) => ({ title: T[lang].title, description: T[lang].description, alternates: alternatesFor(lang, '/changements/') })
 
 // « android, ios, site-web. » → noms des packs dans la langue de la page.
 const packList = (value: string, lang: Lang) => value.replace(/\.$/, '').split(', ').map(type => labelOf(type, lang)).join(', ')
@@ -93,6 +107,17 @@ export function ChangesView({ lang }: { lang: Lang }) {
                       </Frame>
                     </Reveal>
                   ))}
+                  {SITE_NOTES[tour.date] && (
+                    <Reveal index={tour.sections.length}>
+                      <Frame legend="Site · teaser" as="div" className="bg-panel/40 p-5 pt-6">
+                        <ul className="flex flex-col gap-2">
+                          {(SITE_NOTES[tour.date]?.[lang] ?? []).map(note => (
+                            <li key={note} className="text-sm leading-relaxed text-fg/80">{note}</li>
+                          ))}
+                        </ul>
+                      </Frame>
+                    </Reveal>
+                  )}
                   <dl className="grid gap-4 text-sm leading-relaxed sm:grid-cols-[9rem_1fr]">
                     {[
                       [t.rows.ecartes, tour.ecartes],
