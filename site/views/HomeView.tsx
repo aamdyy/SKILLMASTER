@@ -14,10 +14,11 @@ import { SearchField } from '@/components/SearchField'
 import { Section } from '@/components/Section'
 import { Teaser } from '@/components/Teaser'
 import { TeaserPopup } from '@/components/TeaserPopup'
+import { V2 } from '@/components/V2'
 import { ThisWeek } from '@/components/ThisWeek'
 import { formatDate, formatDay, formatInt, formatUsd } from '@/lib/format'
 import { href, LOCALE, type Lang } from '@/lib/lang'
-import { chiffresDuTour, getDernierTour, getDetection, getFunnel, getPack, getPacks, getSkill, getStats, getTours } from '@/lib/library'
+import { chiffresDuTour, getDernierTour, getDetection, getFunnel, getPack, getPacks, getSkill, getSkills, getStats, getTours } from '@/lib/library'
 
 const TEASER = { src: '/video/skillmaster-teaser.mp4', poster: '/video/skillmaster-teaser.jpg' }
 
@@ -35,7 +36,7 @@ type Entonnoir = ReturnType<typeof getFunnel>
 
 const T = {
   fr: {
-    update: 'Mise à jour du',
+    update: 'V2 · mise à jour du',
     tetes: (n: number) => (n > 1 ? `${n} têtes changent` : `${n} tête change`),
     h1: 'Les bons skills Claude Code, pour chaque projet.',
     intro: 'Une bibliothèque triée par type de projet, notée par un juge et mise à jour toute seule chaque lundi.',
@@ -69,7 +70,7 @@ const T = {
     ],
   },
   en: {
-    update: 'Updated',
+    update: 'V2 · updated',
     tetes: (n: number) => (n > 1 ? `${n} heads change` : `${n} head changes`),
     h1: 'The right Claude Code skills, for every project.',
     intro: 'A library sorted by project type, rated by a judge and updated on its own every Monday.',
@@ -124,7 +125,7 @@ export function HomeView({ lang }: { lang: Lang }) {
     <>
       <section className="relative">
         <Container className="flex flex-col items-center pb-0 pt-14 text-center md:pt-24">
-          <InfoPill href={href.changes(lang)}>
+          <InfoPill href="#v2">
             <span>
               {t.update} {formatDate(tour.le, lang)}
               {/* Du plus important au détail : chaque mention n'apparaît qu'à partir de la largeur où elle tient. */}
@@ -176,6 +177,10 @@ export function HomeView({ lang }: { lang: Lang }) {
           </Frame>
         </Container>
       </section>
+
+      <Section id="v2" labelledBy="titre-v2">
+        <V2 figures={{ analyses: stats.analyses, critiques: getSkills().filter(skill => skill.statut !== 'archive' && skill.risqueMax === 'critique').length, packs: stats.packs }} lang={lang} />
+      </Section>
 
       {/* À la première visite, le teaser s'ouvre aussi une fois en fenêtre. */}
       <TeaserPopup src={TEASER.src} poster={TEASER.poster} install={{ href: href.install(lang), label: lang === 'en' ? 'Install' : 'Installer' }} text={{ ...teaserText, close: t.teaser.close, dialog: t.teaser.dialog, caption: t.teaser.caption }} />
