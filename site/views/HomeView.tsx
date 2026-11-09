@@ -21,13 +21,17 @@ import { chiffresDuTour, getDernierTour, getDetection, getFunnel, getPack, getPa
 
 const TEASER = { src: '/video/skillmaster-teaser.mp4', poster: '/video/skillmaster-teaser.jpg' }
 
+// Nouveautés du site lui-même, annoncées dans la pastille du héros le temps du tour qu'elles reprennent
+// (le détail est dans l'onglet Changements, cadre « Site »).
+const SITE_UPDATE = { date: '2026-11-09', fr: 'nouveau teaser et schémas', en: 'new teaser and diagrams' }
+
 type Stats = ReturnType<typeof getStats>
 type DernierTour = ReturnType<typeof getDernierTour>
 type Entonnoir = ReturnType<typeof getFunnel>
 
 const T = {
   fr: {
-    tour: 'Tour du',
+    update: 'Mise à jour du',
     tetes: (n: number) => (n > 1 ? `${n} têtes changent` : `${n} tête change`),
     h1: 'Les bons skills Claude Code, pour chaque projet.',
     intro: 'Une bibliothèque triée par type de projet, notée par un juge et mise à jour toute seule chaque lundi.',
@@ -61,7 +65,7 @@ const T = {
     ],
   },
   en: {
-    tour: 'Run of',
+    update: 'Updated',
     tetes: (n: number) => (n > 1 ? `${n} heads change` : `${n} head changes`),
     h1: 'The right Claude Code skills, for every project.',
     intro: 'A library sorted by project type, rated by a judge and updated on its own every Monday.',
@@ -117,8 +121,12 @@ export function HomeView({ lang }: { lang: Lang }) {
       <section className="relative">
         <Container className="flex flex-col items-center pb-0 pt-14 text-center md:pt-24">
           <InfoPill href={href.changes(lang)}>
-            {t.tour} {formatDate(tour.le, lang)}
-            {chiffres?.tetes ? <span className="hidden sm:inline">{` · ${t.tetes(chiffres.tetes)}`}</span> : null}
+            <span>
+              {t.update} {formatDate(tour.le, lang)}
+              {chiffres?.tetes ? <span className="hidden sm:inline">{` · ${t.tetes(chiffres.tetes)}`}</span> : null}
+              {latest?.date === SITE_UPDATE.date && <span className="hidden md:inline">{` · ${SITE_UPDATE[lang]}`}</span>}
+            </span>
+            <span aria-hidden className="text-muted">→</span>
           </InfoPill>
           <h1 className="mt-8 max-w-3xl text-balance text-[2.5rem] leading-[1.05] tracking-[-0.03em] md:text-[4rem]">{t.h1}</h1>
           <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted md:text-[17px]">{t.intro}</p>
