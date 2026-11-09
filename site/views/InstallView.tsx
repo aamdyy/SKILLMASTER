@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { CodeBlock } from '@/components/CodeBlock'
 import { Container } from '@/components/Container'
 import { Frame } from '@/components/Frame'
+import { FlowDiagram } from '@/components/diagrams/FlowDiagram'
 import { InlineCode } from '@/components/InlineCode'
 import { Label } from '@/components/Label'
 import { Section } from '@/components/Section'
@@ -17,6 +18,7 @@ const T: Record<Lang, {
   steps: { label: string; title: string; list: Step[] }
   choices: { legend: string; items: [string, string][]; escape: string }
   triggers: { label: string; title: string; text: string; items: string[]; note: string }
+  flow: { legend: string; nodes: { title: string; text: string; tag?: string }[] }
   commands: { label: string; title: string; rows: [string, string][] }
   settings: { label: string; title: string; text: string; rows: [string, string][]; example: string }
   without: { label: string; title: string; text: string }
@@ -68,6 +70,16 @@ const T: Record<Lang, {
         'ou quand tu tapes `/sm check`.',
       ],
       note: 'Ton prompt est retenu le temps du choix, puis il revient dans ta saisie. Le conseil de modèle et d’effort est seulement affiché : tu tapes toi-même `/model` ou `/effort` si tu le suis.',
+    },
+    flow: {
+      legend: 'le parcours, dans Claude Code',
+      nodes: [
+        { title: 'Ton prompt', text: 'Un nouveau projet, un prompt long ou un mot de projet ; ou `/sm check`.' },
+        { title: 'La détection', text: 'Le mod lit les fichiers du dossier (`detection.json`), puis les mots du prompt.' },
+        { title: 'Le panneau', text: 'La tête du pack, 8 skills au plus, et un conseil de modèle et d’effort.' },
+        { title: 'Ton choix', text: 'Charger pour la session, garder pour ce projet, choisir toi-même ; Échap ne charge rien.' },
+        { title: 'Chargé', text: 'Pour la session, par l’outil du mod : rien n’est écrit dans le projet.', tag: 'session' },
+      ],
     },
     commands: {
       label: 'Commandes',
@@ -160,6 +172,16 @@ const T: Record<Lang, {
         'or when you type `/sm check`.',
       ],
       note: 'Your prompt is held while you choose, then it comes back to your input. The model and effort suggestion is only displayed: you type `/model` or `/effort` yourself if you follow it.',
+    },
+    flow: {
+      legend: 'the flow, inside Claude Code',
+      nodes: [
+        { title: 'Your prompt', text: 'A new project, a long prompt or a project word; or `/sm check`.' },
+        { title: 'Detection', text: 'The mod reads the folder’s files (`detection.json`), then the prompt’s words.' },
+        { title: 'The panel', text: 'The pack head, up to 8 skills, plus a model and effort suggestion.' },
+        { title: 'Your choice', text: 'Load for the session, keep for this project, choose yourself; Esc loads nothing.' },
+        { title: 'Loaded', text: 'For the session, through the mod’s tool: nothing is written to the project.', tag: 'session' },
+      ],
     },
     commands: {
       label: 'Commands',
@@ -288,23 +310,26 @@ export function InstallView({ lang }: { lang: Lang }) {
       </Section>
 
       <Section labelledBy="titre-quotidien">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <Heading id="titre-quotidien" label={t.triggers.label} title={t.triggers.title} />
-          <div className="flex flex-col gap-5">
-            <p className="text-[15px] leading-relaxed text-fg/85">
-              <Text>{t.triggers.text}</Text>
-            </p>
-            <ul className="flex flex-col gap-2 text-[15px] leading-relaxed text-muted">
-              {t.triggers.items.map(item => (
-                <li key={item} className="border-l border-line-strong pl-4">
-                  <Text>{item}</Text>
-                </li>
-              ))}
-            </ul>
-            <p className="text-[14px] leading-relaxed text-muted">
-              <Text>{t.triggers.note}</Text>
-            </p>
+        <div className="flex flex-col gap-12 md:gap-16">
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+            <Heading id="titre-quotidien" label={t.triggers.label} title={t.triggers.title} />
+            <div className="flex flex-col gap-5">
+              <p className="text-[15px] leading-relaxed text-fg/85">
+                <Text>{t.triggers.text}</Text>
+              </p>
+              <ul className="flex flex-col gap-2 text-[15px] leading-relaxed text-muted">
+                {t.triggers.items.map(item => (
+                  <li key={item} className="border-l border-line-strong pl-4">
+                    <Text>{item}</Text>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-[14px] leading-relaxed text-muted">
+                <Text>{t.triggers.note}</Text>
+              </p>
+            </div>
           </div>
+          <FlowDiagram legend={t.flow.legend} nodes={t.flow.nodes} />
         </div>
       </Section>
 

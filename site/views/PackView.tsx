@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
+import { DetectionDiagram } from '@/components/diagrams/DetectionDiagram'
 import { Frame } from '@/components/Frame'
 import { InlineCode } from '@/components/InlineCode'
 import { Label } from '@/components/Label'
@@ -11,7 +12,7 @@ import { SkillLine } from '@/components/SkillLine'
 import { Raison } from '@/components/ThisWeek'
 import { formatDate } from '@/lib/format'
 import { alternatesFor, href, type Lang } from '@/lib/lang'
-import { PACKS, getDernierTour, getDetection, getPack, getSkill, labelOf, tr, type PackSkill } from '@/lib/library'
+import { PACKS, getDernierTour, getDetection, getDetectionRules, getPack, getSkill, labelOf, tr, type PackSkill } from '@/lib/library'
 
 const T = {
   fr: {
@@ -72,6 +73,7 @@ export function PackView({ lang, type }: { lang: Lang; type: string }) {
   const pack = getPack(type)
   if (!pack) notFound()
   const detection = getDetection()[pack.type]
+  const rule = getDetectionRules()[pack.type]
   const tete = withSkill(pack.recommandes)
   const ajouts = withSkill(pack.ajouts)
   const tour = getDernierTour()
@@ -94,11 +96,17 @@ export function PackView({ lang, type }: { lang: Lang; type: string }) {
             <p className="caps text-[12px] text-muted tabular">{t.counts(pack.recommandes.length, pack.ajouts.length, formatDate(tour.le, lang))}</p>
           </div>
           {detection && (
-            <Frame legend={t.detection} className="max-w-3xl bg-panel/60 p-5 pt-6 md:p-6 md:pt-7">
-              <p className="text-[15px] leading-loose text-fg/85">
-                <span className="text-muted">{t.proposed}</span>
-                <InlineCode text={tr(lang, detection)} />
-              </p>
+            <Frame legend={t.detection} className="bg-panel/60 p-5 pt-7 md:p-6 md:pt-8">
+              <div className="flex flex-col gap-6">
+                {rule && <DetectionDiagram rule={rule} packLabel={labelOf(pack.type, lang)} headCount={pack.recommandes.length} lang={lang} />}
+                {/* Sans fichier à chercher (Méthode), le schéma dit déjà tout. */}
+                {(!rule || rule.fichiers.length + rule.dependances.length + rule.contenus.length > 0) && (
+                  <p className="max-w-3xl text-[14px] leading-loose text-fg/85">
+                    <span className="text-muted">{t.proposed}</span>
+                    <InlineCode text={tr(lang, detection)} />
+                  </p>
+                )}
+              </div>
             </Frame>
           )}
           {pack.changements.length > 0 && (

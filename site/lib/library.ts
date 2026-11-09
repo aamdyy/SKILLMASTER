@@ -55,6 +55,8 @@ export type Pack = {
   ajouts: PackSkill[]
   changements: { entrant: string; sortant: string | null; raison: string }[]
   ecartes: { nom: string; raison: string }[]
+  // Finale du tour : les candidats que Sonnet a classés pour ce pack.
+  finalistes: string[]
 }
 
 export type DernierTour = { le: string; coutUsd: number | null; dureeMin: number | null }
@@ -174,7 +176,7 @@ type RawIndexItem = { id: string; editeur_confiance?: boolean }
 
 export const getPacks = once((): Pack[] =>
   PACKS.map(({ type, label }) => {
-    const raw = readJson<{ recommandes: RawPackItem[]; ajouts?: RawPackItem[]; changements?: Pack['changements']; ecartes?: Pack['ecartes'] }>(
+    const raw = readJson<{ recommandes: RawPackItem[]; ajouts?: RawPackItem[]; changements?: Pack['changements']; ecartes?: Pack['ecartes']; finalistes?: string[] }>(
       join(LIBRARY, 'packs', `${type}.json`),
     )
     const index = readJson<{ recommandes: RawIndexItem[]; ajouts: RawIndexItem[] }>(join(LIBRARY, 'index', `${type}.json`))
@@ -191,6 +193,7 @@ export const getPacks = once((): Pack[] =>
       ajouts: (raw.ajouts ?? []).map(item('ajout')),
       changements: raw.changements ?? [],
       ecartes: raw.ecartes ?? [],
+      finalistes: raw.finalistes ?? [],
     }
   }),
 )
@@ -255,6 +258,45 @@ export const getDernierTour = once((): DernierTour => {
 export const getDetection = once((): Record<string, string> => {
   const { types } = JSON.parse(readFileSync(DETECTION, 'utf8')) as { types: Record<string, { texte: string }> }
   return Object.fromEntries(Object.entries(types).map(([type, rule]) => [type, rule.texte]))
+})
+
+// Règles complètes de détection, pour le schéma de la page d'un pack : fichiers et chemins, dépendances
+// de package.json, exclusions, fichiers dont le contenu compte (avec ce qu'on y cherche), mots du prompt.
+type RawRule = {
+  fichiers?: string[]; chemins?: string[]; dependances?: string[]; sauf_dependances?: string[]
+  contenus?: { fichiers: string[]; motif: string; indice?: string }[]; mots?: string[]; profondeur?: number
+}
+export type DetectionRule = {
+  fichiers: string[]; dependances: string[]; sauf: string[]; contenus: { fichiers: string[]; cherche: string[] }[]; mots: string[]; profondeur: number | null
+}
+// « \b(pandas|polars|duckdb)\b » → pandas, polars, duckdb ; l'indice, s'il existe, est déjà lisible.
+const motsDuMotif = (motif: string) => motif.match(/\(([^()]+)\)/)?.[1]?.split('|') ?? [motif]
+export const getDetectionRules = once((): Record<string, DetectionRule> => {
+  const { types } = JSON.parse(readFileSync(DETECTION, 'utf8')) as { types: Record<string, RawRule> }
+  return Object.fromEntries(Object.entries(types).map(([type, rule]) => [type, {
+    fichiers: [...(rule.fichiers ?? []), ...(rule.chemins ?? [])],
+    dependances: rule.dependances ?? [],
+    sauf: rule.sauf_dependances ?? [],
+    contenus: (rule.contenus ?? []).map(item => ({ fichiers: item.fichiers, cherche: item.indice ? [item.indice] : motsDuMotif(item.motif) })),
+    mots: rule.mots ?? [],
+    profondeur: rule.profondeur ?? null,
+  }]))
+})
+
+// L'entonnoir du dernier tour, du catalogue jusqu'aux têtes de pack (seuil « validé » : note ≥ 6).
+export const getFunnel = once(() => {
+  const stats = getStats()
+  const packs = getPacks()
+  const vivants = getSkills().filter(skill => skill.statut !== 'archive')
+  return {
+    collectes: stats.analyses,
+    depots: stats.depots,
+    juges: vivants.filter(skill => (skill.note ?? 0) >= 6).length,
+    finalistes: new Set(packs.flatMap(pack => pack.finalistes)).size,
+    retenus: stats.retenus,
+    tete: new Set(packs.flatMap(pack => pack.recommandes.map(item => item.id))).size,
+    packs: stats.packs,
+  }
 })
 
 export const getStats = once(() => {

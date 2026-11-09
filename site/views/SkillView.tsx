@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ViewTransition, type ReactNode } from 'react'
+import { ScoreDiagram } from '@/components/diagrams/ScoreDiagram'
 import { NoteBadge, PinnedBadge, RiskBadge, StarsBadge, TextBadge, TrustBadge } from '@/components/Badges'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
@@ -249,24 +250,11 @@ export function SkillView({ lang, skill }: { lang: Lang; skill: Skill | null }) 
           </div>
           {skill.sousNotes && (
             <Frame legend={t.subScores} className="h-fit p-5 pt-6">
-              <dl className="flex flex-col gap-4">
-                {Object.entries(t.sousNotes).map(([key, label]) => {
-                  const value = skill.sousNotes?.[key as keyof typeof skill.sousNotes] ?? 0
-                  return (
-                    <div key={key} className="grid grid-cols-[1fr_auto] items-center gap-3">
-                      <dt className="text-sm text-fg/85">{label}</dt>
-                      <dd className="flex items-center gap-3 font-mono text-[12px] text-muted tabular">
-                        <span aria-hidden className="flex gap-1">
-                          {[0, 1].map(step => (
-                            <span key={step} className={`h-2 w-6 rounded-sm ${step < value ? 'bg-fg' : 'bg-line-strong'}`} />
-                          ))}
-                        </span>
-                        {value}/2
-                      </dd>
-                    </div>
-                  )
-                })}
-              </dl>
+              <ScoreDiagram
+                rows={Object.entries(t.sousNotes).map(([key, label]) => ({ key, label, value: skill.sousNotes?.[key as keyof typeof skill.sousNotes] ?? 0 }))}
+                total={formatNote(skill.note, lang)}
+                totalLabel={t.facts.note}
+              />
             </Frame>
           )}
         </div>

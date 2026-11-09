@@ -2,6 +2,7 @@ import { Button } from '@/components/Button'
 import { CodeBlock } from '@/components/CodeBlock'
 import { Construction } from '@/components/Construction'
 import { Container } from '@/components/Container'
+import { Funnel } from '@/components/diagrams/Funnel'
 import { Frame } from '@/components/Frame'
 import { Hands } from '@/components/Hands'
 import { InfoPill } from '@/components/InfoPill'
@@ -16,12 +17,13 @@ import { TeaserPopup } from '@/components/TeaserPopup'
 import { ThisWeek } from '@/components/ThisWeek'
 import { formatDate, formatDay, formatInt, formatUsd } from '@/lib/format'
 import { href, LOCALE, type Lang } from '@/lib/lang'
-import { chiffresDuTour, getDernierTour, getDetection, getPack, getPacks, getSkill, getStats, getTours } from '@/lib/library'
+import { chiffresDuTour, getDernierTour, getDetection, getFunnel, getPack, getPacks, getSkill, getStats, getTours } from '@/lib/library'
 
 const TEASER = { src: '/video/skillmaster-teaser.mp4', poster: '/video/skillmaster-teaser.jpg' }
 
 type Stats = ReturnType<typeof getStats>
 type DernierTour = ReturnType<typeof getDernierTour>
+type Entonnoir = ReturnType<typeof getFunnel>
 
 const T = {
   fr: {
@@ -34,11 +36,23 @@ const T = {
     lastRun: 'dernier tour',
     figures: { analyses: 'skills analysés', retenus: 'retenus dans les packs', packs: 'packs par type de projet' },
     teaser: { label: 'Teaser', title: 'SKILLMASTER en 27 secondes.', video: 'Teaser SKILLMASTER, 27 secondes, son coupé au départ', pause: 'Pause', play: 'Lecture', sound: 'Son', close: 'Fermer', dialog: 'Teaser SKILLMASTER',
-      caption: 'Le tour du 19 octobre en images : les skills analysés, ceux retenus dans les packs, puis le panneau du mod qui propose le pack dans Claude Code. Le son est coupé au départ : bouton « Son ».' },
+      caption: 'Le tour du 9 novembre en images : les skills analysés, ceux retenus dans les packs, puis le panneau du mod qui propose le pack dans Claude Code. Le son est coupé au départ : bouton « Son ».' },
     construction: { label: 'Construction', title: 'Un pack, c’est des skills et un type de projet.', text: 'skill-master reconnaît le type de ton projet à ses fichiers, puis te propose la tête du pack qui lui correspond.' },
     packs: { title: 'Un pack par type de projet.', note: '8 skills en tête au plus, puis les ajouts' },
     pipelineIntro: 'Une GitHub Action fait tout le travail : elle collecte, juge, classe et publie. Rien ne s’installe sans ton accord.',
     cta: { label: 'Installation', title: 'Deux commandes, et c’est prêt.', text: 'Le plugin te propose le bon pack à chaque nouveau projet ou prompt long, dans le terminal comme dans le panneau VS Code. Rien ne se charge sans ton accord.', guide: 'Le tuto complet' },
+    funnel: {
+      legend: (date: string) => `entonnoir · tour du ${date}`,
+      check: 'contrôle avant publication',
+      target: 'publié sur GitHub, puis sur ce site',
+      rows: (f: Entonnoir) => [
+        { step: 'Collecte', value: f.collectes, detail: `skills lus dans ${formatInt(f.depots)} dépôts, au commit épinglé` },
+        { step: 'Jugement', value: f.juges, detail: 'notés 6/10 ou plus par Claude Haiku, sur cinq critères' },
+        { step: 'Finale', value: f.finalistes, detail: '25 au plus par pack, pertinents pour la stack' },
+        { step: 'Retenus', value: f.retenus, detail: `têtes et ajouts des ${f.packs} packs` },
+        { step: 'En tête', value: f.tete, detail: '8 au plus par pack, rangés par Claude Sonnet en trois tirages' },
+      ],
+    },
     steps: (stats: Stats, tour: DernierTour) => [
       { title: 'Collecte', text: `Le collecteur parcourt GitHub et retient ${formatInt(stats.analyses)} skills venus de ${formatInt(stats.depots)} dépôts actifs. Chacun est lu au commit épinglé, sans jamais être exécuté.` },
       { title: 'Jugement', text: `Claude Haiku note chaque skill nouveau ou modifié sur cinq critères. Un scan statique, qui lit aussi les annexes et les scripts, et le juge signalent les risques : ${formatInt(stats.alertes)} alertes, rangées par catégorie.` },
@@ -56,11 +70,23 @@ const T = {
     lastRun: 'last run',
     figures: { analyses: 'skills analyzed', retenus: 'kept in the packs', packs: 'packs by project type' },
     teaser: { label: 'Teaser', title: 'SKILLMASTER in 27 seconds.', video: 'SKILLMASTER teaser, 27 seconds, muted at first', pause: 'Pause', play: 'Play', sound: 'Sound', close: 'Close', dialog: 'SKILLMASTER teaser',
-      caption: 'The October 19 run in pictures: the skills analyzed, those kept in the packs, then the mod’s panel suggesting the pack inside Claude Code. Sound is off at first: “Sound” button.' },
+      caption: 'The November 9 run in pictures: the skills analyzed, those kept in the packs, then the mod’s panel suggesting the pack inside Claude Code. Sound is off at first: “Sound” button.' },
     construction: { label: 'Construction', title: 'A pack is skills plus a project type.', text: 'skill-master recognizes your project type from its files, then suggests the head of the matching pack.' },
     packs: { title: 'One pack per project type.', note: 'up to 8 skills in the head, then the extras' },
     pipelineIntro: 'A GitHub Action does all the work: it collects, judges, ranks and publishes. Nothing gets installed without your approval.',
     cta: { label: 'Install', title: 'Two commands, and you’re set.', text: 'The plugin suggests the right pack for every new project or long prompt, in the terminal as well as in the VS Code panel. Nothing gets loaded without your approval.', guide: 'The full guide' },
+    funnel: {
+      legend: (date: string) => `funnel · run of ${date}`,
+      check: 'check before publishing',
+      target: 'published on GitHub, then on this site',
+      rows: (f: Entonnoir) => [
+        { step: 'Collection', value: f.collectes, detail: `skills read from ${formatInt(f.depots, 'en')} repositories, at their pinned commit` },
+        { step: 'Judging', value: f.juges, detail: 'rated 6/10 or more by Claude Haiku, on five criteria' },
+        { step: 'Final', value: f.finalistes, detail: 'up to 25 per pack, relevant to the stack' },
+        { step: 'Kept', value: f.retenus, detail: `heads and extras of the ${f.packs} packs` },
+        { step: 'In the head', value: f.tete, detail: 'up to 8 per pack, ranked by Claude Sonnet in three draws' },
+      ],
+    },
     steps: (stats: Stats, tour: DernierTour) => [
       { title: 'Collection', text: `The collector crawls GitHub and keeps ${formatInt(stats.analyses, 'en')} skills from ${formatInt(stats.depots, 'en')} active repositories. Each one is read at its pinned commit and never executed.` },
       { title: 'Judging', text: `Claude Haiku rates every new or changed skill on five criteria. A static scan, which also reads annexes and scripts, and the judge flag the risks: ${formatInt(stats.alertes, 'en')} alerts, sorted by category.` },
@@ -171,7 +197,10 @@ export function HomeView({ lang }: { lang: Lang }) {
       </Section>
 
       <Section labelledBy="titre-pipeline">
-        <Pipeline steps={t.steps(stats, tour)} intro={t.pipelineIntro} lang={lang} />
+        <div className="flex flex-col gap-16 md:gap-20">
+          <Pipeline steps={t.steps(stats, tour)} intro={t.pipelineIntro} lang={lang} />
+          <Funnel rows={t.funnel.rows(getFunnel())} legend={t.funnel.legend(formatDate(tour.le, lang))} footer={{ check: t.funnel.check, target: t.funnel.target }} locale={LOCALE[lang]} />
+        </div>
       </Section>
 
       {latest && (

@@ -38,10 +38,12 @@ const SITE_NOTES: Record<string, Record<Lang, string[]>> = {
     fr: [
       'Le teaser de l’accueil reprend la bibliothèque de ce tour : 1 493 skills dans 422 dépôts, 160 retenus dans 8 packs.',
       'Le pack Méthode (relecture, débogage, tests) entre dans la vidéo, et les têtes de pack affichées sont celles de ce tour.',
+      'Quatre schémas, faits avec les données de ce tour : l’entonnoir du tour sur l’accueil, la note décomposée sur chaque fiche, la règle de détection sur chaque pack, le parcours dans Claude Code sur la page Installation.',
     ],
     en: [
       'The home page teaser now shows this run’s library: 1,493 skills from 422 repositories, 160 selected across 8 packs.',
       'The Method pack (review, debugging, tests) joins the video, and the pack heads shown are this run’s.',
+      'Four diagrams, built from this run’s data: the run’s funnel on the home page, the score breakdown on every skill page, the detection rule on every pack, the flow inside Claude Code on the Install page.',
     ],
   },
 }
@@ -109,7 +111,7 @@ export function ChangesView({ lang }: { lang: Lang }) {
                   ))}
                   {SITE_NOTES[tour.date] && (
                     <Reveal index={tour.sections.length}>
-                      <Frame legend="Site · teaser" as="div" className="bg-panel/40 p-5 pt-6">
+                      <Frame legend="Site" as="div" className="bg-panel/40 p-5 pt-6">
                         <ul className="flex flex-col gap-2">
                           {(SITE_NOTES[tour.date]?.[lang] ?? []).map(note => (
                             <li key={note} className="text-sm leading-relaxed text-fg/80">{note}</li>
