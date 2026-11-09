@@ -1,0 +1,591 @@
+{
+  "genere_le": "2026-11-09T14:26:42.079Z",
+  "type": "methode",
+  "bareme": "b2",
+  "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
+  "recommandes": [
+    {
+      "id": "everyinc/compound-engineering-plugin/skills/ce-debug",
+      "nom": "ce-debug",
+      "place": "recommande",
+      "repo": "EveryInc/compound-engineering-plugin",
+      "chemin_skill": "skills/ce-debug",
+      "skill_md": "skills/ce-debug/SKILL.md",
+      "sha_epingle": "8e5d1c87613f484a5bdfeacedf86a7aaaccfa264",
+      "empreinte": "f1dc36ab2ac3bf3bc294093229fc9f9a2cb7da41f3da3a001f2e3d053200161f",
+      "licence": "MIT",
+      "resume_fr": "trouve la cause racine d'un bug, puis le corrige test d'abord → évite les correctifs superficiels",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/packs-resolve.py"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le mode pipeline commit et pousse automatiquement sans confirmation sur la branche courante, sous un périmètre hérité ; risque d'action non voulue si le périmètre est mal compris"
+        }
+      ]
+    },
+    {
+      "id": "code-yeongyu/oh-my-openagent/packages/shared-skills/skills/debugging",
+      "nom": "debugging",
+      "place": "recommande",
+      "repo": "code-yeongyu/oh-my-openagent",
+      "chemin_skill": "packages/shared-skills/skills/debugging",
+      "skill_md": "packages/shared-skills/skills/debugging/SKILL.md",
+      "sha_epingle": "2faeda01eaee3bba9c65ac20ab78151371181dfb",
+      "empreinte": "c41370039f5d75bcf3d7e2d892484fe119e9015bd000af11a7c9c095157a2bff",
+      "licence": "NOASSERTION",
+      "resume_fr": "te fait tester des hypothèses sur l'exécution réelle → évite les corrections devinées",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "references/scripts/dap.mjs"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier) (annexe references/methodology/09-cleanup.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "references/scripts/dap.test.ts, references/scripts/fixture-adapter.mjs"
+        }
+      ]
+    },
+    {
+      "id": "everyinc/compound-engineering-plugin/skills/ce-code-review",
+      "nom": "ce-code-review",
+      "place": "recommande",
+      "repo": "EveryInc/compound-engineering-plugin",
+      "chemin_skill": "skills/ce-code-review",
+      "skill_md": "skills/ce-code-review/SKILL.md",
+      "sha_epingle": "8e5d1c87613f484a5bdfeacedf86a7aaaccfa264",
+      "empreinte": "a83b86e0c2592b3cb6d68518ac2a1428fb00b583da5d7ab65bd9744431d56622",
+      "licence": "MIT",
+      "resume_fr": "relit une PR pour bugs, régressions et tests → évite de merger du code défectueux",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/cross-model-adversarial-review.sh, scripts/findings-mechanics.py, scripts/packs-resolve.py, scripts/peer-job-ru…"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le mode revue adversariale croisée envoie le diff à un modèle tiers via acpx et npx, donc du code local quitte la machine (déclenché sans nouvelle confirmation une fois la divulgation faite)."
+        }
+      ]
+    },
+    {
+      "id": "addyosmani/agent-skills/skills/constraint-driven-development",
+      "nom": "constraint-driven-development",
+      "place": "recommande",
+      "repo": "addyosmani/agent-skills",
+      "chemin_skill": "skills/constraint-driven-development",
+      "skill_md": "skills/constraint-driven-development/SKILL.md",
+      "sha_epingle": "301b02b12bff98e4688e6984af6556802322bbde",
+      "empreinte": "5aedadb1f975bbfc9cc031dab085881fee059afdf65d2c684ea6614f93c4dd7e",
+      "licence": "MIT",
+      "resume_fr": "surveille le diff, bloque les tests sautés → empêche les agents de baisser la barre",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/quality-gate.mjs"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "exécution dynamique de code (dans un exemple de code, à vérifier) (annexe references/floor-guard.md)"
+        }
+      ]
+    },
+    {
+      "id": "alibaba/open-code-review/skills/open-code-review-delegate",
+      "nom": "open-code-review-delegate",
+      "place": "recommande",
+      "repo": "alibaba/open-code-review",
+      "chemin_skill": "skills/open-code-review-delegate",
+      "skill_md": "skills/open-code-review-delegate/SKILL.md",
+      "sha_epingle": "04deca6721ec4fe2f74a6a0eb069d2a01b3d31cb",
+      "empreinte": "77442b2766d5e05a410f360673ae718764e814d4235e90cbac0c27a2145db549",
+      "licence": "Apache-2.0",
+      "resume_fr": "relit tes modifications fichier par fichier selon les règles → repère bugs et failles avant fusion",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Installation globale recommandée via `npm install -g @alibaba-group/open-code-review`, sans épinglage de version ni vérification d'intégrité."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le texte de contexte (`--background`) est injecté dans une ligne de commande shell ; le skill met en garde, mais l'exécution d'un résumé non fiable reste un vecteur d'injection."
+        }
+      ]
+    },
+    {
+      "id": "obra/superpowers/skills/requesting-code-review",
+      "nom": "requesting-code-review",
+      "place": "recommande",
+      "repo": "obra/superpowers",
+      "chemin_skill": "skills/requesting-code-review",
+      "skill_md": "skills/requesting-code-review/SKILL.md",
+      "sha_epingle": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "empreinte": "e1de0c46d9b6ba89047432d7b7429d9d221388616a78f7bd08e87af79785fd4d",
+      "licence": "MIT",
+      "resume_fr": "fait relire ton code par un sous-agent avant fusion → repère les problèmes avant qu'ils s'accumulent",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "bjgreenberg/senior-engineering-partner/senior-engineering-partner",
+      "nom": "senior-engineering-partner",
+      "place": "recommande",
+      "repo": "bjgreenberg/senior-engineering-partner",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "ede4bc0a9b216c5d3e680b874e859fbcf21a6a7e",
+      "empreinte": "f4ce5769ffa0333ba0e9f3343d474cb42718b6de6a3c42e37676047a44a5aeab",
+      "licence": "Apache-2.0",
+      "resume_fr": "relit, débogue et sécurise ton code en mode senior → moins de bugs et de failles",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "télécharge et exécute un script (curl | sh) (dans un exemple de code, à vérifier)"
+        },
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier)"
+        },
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "télécharge et exécute un script (curl | sh) (dans un exemple de code, à vérifier) (annexe references/dev-environment-isolation.md)"
+        },
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "modifie la configuration de Claude Code (annexe references/llm-apps.md)"
+        },
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/actions-lint.sh, scripts/audit.sh, scripts/curate-baseline.py, scripts/eval-guard.py, scripts/leakage-guard.sh"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "phrase d’injection de prompt (citée pour mettre en garde) (annexe CHANGELOG.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "exécution dynamique de code (annexe CHANGELOG.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier) (annexe references/compliance.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "accès à des secrets locaux (dans un exemple de code, à vérifier) (annexe references/local-and-agentic-ai-tools.md)"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "moyen",
+          "source": "scan",
+          "code": "plugin.json : retiré à la copie, jamais chargé comme plugin"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "CLAUDE.md ou .claude/ embarqué : instructions lues par Claude Code une fois dans le projet",
+          "detail": "CLAUDE.md"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "evals/fixtures/dependency-manifest-drift/scripts/audit.sh.fixture"
+        }
+      ]
+    },
+    {
+      "id": "obra/superpowers/skills/subagent-driven-development",
+      "nom": "subagent-driven-development",
+      "place": "recommande",
+      "repo": "obra/superpowers",
+      "chemin_skill": "skills/subagent-driven-development",
+      "skill_md": "skills/subagent-driven-development/SKILL.md",
+      "sha_epingle": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "empreinte": "2295e000c7f842505926dac86486c30cb839ddb59e047fdcf33e950f46edced2",
+      "licence": "MIT",
+      "resume_fr": "exécute un plan avec un sous-agent frais par tâche et relecture → moins d'erreurs, contexte préservé",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/review-package, scripts/sdd-workspace, scripts/task-brief"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier) (annexe references/final-review.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "scripts/sdd-repo"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Règle « Rulings, not stalls » : l'agent tranche seul les conflits et plans défectueux et continue, ce qui réduit les points de contrôle humains hors des quatre cas listés."
+        }
+      ]
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "everyinc/compound-engineering-plugin/skills/ce-resolve-pr-feedback",
+      "nom": "ce-resolve-pr-feedback",
+      "place": "ajout",
+      "repo": "EveryInc/compound-engineering-plugin",
+      "chemin_skill": "skills/ce-resolve-pr-feedback",
+      "skill_md": "skills/ce-resolve-pr-feedback/SKILL.md",
+      "sha_epingle": "8e5d1c87613f484a5bdfeacedf86a7aaaccfa264",
+      "empreinte": "adc96cc83a77d1cb476f28cca333576c924ce1fc2d50f7ac400510cccd69c688",
+      "licence": "MIT",
+      "resume_fr": "juge les retours de revue, applique les corrections valides → moins de va-et-vient en revue",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/get-pr-comments, scripts/get-thread-for-comment, scripts/pending-feedback.py, scripts/reply-to-pr-thread, scrip…"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Bash(gh *), Bash(git *), Bash(bash *), Bash(python3 *), Read, Write"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "En mode pipeline, l'agent pousse, répond et résout des threads sans validation humaine ; Bash(git *) permet aussi des push, limités seulement par la prose du skill."
+        }
+      ]
+    },
+    {
+      "id": "obra/superpowers/skills/executing-plans",
+      "nom": "executing-plans",
+      "place": "ajout",
+      "repo": "obra/superpowers",
+      "chemin_skill": "skills/executing-plans",
+      "skill_md": "skills/executing-plans/SKILL.md",
+      "sha_epingle": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "empreinte": "72a2e314b40d2deb3e6ecdc126fcf4018b3cec392e8cebd4d1ccc83ca2bbae18",
+      "licence": "MIT",
+      "resume_fr": "exécute le plan toi-même, tâche par tâche → moins de coût, une seule revue finale",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/task-done, scripts/task-start"
+        }
+      ]
+    },
+    {
+      "id": "alirezarezvani/claude-skills/engineering/skills/agent-regression-evals",
+      "nom": "agent-regression-evals",
+      "place": "ajout",
+      "repo": "alirezarezvani/claude-skills",
+      "chemin_skill": "engineering/skills/agent-regression-evals",
+      "skill_md": "engineering/skills/agent-regression-evals/SKILL.md",
+      "sha_epingle": "8f082544116fc0d014188e521ca40304cdfc86b0",
+      "empreinte": "5e56522eb121c6008fd2e9367c4ae9828058e4673a97f83ca71b0b33e17c4453",
+      "licence": "MIT",
+      "resume_fr": "compare chaque modification d'agent à la baseline par statistiques → évite les régressions invisibles",
+      "note": 10,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "exécution dynamique de code"
+        },
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/flake_detector.py, scripts/regression_gate.py, scripts/trajectory_checker.py"
+        }
+      ]
+    },
+    {
+      "id": "obra/superpowers/skills/finishing-a-development-branch",
+      "nom": "finishing-a-development-branch",
+      "place": "ajout",
+      "repo": "obra/superpowers",
+      "chemin_skill": "skills/finishing-a-development-branch",
+      "skill_md": "skills/finishing-a-development-branch/SKILL.md",
+      "sha_epingle": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "empreinte": "79af101c0a3c11d3007579708febeed1350a21800ad602efe1fa7ae6addd9103",
+      "licence": "MIT",
+      "resume_fr": "te fait choisir merge, PR ou conservation après tests verts → évite les fusions hasardeuses",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "everyinc/compound-engineering-plugin/skills/ce-dogfood",
+      "nom": "ce-dogfood",
+      "place": "ajout",
+      "repo": "EveryInc/compound-engineering-plugin",
+      "chemin_skill": "skills/ce-dogfood",
+      "skill_md": "skills/ce-dogfood/SKILL.md",
+      "sha_epingle": "8e5d1c87613f484a5bdfeacedf86a7aaaccfa264",
+      "empreinte": "c7368ede08c508fc8a6f74dcff48a398e10cbabad692f482a9041353a9eb0bad",
+      "licence": "MIT",
+      "resume_fr": "teste la branche dans un navigateur, corrige les petites casses → moins de régressions avant livraison",
+      "note": 10,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/packs-resolve.py"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Commits autonomes et corrections de code sur la branche active sans validation humaine intermédiaire ; à surveiller à l'exécution."
+        }
+      ]
+    },
+    {
+      "id": "zebbern/claude-code-guide/skills/secure-code-review",
+      "nom": "secure-code-review",
+      "place": "ajout",
+      "repo": "zebbern/claude-code-guide",
+      "chemin_skill": "skills/secure-code-review",
+      "skill_md": "skills/secure-code-review/SKILL.md",
+      "sha_epingle": "3ae17b2c765ed8534ba9c6f848563db127fc4ca6",
+      "empreinte": "fdc5102b2d2143f1628d6cf81872fbf4565fd96dfc7c6b9648ee71cf5e2e39ef",
+      "licence": "MIT",
+      "resume_fr": "audite le code contre l'OWASP Top 10 → repère les failles avant mise en production",
+      "note": 7,
+      "editeur_confiance": false,
+      "risque_max": "info",
+      "risque_max_projet": "info",
+      "risques": [
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "exécution dynamique de code (dans un exemple de code, à vérifier)"
+        }
+      ]
+    },
+    {
+      "id": "wshobson/agents/plugins/agent-teams/skills/parallel-debugging",
+      "nom": "parallel-debugging",
+      "place": "ajout",
+      "repo": "wshobson/agents",
+      "chemin_skill": "plugins/agent-teams/skills/parallel-debugging",
+      "skill_md": "plugins/agent-teams/skills/parallel-debugging/SKILL.md",
+      "sha_epingle": "9c61ab243def98f72da12abd41cfcf5bcd91af9d",
+      "empreinte": "3557dae2b6180813d6f75be686071c79bdb8b880e70f86f627964a852a779866",
+      "licence": "MIT",
+      "resume_fr": "fait tester plusieurs causes possibles en parallèle → évite de chasser le mauvais bug",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "wshobson/agents/plugins/agent-teams/skills/team-communication-protocols",
+      "nom": "team-communication-protocols",
+      "place": "ajout",
+      "repo": "wshobson/agents",
+      "chemin_skill": "plugins/agent-teams/skills/team-communication-protocols",
+      "skill_md": "plugins/agent-teams/skills/team-communication-protocols/SKILL.md",
+      "sha_epingle": "9c61ab243def98f72da12abd41cfcf5bcd91af9d",
+      "empreinte": "72a7c338690f44d6bc302fdfc2d35fa97cc130a9fb1129f98e3fe15f73ae9e38",
+      "licence": "MIT",
+      "resume_fr": "te fait choisir le bon message entre équipiers → évite le bruit et les coordinations ratées",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "github/awesome-copilot/skills/agent-architecture",
+      "nom": "agent-architecture",
+      "place": "ajout",
+      "repo": "github/awesome-copilot",
+      "chemin_skill": "skills/agent-architecture",
+      "skill_md": "skills/agent-architecture/SKILL.md",
+      "sha_epingle": "b13e55f85ffdf451d40d09839cb1e337bf3eda98",
+      "empreinte": "fd2a0266b2214db166df4bf942975d0b1017790e54fa1082ca275de37c028643",
+      "licence": "MIT",
+      "resume_fr": "conçoit ou audite des architectures d'agents IA → évite les composants superflus et erreurs coûteuses",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "alirezarezvani/claude-skills/markdown-html/skills/md-review",
+      "nom": "md-review",
+      "place": "ajout",
+      "repo": "alirezarezvani/claude-skills",
+      "chemin_skill": "markdown-html/skills/md-review",
+      "skill_md": "markdown-html/skills/md-review/SKILL.md",
+      "sha_epingle": "8f082544116fc0d014188e521ca40304cdfc86b0",
+      "empreinte": "c804c2cfbdfd8a47645f4460446f0a236218df34f2c8bf7a12fc736b465b37d2",
+      "licence": "MIT",
+      "resume_fr": "transforme une revue de code markdown en HTML annoté → relectures lisibles et accessibles",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/annotation_extractor.py, scripts/diff_parser.py, scripts/review_html_renderer.py"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le HTML généré charge Google Fonts : une requête vers un tiers qui expose l'IP du lecteur, à noter pour des revues confidentielles."
+        }
+      ]
+    },
+    {
+      "id": "affaan-m/ecc/skills/agent-introspection-debugging",
+      "nom": "agent-introspection-debugging",
+      "place": "ajout",
+      "repo": "affaan-m/ECC",
+      "chemin_skill": "skills/agent-introspection-debugging",
+      "skill_md": "skills/agent-introspection-debugging/SKILL.md",
+      "sha_epingle": "d2ef2680594f9a17526a6e1a2e18b3d242c5d17b",
+      "empreinte": "c8d0b3c24447dc0c9c1e830162de925d62736502800a2078cbbb331d094a4c97",
+      "licence": "MIT",
+      "resume_fr": "diagnostique une panne d'agent avant toute relance → évite les réessais aveugles",
+      "note": 7,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "affaan-m/ecc/skills/agent-architecture-audit",
+      "nom": "agent-architecture-audit",
+      "place": "ajout",
+      "repo": "affaan-m/ECC",
+      "chemin_skill": "skills/agent-architecture-audit",
+      "skill_md": "skills/agent-architecture-audit/SKILL.md",
+      "sha_epingle": "d2ef2680594f9a17526a6e1a2e18b3d242c5d17b",
+      "empreinte": "72d9fae907692f2930fb49c4a6da0a3e4f0d7763b6a1debdf79cc1eea212003a",
+      "licence": "MIT",
+      "resume_fr": "diagnostique les 12 couches d'un agent → trouve la cause au lieu de deviner",
+      "note": 7,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    }
+  ]
+}

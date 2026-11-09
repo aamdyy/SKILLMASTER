@@ -1,89 +1,125 @@
 {
   "type": "data",
-  "genere_le": "2026-11-02T13:56:47.181Z",
+  "genere_le": "2026-11-09T14:25:50.867Z",
   "version_juge": "v3",
-  "proposition_auto": true,
-  "regles": "finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 3 skills par dépôt au plus ; épinglages et exclusions dans library/overrides.json",
+  "regles": "finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus, sauf éditeurs de confiance et exceptions ; épinglages et exclusions dans library/overrides.json",
   "tenants_de": "tour précédent",
   "reclasse": true,
   "finalistes": [
     "anthropics/skills/skills/xlsx",
-    "astronomer/agents/skills/airflow",
+    "aws/agent-toolkit-for-aws/plugins/aws-data-analytics/skills/connecting-to-data-source",
     "awslabs/agent-plugins/plugins/databases-on-aws/skills/dsql",
     "cloudflare/skills/skills/basin",
     "data-goblin/power-bi-agentic-development/plugins/dashboards/skills/querying-fabric",
     "data-goblin/power-bi-agentic-development/plugins/etl/skills/using-duckdb",
     "data-goblin/power-bi-agentic-development/plugins/fabric-cli/skills/fabric-cli",
     "datopian/portaljs/skills/portaljs-add-geo",
-    "dynatrace/dynatrace-for-ai/skills/dt-app-notebooks",
-    "dynatrace/dynatrace-for-ai/skills/dt-obs-analytics",
+    "duckdb/duckdb-skills/skills/query",
     "googlecloudplatform/data-agent-kit-plugin/skills/bigtable-basics",
     "huggingface/skills/skills/huggingface-trackio",
     "jeffallan/claude-skills/skills/pandas-pro",
     "jeffallan/claude-skills/skills/sql-pro",
     "jimliu/baoyu-design/skills/dataviz",
-    "k-dense-ai/scientific-agent-skills/skills/aeon",
-    "k-dense-ai/scientific-agent-skills/skills/astropy",
-    "k-dense-ai/scientific-agent-skills/skills/polars",
     "k-dense-ai/scientific-agent-skills/skills/scientific-visualization",
     "mahanaicoach/google-maps-scraper-kit/.claude/skills/google-maps-scraper",
     "microsoft/dataverse-skills/.github/plugins/dataverse/skills/dv-query",
-    "mongodb/agent-skills/skills/mongodb-schema-design",
-    "phuryn/pm-skills/pm-execution/skills/dummy-dataset",
+    "monte-carlo-data/mc-agent-toolkit/skills/generate-validation-notebook",
+    "netlify/context-and-tools/skills/netlify-database",
+    "nvidia/skills/skills/accelerated-computing-cudf",
+    "supabase/agent-skills/skills/supabase-postgres-best-practices",
+    "thinkinaixyz/deepchat/.agents/skills/deepchat-data-import",
     "timescale/pg-aiguide/skills/schema-exploration",
-    "tronghieu/agent-skills/skills/data-scientist"
+    "tronghieu/agent-skills/skills/data-scientist",
+    "zebbern/claude-code-guide/skills/sql-insight"
   ],
-  "changements": [],
+  "changements": [
+    {
+      "entrant": "query",
+      "sortant": "xlsx",
+      "raison": "DuckDB est dans la stack et ce skill lance du SQL local sur CSV/Parquet, plus utile pour la data que la création de fichiers Excel.",
+      "entrant_id": "duckdb/duckdb-skills/skills/query",
+      "sortant_id": "anthropics/skills/skills/xlsx"
+    },
+    {
+      "entrant": "dataviz",
+      "sortant": "polars",
+      "raison": "plus éligible pour ce type ou absent de la sélection",
+      "entrant_id": "jimliu/baoyu-design/skills/dataviz",
+      "sortant_id": "k-dense-ai/scientific-agent-skills/skills/polars"
+    },
+    {
+      "entrant": "supabase-postgres-best-practices",
+      "sortant": "aeon",
+      "raison": "plus éligible pour ce type ou absent de la sélection",
+      "entrant_id": "supabase/agent-skills/skills/supabase-postgres-best-practices",
+      "sortant_id": "k-dense-ai/scientific-agent-skills/skills/aeon"
+    },
+    {
+      "entrant": "sql-insight",
+      "sortant": "dummy-dataset",
+      "raison": "plus éligible pour ce type ou absent de la sélection",
+      "entrant_id": "zebbern/claude-code-guide/skills/sql-insight",
+      "sortant_id": "phuryn/pm-skills/pm-execution/skills/dummy-dataset"
+    }
+  ],
   "ecartes": [
     {
       "nom": "using-duckdb",
-      "raison": "Cible OneLake/Fabric (cloud, Spark), pas le DuckDB local."
+      "raison": "Cible Fabric/OneLake (entrepôt cloud), hors stack."
     },
     {
-      "nom": "basin",
-      "raison": "Iceberg R2 avec SQL distribué : data warehouse cloud, absent de sa stack."
+      "nom": "dv-query",
+      "raison": "Spécifique à Dataverse, absent de la stack."
+    },
+    {
+      "nom": "generate-validation-notebook",
+      "raison": "Dédié à dbt et aux entrepôts cloud (Snowflake, BigQuery), hors stack."
     },
     {
       "nom": "bigtable-basics",
       "raison": "Bigtable est une base cloud Google, hors stack."
     },
     {
+      "nom": "connecting-to-data-source",
+      "raison": "Glue avec Snowflake/BigQuery/Redshift, entrepôts cloud hors stack."
+    },
+    {
       "nom": "querying-fabric",
-      "raison": "Microsoft Fabric/Power BI : entrepôt cloud, hors stack."
+      "raison": "Fabric/Power BI, entrepôt cloud hors stack."
     },
     {
       "nom": "fabric-cli",
-      "raison": "Microsoft Fabric : plateforme data cloud, hors stack."
+      "raison": "Outil Fabric cloud, hors stack."
+    },
+    {
+      "nom": "accelerated-computing-cudf",
+      "raison": "GPU NVIDIA et dask-cuDF (calcul distribué), hors stack."
+    },
+    {
+      "nom": "basin",
+      "raison": "Entrepôt analytique Iceberg/SQL distribué, de type data warehouse cloud."
     },
     {
       "nom": "dsql",
-      "raison": "Aurora DSQL est une base SQL distribuée cloud, hors stack."
+      "raison": "Base SQL distribuée AWS, hors stack."
     },
     {
-      "nom": "airflow",
-      "raison": "Airflow orchestre des pipelines de data warehouse, hors stack."
+      "nom": "netlify-database",
+      "raison": "Propre à Netlify, hors stack."
     },
     {
-      "nom": "dt-app-notebooks",
-      "raison": "Notebooks Dynatrace et DQL : plateforme d'observabilité cloud, hors stack."
+      "nom": "deepchat-data-import",
+      "raison": "Ne vaut que pour l'application DeepChat."
     },
     {
-      "nom": "dt-obs-analytics",
-      "raison": "Analyse de dashboards Dynatrace, hors stack."
-    },
-    {
-      "nom": "dv-query",
-      "raison": "Dataverse est une plateforme de données cloud Microsoft, hors stack."
-    },
-    {
-      "nom": "mongodb-schema-design",
-      "raison": "MongoDB n'est pas dans sa stack."
+      "nom": "google-maps-scraper",
+      "raison": "Scraping de prospects Google Maps, sans lien avec la stack data."
     }
   ],
   "stabilite": {
     "tirages": 3,
-    "meme_composition_sans_tenants": true,
-    "raison_tirage_1": "Les tenants pandas, SQL généraliste et visualisation matplotlib collent directement à sa stack Python/data, alors que les skills cloud (Fabric, Dynatrace, DSQL, Bigtable, Basin) sont écartés."
+    "meme_composition_sans_tenants": false,
+    "raison_tirage_1": "La tête du pack reste pandas, SQL, DuckDB local et la méthode d'analyse, tout ce qui est cloud ou entrepôt de données étant écarté."
   },
   "recommandes": [
     {
@@ -96,21 +132,8 @@
       "score_pack": 7.2,
       "note_juge": 8,
       "modele": "haiku",
-      "risque_max": null,
+      "risque_max": "info",
       "raison": "Déclenchement précis et code concret, mais contenu en grande partie connu de Claude. Quelques usages dépréciés (errors=ignore) et annexes tronquées. Pas de risque de sécurité nouveau."
-    },
-    {
-      "id": "k-dense-ai/scientific-agent-skills/skills/polars",
-      "nom": "polars",
-      "repo": "K-Dense-AI/scientific-agent-skills",
-      "resume_fr": "te guide sur Polars en lazy et expressions → ETL plus rapides que pandas",
-      "note": 9,
-      "pertinence": 8,
-      "score_pack": 8.6,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Skill data ciblé, versionné et vérifié sur Polars 1.44.2, avec pièges réels (null vs NaN, cardinalité des jointures, ddof, streaming). Note amputée par les annexes absentes ou tronquées et une section de citation hors sujet."
     },
     {
       "id": "jeffallan/claude-skills/skills/sql-pro",
@@ -135,34 +158,21 @@
       "score_pack": 8.4,
       "note_juge": 10,
       "modele": "haiku",
-      "risque_max": "eleve",
+      "risque_max": "moyen",
       "raison": "Skill ciblé et précis : garde-fous d'intégrité, commandes exactes avec versions pinées, contrôles d'export. Règles d'éditeur datées (2026-10-01). Annexes lues en extrait tronqué. Scripts déjà signalés."
     },
     {
-      "id": "k-dense-ai/scientific-agent-skills/skills/aeon",
-      "nom": "aeon",
-      "repo": "K-Dense-AI/scientific-agent-skills",
-      "resume_fr": "classe, prévoit et détecte les anomalies en séries temporelles → évite les algorithmes faits maison",
+      "id": "duckdb/duckdb-skills/skills/query",
+      "nom": "query",
+      "repo": "duckdb/duckdb-skills",
+      "resume_fr": "lance du SQL DuckDB sur tes fichiers → analyses rapides sans quitter le terminal",
       "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
+      "pertinence": 8,
+      "score_pack": 8.6,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "info",
-      "raison": "Déclenchement précis et API versionnée (aeon 1.6.0) avec pièges réels : modules expérimentaux, prts incompatible, formats de données. Qualité tirée vers le bas par une section de citation envahissante et des snippets de téléchargement non exécutés."
-    },
-    {
-      "id": "anthropics/skills/skills/xlsx",
-      "nom": "xlsx",
-      "repo": "anthropics/skills",
-      "resume_fr": "crée et corrige des fichiers Excel avec formules vérifiées → tableurs sans erreurs de calcul",
-      "note": 10,
-      "pertinence": 6,
-      "score_pack": 8.4,
-      "note_juge": 10,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Skill officiel Anthropic, ciblé et précis : déclencheurs et exclusions clairs, pièges réels (_xlfn, fonctions non supportées par LibreOffice, liens externes, data_only destructif), recalcul vérifiable. Annexe LICENSE seule."
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et étapes exécutables, sandbox DuckDB et idiomes Friendly SQL utiles. Retenue pour les dépendances non fournies (install-duckdb, duckdb-docs), une logique de taille floue et une incohérence sur le mode fallback."
     },
     {
       "id": "tronghieu/agent-skills/skills/data-scientist",
@@ -174,36 +184,62 @@
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "eleve",
+      "risque_max": "moyen",
       "raison": "Discipline solide et précise : profilage obligatoire, baseline avant complexité, checklists de fuites et de revue rouge, commandes exactes. Périmètre large mais cohérent. Plusieurs références absentes."
     },
-    {
-      "id": "phuryn/pm-skills/pm-execution/skills/dummy-dataset",
-      "nom": "dummy-dataset",
-      "repo": "phuryn/pm-skills",
-      "resume_fr": "génère des jeux de données factices réalistes → testes ton code sans vraies données",
-      "note": 6,
-      "pertinence": 8,
-      "score_pack": 6.8,
-      "note_juge": 6,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement clair et sujet net. Mais le contenu est très générique : le gabarit Python est incomplet (générateur vide, placeholders $ROWS non remplis, « auto-increment » non implémenté). Peu de savoir-faire propre à Claude Code."
-    }
-  ],
-  "ajouts": [
     {
       "id": "jimliu/baoyu-design/skills/dataviz",
       "nom": "dataviz",
       "repo": "JimLiu/baoyu-design",
       "resume_fr": "valide la palette de couleurs avant chaque graphique → évite les visuels illisibles pour les daltoniens",
       "note": 9,
+      "pertinence": 8,
+      "score_pack": 8.6,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et méthode concrète avec validateur CVD exécutable et règles testables. Retenu : palette.md absente, annexes tronquées, et specs de style imposées (choix visuels fixes)."
+    },
+    {
+      "id": "supabase/agent-skills/skills/supabase-postgres-best-practices",
+      "nom": "supabase-postgres-best-practices",
+      "repo": "supabase/agent-skills",
+      "resume_fr": "te guide sur Postgres avant schémas, requêtes et RLS → évite lenteurs et fuites de données",
+      "note": 9,
+      "pertinence": 8,
+      "score_pack": 8.6,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et règles SQL concrètes (index, RLS, pooling). Note limitée par un gabarit résiduel dans _sections.md, un CHANGELOG tronqué et une licence absente du dépôt."
+    },
+    {
+      "id": "zebbern/claude-code-guide/skills/sql-insight",
+      "nom": "sql-insight",
+      "repo": "zebbern/claude-code-guide",
+      "resume_fr": "traduit tes questions en SQL, repère les index manquants → requêtes plus rapides",
+      "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Déclenchement précis et méthode concrète avec validateur CVD exécutable et règles testables. Retenu : palette.md absente, annexes tronquées, et specs de style imposées (choix visuels fixes)."
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis, commandes exactes et règles listées. Savoir-faire partiellement connu (anti-patterns SQL classiques). Script non fourni, donc non vérifié. Pas de contenu marketing."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "anthropics/skills/skills/xlsx",
+      "nom": "xlsx",
+      "repo": "anthropics/skills",
+      "resume_fr": "crée et modifie des tableurs Excel avec formules vérifiées → évite les erreurs de calcul cachées",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis avec exclusions claires. Pièges réels (préfixes _xlfn, fonctions non évaluées par LibreOffice, liens externes perdus, double chargement) et commandes exactes. Note réduite : hypothèses d'environnement et règles esthétiques imposées."
     },
     {
       "id": "timescale/pg-aiguide/skills/schema-exploration",
@@ -219,19 +255,6 @@
       "raison": "Déclencheur précis et garde-fous solides (lecture seule, échantillonnage soumis à accord, PG18). Requêtes catalogue concrètes. Notée un cran plus bas : plusieurs annexes citées sont absentes ou tronquées."
     },
     {
-      "id": "datopian/portaljs/skills/portaljs-add-geo",
-      "nom": "portaljs-add-geo",
-      "repo": "datopian/portaljs",
-      "resume_fr": "convertit un fichier géo en carte et requêtes spatiales → portail prêt sans serveur",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Pipeline géo précis et vérifiable (commandes ogr2ogr, tippecanoe, duckdb, pièges RFC7946 et Hilbert, seuils de taille). Retiré : workflow principal externe non fourni, annexe tronquée, pipeline qui publie les données."
-    },
-    {
       "id": "huggingface/skills/skills/huggingface-trackio",
       "nom": "huggingface-trackio",
       "repo": "huggingface/skills",
@@ -245,30 +268,108 @@
       "raison": "Skill officiel Hugging Face, ciblé et déclencheur précis, avec API et commandes CLI exactes. Note amputée par des annexes tronquées et un exemple avec variable non définie."
     },
     {
-      "id": "k-dense-ai/scientific-agent-skills/skills/astropy",
-      "nom": "astropy",
-      "repo": "K-Dense-AI/scientific-agent-skills",
-      "resume_fr": "guide les API Astropy : unités, coordonnées, FITS, WCS → moins d'erreurs d'unités et de conversion",
+      "id": "datopian/portaljs/skills/portaljs-add-geo",
+      "nom": "portaljs-add-geo",
+      "repo": "datopian/portaljs",
+      "resume_fr": "convertit un fichier géo en carte et requêtes spatiales → portail prêt sans serveur",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Pipeline géo précis et vérifiable (commandes ogr2ogr, tippecanoe, duckdb, pièges RFC7946 et Hilbert, seuils de taille). Retiré : workflow principal externe non fourni, annexe tronquée, pipeline qui publie les données."
+    },
+    {
+      "id": "duckdb/duckdb-skills/skills/spatial",
+      "nom": "spatial",
+      "repo": "duckdb/duckdb-skills",
+      "resume_fr": "interroge données géographiques avec DuckDB, sans clé API → trouve lieux, distances et jointures spatiales",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et pièges réels bien documentés (POINT_2D, geometry_always_xy, bbox pushdown). Commandes concrètes. Retenue : release Overture figée à 2026-03-18.0 et annexes vues partiellement."
+    },
+    {
+      "id": "astronomer/agents/skills/airflow-state-store",
+      "nom": "airflow-state-store",
+      "repo": "astronomer/agents",
+      "resume_fr": "garde l'état des tâches entre relances → évite de relancer un job depuis zéro",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Skill ciblé et précis : pièges réels (z positionnel, WCS 0/1, w0wzCDM, réseau signalé). Note de qualité réduite : texte verbeux, avertissements « illustratifs » répétés, section de citation hors sujet."
+      "raison": "Déclenchement précis et savoir-faire réel (AIP-103, pièges submit+poll, anti-patterns Variable/XCom). Exemples concrets et vérifiables. Note amputée : SKILL.md tronqué en fin de checklist."
     },
     {
-      "id": "mahanaicoach/google-maps-scraper-kit/.claude/skills/google-maps-scraper",
-      "nom": "google-maps-scraper",
-      "repo": "Mahanaicoach/google-maps-scraper-kit",
-      "resume_fr": "te génère une liste de commerces locaux avec emails et réseaux → prospection plus rapide",
+      "id": "astronomer/agents/skills/airflow",
+      "nom": "airflow",
+      "repo": "astronomer/agents",
+      "resume_fr": "lance, relance et diagnostique tes DAG Airflow → moins de temps perdu sur les échecs",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Déclenchement précis et commandes concrètes propres au kit, savoir-faire pratique (quotas, proxies, pièges). Note réduite par la longueur répétitive et la dépendance à des scripts absents."
+      "risque_max": "moyen",
+      "raison": "Skill d'Astronomer, ciblé sur les opérations Airflow avec des commandes `af` exactes et des garde-fous (dry-run avant discover). Note amputée : routes vers des skills frères et un hook absents."
+    },
+    {
+      "id": "googlecloudplatform/data-agent-kit-plugin/skills/building-data-apps",
+      "nom": "building-data-apps",
+      "repo": "GoogleCloudPlatform/data-agent-kit-plugin",
+      "resume_fr": "crée dashboards data GCP en React ou Streamlit → évite les choix visuels inventés",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et périmètre net (dashboards GCP). Pièges BigQuery et streaming SSE utiles. Note bridée par un style visuel imposé, des MUST nombreux et des exemples absents."
+    },
+    {
+      "id": "mongodb/agent-skills/skills/mongodb-schema-design",
+      "nom": "mongodb-schema-design",
+      "repo": "mongodb/agent-skills",
+      "resume_fr": "revoit ton modèle de données MongoDB → évite les schémas qui ralentissent les requêtes",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclencheurs précis, pièges réels et commandes vérifiables (hideIndex, $indexStats, explain). Retranché : ton d'agent mal adapté (« je », outils MCP), annexe tronquée, 15 annexes non fournies."
+    },
+    {
+      "id": "dynatrace/dynatrace-for-ai/skills/dt-app-notebooks",
+      "nom": "dt-app-notebooks",
+      "repo": "Dynatrace/dynatrace-for-ai",
+      "resume_fr": "crée et modifie tes notebooks Dynatrace, requêtes DQL validées → évite les requêtes inventées",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill ciblé et précis : workflow dtctl en étapes, règles de mise à jour (relire avant d'écrire), types de visualisation et pièges réels. Note amputée par une annexe tronquée, un JSON commenté invalide et des assets absents."
+    },
+    {
+      "id": "dynatrace/dynatrace-for-ai/skills/dt-obs-analytics",
+      "nom": "dt-obs-analytics",
+      "repo": "Dynatrace/dynatrace-for-ai",
+      "resume_fr": "extrait les requêtes d'un dashboard Dynatrace → repère anomalies et corrélations sans tout lire",
+      "note": 9,
+      "pertinence": 6,
+      "score_pack": 7.8,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill officiel Dynatrace, très ciblé. Commandes dtctl exactes, payloads, pièges réels (variables vfilter, timeframe absolu). Note amputée par une description très longue et des scripts non fournis."
     },
     {
       "id": "pydantic/skills/skills/logfire-query",
@@ -282,71 +383,6 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Déclenchement précis avec routage explicite vers logfire-ui. Schéma Logfire, limites (14 jours, 10 000 lignes) et exemples SQL concrets. Note amputée par des restes écrits pour Codex et des annexes tronquées."
-    },
-    {
-      "id": "neondatabase/agent-skills/skills/neon-realtime",
-      "nom": "neon-realtime",
-      "repo": "neondatabase/agent-skills",
-      "resume_fr": "synchronise les requêtes SQL en direct dans l'UI → évite le polling et les rafraîchissements manuels",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Skill officiel Neon, API bêta absente des données d'entraînement, avec code, commandes et pièges (sealing, txid, SSR). Note limitée par annexes tronquées, subscribing.md absent et dépendance au skill parent neon."
-    },
-    {
-      "id": "sentioxyz/sentio-ai-kit/skills/sentio-platform",
-      "nom": "sentio-platform",
-      "repo": "sentioxyz/sentio-ai-kit",
-      "resume_fr": "pilote processors, requêtes SQL, alertes et dashboards Sentio → supervise tes données sans quitter le terminal",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "eleve",
-      "raison": "Déclenchement précis et commandes CLI Sentio concrètes et spécifiques à la plateforme. Qualité réduite par l'usage mêlé de npx et de la commande nue « sentio », « @latest » non épinglé, et annexe absente."
-    },
-    {
-      "id": "confluentinc/agent-skills/skills/flink-udf",
-      "nom": "flink-udf",
-      "repo": "confluentinc/agent-skills",
-      "resume_fr": "guide la création d'UDF Flink en Java → étend Flink SQL avec tes propres fonctions",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis, avec exclusions nettes. Commandes Confluent CLI et API PTF utiles. Exemples PTF incohérents (StayState non défini, imports manquants) et dépendances absentes."
-    },
-    {
-      "id": "confluentinc/agent-skills/skills/confluent-cloud-flink-sql",
-      "nom": "confluent-cloud-flink-sql",
-      "repo": "confluentinc/agent-skills",
-      "resume_fr": "contrôle le SQL Flink de Confluent Cloud avant exécution → évite les écarts avec Apache Flink",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Skill officiel Confluent, ciblé, avec pièges de dialecte CC vs OSS, commandes CLI exactes et boucle de vérification. Note réduite : annexes principales tronquées (dialect-traps, cli-reference, sql-patterns) et annexes manquantes."
-    },
-    {
-      "id": "netlify/context-and-tools/skills/netlify-database",
-      "nom": "netlify-database",
-      "repo": "netlify/context-and-tools",
-      "resume_fr": "crée et migre une base Postgres sans configuration → évite de gérer l'infrastructure de données soi-même",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclencheurs précis, règles de migration et pièges réels bien documentés, commandes exactes. Retenue : date de tarification périmée, annexes tronquées, operational-footguns.md absent."
     }
   ]
 }

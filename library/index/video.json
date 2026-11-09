@@ -1,7 +1,7 @@
 {
-  "genere_le": "2026-11-02T13:57:04.416Z",
+  "genere_le": "2026-11-09T14:26:42.080Z",
   "type": "video",
-  "bareme": "b1",
+  "bareme": "b2",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
     {
@@ -11,8 +11,10 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-best-practices",
       "skill_md": "skills/remotion-best-practices/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "route vers le bon guide Remotion selon ta tâche → évite de chercher la doc",
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "5879c07afcfe7622b0de58738571ecdefe10504f41ce5fb50d01222dea3a3da5",
+      "licence": null,
+      "resume_fr": "t'oriente vers le bon guide Remotion selon ta tâche → moins d'erreurs, gain de temps",
       "note": 7,
       "editeur_confiance": true,
       "risque_max": "info",
@@ -21,7 +23,7 @@
         {
           "gravite": "info",
           "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "code": "scripts embarqués, que rien ne lance",
           "detail": "remotion-maps/techniques/cesium/assets/flight-path.ts, remotion-maps/techniques/cesium/scripts/prep-cesium-path.mjs, re…"
         }
       ]
@@ -33,8 +35,10 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-captions",
       "skill_md": "skills/remotion-captions/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "transcris, affiche et importe tes sous-titres en JSON → vidéos Remotion synchronisées et lisibles",
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "17974182b3e67ead01684b792bac2f80344ecc6a809a847dc432cd10429d7212",
+      "licence": null,
+      "resume_fr": "transcrit, affiche et anime des sous-titres en JSON → rend tes vidéos Remotion accessibles et lisibles",
       "note": 8,
       "editeur_confiance": true,
       "risque_max": null,
@@ -42,30 +46,32 @@
       "risques": []
     },
     {
-      "id": "vincentwei1021/video-shotcraft/video-shotcraft",
-      "nom": "video-shotcraft",
+      "id": "remotion-dev/skills/skills/remotion-create",
+      "nom": "remotion-create",
       "place": "recommande",
-      "repo": "Vincentwei1021/video-shotcraft",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "1266a3ec4831289c4d893d42dd5102723658039a",
-      "resume_fr": "crée des promos produit cinématiques depuis ton projet web → vidéos soignées sans design improvisé",
-      "note": 8,
-      "editeur_confiance": false,
+      "repo": "remotion-dev/skills",
+      "chemin_skill": "skills/remotion-create",
+      "skill_md": "skills/remotion-create/SKILL.md",
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "69711dc3d5538648774086be14e4b87295615e392d03eb731b36e49f02e74ee7",
+      "licence": null,
+      "resume_fr": "crée un projet Remotion et ouvre le Studio → aperçu immédiat pour guider le rendu",
+      "note": 7,
+      "editeur_confiance": true,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Publication de vidéos vers des réseaux sociaux tiers via une API avec clé (UPLOAD_POST_API_KEY), donc envoi de contenu à un tiers si l'utilisateur le demande."
-        },
-        {
           "gravite": "moyen",
           "source": "juge",
-          "categorie": "donnees",
-          "code": "Capture de pages réelles d'un produit pouvant contenir des données sensibles ; le skill demande de les anonymiser mais ne le garantit pas."
+          "categorie": "reseau",
+          "code": "La commande « npx create-video@latest » exécute un paquet distant non épinglé sans vérification."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "destruction",
+          "code": "Suppression de fichiers de métadonnées (.DS_Store) dans le dossier courant, à faire sans confirmation explicite de l'utilisateur."
         }
       ]
     },
@@ -76,20 +82,15 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-docs",
       "skill_md": "skills/remotion-docs/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "te fait chercher la doc Remotion en Markdown → évite les API obsolètes de mémoire",
-      "note": 7,
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "31e2dfc60c5dc884ba153f1504a534e80b34e3b33512d6059b46d5247e248a76",
+      "licence": null,
+      "resume_fr": "cherche la doc Remotion à jour en Markdown → évite les API périmées",
+      "note": 8,
       "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Les requêtes de recherche sont envoyées à un service tiers (Algolia) ; à noter si les requêtes contiennent du code ou des données sensibles."
-        }
-      ]
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     },
     {
       "id": "remotion-dev/skills/skills/remotion-markup",
@@ -98,18 +99,27 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-markup",
       "skill_md": "skills/remotion-markup/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "guide les animations par frames avec interpolate → évite les animations CSS qui ne rendent pas",
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "6f86feeb2c6f32e0240ed858c96973d7c68eafac587787ea347f6cd98d2f7ffa",
+      "licence": null,
+      "resume_fr": "pilote les animations par frame → évite les transitions CSS qui ne se rendent pas",
       "note": 6,
       "editeur_confiance": true,
-      "risque_max": "info",
-      "risque_max_projet": "info",
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "info",
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
           "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
           "detail": "remotion-maps/techniques/cesium/assets/flight-path.ts, remotion-maps/techniques/cesium/scripts/prep-cesium-path.mjs, re…"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Les annexes Remotion Maps référencent des scripts (prep-geo.mjs, prep-cesium-path.mjs) et des tokens (tokens.ts) : à vérifier avant exécution"
         }
       ]
     },
@@ -120,8 +130,10 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-render",
       "skill_md": "skills/remotion-render/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "exporte une vidéo Remotion avec le navigateur intégré → rendus fiables, sans configuration de navigateur manuelle",
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "4e16b13ac5c52f62ca174cb8a3c173aec5d864412978510a006469f2ba52746e",
+      "licence": null,
+      "resume_fr": "exporte ta vidéo Remotion avec son navigateur intégré → moins de réglages, rendu fiable",
       "note": 8,
       "editeur_confiance": true,
       "risque_max": null,
@@ -136,26 +148,29 @@
       "chemin_skill": "skills/motion-video",
       "skill_md": "skills/motion-video/SKILL.md",
       "sha_epingle": "4e6e08abf6f26c452d9c87351f36b0dd83683fa8",
+      "empreinte": "63e8cbb2d65bfcf96f7677de12bd7d91423875fdec761c1899879b3b03fd60d6",
+      "licence": "MIT",
       "resume_fr": "rend des scènes animées, une seule vraie capture → preuve crédible sans fausser le reste",
       "note": 9,
       "editeur_confiance": false,
-      "risque_max": "eleve",
+      "risque_max": "moyen",
       "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
           "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
           "detail": "scripts/render-formats.mjs, scripts/stitch.mjs"
         },
         {
           "gravite": "info",
           "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "code": "scripts embarqués, que rien ne lance",
           "detail": "assets/motion/helpers/motion.ts, assets/motion/helpers/rand.ts, assets/motion/helpers/shake.ts"
         },
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
           "source": "juge",
           "categorie": "reseau",
           "code": "Instructions d'installation par git clone ou npx skills add d'un dépôt tiers (video-shotcraft) sans épinglage de version ni revue, donc exécution de code distant non vérifié."
@@ -169,27 +184,24 @@
       "repo": "OpenSenseNova/SenseNova-Skills",
       "chemin_skill": "skills/sn-code-video",
       "skill_md": "skills/sn-code-video/SKILL.md",
-      "sha_epingle": "5ed46909eb78c64274cf149615c283e55f761c9f",
+      "sha_epingle": "004a2426fa092097d65ac9233ca0bcb2be793f57",
+      "empreinte": "bb623b3ea782e5c419a2b6fd2b6754a0c887ebf895dc465ebc9974d57cb374c8",
+      "licence": "MIT",
       "resume_fr": "crée des vidéos par code image par image → rendus fiables et vérifiés en MP4",
       "note": 9,
       "editeur_confiance": false,
-      "risque_max": "eleve",
+      "risque_max": "moyen",
       "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
           "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
           "detail": "scripts/audio_check.sh, scripts/capture.mjs, scripts/check_video.sh, scripts/contact_sheet.sh, scripts/sync_check.py"
         },
         {
-          "gravite": "info",
-          "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
-          "detail": "scripts/synth.py, scripts/tts.py"
-        },
-        {
-          "gravite": "eleve",
+          "gravite": "moyen",
           "source": "juge",
           "categorie": "reseau",
           "code": "Le SKILL.md installe des dépendances (Playwright, Puppeteer, pip) et utilise edge-tts, qui envoie le texte à un service réseau tiers"
@@ -199,46 +211,139 @@
   ],
   "ajouts": [
     {
-      "id": "remotion-dev/skills/skills/remotion-create",
-      "nom": "remotion-create",
+      "id": "kajisho5/ffmpeg-skill/ffmpeg-skill",
+      "nom": "ffmpeg-skill",
       "place": "ajout",
-      "repo": "remotion-dev/skills",
-      "chemin_skill": "skills/remotion-create",
-      "skill_md": "skills/remotion-create/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "crée un projet Remotion et ouvre le Studio → aperçu immédiat et modifications visibles en direct",
-      "note": 5,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Commandes npx create-video@latest et npm i exécutent du code distant non épinglé"
-        }
-      ]
-    },
-    {
-      "id": "trunghaiy/appshot/skills/appshot-videos",
-      "nom": "appshot-videos",
-      "place": "ajout",
-      "repo": "trunghaiy/appshot",
-      "chemin_skill": "skills/appshot-videos",
-      "skill_md": "skills/appshot-videos/SKILL.md",
-      "sha_epingle": "4c3853ff81383604485d7d6e5702d7da586e4d4f",
-      "resume_fr": "crée des vidéos d'aperçu App Store et Play Store → scènes sur mesure, sans gabarit générique",
-      "note": 9,
+      "repo": "kajisho5/ffmpeg-skill",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "6e42a79247909659b3d80833120b272fb5e46aba",
+      "empreinte": "188e35d1708260514705af85323c077ac5f8acc86b632471efe798fdac20931b",
+      "licence": "MIT",
+      "resume_fr": "coupe, assemble et sous-titre vidéo et audio en local → exports prêts pour Reels, TikTok, YouTube",
+      "note": 10,
       "editeur_confiance": false,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
       "risques": [
         {
           "gravite": "eleve",
+          "source": "scan",
+          "code": "caractères invisibles ou bidirectionnels (annexe references/gotchas.md)"
+        },
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": ".github/scripts/bump_roadmap_md.py, .github/scripts/resolve_version.py, bin/install.js, demos/build.py, evals/contract/…"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "exécution dynamique de code (annexe README.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "exécution dynamique de code (dans un exemple de code, à vérifier) (annexe docs/contract.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier) (annexe references/process-pitfalls.md)"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "moyen",
+          "source": "scan",
+          "code": "plugin.json : retiré à la copie, jamais chargé comme plugin"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "CLAUDE.md ou .claude/ embarqué : instructions lues par Claude Code une fois dans le projet",
+          "detail": ".claude/settings.json"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "fichier de plus de 1 Mo",
+          "detail": "assets/demo.gif"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "moyen",
+          "source": "scan",
+          "code": "dossier bin/, retiré à la copie"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": ".github/scripts/build_pages.py, .github/scripts/bump_contract_md.py, .github/scripts/design_decisions_index.py, demos/p…"
+        }
+      ]
+    },
+    {
+      "id": "vincentwei1021/video-shotcraft/video-shotcraft",
+      "nom": "video-shotcraft",
+      "place": "ajout",
+      "repo": "Vincentwei1021/video-shotcraft",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "1266a3ec4831289c4d893d42dd5102723658039a",
+      "empreinte": "65d80ebfefd9cea29993b615116cb7c0fd16fdbef08d06501378da5482d4edd6",
+      "licence": "Apache-2.0",
+      "resume_fr": "crée des promos produit cinématiques depuis ton projet web → vidéos soignées sans design improvisé",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "lien symbolique",
+          "detail": "workbench/demosrc"
+        },
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "assets/lib/helpers/motion.ts, assets/lib/helpers/rand.ts, assets/scripts/capture-template.mjs, assets/scripts/sfx-sourc…"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "moyen",
+          "source": "scan",
+          "code": "plugin.json : retiré à la copie, jamais chargé comme plugin"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "fichier de plus de 1 Mo",
+          "detail": "assets/audio/bgm/bgm-tech-house.mp3"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": ".github/scripts/showcase-publish.py, assets/lib/helpers/__tests__/helpers.test.ts, assets/lib/helpers/shake.ts, assets/…"
+        },
+        {
+          "gravite": "moyen",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Le skill lance npm install sur des dépendances tierces et un serveur de dev en arrière-plan, puis tue tout processus sur le port 3000 via lsof | xargs kill sans vérifier le processus."
+          "code": "Publication de vidéos vers des réseaux sociaux tiers via une API avec clé (UPLOAD_POST_API_KEY), donc envoi de contenu à un tiers si l'utilisateur le demande."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Capture de pages réelles d'un produit pouvant contenir des données sensibles ; le skill demande de les anonymiser mais ne le garantit pas."
         }
       ]
     },
@@ -249,8 +354,10 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-studio",
       "skill_md": "skills/remotion-studio/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "lance l'aperçu Remotion dès le début → voir chaque modification de ta vidéo en direct",
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "51995464fd318cb4466c82a11890ce1fe57ceda23cd1bb2e387f066ecaefc5a3",
+      "licence": null,
+      "resume_fr": "ouvre l'aperçu Remotion dès le départ → tu suis chaque modification en direct",
       "note": 6,
       "editeur_confiance": true,
       "risque_max": null,
@@ -264,8 +371,10 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-interactivity",
       "skill_md": "skills/remotion-interactivity/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "structure les scènes Remotion en éléments éditables → sélection, déplacement et style indépendants dans Studio",
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "823266212a0bf352e48412316943ba5495341f31b6ca4500994046f33cc663d0",
+      "licence": null,
+      "resume_fr": "te fais structurer les éléments Remotion en unités éditables → modifications indépendantes dans Studio",
       "note": 8,
       "editeur_confiance": true,
       "risque_max": null,
@@ -273,58 +382,43 @@
       "risques": []
     },
     {
-      "id": "kajisho5/ffmpeg-skill/ffmpeg-skill",
-      "nom": "ffmpeg-skill",
+      "id": "remotion-dev/skills/skills/remotion-multimedia",
+      "nom": "remotion-multimedia",
       "place": "ajout",
-      "repo": "kajisho5/ffmpeg-skill",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "1ce2c186bf1dba96132d87274eee46df4f537e0e",
-      "resume_fr": "coupe, sous-titre et normalise vidéo et audio en local → exports prêts pour Reels, TikTok, YouTube",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Installation via « npx ffmpeg-skill » : exécution de paquet npm distant non vérifié dans ce contexte"
-        }
-      ]
+      "repo": "remotion-dev/skills",
+      "chemin_skill": "skills/remotion-multimedia",
+      "skill_md": "skills/remotion-multimedia/SKILL.md",
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "541a17e3f774d6b80efbab43603bb07dfe0fcd488568f2a937220874f2721bf3",
+      "licence": null,
+      "resume_fr": "lit durée et dimensions de tes médias dans le navigateur → évite les outils serveur externes",
+      "note": 7,
+      "editeur_confiance": true,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     },
     {
-      "id": "vincentwei1021/video-talkcraft/video-talkcraft",
-      "nom": "video-talkcraft",
+      "id": "trunghaiy/appshot/skills/appshot-videos",
+      "nom": "appshot-videos",
       "place": "ajout",
-      "repo": "Vincentwei1021/video-talkcraft",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "a7c29edfb2404612dde6a5a1c8aa94232e85625b",
-      "resume_fr": "transforme ta voix-off en vidéo animée synchronisée → montages explicatifs plus rapides et soignés",
+      "repo": "trunghaiy/appshot",
+      "chemin_skill": "skills/appshot-videos",
+      "skill_md": "skills/appshot-videos/SKILL.md",
+      "sha_epingle": "4c3853ff81383604485d7d6e5702d7da586e4d4f",
+      "empreinte": "284c88518dffb0f1d7dcbc1fd3bd6abf018a3cdd716c8871a189f4f01e2bbeba",
+      "licence": "MIT",
+      "resume_fr": "crée des vidéos d'aperçu App Store et Play Store → scènes sur mesure, sans gabarit générique",
       "note": 9,
       "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
       "risques": [
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
           "source": "juge",
           "categorie": "reseau",
-          "code": "Le texte du script et les paramètres sont envoyés à l'API tierce Fish Audio pour la synthèse vocale (option, sur clé API)."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Scripts d'installation et de mise à jour (check-runtime.sh --upgrade, npm ci, pip install) qui exécutent du code tiers et peuvent upgrader Remotion automatiquement."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Téléchargements de modèles et de navigateurs depuis des URL externes, avec des clés API Pexels et Pixabay à manipuler."
+          "code": "Le skill lance npm install sur des dépendances tierces et un serveur de dev en arrière-plan, puis tue tout processus sur le port 3000 via lsof | xargs kill sans vérifier le processus."
         }
       ]
     },
@@ -335,102 +429,20 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-upgrade",
       "skill_md": "skills/remotion-upgrade/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "aligne Remotion et ses paquets sur une version → évite les conflits de dépendances",
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "419bacf79a37a66d38c565a0cfe9e653d47860d13185b020e7c1ffdf62ca080b",
+      "licence": null,
+      "resume_fr": "aligne Remotion et ses paquets sur la dernière version → évite les conflits de versions",
       "note": 7,
       "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
       "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Exécute `npx remotion upgrade` et `npx skills update ... --yes` : installation de code tiers non épinglé, sans confirmation."
-        }
-      ]
-    },
-    {
-      "id": "remotion-dev/skills/skills/remotion-multimedia",
-      "nom": "remotion-multimedia",
-      "place": "ajout",
-      "repo": "remotion-dev/skills",
-      "chemin_skill": "skills/remotion-multimedia",
-      "skill_md": "skills/remotion-multimedia/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "lit durée et dimensions de médias dans le navigateur → évite de charger les fichiers entiers",
-      "note": 6,
-      "editeur_confiance": true,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "UrlSource accepte une URL arbitraire sans validation : à utiliser avec des entrées contrôlées pour éviter des requêtes vers des cibles internes."
-        }
-      ]
-    },
-    {
-      "id": "feitangyuan/onetake/onetake",
-      "nom": "onetake",
-      "place": "ajout",
-      "repo": "feitangyuan/onetake",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "013a61ac8d98883c73733f59c06e49e9ba444f14",
-      "resume_fr": "transforme tes captures d'écran en vidéo de lancement animée → rythme cinématique au lieu d'un diaporama",
-      "note": 8,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Le skill télécharge des sources audio et des modèles (Kokoro, faster-whisper, Kenney, Voxengo) depuis Internet ; provenance à vérifier avant exécution."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Le skill exécute des scripts Python/Node et un navigateur Playwright sur le poste local ; à lancer uniquement depuis un dépôt de confiance."
-        }
-      ]
-    },
-    {
-      "id": "vincentwei1021/anything2explainer/anything2explainer",
-      "nom": "anything2explainer",
-      "place": "ajout",
-      "repo": "Vincentwei1021/anything2explainer",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "735c79c8724e897e8971cd59dde7e5aa11e4d6ce",
-      "resume_fr": "transforme un sujet en vidéo explicative narrée → évite tournage et montage manuels",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Le skill envoie le texte du script à un service cloud (edge-tts, Microsoft) et mentionne un TTS Volcengine : données transmises à un tiers, sans avertissement explicite."
-        },
         {
           "gravite": "moyen",
           "source": "juge",
-          "categorie": "consigne",
-          "code": "La phase de recherche aspire des pages web arbitraires ; le skill demande de ne pas exécuter les instructions trouvées, mais un agent qui les lit reste exposé à l'injection de prompt."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
           "categorie": "reseau",
-          "code": "Installation de dépendances non épinglées (npm install, pip install, brew, modèles TTS téléchargés) et exécution de scripts zsh/Python du template, sans vérification d'intégrité."
+          "code": "Exécution de npx skills update --yes sans confirmation, qui installe du code distant depuis un registre externe"
         }
       ]
     },
@@ -441,24 +453,174 @@
       "repo": "remotion-dev/skills",
       "chemin_skill": "skills/remotion-maps",
       "skill_md": "skills/remotion-maps/SKILL.md",
-      "sha_epingle": "c7cb2fdcacd134fb2ccb9b7a44f9ffa44e467271",
-      "resume_fr": "choisit la technique de carte Remotion adaptée à ton plan → évite les outils inutiles",
-      "note": 5,
+      "sha_epingle": "1af7e69a2a613437d46095924057970a6a7df40d",
+      "empreinte": "42c2b572c46236c4b4ccfcb36afae676ff499d73a1ae2647d33542e0ca61e21b",
+      "licence": null,
+      "resume_fr": "choisis une technique de carte selon le plan visé → évite de charger des guides inutiles",
+      "note": 8,
       "editeur_confiance": true,
       "risque_max": "moyen",
-      "risque_max_projet": "moyen",
+      "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "info",
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
           "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
           "detail": "techniques/cesium/assets/flight-path.ts, techniques/cesium/scripts/prep-cesium-path.mjs, techniques/maptiler/assets/Map…"
         },
         {
           "gravite": "moyen",
           "source": "juge",
           "categorie": "donnees",
-          "code": "Le TECHNIQUE.md Cesium demande de créer une clé Google Maps avec facturation et de la laisser sans restriction d'origine pour le rendu headless : risque de fuite de clé à surveiller."
+          "code": "Clés API (Mapbox, MapTiler, Google) lues via process.env dans du code bundlé côté client : risque d'exposition, et la clé MapTiler est dite « unrestricted » sans avertissement."
+        }
+      ]
+    },
+    {
+      "id": "feitangyuan/onetake/onetake",
+      "nom": "onetake",
+      "place": "ajout",
+      "repo": "feitangyuan/onetake",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "abb6d17279cdc749e27e99aa534a062d8fd01ced",
+      "empreinte": "0e57aaa708188548e8a15e2532a1a442353ff71d947a13e8049d670a160598f2",
+      "licence": "NOASSERTION",
+      "resume_fr": "transforme tes captures d'écran en vidéo de lancement animée → rythme cinématique au lieu d'un diaporama",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "lib/motion.js, lib/ui_kit.js, scripts/analyze_ref.py, scripts/frame_diff.py, scripts/gallery.py"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "fichier de plus de 1 Mo",
+          "detail": "assets/cases/clawd.gif"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le skill télécharge des sources audio et des modèles (Kokoro, faster-whisper, Kenney, Voxengo) depuis Internet ; provenance à vérifier avant exécution."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le skill exécute des scripts Python/Node et un navigateur Playwright sur le poste local ; à lancer uniquement depuis un dépôt de confiance."
+        }
+      ]
+    },
+    {
+      "id": "vincentwei1021/video-talkcraft/video-talkcraft",
+      "nom": "video-talkcraft",
+      "place": "ajout",
+      "repo": "Vincentwei1021/video-talkcraft",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "501708856fbfdf596e27dba3200e12cf95da57be",
+      "empreinte": "6871c35f88db864d66ddb4a9f196b560d9b6a71280300b780d6e746d29aeb140",
+      "licence": "NOASSERTION",
+      "resume_fr": "transforme ta voix-off en vidéo animée synchronisée → montages explicatifs plus rapides et soignés",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "lien symbolique",
+          "detail": "workbench/node_modules"
+        },
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "demos/_lib/demo-shell.js, demos/_lib/gsap.min.js, demos/_lib/lottie.min.js, demos/_lib/sfx-map.js, demos/_lib/sfx-sampl…"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "fichier de plus de 1 Mo",
+          "detail": "demos/_lib/media/v-ocean.webm"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "gallery/build.mjs, gallery/server.mjs, runtime/test_runtime.py, scripts/frame_signature.py, scripts/remotion_project_co…"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le texte du script et les paramètres sont envoyés à l'API tierce Fish Audio pour la synthèse vocale (option, sur clé API)."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Scripts d'installation et de mise à jour (check-runtime.sh --upgrade, npm ci, pip install) qui exécutent du code tiers et peuvent upgrader Remotion automatiquement."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Téléchargements de modèles et de navigateurs depuis des URL externes, avec des clés API Pexels et Pixabay à manipuler."
+        }
+      ]
+    },
+    {
+      "id": "andyhuo520/digital-human-koubo/skills/digital-human-koubo",
+      "nom": "digital-human-koubo",
+      "place": "ajout",
+      "repo": "andyhuo520/digital-human-koubo",
+      "chemin_skill": "skills/digital-human-koubo",
+      "skill_md": "skills/digital-human-koubo/SKILL.md",
+      "sha_epingle": "f661a6c047bb74ea306ef58aeb1d461a52c01871",
+      "empreinte": "2000cc61d1eb20c911f05fa659f79044728ba0b4b12782cf66c23e9768e32b76",
+      "licence": "MIT",
+      "resume_fr": "fait parler ton avatar fixe avec des habillages viraux → vidéos plus rythmées et reconnaissables",
+      "note": 8,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/align.py, scripts/assemble.py, scripts/build_tasks.py, scripts/check_edit.py, scripts/cover_first.py"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "scripts/rangedl_mp4.py, templates/reference/launch-169/src/ref/cinematic/geist.ts, templates/reference/launch-169/src/r…"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Envoi de la photo et de la voix de l'utilisateur à des services tiers (Renoise, MiMo) pour le clonage et la génération."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Autorise à retirer la mention « contenu généré par IA » sur demande ; seul un rappel est prévu, ce qui peut favoriser des deepfakes trompeurs."
         }
       ]
     },
@@ -470,32 +632,35 @@
       "chemin_skill": "skills/finance-explainer",
       "skill_md": "skills/finance-explainer/SKILL.md",
       "sha_epingle": "f661a6c047bb74ea306ef58aeb1d461a52c01871",
+      "empreinte": "0732b5da8852f4890d21c28eed040e6ed82b7093fbc30fa113b7488bd7b860cc",
+      "licence": "MIT",
       "resume_fr": "transforme un sujet financier en vidéo sourcée → évite les chiffres inventés",
       "note": 9,
       "editeur_confiance": false,
-      "risque_max": "eleve",
+      "risque_max": "moyen",
       "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
           "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
           "detail": "scripts/align_recording.py, scripts/build_timeline.py, scripts/classify.py, scripts/copy_stats.py, scripts/fetch_stock.…"
         },
         {
           "gravite": "info",
           "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
-          "detail": "scripts/grok_beats.py, templates/engine/remotion.config.ts, templates/engine/src/index.ts, templates/engine/src/lib/the…"
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "templates/engine/remotion.config.ts, templates/engine/src/index.ts, templates/engine/src/lib/types.ts"
         },
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
           "source": "juge",
           "categorie": "reseau",
           "code": "Envoi à des tiers (moteurs de recherche, Renoise, MiMo) de requêtes, de textes, d'audio du présentateur et d'images ; la confidentialité dépend de chaque fournisseur."
         },
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
           "source": "juge",
           "categorie": "reseau",
           "code": "Des URL arbitraires sont récupérées et scrapées (research.py scrape) ; risque de contenu non fiable injecté dans les faits sourcés."

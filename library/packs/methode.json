@@ -1,0 +1,347 @@
+{
+  "type": "methode",
+  "genere_le": "2026-11-09T14:26:41.698Z",
+  "version_juge": "v3",
+  "regles": "finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus, sauf éditeurs de confiance et exceptions ; épinglages et exclusions dans library/overrides.json",
+  "tenants_de": "tour précédent",
+  "reclasse": true,
+  "finalistes": [
+    "addyosmani/agent-skills/skills/constraint-driven-development",
+    "alibaba/open-code-review/skills/open-code-review-delegate",
+    "alirezarezvani/claude-skills/engineering/skills/agent-regression-evals",
+    "artokun/comfyui-mcp/plugin/skills/debug-render",
+    "bjgreenberg/senior-engineering-partner/senior-engineering-partner",
+    "cherryhq/cherry-studio/.agents/skills/cherry-regression-test",
+    "code-yeongyu/oh-my-openagent/.agents/skills/senpi-qa",
+    "code-yeongyu/oh-my-openagent/packages/shared-skills/skills/debugging",
+    "dotnet/skills/plugins/dotnet-diag/skills/android-tombstone-symbolication",
+    "evalstate/fast-agent/examples/hf-toad-cards/skills/session-investigator",
+    "everyinc/compound-engineering-plugin/skills/ce-code-review",
+    "everyinc/compound-engineering-plugin/skills/ce-debug",
+    "everyinc/compound-engineering-plugin/skills/ce-dogfood",
+    "everyinc/compound-engineering-plugin/skills/ce-optimize",
+    "everyinc/compound-engineering-plugin/skills/ce-resolve-pr-feedback",
+    "kajisho5/ffmpeg-skill/.claude/skills/code-review",
+    "obra/superpowers/skills/executing-plans",
+    "obra/superpowers/skills/finishing-a-development-branch",
+    "obra/superpowers/skills/requesting-code-review",
+    "obra/superpowers/skills/subagent-driven-development",
+    "topoteretes/cognee/.agents/skills/cognee-custom-graph-models",
+    "topoteretes/cognee/.agents/skills/cognee-custom-pipelines",
+    "topoteretes/cognee/.agents/skills/cognee-permissions",
+    "topoteretes/cognee/.agents/skills/cognee-recall",
+    "zebbern/claude-code-guide/skills/secure-code-review"
+  ],
+  "changements": [],
+  "ecartes": [
+    {
+      "nom": "cognee-custom-graph-models",
+      "raison": "Spécifique à la bibliothèque cognee."
+    },
+    {
+      "nom": "cognee-custom-pipelines",
+      "raison": "Spécifique à cognee."
+    },
+    {
+      "nom": "cognee-permissions",
+      "raison": "Spécifique à cognee."
+    },
+    {
+      "nom": "cognee-recall",
+      "raison": "Spécifique à cognee."
+    },
+    {
+      "nom": "android-tombstone-symbolication",
+      "raison": "Spécifique à .NET/MAUI, absent de la stack."
+    },
+    {
+      "nom": "senpi-qa",
+      "raison": "Ne vaut que pour l'adaptateur senpi."
+    },
+    {
+      "nom": "cherry-regression-test",
+      "raison": "Ne vaut que pour Cherry Studio."
+    },
+    {
+      "nom": "reviewing-ffmpeg-skill-changes",
+      "raison": "Ne vaut que pour le dépôt ffmpeg-skill."
+    },
+    {
+      "nom": "session-investigator",
+      "raison": "Spécifique à fast-agent."
+    },
+    {
+      "nom": "debug-render",
+      "raison": "Spécifique à ComfyUI."
+    }
+  ],
+  "stabilite": {
+    "tirages": 3,
+    "meme_composition_sans_tenants": false,
+    "raison_tirage_1": "Les méthodes de débogage par cause racine et de relecture de code valent pour toute techno, donc elles passent avant les outils liés à un produit précis."
+  },
+  "recommandes": [
+    {
+      "id": "everyinc/compound-engineering-plugin/skills/ce-debug",
+      "nom": "ce-debug",
+      "repo": "EveryInc/compound-engineering-plugin",
+      "resume_fr": "trouve la cause racine d'un bug, puis le corrige test d'abord → évite les correctifs superficiels",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement clair et méthode précise (reproduction, hypothèses bornées, escalade, test de non-régression, statuts exacts). Note amputée par la complexité, la dépendance à plusieurs sous-skills et des annexes absentes ou tronquées."
+    },
+    {
+      "id": "code-yeongyu/oh-my-openagent/packages/shared-skills/skills/debugging",
+      "nom": "debugging",
+      "repo": "code-yeongyu/oh-my-openagent",
+      "resume_fr": "te fait tester des hypothèses sur l'exécution réelle → évite les corrections devinées",
+      "note": 8,
+      "pertinence": 4,
+      "score_pack": 6.4,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Méthode solide et concrète (triage flaky, invariants, journal de nettoyage, commandes bornées). Périmètre très large, dépendances à des outils maison (omowright, .omo) et références non fournies ; contenu tronqué."
+    },
+    {
+      "id": "everyinc/compound-engineering-plugin/skills/ce-code-review",
+      "nom": "ce-code-review",
+      "repo": "EveryInc/compound-engineering-plugin",
+      "resume_fr": "relit une PR pour bugs, régressions et tests → évite de merger du code défectueux",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et pipeline de revue très détaillé (scope, reviewers, validation, rapport) avec pièges réels. Pénalisé pour sa longueur et sa complexité, et pour des annexes tronquées ou absentes."
+    },
+    {
+      "id": "addyosmani/agent-skills/skills/constraint-driven-development",
+      "nom": "constraint-driven-development",
+      "repo": "addyosmani/agent-skills",
+      "resume_fr": "surveille le diff, bloque les tests sautés → empêche les agents de baisser la barre",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et seuils justifiés, pièges réels (--redact, ratchets, contrôles externes). Pénalisé par la longueur, des exemples de dates incohérents et l'annexe floor-guard tronquée."
+    },
+    {
+      "id": "alibaba/open-code-review/skills/open-code-review-delegate",
+      "nom": "open-code-review-delegate",
+      "repo": "alibaba/open-code-review",
+      "resume_fr": "relit tes modifications fichier par fichier selon les règles → repère bugs et failles avant fusion",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Commandes ocr exactes, format de commentaire, contrôle de couverture obligatoire et gestion des versions de CLI. Déclenchement assez vague (« quand l'agent hôte doit piloter la revue »). Écrit par alibaba, à jour."
+    },
+    {
+      "id": "obra/superpowers/skills/requesting-code-review",
+      "nom": "requesting-code-review",
+      "repo": "obra/superpowers",
+      "resume_fr": "fait relire ton code par un sous-agent avant fusion → repère les problèmes avant qu'ils s'accumulent",
+      "note": 8,
+      "pertinence": 4,
+      "score_pack": 6.4,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Workflow net et précis : commandes git exactes, placeholders du gabarit, règles de traitement des retours. Déclenchement assez générique (\"completing tasks\") et partie du savoir-faire déjà connue de Claude. Annexe tronquée."
+    },
+    {
+      "id": "bjgreenberg/senior-engineering-partner/senior-engineering-partner",
+      "nom": "senior-engineering-partner",
+      "repo": "bjgreenberg/senior-engineering-partner",
+      "resume_fr": "relit, débogue et sécurise ton code en mode senior → moins de bugs et de failles",
+      "note": 8,
+      "pertinence": 6,
+      "score_pack": 7.2,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "eleve",
+      "raison": "Déclencheurs et modes précis, disciplines concrètes et pièges réels (globbing zsh, commande shadowée, injection Bash). Périmètre très large, document dense et tronqué, références externes absentes."
+    },
+    {
+      "id": "obra/superpowers/skills/subagent-driven-development",
+      "nom": "subagent-driven-development",
+      "repo": "obra/superpowers",
+      "resume_fr": "exécute un plan avec un sous-agent frais par tâche et relecture → moins d'erreurs, contexte préservé",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et workflow très détaillé (journal, boucle de correction plafonnée, lots, modèles par rôle). Qualité freinée par annexes tronquées, références absentes et verbosité ; règles d'autonomie à surveiller."
+    }
+  ],
+  "ajouts": [
+    {
+      "id": "everyinc/compound-engineering-plugin/skills/ce-resolve-pr-feedback",
+      "nom": "ce-resolve-pr-feedback",
+      "repo": "EveryInc/compound-engineering-plugin",
+      "resume_fr": "juge les retours de revue, applique les corrections valides → moins de va-et-vient en revue",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement net, contraste avec ce-code-review. Procédures GitHub précises, modes pipeline et reprise bien définis. Note réduite : annexes très denses, scripts et agent fixeur non fournis."
+    },
+    {
+      "id": "obra/superpowers/skills/executing-plans",
+      "nom": "executing-plans",
+      "repo": "obra/superpowers",
+      "resume_fr": "exécute le plan toi-même, tâche par tâche → moins de coût, une seule revue finale",
+      "note": 8,
+      "pertinence": 4,
+      "score_pack": 6.4,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et workflow concret (registre, rulings, revue finale). Note réduite : scripts et annexes (code-reviewer.md, sdd-workspace, review-package) non fournis, texte très long et répétitif."
+    },
+    {
+      "id": "alirezarezvani/claude-skills/engineering/skills/agent-regression-evals",
+      "nom": "agent-regression-evals",
+      "repo": "alirezarezvani/claude-skills",
+      "resume_fr": "compare chaque modification d'agent à la baseline par statistiques → évite les régressions invisibles",
+      "note": 10,
+      "pertinence": 4,
+      "score_pack": 7.6,
+      "note_juge": 10,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill précis et ciblé : statistiques appariées, McNemar, pass^k, politique de quarantaine avec expiration, codes de sortie bloquants. Annexes sourcées. Scripts non fournis, donc non vérifiés."
+    },
+    {
+      "id": "obra/superpowers/skills/finishing-a-development-branch",
+      "nom": "finishing-a-development-branch",
+      "repo": "obra/superpowers",
+      "resume_fr": "te fait choisir merge, PR ou conservation après tests verts → évite les fusions hasardeuses",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et garde-fous réels (confirmation « discard » tapée, pas de --force sans accord, worktrees limités à .worktrees/). Commandes exactes. Qualité légèrement gênée par le mélange anglais et le ton propre à un agent."
+    },
+    {
+      "id": "everyinc/compound-engineering-plugin/skills/ce-dogfood",
+      "nom": "ce-dogfood",
+      "repo": "EveryInc/compound-engineering-plugin",
+      "resume_fr": "teste la branche dans un navigateur, corrige les petites casses → moins de régressions avant livraison",
+      "note": 10,
+      "pertinence": 4,
+      "score_pack": 7.6,
+      "note_juge": 10,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill de mainteneur très structuré : périmètre net, phases, matrice, gabarit de rapport, pièges concrets (PR, trunk, worktree). Annexes clés tronquées à la lecture et script packs-resolve.py non vu."
+    },
+    {
+      "id": "zebbern/claude-code-guide/skills/secure-code-review",
+      "nom": "secure-code-review",
+      "repo": "zebbern/claude-code-guide",
+      "resume_fr": "audite le code contre l'OWASP Top 10 → repère les failles avant mise en production",
+      "note": 7,
+      "pertinence": 6,
+      "score_pack": 6.6,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": "info",
+      "raison": "Description déclenchante précise et périmètre net. Checklist générique utile mais surtout connue ; exemples Python bien ciblés, mais quelques correctifs incomplets (SSRF sans protection DNS rebinding, pas d'annexes)."
+    },
+    {
+      "id": "wshobson/agents/plugins/agent-teams/skills/parallel-debugging",
+      "nom": "parallel-debugging",
+      "repo": "wshobson/agents",
+      "resume_fr": "fait tester plusieurs causes possibles en parallèle → évite de chasser le mauvais bug",
+      "note": 8,
+      "pertinence": 4,
+      "score_pack": 6.4,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et périmètre net. Méthode ACH et gabarits utiles, mais surtout des banalités de débogage ; peu de commandes ou d'outils Claude Code concrets pour l'orchestration parallèle."
+    },
+    {
+      "id": "wshobson/agents/plugins/agent-teams/skills/team-communication-protocols",
+      "nom": "team-communication-protocols",
+      "repo": "wshobson/agents",
+      "resume_fr": "te fait choisir le bon message entre équipiers → évite le bruit et les coordinations ratées",
+      "note": 8,
+      "pertinence": 4,
+      "score_pack": 6.4,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Sujet net et déclencheurs précis pour les Agent Teams. Formats JSON de messages et outils (SendMessage, ExitPlanMode) difficiles à vérifier ici ; annexe de gabarits surtout générique."
+    },
+    {
+      "id": "github/awesome-copilot/skills/agent-architecture",
+      "nom": "agent-architecture",
+      "repo": "github/awesome-copilot",
+      "resume_fr": "conçoit ou audite des architectures d'agents IA → évite les composants superflus et erreurs coûteuses",
+      "note": 8,
+      "pertinence": 4,
+      "score_pack": 6.4,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Périmètre net, déclencheurs précis, savoir-faire solide (contrôles avant effet, budgets, écriture sur timeout). Précision inégale, références non fournies, annexes tronquées, instructions en anglais."
+    },
+    {
+      "id": "alirezarezvani/claude-skills/markdown-html/skills/md-review",
+      "nom": "md-review",
+      "repo": "alirezarezvani/claude-skills",
+      "resume_fr": "transforme une revue de code markdown en HTML annoté → relectures lisibles et accessibles",
+      "note": 8,
+      "pertinence": 4,
+      "score_pack": 6.4,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et commandes exactes. Valeur surtout conventionnelle (sévérités, WCAG 1.4.1). Annexes tronquées, scripts non fournis, citations d'essais peu vérifiables, dépendance au gate de design-system."
+    },
+    {
+      "id": "affaan-m/ecc/skills/agent-introspection-debugging",
+      "nom": "agent-introspection-debugging",
+      "repo": "affaan-m/ECC",
+      "resume_fr": "diagnostique une panne d'agent avant toute relance → évite les réessais aveugles",
+      "note": 7,
+      "pertinence": 4,
+      "score_pack": 5.8,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis et périmètre net. Contenu surtout générique (conseils connus, modèles de rapport), peu de commandes ou de pièges propres à Claude Code. Renvois vers des skills ECC absents."
+    },
+    {
+      "id": "affaan-m/ecc/skills/agent-architecture-audit",
+      "nom": "agent-architecture-audit",
+      "repo": "affaan-m/ECC",
+      "resume_fr": "diagnostique les 12 couches d'un agent → trouve la cause au lieu de deviner",
+      "note": 7,
+      "pertinence": 4,
+      "score_pack": 5.8,
+      "note_juge": 7,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement clair (agent qui se dégrade, couche inconnue, avant mise en prod). Cadre à 12 couches peu sourcé, commandes rg utiles mais génériques, ton marketing dans la description, mélange de langues. Note 7/10."
+    }
+  ]
+}

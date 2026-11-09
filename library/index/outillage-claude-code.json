@@ -1,7 +1,7 @@
 {
-  "genere_le": "2026-11-02T13:57:04.415Z",
+  "genere_le": "2026-11-09T14:26:42.079Z",
   "type": "outillage-claude-code",
-  "bareme": "b1",
+  "bareme": "b2",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
     {
@@ -11,23 +11,26 @@
       "repo": "anthropics/skills",
       "chemin_skill": "skills/skill-creator",
       "skill_md": "skills/skill-creator/SKILL.md",
-      "sha_epingle": "ca45fc496a3436251f191354091d557da31c15b5",
+      "sha_epingle": "2c5958ecac7cee2b583967a2c4981d0f4a75c579",
+      "empreinte": "fd647bd3990c62a28e69aeaa262069f089a7ce3fd6d5433b38813372c6d72511",
+      "licence": null,
       "resume_fr": "crée et teste tes skills → des skills fiables, déclenchés au bon moment",
       "note": 9,
       "editeur_confiance": true,
-      "risque_max": "eleve",
+      "risque_max": "moyen",
       "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
           "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
           "detail": "eval-viewer/generate_review.py, scripts/package_skill.py, scripts/run_eval.py, scripts/run_loop.py"
         },
         {
           "gravite": "info",
           "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
+          "code": "scripts embarqués, que rien ne lance",
           "detail": "scripts/__init__.py, scripts/aggregate_benchmark.py, scripts/generate_report.py, scripts/improve_description.py, script…"
         }
       ]
@@ -39,21 +42,35 @@
       "repo": "anthropics/skills",
       "chemin_skill": "skills/mcp-builder",
       "skill_md": "skills/mcp-builder/SKILL.md",
-      "sha_epingle": "ca45fc496a3436251f191354091d557da31c15b5",
+      "sha_epingle": "2c5958ecac7cee2b583967a2c4981d0f4a75c579",
+      "empreinte": "ac1156c2ad87192cdb923d2910e714933122190f2d5b07c5d83dd0dcf90a0033",
+      "licence": null,
       "resume_fr": "guide la création de serveurs MCP en Python ou TypeScript → outils mieux conçus, intégrations fiables",
       "note": 9,
       "editeur_confiance": true,
-      "risque_max": "eleve",
+      "risque_max": "moyen",
       "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "info",
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
           "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
-          "detail": "scripts/connections.py, scripts/evaluation.py"
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/evaluation.py"
         },
         {
-          "gravite": "eleve",
+          "gravite": "info",
+          "source": "scan",
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier) (annexe reference/node_mcp_server.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "scripts/connections.py"
+        },
+        {
+          "gravite": "moyen",
           "source": "juge",
           "categorie": "reseau",
           "code": "Le skill recommande d'exécuter `npx @modelcontextprotocol/codemod@latest` sans version épinglée : exécution de paquet npm distant non vérifié."
@@ -67,57 +84,63 @@
       "repo": "anthropics/skills",
       "chemin_skill": "skills/claude-api",
       "skill_md": "skills/claude-api/SKILL.md",
-      "sha_epingle": "ca45fc496a3436251f191354091d557da31c15b5",
+      "sha_epingle": "2c5958ecac7cee2b583967a2c4981d0f4a75c579",
+      "empreinte": "5e8ff6a13b5e2a55cd93277012b890f092841c7f60f67dc70b452d1a8cebbe76",
+      "licence": null,
       "resume_fr": "te donne les bons modèles et paramètres de l'API Claude → évite le code daté",
       "note": 8,
       "editeur_confiance": true,
-      "risque_max": "eleve",
+      "risque_max": "moyen",
       "risque_max_projet": "eleve",
       "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "shared/evals/report/build-report-lite.mjs, shared/preserved-thinking-migration/prefix_diff.py"
-        },
         {
           "gravite": "moyen",
           "source": "scan",
           "code": "exécution dynamique de code"
         },
         {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "télécharge et exécute un script (curl | sh) (dans un exemple de code, à vérifier) (annexe shared/managed-agents-onboarding-from-url.md)"
+        },
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "shared/evals/report/build-report-lite.mjs, shared/preserved-thinking-migration/drop_block_probe.py, shared/preserved-th…"
+        },
+        {
           "gravite": "info",
           "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
-          "detail": "shared/evals/report/runner-scaffold.mjs, shared/preserved-thinking-migration/drop_block_probe.py"
+          "code": "fausse balise système (dans un exemple de code, à vérifier) (annexe shared/agent-design.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "exécution dynamique de code (annexe shared/cost-optimization.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier) (annexe shared/managed-agents-tools.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "fausse balise système (citée pour mettre en garde) (annexe shared/prompt-caching.md)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "shared/evals/report/runner-scaffold.mjs"
         },
         {
           "gravite": "moyen",
           "source": "juge",
           "categorie": "donnees",
           "code": "Les exemples curl de Managed Agents passent un authorization_token GitHub en clair dans la commande, ce qui encourage à mettre des secrets dans l'historique shell et les payloads."
-        }
-      ]
-    },
-    {
-      "id": "addyosmani/agent-skills/skills/constraint-driven-development",
-      "nom": "constraint-driven-development",
-      "place": "recommande",
-      "repo": "addyosmani/agent-skills",
-      "chemin_skill": "skills/constraint-driven-development",
-      "skill_md": "skills/constraint-driven-development/SKILL.md",
-      "sha_epingle": "301b02b12bff98e4688e6984af6556802322bbde",
-      "resume_fr": "surveille le diff, bloque les tests sautés → empêche les agents de baisser la barre",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "scripts/quality-gate.mjs"
         }
       ]
     },
@@ -129,50 +152,9 @@
       "chemin_skill": "skills/engineering/code-review",
       "skill_md": "skills/engineering/code-review/SKILL.md",
       "sha_epingle": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+      "empreinte": "11a78205ca3eb09848cc41c123337be7c3b0b89088e5e877badea7c6321222a6",
+      "licence": "MIT",
       "resume_fr": "revoit les changements contre les standards du repo et la spec → repère écarts et hors-périmètre",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "gaasher/agent-loop-skills/loops/optimize-loop",
-      "nom": "optimize-loop",
-      "place": "recommande",
-      "repo": "gaasher/Agent-Loop-Skills",
-      "chemin_skill": "loops/optimize-loop",
-      "skill_md": "loops/optimize-loop/SKILL.md",
-      "sha_epingle": "f1169e6db0b0f8a83ced3a18562b7c57e14a748a",
-      "resume_fr": "mesure chaque retouche, garde si tests verts → code plus simple ou SQL plus rapide",
-      "note": 8,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "tools/bench.py, tools/metrics.py"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Le skill fait exécuter en boucle, sans pause, des commandes arbitraires (gate_cmd, metric_cmd) définies dans loop.run.yaml, et modifie des fichiers sans validation intermédiaire."
-        }
-      ]
-    },
-    {
-      "id": "rossark0/rossark-motion-skill/rossark-motion-skill",
-      "nom": "rossark-motion-skill",
-      "place": "recommande",
-      "repo": "rossark0/rossark-motion-skill",
-      "chemin_skill": "",
-      "skill_md": "SKILL.md",
-      "sha_epingle": "9b20964e32f07f8ac7e2948cd175746fa4a7712f",
-      "resume_fr": "anime illustrations, icônes et scènes avec un mouvement calme → rendu vivant sans effets chargés",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
@@ -186,9 +168,83 @@
       "repo": "anthropics/claude-plugins-official",
       "chemin_skill": "plugins/mcp-server-dev/skills/build-mcpb",
       "skill_md": "plugins/mcp-server-dev/skills/build-mcpb/SKILL.md",
-      "sha_epingle": "a7ba5b93db0c7c8d17f3f1d25853adca79598a1a",
+      "sha_epingle": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
+      "empreinte": "17edac3754e5427e26eeb979f3e866ac12648e65bf2baa42e9347e9ff1ddde05",
+      "licence": "Apache-2.0",
       "resume_fr": "empaquette un serveur MCP local avec son runtime → installable sans Node ni Python",
       "note": 10,
+      "editeur_confiance": true,
+      "risque_max": "info",
+      "risque_max_projet": "info",
+      "risques": [
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier) (annexe references/local-security.md)"
+        }
+      ]
+    },
+    {
+      "id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcp-server",
+      "nom": "build-mcp-server",
+      "place": "recommande",
+      "repo": "anthropics/claude-plugins-official",
+      "chemin_skill": "plugins/mcp-server-dev/skills/build-mcp-server",
+      "skill_md": "plugins/mcp-server-dev/skills/build-mcp-server/SKILL.md",
+      "sha_epingle": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
+      "empreinte": "4c7fb2d90290d09a304ea65e2a4263b1075e31c5daa1d8f3e2423c94186afe88",
+      "licence": "Apache-2.0",
+      "resume_fr": "te pose les bonnes questions avant de coder → évite de refaire ton architecture plus tard",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le skill demande de récupérer au démarrage une documentation externe (claude.com/docs/llms-full.txt) et de s'y fier pour les contraintes ; contenu distant non épinglé injecté dans le contexte."
+        }
+      ]
+    },
+    {
+      "id": "anthropics/claude-plugins-official/plugins/plugin-dev/skills/agent-development",
+      "nom": "agent-development",
+      "place": "recommande",
+      "repo": "anthropics/claude-plugins-official",
+      "chemin_skill": "plugins/plugin-dev/skills/agent-development",
+      "skill_md": "plugins/plugin-dev/skills/agent-development/SKILL.md",
+      "sha_epingle": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
+      "empreinte": "b1a28b0e1a79689d62b3c15c2c05816bdba5073436cb8bb69f68fc92c58f91a0",
+      "licence": "Apache-2.0",
+      "resume_fr": "guide la création d'agents Claude Code : déclencheurs, outils, prompt système → agents plus fiables",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/validate-agent.sh"
+        }
+      ]
+    },
+    {
+      "id": "anthropics/claude-plugins-official/plugins/plugin-dev/skills/plugin-structure",
+      "nom": "plugin-structure",
+      "place": "recommande",
+      "repo": "anthropics/claude-plugins-official",
+      "chemin_skill": "plugins/plugin-dev/skills/plugin-structure",
+      "skill_md": "plugins/plugin-dev/skills/plugin-structure/SKILL.md",
+      "sha_epingle": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
+      "empreinte": "bbd0baaf99e044ab9a35c19f7d00c62315d2ffaf5e6f2c13473065cbc6b62488",
+      "licence": "Apache-2.0",
+      "resume_fr": "te guide dans l'organisation d'un plugin → évite les erreurs de manifeste et de découverte automatique",
+      "note": 9,
       "editeur_confiance": true,
       "risque_max": null,
       "risque_max_projet": null,
@@ -197,64 +253,96 @@
   ],
   "ajouts": [
     {
-      "id": "affaan-m/ecc/skills/agent-security-hardening",
-      "nom": "agent-security-hardening",
+      "id": "kajisho5/ffmpeg-skill/.claude/skills/mcp-server-design",
+      "nom": "building-python-mcp-servers",
       "place": "ajout",
-      "repo": "affaan-m/ECC",
-      "chemin_skill": "skills/agent-security-hardening",
-      "skill_md": "skills/agent-security-hardening/SKILL.md",
-      "sha_epingle": "b38be6a7f6350964d59328b52f0624e1d1d552d1",
-      "resume_fr": "valide identifiants, chemins et URLs avant chaque action d'agent → bloque fuites et écritures hors périmètre",
-      "note": 9,
+      "repo": "kajisho5/ffmpeg-skill",
+      "chemin_skill": ".claude/skills/mcp-server-design",
+      "skill_md": ".claude/skills/mcp-server-design/SKILL.md",
+      "sha_epingle": "6e42a79247909659b3d80833120b272fb5e46aba",
+      "empreinte": "3938a82d4df8577e2302e4e5cdd9c1867fc30b155569770424ab5c5dfd771429",
+      "licence": "MIT",
+      "resume_fr": "construit des serveurs MCP Python robustes et testables → moins de pannes côté client LLM",
+      "note": 8,
       "editeur_confiance": false,
       "risque_max": null,
       "risque_max_projet": null,
       "risques": []
     },
     {
-      "id": "heygen-com/hyperframes/skills/remotion-to-hyperframes",
-      "nom": "remotion-to-hyperframes",
+      "id": "anthropics/claude-plugins-official/plugins/plugin-dev/skills/mcp-integration",
+      "nom": "mcp-integration",
       "place": "ajout",
-      "repo": "heygen-com/hyperframes",
-      "chemin_skill": "skills/remotion-to-hyperframes",
-      "skill_md": "skills/remotion-to-hyperframes/SKILL.md",
-      "sha_epingle": "036e41fa09e6670f155fa3f2c361b58b8ed77e02",
-      "resume_fr": "porte Remotion ou Lottie dans HyperFrames, vérifié image par image → moins de régressions visuelles",
-      "note": 8,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
+      "repo": "anthropics/claude-plugins-official",
+      "chemin_skill": "plugins/plugin-dev/skills/mcp-integration",
+      "skill_md": "plugins/plugin-dev/skills/mcp-integration/SKILL.md",
+      "sha_epingle": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
+      "empreinte": "c8a5fbd9a5941fe67b730f18bf9f9e9f9d8e3d265a71bcf379486b630e8bebef",
+      "licence": "Apache-2.0",
+      "resume_fr": "connecte des services externes via MCP → outils structurés disponibles directement dans Claude Code",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "anthropics/claude-plugins-official/plugins/hookify/skills/writing-rules",
+      "nom": "writing-hookify-rules",
+      "place": "ajout",
+      "repo": "anthropics/claude-plugins-official",
+      "chemin_skill": "plugins/hookify/skills/writing-rules",
+      "skill_md": "plugins/hookify/skills/writing-rules/SKILL.md",
+      "sha_epingle": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
+      "empreinte": "c7bb746fcc855d43870fba4ce18e7500342d64f7404b82f248ea3f7bb7aa15e1",
+      "licence": "Apache-2.0",
+      "resume_fr": "t'aide à écrire des règles hookify → évite les motifs regex trop larges et bruyants",
+      "note": 9,
+      "editeur_confiance": true,
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
       "risques": [
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
           "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "scripts/lint_source.py"
+          "code": "suppression récursive (rm -rf) (dans un exemple de code, à vérifier)"
         },
         {
           "gravite": "info",
           "source": "scan",
-          "code": "scripts embarqués, que le SKILL.md ne lance pas",
-          "detail": "assets/test-corpus/run.sh, assets/test-corpus/tier-1-title-card/remotion-src/remotion.config.ts, assets/test-corpus/tie…"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Les fonts Google sont chargées depuis un tiers (fonts.googleapis.com) lors du rendu, transmission de requêtes externes"
+          "code": "exécution dynamique de code (dans un exemple de code, à vérifier)"
         }
       ]
     },
     {
-      "id": "zlanqing/codex-claude-academic-skills/scientific-toolkit-skill/references/scientific-skills/scikit-learn",
-      "nom": "scikit-learn",
+      "id": "nvidia/skillspector/skills/skill-inspector",
+      "nom": "skill-inspector",
       "place": "ajout",
-      "repo": "zLanqing/codex-claude-academic-skills",
-      "chemin_skill": "scientific-toolkit-skill/references/scientific-skills/scikit-learn",
-      "skill_md": "scientific-toolkit-skill/references/scientific-skills/scikit-learn/SKILL.md",
-      "sha_epingle": "7ed6377f0efb6a38951b48ef03b19d996e454b1f",
-      "resume_fr": "guide prétraitement, pipelines et validation croisée → évite les fuites de données et scores trompeurs",
-      "note": 5,
+      "repo": "NVIDIA/SkillSpector",
+      "chemin_skill": "skills/skill-inspector",
+      "skill_md": "skills/skill-inspector/SKILL.md",
+      "sha_epingle": "e48d771a26f7398b36256ceb8d8f94adce3d5c44",
+      "empreinte": "4c517862413f1eed5a31b197eaacc7fd1665095c5de94e6d5f1a9f3ff20db310",
+      "licence": "Apache-2.0",
+      "resume_fr": "analyse un skill avant installation avec SkillSpector → évite les skills malveillants ou trop permissifs",
+      "note": 10,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "juliusbrussee/caveman/skills/caveman-learn",
+      "nom": "caveman-learn",
+      "place": "ajout",
+      "repo": "JuliusBrussee/caveman",
+      "chemin_skill": "skills/caveman-learn",
+      "skill_md": "skills/caveman-learn/SKILL.md",
+      "sha_epingle": "3dc497a7f858c774d6e15b25e8c6120ef3a0eda8",
+      "empreinte": "491746ac03cc3c02647f8869ff1e95058e77ad26bdfd0f2a66aeb482a3fe1af9",
+      "licence": "Apache-2.0",
+      "resume_fr": "mesure où partent les tokens, propose des corrections validées → coûts réduits, économies mesurées",
+      "note": 9,
       "editeur_confiance": false,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
@@ -262,124 +350,290 @@
         {
           "gravite": "eleve",
           "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "scripts/classification_pipeline.py, scripts/clustering_analysis.py"
+          "code": "modifie la configuration de Claude Code"
+        },
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "tests/skill-file.test.mjs"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "CLAUDE.md ou .claude/ embarqué : instructions lues par Claude Code une fois dans le projet",
+          "detail": "CLAUDE.md"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "tests/index.js"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Lit les transcripts de sessions (JSONL) et copie des blocs de texte verbatim dans un magasin local ~/.caveman : données potentiellement sensibles persistées hors projet."
         },
         {
           "gravite": "eleve",
           "source": "juge",
-          "categorie": "execution",
-          "code": "Les scripts lancés par le SKILL.md (python scripts/...) s'exécutent sans contrôle de contenu ; scripts non fournis, donc non vérifiables"
+          "categorie": "destruction",
+          "code": "Retire du CLAUDE.md ou de la mémoire le texte déplacé vers cavemem : action destructive sur la config, couverte par le consentement et la réversibilité décrits mais à surveiller."
         }
       ]
     },
     {
-      "id": "jeffallan/claude-skills/skills/code-reviewer",
-      "nom": "code-reviewer",
+      "id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcp-app",
+      "nom": "build-mcp-app",
       "place": "ajout",
-      "repo": "Jeffallan/claude-skills",
-      "chemin_skill": "skills/code-reviewer",
-      "skill_md": "skills/code-reviewer/SKILL.md",
-      "sha_epingle": "078a25cc5bfd8011459be7b91d004e900c1d02d3",
-      "resume_fr": "relit tes diffs pour trouver bugs et failles → revues de PR plus sûres",
-      "note": 5,
-      "editeur_confiance": false,
+      "repo": "anthropics/claude-plugins-official",
+      "chemin_skill": "plugins/mcp-server-dev/skills/build-mcp-app",
+      "skill_md": "plugins/mcp-server-dev/skills/build-mcp-app/SKILL.md",
+      "sha_epingle": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
+      "empreinte": "18728f64a4d4e5314cb846cc840b48f78889baa6073cfc091b732c383a4f73a6",
+      "licence": "Apache-2.0",
+      "resume_fr": "ajoute des formulaires et sélecteurs interactifs dans le chat → évite les saisies textuelles fastidieuses",
+      "note": 9,
+      "editeur_confiance": true,
       "risque_max": "info",
       "risque_max_projet": "info",
       "risques": [
         {
           "gravite": "info",
-          "source": "scan",
-          "code": "frontmatter allowed-tools",
-          "detail": "Read Grep Glob"
+          "source": "juge",
+          "categorie": "autre",
+          "code": "Les exemples rendent des données de contacts via innerHTML sans échappement : risque de XSS si les données proviennent de tiers, et le skill sert ce motif de référence."
         }
       ]
     },
     {
-      "id": "confident-ai/deepeval/skills/deepeval",
-      "nom": "deepeval",
+      "id": "anthropics/claude-plugins-official/plugins/champion-kit/skills/routines",
+      "nom": "routines",
       "place": "ajout",
-      "repo": "confident-ai/deepeval",
-      "chemin_skill": "skills/deepeval",
-      "skill_md": "skills/deepeval/SKILL.md",
-      "sha_epingle": "b791a0f86d44324f912786650521663e9d6877d3",
-      "resume_fr": "guide une évaluation pytest d'agents IA → repère les échecs et améliore leur fiabilité",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "templates/metrics.py, templates/test_multi_turn_e2e.py, templates/test_single_turn_no_tracing.py, templates/test_single…"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Envoi de documents, contextes et traces vers un fournisseur de modèle et vers Confident AI (tiers) via deepeval login ou CONFIDENT_API_KEY, sans avertissement sur les données sensibles."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Exécution de l'application et de suites de tests réelles par deepeval test run, qui peut appeler des API payantes et des services externes."
-        }
-      ]
-    },
-    {
-      "id": "anthropics/claude-cookbooks/.claude/skills/cookbook-audit",
-      "nom": "cookbook-audit",
-      "place": "ajout",
-      "repo": "anthropics/claude-cookbooks",
-      "chemin_skill": ".claude/skills/cookbook-audit",
-      "skill_md": ".claude/skills/cookbook-audit/SKILL.md",
-      "sha_epingle": "c43f56d0360b9b1f631bd090fd199231d4c880cc",
-      "resume_fr": "audite un notebook du Cookbook selon une grille → notebooks plus clairs et exécutables",
+      "repo": "anthropics/claude-plugins-official",
+      "chemin_skill": "plugins/champion-kit/skills/routines",
+      "skill_md": "plugins/champion-kit/skills/routines/SKILL.md",
+      "sha_epingle": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
+      "empreinte": "84c7d640397a66e10d695f97d85c16bd02688c017efb6afef4ef8e8d98e2bfb9",
+      "licence": "Apache-2.0",
+      "resume_fr": "planifie digest hebdo et contrôles mensuels du dépôt → suivi automatique, sans lancement manuel",
       "note": 9,
       "editeur_confiance": true,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "virgiliojr94/book-to-skill/book-to-skill",
+      "nom": "book-to-skill",
+      "place": "ajout",
+      "repo": "virgiliojr94/book-to-skill",
+      "chemin_skill": "",
+      "skill_md": "SKILL.md",
+      "sha_epingle": "e7bb659d3261491c8b28793dcb9102fa64a46c22",
+      "empreinte": "d23b83dd95be0c05dfb9bb6aaf78c2e3d4a7c80144f37ccf89c511bdaa22e360",
+      "licence": "MIT",
+      "resume_fr": "extrait frameworks et principes d'un livre → applique les idées d'un auteur à tes projets",
+      "note": 9,
+      "editeur_confiance": false,
       "risque_max": "eleve",
       "risque_max_projet": "eleve",
       "risques": [
         {
           "gravite": "eleve",
           "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "validate_notebook.py"
+          "code": "suppression récursive (rm -rf)"
+        },
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "book_to_skill/cli.py, book_to_skill/config.py, book_to_skill/dependencies.py, book_to_skill/exceptions.py, book_to_skil…"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "CLAUDE.md ou .claude/ embarqué : instructions lues par Claude Code une fois dans le projet",
+          "detail": "CLAUDE.md"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "book_to_skill/__init__.py, book_to_skill/__main__.py, book_to_skill/parsers/__init__.py, book_to_skill/parsers/calibre.…"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le script de recherche d'extract.py inclut des chemins relatifs au projet courant (.claude/skills, skills/, etc.) : un dépôt malveillant peut y déposer un extract.py exécuté automatiquement."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Le bloc Bash exécute le script trouvé puis lit et écrit des fichiers dans des racines personnelles (~/.agents, ~/.claude) et crée des symlinks, sans confirmation explicite de la racine choisie."
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "La commande de confiance Hermes (hermes skills trust) élargit les permissions sur un répertoire projet après génération."
         }
       ]
     },
     {
-      "id": "xberg-io/xberg/skills/xberg",
-      "nom": "xberg",
+      "id": "mukul975/anthropic-cybersecurity-skills/skills/auditing-mcp-servers-for-tool-poisoning",
+      "nom": "auditing-mcp-servers-for-tool-poisoning",
       "place": "ajout",
-      "repo": "xberg-io/xberg",
-      "chemin_skill": "skills/xberg",
-      "skill_md": "skills/xberg/SKILL.md",
-      "sha_epingle": "ddb241673564ce669c848f14f6274b98e6e22e18",
-      "resume_fr": "extrait texte, tableaux et métadonnées de 107 formats → une seule API pour tous vos documents",
-      "note": 6,
+      "repo": "mukul975/Anthropic-Cybersecurity-Skills",
+      "chemin_skill": "skills/auditing-mcp-servers-for-tool-poisoning",
+      "skill_md": "skills/auditing-mcp-servers-for-tool-poisoning/SKILL.md",
+      "sha_epingle": "54a798831d2266a3ca61ce68a7acb80b81160d57",
+      "empreinte": "34f838a8ac629b56ac5749516494322d2c880b8b1f2523cbf919e26d9c46e40d",
+      "licence": "Apache-2.0",
+      "resume_fr": "audite les serveurs MCP avant ajout → évite les outils empoisonnés et les rug pulls",
+      "note": 9,
       "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "télécharge et exécute un script (curl | sh) (dans un exemple de code, à vérifier)"
+        },
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "accès à des secrets locaux"
+        },
+        {
+          "gravite": "eleve",
+          "source": "scan",
+          "code": "télécharge et exécute un script (curl | sh) (script scripts/agent.py)"
+        },
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "accès à des secrets locaux (script scripts/agent.py)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "consigne de cacher des actions à l’utilisateur (citée pour mettre en garde)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "scripts/agent.py"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "uvx mcp-scan@latest télécharge et exécute un paquet distant non épinglé, dont la chaîne d'approvisionnement n'est pas vérifiée"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Les sondes SSRF envoient des requêtes à des cibles sensibles (IMDS, file:///etc/passwd) via les outils du serveur ; mal utilisées, elles peuvent exposer des données locales"
+        }
+      ]
     },
     {
-      "id": "sickn33/agentic-awesome-skills/skills/aas-compose-stack",
-      "nom": "aas-compose-stack",
+      "id": "openai/codex-plugin-cc/plugins/codex/skills/gpt-5-4-prompting",
+      "nom": "gpt-5-4-prompting",
       "place": "ajout",
-      "repo": "sickn33/agentic-awesome-skills",
-      "chemin_skill": "skills/aas-compose-stack",
-      "skill_md": "skills/aas-compose-stack/SKILL.md",
-      "sha_epingle": "8aa412398110762dfbf7a88af66cadcf3985f64e",
-      "resume_fr": "compose une pile de skills AAS validée → garde une trace vérifiable sans installation automatique",
-      "note": 5,
+      "repo": "openai/codex-plugin-cc",
+      "chemin_skill": "plugins/codex/skills/gpt-5-4-prompting",
+      "skill_md": "plugins/codex/skills/gpt-5-4-prompting/SKILL.md",
+      "sha_epingle": "db52e28f4d9ded852ab3942cea316258ae4ef346",
+      "empreinte": "b3de1a7d23ed4b09d14082b9a7ccc1546a7e335cdc8c9aef7f324204ad52b88c",
+      "licence": "Apache-2.0",
+      "resume_fr": "écrit des prompts Codex structurés en blocs XML → réponses plus ciblées et vérifiables",
+      "note": 9,
       "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Les recettes de diagnostic et de correctif tournent par défaut en mode écriture (write mode) sauf demande explicite de lecture seule : une tâche de simple diagnostic peut modifier le dépôt"
+        }
+      ]
+    },
+    {
+      "id": "nanocoai/nanoclaw/.claude/skills/add-atomic-chat-tool",
+      "nom": "add-atomic-chat-tool",
+      "place": "ajout",
+      "repo": "nanocoai/nanoclaw",
+      "chemin_skill": ".claude/skills/add-atomic-chat-tool",
+      "skill_md": ".claude/skills/add-atomic-chat-tool/SKILL.md",
+      "sha_epingle": "bdfb2f1df70cfa49b7141bb59ec886dbacfbc366",
+      "empreinte": "75a559b4ac2141548e3721086fdef197fb7585aefa7f90593f502e2ec1653d07",
+      "licence": "MIT",
+      "resume_fr": "expose les modèles locaux d'Atomic Chat à l'agent → réduit les coûts d'API",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "atomic-chat-env.ts, atomic-chat-mcp-stdio.ts, atomic-chat-registration.test.ts, atomic-chat-wiring.test.ts"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "ATOMIC_CHAT_API_KEY, si défini, est transmis dans le conteneur de l'agent ; ATOMIC_CHAT_HOST pointant vers un hôte distant enverrait les prompts à un tiers."
+        }
+      ]
+    },
+    {
+      "id": "nanocoai/nanoclaw/.claude/skills/add-codex",
+      "nom": "add-codex",
+      "place": "ajout",
+      "repo": "nanocoai/nanoclaw",
+      "chemin_skill": ".claude/skills/add-codex",
+      "skill_md": ".claude/skills/add-codex/SKILL.md",
+      "sha_epingle": "bdfb2f1df70cfa49b7141bb59ec886dbacfbc366",
+      "empreinte": "f29e929375f13a18936557fe9aedb4ba0638262b7441796c64f526f689d002b8",
+      "licence": "MIT",
+      "resume_fr": "ajoute Codex comme agent complet, aux côtés de Claude → clés API jamais exposées au conteneur",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "payload/container/agent-runner/src/provider-contracts/codex.ts, payload/container/agent-runner/src/providers/codex-app-…"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Installation d'un paquet npm global (@openai/codex) exécuté dans le conteneur, avec des identifiants ChatGPT ou OpenAI transitant par la gateway d'identifiants."
+        }
+      ]
     }
   ]
 }

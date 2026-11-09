@@ -1,15 +1,16 @@
 {
-  "le": "2026-11-02T13:57:04.087Z",
-  "duree_min": 13,
-  "skills": 1500,
+  "le": "2026-11-09T14:26:41.751Z",
+  "duree_min": 18,
+  "skills": 1493,
   "cout": {
-    "total": 1.2419309799999996,
-    "haiku": 0.48112410999999966,
-    "resumes": 0.20262963499999986,
-    "classements": 0.5457476000000001,
-    "alertes": 0.012429635000000003
+    "total": 2.467141845,
+    "haiku": 0.65914378,
+    "resumes": 0.2830713100000003,
+    "classements": 1.3519668,
+    "alertes": 0.019949249999999998,
+    "traduction": 0.153010705
   },
-  "tetes_changees": 5,
-  "nouveaux": 82,
-  "archives": 4
+  "tetes_changees": 4,
+  "nouveaux": 237,
+  "archives": 5
 }

@@ -1,7 +1,7 @@
 {
-  "genere_le": "2026-11-02T13:57:04.412Z",
+  "genere_le": "2026-11-09T14:26:42.077Z",
   "type": "android",
-  "bareme": "b1",
+  "bareme": "b2",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
   "recommandes": [
     {
@@ -11,7 +11,9 @@
       "repo": "chrisbanes/skills",
       "chemin_skill": "skills/compose-performance",
       "skill_md": "skills/compose-performance/SKILL.md",
-      "sha_epingle": "d83f6e289a07a55026e610c797672f22eff3f022",
+      "sha_epingle": "72628aea92c9081df0ba96600f24af3f07f4a87a",
+      "empreinte": "b435fc49cc27bda72f8d11ce2fdd9070a9af554a1e927225f733c53c54dcbbbd",
+      "licence": "Apache-2.0",
       "resume_fr": "trouve la cause des recompositions Compose inutiles → interface plus fluide, moins de re-rendus",
       "note": 9,
       "editeur_confiance": false,
@@ -26,7 +28,9 @@
       "repo": "chrisbanes/skills",
       "chemin_skill": "skills/compose-component-design",
       "skill_md": "skills/compose-component-design/SKILL.md",
-      "sha_epingle": "d83f6e289a07a55026e610c797672f22eff3f022",
+      "sha_epingle": "72628aea92c9081df0ba96600f24af3f07f4a87a",
+      "empreinte": "971562506990550b03a4b1bdb310aa977cbab0095bfc54be27f896061dde0842",
+      "licence": "Apache-2.0",
       "resume_fr": "guide les modifiers et slots de tes composants Compose → API réutilisables, sans booléens cachés",
       "note": 9,
       "editeur_confiance": false,
@@ -42,16 +46,19 @@
       "chemin_skill": "skills/material-3",
       "skill_md": "skills/material-3/SKILL.md",
       "sha_epingle": "14385f2bf3804d8779f8b4db2604211f1e70b4c1",
+      "empreinte": "b8a0c47bf0797df93170c85ee499086952aeada20cb63199c78f302b7db91729",
+      "licence": "MIT",
       "resume_fr": "guide les composants Material 3 de Compose → interfaces cohérentes, adaptatives et accessibles",
       "note": 7,
       "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
+      "risque_max": "info",
+      "risque_max_projet": "moyen",
       "risques": [
         {
-          "gravite": "eleve",
+          "gravite": "info",
+          "gravite_projet": "moyen",
           "source": "scan",
-          "code": "plugin.json : chargé comme plugin"
+          "code": "plugin.json : retiré à la copie, jamais chargé comme plugin"
         }
       ]
     },
@@ -62,7 +69,9 @@
       "repo": "chrisbanes/skills",
       "chemin_skill": "skills/kotlin-concurrency-and-flow",
       "skill_md": "skills/kotlin-concurrency-and-flow/SKILL.md",
-      "sha_epingle": "d83f6e289a07a55026e610c797672f22eff3f022",
+      "sha_epingle": "72628aea92c9081df0ba96600f24af3f07f4a87a",
+      "empreinte": "cdb32405c5d1792a801047b376fe355239f32d55bd48e335cc2d2eb3374adbc9",
+      "licence": "Apache-2.0",
       "resume_fr": "vérifie la portée des coroutines et StateFlow ou Channel → évite fuites et événements perdus",
       "note": 9,
       "editeur_confiance": false,
@@ -78,16 +87,19 @@
       "chemin_skill": "skills/footgun-scan",
       "skill_md": "skills/footgun-scan/SKILL.md",
       "sha_epingle": "2c391bc9c9f873580aa855d7a7b1c3a2ed9e68ae",
+      "empreinte": "f0683a61800abcff568ca0ceea623ad319a52a76621322524fce970caded100c",
+      "licence": "GPL-3.0",
       "resume_fr": "repère les pièges Kotlin et Compose dans ton diff → évite les bugs avant le commit",
       "note": 9,
       "editeur_confiance": false,
-      "risque_max": "eleve",
+      "risque_max": "moyen",
       "risque_max_projet": "eleve",
       "risques": [
         {
-          "gravite": "eleve",
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
           "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
           "detail": "scripts/scan.py"
         }
       ]
@@ -100,23 +112,26 @@
       "chemin_skill": "skills/compose-agent",
       "skill_md": "skills/compose-agent/SKILL.md",
       "sha_epingle": "f815c31d6cc1a4af4ce2796d08eb7d8b506785c9",
+      "empreinte": "975298529200a3b1cec2c958ca050df358de1ec3655c0428dac4ba1413600484",
+      "licence": "MIT",
       "resume_fr": "corrige l'état, les effets et les modifiers Compose → moins d'erreurs typiques des LLM",
       "note": 10,
       "editeur_confiance": false,
-      "risque_max": "eleve",
+      "risque_max": "info",
       "risque_max_projet": "eleve",
       "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "plugin.json : chargé comme plugin"
-        },
         {
           "gravite": "info",
           "gravite_projet": "eleve",
           "source": "scan",
           "code": "frontmatter allowed-tools",
           "detail": "Read, Glob, Grep, Edit, Write, Bash"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "moyen",
+          "source": "scan",
+          "code": "plugin.json : retiré à la copie, jamais chargé comme plugin"
         }
       ]
     },
@@ -127,7 +142,9 @@
       "repo": "chrisbanes/skills",
       "chemin_skill": "skills/compose-state-and-effects",
       "skill_md": "skills/compose-state-and-effects/SKILL.md",
-      "sha_epingle": "d83f6e289a07a55026e610c797672f22eff3f022",
+      "sha_epingle": "72628aea92c9081df0ba96600f24af3f07f4a87a",
+      "empreinte": "400f84b1b2f4ebf95906771b8f5ac52e4cfbce27db3b12ae496ee7d2636a31f0",
+      "licence": "Apache-2.0",
       "resume_fr": "place l'état Compose et ses effets au bon endroit → évite bugs et fuites",
       "note": 9,
       "editeur_confiance": false,
@@ -143,6 +160,8 @@
       "chemin_skill": "plugins/android-skills/skills/android-debugging",
       "skill_md": "plugins/android-skills/skills/android-debugging/SKILL.md",
       "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
+      "empreinte": "4ed1bb87f47380494f935553d182ff8319556a8e71903e6bc770929351c19863",
+      "licence": "MIT",
       "resume_fr": "décode ANR, R8 et fuites mémoire Android → trouve la cause racine avant tout correctif",
       "note": 9,
       "editeur_confiance": false,
@@ -153,43 +172,6 @@
   ],
   "ajouts": [
     {
-      "id": "athevon/genjutsu/skills/_jutsu/compose-motion",
-      "nom": "compose-motion",
-      "place": "ajout",
-      "repo": "AThevon/genjutsu",
-      "chemin_skill": "skills/_jutsu/compose-motion",
-      "skill_md": "skills/_jutsu/compose-motion/SKILL.md",
-      "sha_epingle": "ac9ca74156946be8e449f0d6acc8043a105a38f3",
-      "resume_fr": "te guide pour animer Compose avec AnimatedVisibility, updateTransition et transitions partagées → animations fluides sans bricolage",
-      "note": 8,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "aldefy/compose-skill/skills/compose-expert",
-      "nom": "compose-expert",
-      "place": "ajout",
-      "repo": "aldefy/compose-skill",
-      "chemin_skill": "skills/compose-expert",
-      "skill_md": "skills/compose-expert/SKILL.md",
-      "sha_epingle": "954ef54ea32288fbc90745f012d09d7b791f0d8a",
-      "resume_fr": "guide Compose et Compose Multiplatform, navigation comprise → interfaces plus fluides, moins de re-rendus",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "La bannière de SKILL.md invite à exécuter `/plugin marketplace add aldefy/compose-skill` puis `/plugin install`, ce qui installe un plugin tiers non sandboxé. À signaler à l'utilisateur avant toute installati…"
-        }
-      ]
-    },
-    {
       "id": "skydoves/compose-performance-skills/audit/auditing-compose-performance",
       "nom": "auditing-compose-performance",
       "place": "ajout",
@@ -197,6 +179,8 @@
       "chemin_skill": "audit/auditing-compose-performance",
       "skill_md": "audit/auditing-compose-performance/SKILL.md",
       "sha_epingle": "1b32f81724c0d71fe9ef093ca44697f559fdab6e",
+      "empreinte": "c7f5bb0a1bb3e8da20a6876aa124e334b4c26f0fdb4ef84cbd1ab0f637fec9d0",
+      "licence": "Apache-2.0",
       "resume_fr": "te fait mesurer avant de corriger → gains de fluidité prouvés par des chiffres",
       "note": 10,
       "editeur_confiance": false,
@@ -212,7 +196,129 @@
       "chemin_skill": "plugins/android-skills/skills/android-testing",
       "skill_md": "plugins/android-skills/skills/android-testing/SKILL.md",
       "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
+      "empreinte": "ed763aced19a0e15cf5592c0a8eec88c828fadb231c3b7b67510baf180d306ad",
+      "licence": "MIT",
       "resume_fr": "impose des tests rouges avant tout code Android → évite les pièges Compose et KMP",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "aldefy/compose-skill/skills/compose-expert",
+      "nom": "compose-expert",
+      "place": "ajout",
+      "repo": "aldefy/compose-skill",
+      "chemin_skill": "skills/compose-expert",
+      "skill_md": "skills/compose-expert/SKILL.md",
+      "sha_epingle": "6e838c050468b8e4c1988f121033775326d38f20",
+      "empreinte": "10e5f91ba4f7899dd9b70afe81f9796d884a329f1a853bd83906eace5f1d5719",
+      "licence": "NOASSERTION",
+      "resume_fr": "te guide sur Compose et Compose Multiplatform → interfaces plus fluides et moins de recompositions",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "exécution dynamique de code (dans un exemple de code, à vérifier) (annexe references/agsl-shaders.md)"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le bandeau d'installation invite à installer un plugin depuis un marketplace distant (/plugin marketplace add), ce qui revient à exécuter du code tiers non vérifié."
+        },
+        {
+          "gravite": "info",
+          "source": "juge",
+          "categorie": "autre",
+          "code": "Les exemples A2UI et AGSL montrent du contenu généré par agent ou des shaders dynamiques : sans garde-fous explicites dans le skill, un développeur pourrait exposer des actions privilégiées."
+        }
+      ]
+    },
+    {
+      "id": "hamen/compose_skill/skills/jetpack-compose-audit",
+      "nom": "jetpack-compose-audit",
+      "place": "ajout",
+      "repo": "hamen/compose_skill",
+      "chemin_skill": "skills/jetpack-compose-audit",
+      "skill_md": "skills/jetpack-compose-audit/SKILL.md",
+      "sha_epingle": "f815c31d6cc1a4af4ce2796d08eb7d8b506785c9",
+      "empreinte": "629da8dd346362c85607f0a7c792bb95b430c5d658c6f1362d6edbc4f689a770",
+      "licence": "MIT",
+      "resume_fr": "audite Jetpack Compose et note performance, état, effets → moins de recompositions inutiles",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "eleve",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "info",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "frontmatter allowed-tools",
+          "detail": "Read, Glob, Grep, Write, Bash, Agent"
+        },
+        {
+          "gravite": "info",
+          "gravite_projet": "moyen",
+          "source": "scan",
+          "code": "plugin.json : retiré à la copie, jamais chargé comme plugin"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "execution",
+          "code": "Étape 4 : lance ./gradlew du dépôt audité, donc exécute son code de build (tâches Gradle, plugins) sans confirmation explicite de l'utilisateur."
+        },
+        {
+          "gravite": "eleve",
+          "source": "juge",
+          "categorie": "destruction",
+          "code": "Le fallback écrit un script dans le dépôt cible puis le supprime : écriture et suppression de fichiers dans un projet tiers, sans garde-fou précisé."
+        }
+      ]
+    },
+    {
+      "id": "meet-miyani/compose-skill/skills/compose-feature",
+      "nom": "compose-feature",
+      "place": "ajout",
+      "repo": "Meet-Miyani/compose-skill",
+      "chemin_skill": "skills/compose-feature",
+      "skill_md": "skills/compose-feature/SKILL.md",
+      "sha_epingle": "5841d1e146d205e7fc6ab22bf297cb1b7f4b4c5b",
+      "empreinte": "5005ceac7c1b1ffc776125f4da6d4351bae9cbc6e8d5d06cf633379cc3bf2d14",
+      "licence": "MIT",
+      "resume_fr": "construit un écran complet, du repository aux tests → évite les features inachevées",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/new-feature.sh"
+        }
+      ]
+    },
+    {
+      "id": "chrisbanes/skills/skills/compose-animations",
+      "nom": "compose-animations",
+      "place": "ajout",
+      "repo": "chrisbanes/skills",
+      "chemin_skill": "skills/compose-animations",
+      "skill_md": "skills/compose-animations/SKILL.md",
+      "sha_epingle": "72628aea92c9081df0ba96600f24af3f07f4a87a",
+      "empreinte": "64da0022947f049fac543aaf42271b9d7fb9182c6b24e095ea62fae54d7ab387",
+      "licence": "Apache-2.0",
+      "resume_fr": "choisit la plus simple API d'animation Compose → évite les contenus fantômes après sortie",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
@@ -227,23 +333,10 @@
       "chemin_skill": "plugins/android-skills/skills/coil-compose",
       "skill_md": "plugins/android-skills/skills/coil-compose/SKILL.md",
       "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
+      "empreinte": "095d1c2ed0fba39a443763a2033ee1924b3607dbdabb688f553e8d79a6ae6de7",
+      "licence": "MIT",
       "resume_fr": "guide Coil 3 en Compose KMP → évite les OOM et saccades dans les listes",
       "note": 10,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "chrisbanes/skills/skills/compose-animations",
-      "nom": "compose-animations",
-      "place": "ajout",
-      "repo": "chrisbanes/skills",
-      "chemin_skill": "skills/compose-animations",
-      "skill_md": "skills/compose-animations/SKILL.md",
-      "sha_epingle": "d83f6e289a07a55026e610c797672f22eff3f022",
-      "resume_fr": "choisit la plus simple API d'animation Compose → évite les contenus fantômes après sortie",
-      "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
       "risque_max_projet": null,
@@ -257,6 +350,8 @@
       "chemin_skill": "measurement/generating-baseline-profiles",
       "skill_md": "measurement/generating-baseline-profiles/SKILL.md",
       "sha_epingle": "1b32f81724c0d71fe9ef093ca44697f559fdab6e",
+      "empreinte": "859334692a5c2787327532f0891845a7c13faa7fe97f839ce4a7686612b5ed0b",
+      "licence": "Apache-2.0",
       "resume_fr": "génère et mesure les Baseline Profiles Compose → démarrage plus rapide, scroll plus fluide",
       "note": 9,
       "editeur_confiance": false,
@@ -265,106 +360,78 @@
       "risques": []
     },
     {
-      "id": "hamen/compose_skill/skills/jetpack-compose-audit",
-      "nom": "jetpack-compose-audit",
-      "place": "ajout",
-      "repo": "hamen/compose_skill",
-      "chemin_skill": "skills/jetpack-compose-audit",
-      "skill_md": "skills/jetpack-compose-audit/SKILL.md",
-      "sha_epingle": "f815c31d6cc1a4af4ce2796d08eb7d8b506785c9",
-      "resume_fr": "audite Jetpack Compose et note performance, état, effets → moins de recompositions inutiles",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "plugin.json : chargé comme plugin"
-        },
-        {
-          "gravite": "info",
-          "gravite_projet": "eleve",
-          "source": "scan",
-          "code": "frontmatter allowed-tools",
-          "detail": "Read, Glob, Grep, Write, Bash, Agent"
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "execution",
-          "code": "Étape 4 : lance ./gradlew du dépôt audité, donc exécute son code de build (tâches Gradle, plugins) sans confirmation explicite de l'utilisateur."
-        },
-        {
-          "gravite": "eleve",
-          "source": "juge",
-          "categorie": "destruction",
-          "code": "Le fallback écrit un script dans le dépôt cible puis le supprime : écriture et suppression de fichiers dans un projet tiers, sans garde-fou précisé."
-        }
-      ]
-    },
-    {
-      "id": "skydoves/compose-performance-skills/measurement/testing-compose-in-release-mode",
-      "nom": "testing-compose-in-release-mode",
-      "place": "ajout",
-      "repo": "skydoves/compose-performance-skills",
-      "chemin_skill": "measurement/testing-compose-in-release-mode",
-      "skill_md": "measurement/testing-compose-in-release-mode/SKILL.md",
-      "sha_epingle": "1b32f81724c0d71fe9ef093ca44697f559fdab6e",
-      "resume_fr": "mesure les performances Compose en build release → évite des chiffres faussés par le mode debug",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "rcosteira79/android-skills/plugins/android-skills/skills/android-ux",
-      "nom": "android-ux",
-      "place": "ajout",
-      "repo": "rcosteira79/android-skills",
-      "chemin_skill": "plugins/android-skills/skills/android-ux",
-      "skill_md": "plugins/android-skills/skills/android-ux/SKILL.md",
-      "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
-      "resume_fr": "audite tes écrans Android selon Material Design 3 → moins de fautes d'accessibilité et d'ergonomie",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "meet-miyani/compose-skill/skills/compose-feature",
-      "nom": "compose-feature",
-      "place": "ajout",
-      "repo": "Meet-Miyani/compose-skill",
-      "chemin_skill": "skills/compose-feature",
-      "skill_md": "skills/compose-feature/SKILL.md",
-      "sha_epingle": "dbaa268a8131fd5ddf5041ceb0d1011e7ac2f12c",
-      "resume_fr": "construit un écran complet, tests inclus → évite les features inachevées et états oubliés",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "eleve",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md",
-          "detail": "scripts/new-feature.sh"
-        }
-      ]
-    },
-    {
       "id": "meet-miyani/compose-skill/skills/compose-data",
       "nom": "compose-data",
       "place": "ajout",
       "repo": "Meet-Miyani/compose-skill",
       "chemin_skill": "skills/compose-data",
       "skill_md": "skills/compose-data/SKILL.md",
-      "sha_epingle": "dbaa268a8131fd5ddf5041ceb0d1011e7ac2f12c",
+      "sha_epingle": "5841d1e146d205e7fc6ab22bf297cb1b7f4b4c5b",
+      "empreinte": "6e13d6e516cc68b8ae529966813a389d13ada18d537522c7838b305c81f68544",
+      "licence": "MIT",
       "resume_fr": "isole DTO, Ktor, Room et Paging → une API qui change ne casse plus l'UI",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "chrisbanes/skills/skills/compose-focus-navigation",
+      "nom": "compose-focus-navigation",
+      "place": "ajout",
+      "repo": "chrisbanes/skills",
+      "chemin_skill": "skills/compose-focus-navigation",
+      "skill_md": "skills/compose-focus-navigation/SKILL.md",
+      "sha_epingle": "72628aea92c9081df0ba96600f24af3f07f4a87a",
+      "empreinte": "e8f41b4e236a36e6c11cc7b07242c72792538e9f376b96dfee845a9950db0db8",
+      "licence": "Apache-2.0",
+      "resume_fr": "règles de focus Compose pour D-pad et clavier → évite les écrans sans cible focalisée",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
+      "id": "athevon/genjutsu/skills/_jutsu/compose-graphics",
+      "nom": "compose-graphics",
+      "place": "ajout",
+      "repo": "AThevon/genjutsu",
+      "chemin_skill": "skills/_jutsu/compose-graphics",
+      "skill_md": "skills/_jutsu/compose-graphics/SKILL.md",
+      "sha_epingle": "5e00595ab7495d6bb966639f2f5ff1dbee364389",
+      "empreinte": "9adc6eef27012d919bac6fc781dc280006587a458f6f569a2dd77b3d76247b85",
+      "licence": "NOASSERTION",
+      "resume_fr": "guide animations expressives, shaders AGSL et Canvas → visuels Compose plus riches et fluides",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "info",
+      "risque_max_projet": "info",
+      "risques": [
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "exécution dynamique de code (dans un exemple de code, à vérifier)"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "exécution dynamique de code (dans un exemple de code, à vérifier) (annexe references/agsl-recipes.md)"
+        }
+      ]
+    },
+    {
+      "id": "cometchat/cometchat-skills/skills/cometchat-android-v6-compose-components",
+      "nom": "cometchat-android-v6-compose-components",
+      "place": "ajout",
+      "repo": "cometchat/cometchat-skills",
+      "chemin_skill": "skills/cometchat-android-v6-compose-components",
+      "skill_md": "skills/cometchat-android-v6-compose-components/SKILL.md",
+      "sha_epingle": "8652f1ea41d12e5058123db1e4e6babef9c918f1",
+      "empreinte": "1ff97f26cf5a100e14a9b34317809ddc25147bbc94d12c8c8a0cfb33b45ce57a",
+      "licence": "MIT",
+      "resume_fr": "liste les composables CometChat Compose et leurs slots → évite d'inventer un composant inexistant",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
