@@ -59,6 +59,15 @@ jobs:
       - name: Cycle de vie, index et récapitulatif
         run: node collector/publish.ts >> "$GITHUB_STEP_SUMMARY"
 
+      # Table du routeur (library/intents.json) : seuls les skills de pack nouveaux ou modifiés
+      # sont écrits. En cas d'échec, l'entrée d'avant reste ; un skill sans entrée n'est pas signalé.
+      - name: Intentions du routeur
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SM_CLAUDE_BARE: '1'
+        run: node collector/intents.ts --concurrency 6
+
       # Version anglaise du site : seuls les textes nouveaux ou modifiés sont traduits
       # (library/i18n/en.json). En cas d'échec, le site garde le français pour eux.
       - name: Traduire en anglais

@@ -20,12 +20,12 @@ const T = {
       { legend: 'nouveau pack', figure: String(f.packs), unit: 'packs, dont Méthode', text: 'Relecture, débogage, tests : un pack pour tous les projets, quelle que soit la techno. Le pack Data est recentré sur Postgres, DuckDB et pandas.', link: { href: href.pack(lang, 'methode'), label: 'Voir le pack Méthode' } },
       { legend: 'open source', figure: 'MIT', unit: 'licence du code', text: 'Le code de SKILLMASTER est public, avec un README. Les tests tournent à chaque push et avant chaque tour du lundi.', link: { href: REPO, label: 'Le dépôt GitHub', external: true } },
     ],
-    next: 'en préparation',
+    next: 'la suite',
     nextItems: [
-      ['Routeur', 'le bon skill à chaque prompt, glissé sans dialogue'],
-      ['Réglage mode', 'proposer, ombre ou auto, choisi une fois pour toutes'],
-      ['Radar', 'les skills qui montent cette semaine, avec /sm radar'],
-      ['Nano-règles', 'un rappel de 15 mots, au moment où il sert'],
+      ['Routeur', 'le bon skill à chaque prompt, glissé sans dialogue', 'en essai · 0.3.0'],
+      ['Réglage mode', 'proposer, ombre ou auto, choisi une fois pour toutes', 'livré · 0.3.0'],
+      ['Radar', 'les skills qui montent cette semaine, avec /sm radar', 'en préparation'],
+      ['Nano-règles', 'un rappel de 15 mots, au moment où il sert', 'en préparation'],
     ],
     newTab: ' (nouvel onglet)',
   },
@@ -39,19 +39,19 @@ const T = {
       { legend: 'new pack', figure: String(f.packs), unit: 'packs, including Method', text: 'Review, debugging, tests: a pack for every project, whatever the stack. The Data pack now focuses on Postgres, DuckDB and pandas.', link: { href: href.pack(lang, 'methode'), label: 'See the Method pack' } },
       { legend: 'open source', figure: 'MIT', unit: 'code license', text: 'SKILLMASTER’s code is public, with a README. Tests run on every push and before every Monday run.', link: { href: REPO, label: 'The GitHub repository', external: true } },
     ],
-    next: 'in the works',
+    next: 'next up',
     nextItems: [
-      ['Router', 'the right skill for each prompt, slipped in without a dialog'],
-      ['Mode setting', 'suggest, shadow or auto, chosen once and for all'],
-      ['Radar', 'the skills rising this week, with /sm radar'],
-      ['Nano-rules', 'a 15-word reminder, right when it helps'],
+      ['Router', 'the right skill for each prompt, slipped in without a dialog', 'in trial · 0.3.0'],
+      ['Mode setting', 'suggest, shadow or auto, chosen once and for all', 'shipped · 0.3.0'],
+      ['Radar', 'the skills rising this week, with /sm radar', 'in the works'],
+      ['Nano-rules', 'a 15-word reminder, right when it helps', 'in the works'],
     ],
     newTab: ' (new tab)',
   },
 }
 
 // Section V2 de l'accueil : ce qui est livré, en quatre cadres avec un vrai chiffre chacun (recalculé
-// à chaque build), puis ce qui est en préparation, sans date, nettement à part.
+// à chaque build), puis la suite, avec l'état de chaque chantier, nettement à part.
 export function V2({ figures, lang }: { figures: Figures; lang: Lang }) {
   const t = T[lang]
   return (
@@ -92,9 +92,10 @@ export function V2({ figures, lang }: { figures: Figures; lang: Lang }) {
         <div className="relative border border-dashed border-line-strong p-5 pt-7 md:p-7 md:pt-8">
           <p className="frame-legend">{t.next}</p>
           <ul className="grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
-            {t.nextItems.map(([name, text]) => (
+            {t.nextItems.map(([name, text, state]) => (
               <li key={name} className="flex flex-col gap-1">
                 <p className="font-mono text-[13px] text-fg/85">{name}</p>
+                <p className="caps text-[10.5px] text-muted">{state}</p>
                 <p className="text-[13px] leading-relaxed text-muted">{text}</p>
               </li>
             ))}

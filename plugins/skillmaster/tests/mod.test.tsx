@@ -25,6 +25,18 @@ const MODEL_RULES = {
 const entry = (nom: string, extra = {}) => ({ id: `o/r/${nom}`, nom, repo: 'o/r', resume_fr: `fait ${nom} → améliore ${nom}`, risque_max: null, ...extra })
 const INDEX = { type: 'site-web', recommandes: [entry('a'), entry('b', { risque_max: 'eleve' })], ajouts: [entry('c')] }
 const INDEX_DATA = { type: 'data', recommandes: [entry('d')], ajouts: [] }
+const INDEX_METHODE = { type: 'methode', recommandes: [entry('m')], ajouts: [] }
+// Le routeur : a (tête, sans risque), b (élevé : jamais dans la réserve), c (ajout, animations), m (Méthode).
+const intent = (nom: string, neutre: string, fr: string[]) => ({ nom, neutre, fr, en: [] })
+const INTENTS = {
+  skills: {
+    'o/r/a': intent('a', 'formulaires de contact et validation', ['formulaire de contact', 'validation de formulaire']),
+    'o/r/b': intent('b', 'paiement en ligne', ['paiement stripe']),
+    'o/r/c': intent('c', 'animations au scroll avec gsap', ['animation au scroll', 'parallaxe', 'gsap', 'timeline gsap']),
+    'o/r/m': intent('m', 'pour trouver la cause d’un bug', ['cause du bug', 'débogage']),
+  },
+}
+const SCROLL = "Ajoute une animation au scroll sur les cartes de l'accueil, avec gsap et une timeline, et un léger effet de parallaxe sur les images."
 const FETCH = {
   mode: 'session',
   skills: [
@@ -33,17 +45,19 @@ const FETCH = {
   ],
 }
 
-function world(on: On, answers: string[], options: { fetchFails?: boolean } = {}) {
+function world(on: On, answers: string[], options: { fetchFails?: boolean; present?: string[] } = {}) {
   mock.store(on)
   mock.env(on, { HOME })
   const clock = mock.clock(on)
-  const seen = { fills: [] as string[], asked: [] as string[], fetches: 0, tools: [] as { description: string }[], closed: 0, submitted: [] as string[], contexts: [] as (readonly string[] | undefined)[] }
+  const seen = { writes: {} as Record<string, string>, logs: [] as string[], fills: [] as string[], asked: [] as string[], fetches: 0, tools: [] as { description: string }[], closed: 0, submitted: [] as string[], contexts: [] as (readonly string[] | undefined)[] }
   const files: Record<string, string> = {
     [`${ROOT}/package.json`]: JSON.stringify({ dependencies: { next: '15' } }),
     [`${ROOT}/CLAUDE.md`]: '# projet',
     [`${LIB}/.commit`]: 'abcdef1234567 2026-10-19T17:36:17Z\n',
     [`${LIB}/index/site-web.json`]: JSON.stringify(INDEX),
     [`${LIB}/index/data.json`]: JSON.stringify(INDEX_DATA),
+    [`${LIB}/index/methode.json`]: JSON.stringify(INDEX_METHODE),
+    [`${LIB}/intents.json`]: JSON.stringify(INTENTS),
     [`${LIB}/overrides.json`]: '{}',
     [`${DIR_A}/SKILL.md`]: '---\nname: a\n---\n# Skill A',
     [`${DIR_A}/references/guide.md`]: 'le guide',
@@ -68,6 +82,13 @@ function world(on: On, answers: string[], options: { fetchFails?: boolean } = {}
   on('session.end', (_, e) => ({ sessionId: e.sessionId }))
   on('session.root', () => ({ value: ROOT }))
   on('session.model', () => ({ value: 'claude-sonnet-5-5' }))
+  on('session.id', () => ({ value: 'abcd1234-0000' }))
+  on('session.usage', () => ({ value: { context: { breakdown: { skills: { skillFrontmatter: (options.present ?? []).map(name => ({ name, source: 'built-in', tokens: 1 })) } } } } as never }))
+  on('fs.write', (_, e) => {
+    seen.writes[e.path] = e.text
+    return { value: undefined }
+  })
+  on('prompt.compose', () => ({ sections: [] }))
   on('settings.read', () => ({ value: { effortLevel: 'medium', modelSettings: { 'claude-opus-5-5': { effortLevel: 'xhigh' } } } }))
   on('fs.read', (_, e) => {
     const text = read(e.path)
@@ -92,6 +113,7 @@ function world(on: On, answers: string[], options: { fetchFails?: boolean } = {}
     if (e.argv.includes('sync')) return out({ etat: 'a_jour', date: '2026-10-19' })
     if (e.argv.includes('fetch')) {
       seen.fetches++
+      if (e.argv.includes('o/r/c')) return out({ mode: 'session', skills: [{ id: 'o/r/c', nom: 'c', repo: 'o/r', source: 'bibliotheque', decision: 'une_ligne', risques: [], dossier: DIR_A, sha_epingle: '123456789012abcd' }] })
       return options.fetchFails ? out({ erreur: 'GitHub 503' }, 1) : out(FETCH)
     }
     return ran('')
@@ -107,7 +129,10 @@ function world(on: On, answers: string[], options: { fetchFails?: boolean } = {}
     return { value: undefined }
   })
   on('ui.status', () => ({ value: undefined }))
-  on('ui.log', () => ({ value: undefined }))
+  on('ui.log', (_, e) => {
+    seen.logs.push(e.text)
+    return { value: undefined }
+  })
   on('prompt.fill', (_, e) => {
     seen.fills.push(e.text)
     return { isFilled: true }
@@ -324,4 +349,88 @@ test('PLG-11 : des skills chargés après le premier prompt sont annoncés dans 
   const read = await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'a' } as never)
   expect(JSON.stringify(read)).toContain('# Skill A')
 
+})
+
+const COMPOSE = { model: 'claude-opus-5-5', promptModel: 'claude-opus-5-5', surfaces: [], tools: ['mcp__skillmaster__skill'], outputStyle: null, traits: [] }
+const TRACES = `${HOME}/.cache/skillmaster/routeur/`
+const traces = (seen: { writes: Record<string, string> }) => {
+  const file = Object.keys(seen.writes).find(path => path.startsWith(TRACES))
+  return file ? (JSON.parse(seen.writes[file]!) as { traces: { evenement: string; raison?: string; noms?: string[]; source?: string }[] }).traces : []
+}
+
+test('mode proposer (par défaut) : le routeur ne fait rien, aucun indice ni trace', async ($, on) => {
+  const { clock, seen } = world(on, [ESC])
+  await start($, clock)
+  const sent = await $.prompt.submit(typed(SCROLL))
+  expect(sent.context).toBeUndefined()
+  expect(traces(seen)).toEqual([])
+  expect((await $.command.run(command('sm', 'routeur'))).text).toContain('proposer (routeur éteint)')
+})
+
+test("mode auto : socle dans le prompt système, pas de dialogue, un indice au prompt qui l'appelle, une seule fois", { options: { mode: 'auto' } }, async ($, on) => {
+  const { clock, seen } = world(on, [])
+  await start($, clock)
+
+  // Le socle : la tête du pack sans risque (a ; b est « élevé »), puis Méthode (m), avec notre phrase neutre.
+  const composed = await $.prompt.compose(COMPOSE)
+  const socle = composed.sections.find(section => section.id === 'skillmaster:socle')?.text ?? ''
+  expect(socle).toContain('- a : formulaires de contact et validation')
+  expect(socle).toContain('- m : pour trouver la cause d’un bug')
+  expect(socle).not.toContain('- b :')
+  expect(socle).not.toContain('fait a → améliore a')
+
+  // Un prompt long sans skill proche : ni dialogue, ni indice.
+  const plain = await $.prompt.submit(typed(LONG.replace('contact', 'tarifs').replace('formulaire', 'tableau')))
+  expect(seen.asked).toEqual([])
+  expect(plain.context).toBeUndefined()
+
+  // Le prompt du scroll : c est signalé, dans le context et par une ligne visible.
+  const hinted = await $.prompt.submit(typed(SCROLL))
+  expect(hinted.text).toBe(SCROLL)
+  expect((hinted.context ?? []).join('\n')).toContain('le skill « c » (animations au scroll avec gsap) semble utile')
+  expect(seen.logs).toContain('→ SKILLMASTER : c')
+
+  // Le même prompt une deuxième fois : déjà signalé, rien (et l'indice d'avant, pas lu, est noté « ignore »).
+  expect((await $.prompt.submit(typed(SCROLL))).context).toBeUndefined()
+
+  // Claude lit c : l'outil le télécharge (réserve), le sert, et la trace note « lu » puis « retenu ».
+  const served = await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'c' } as never)
+  expect(JSON.stringify(served)).toContain('# Skill A')
+  await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'c', fichier: 'references/guide.md' } as never)
+  const kinds = traces(seen).map(one => `${one.evenement}${one.raison ? `:${one.raison}` : ''}${one.noms?.length ? `:${one.noms.join(',')}` : ''}`)
+  expect(kinds).toEqual(['route:aucun', 'route:indice:c', 'ignore:c', 'route:aucun', 'lu:c', 'retenu:c'])
+  expect(traces(seen).find(one => one.evenement === 'lu')?.source).toBe('indice')
+
+  // Un skill à risque n'est jamais servi par la réserve.
+  expect(JSON.stringify(await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'b' } as never))).toContain("n'est pas chargé")
+})
+
+test('mode auto : un indice pas lu avant le prompt suivant est noté « ignore »', { options: { mode: 'auto' } }, async ($, on) => {
+  const { clock, seen } = world(on, [])
+  await start($, clock)
+  await $.prompt.submit(typed(SCROLL))
+  await $.prompt.submit(typed('merci, on passe à autre chose'))
+  expect(traces(seen).map(one => one.evenement)).toEqual(['route', 'ignore', 'route'])
+})
+
+test('mode ombre : la décision est notée, rien ne part, et le panneau de la V1 reste là', { options: { mode: 'ombre' } }, async ($, on) => {
+  const { clock, seen } = world(on, [ESC])
+  await start($, clock)
+  const sent = await $.prompt.submit(typed(SCROLL))
+  expect(sent.context).toBeUndefined()
+  expect(seen.logs).not.toContain('→ SKILLMASTER : c')
+  expect(traces(seen).map(one => `${one.evenement}:${one.raison}:${one.noms?.join(',')}`)).toEqual(['route:indice:c'])
+  // Pas de socle dans le prompt système, et l'outil ne sert pas la réserve.
+  expect((await $.prompt.compose(COMPOSE)).sections.find(section => section.id === 'skillmaster:socle')).toBeUndefined()
+  expect(JSON.stringify(await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'c' } as never))).toContain("n'est pas chargé")
+})
+
+test('mode auto : un skill que la session a déjà (Claude Code, plugin) n’est ni au socle ni signalé', { options: { mode: 'auto' } }, async ($, on) => {
+  const { clock, seen } = world(on, [], { present: ['c', 'a'] })
+  await start($, clock)
+  const socle = (await $.prompt.compose(COMPOSE)).sections.find(section => section.id === 'skillmaster:socle')?.text ?? ''
+  expect(socle).not.toContain('- a :')
+  expect(socle).toContain('- m :')
+  expect((await $.prompt.submit(typed(SCROLL))).context).toBeUndefined()
+  expect(seen.logs).not.toContain('→ SKILLMASTER : c')
 })

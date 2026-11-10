@@ -12,10 +12,17 @@ node collector/judge.ts --concurrency 5 --finalists 25 --rank-runs 3 --budget 6
 # 3. Cycle de vie, index, récapitulatif et garde-fous (échoue si le tour est abîmé)
 node collector/publish.ts
 
-# 4. Version anglaise du site : traduire les textes nouveaux ou modifiés
+# 4. Table du routeur : écrire les intentions des skills de pack nouveaux ou modifiés
+node collector/intents.ts --concurrency 6
+
+# 5. Version anglaise du site : traduire les textes nouveaux ou modifiés
 node collector/translate.ts --concurrency 6
 
-# 5. Calibrer par l'usage réel : place des skills les plus utilisés, avant et après
+# Mesurer le routeur sur les prompts de référence (et le jeu de contrôle, jamais utilisé pour régler)
+node collector/route-eval.ts
+node collector/route-eval.ts --controle
+
+# 6. Calibrer par l'usage réel : place des skills les plus utilisés, avant et après
 node collector/calibrate.ts --avant <commit> --min 5
 ```
 
@@ -30,6 +37,8 @@ node collector/calibrate.ts --avant <commit> --min 5
 | `resume.ts` | `resume_fr` : une phrase, 15 mots au plus, « ce qu'il fait → ce qu'il améliore ». Troisième temps du juge (Sonnet pour les finalistes, Haiku pour les autres). `node collector/resume.ts --archive` remplit aussi le manifeste de la bibliothèque locale |
 | `publish.ts` | Après le juge : cycle de vie (archive des skills disparus du tour qui comptaient, `remplace_par`), index léger `library/index/<type>.json` pour skill-master, récapitulatif `library/RECAP.md`, signal « tête changée » pour l'issue |
 | `translate.ts` | Version anglaise du site : Haiku traduit par lots les textes affichés (résumés, jugements, réserves, alertes, raisons, critères de détection). La table `library/i18n/en.json` est indexée par l'empreinte du texte français : seuls les textes nouveaux ou modifiés sont traduits, ceux qui disparaissent sont retirés. Sans traduction, le site garde le français |
+| `intents.ts` | Table du routeur, `library/intents.json` : pour chaque skill de pack, Haiku écrit une phrase neutre (quand il sert, avec nos mots, jamais ceux de l'auteur) et 8 à 14 expressions en français et en anglais, telles qu'on les taperait dans un prompt. Filtre : ni URL, ni chemin, ni commande, ni mot générique seul. Gardée par empreinte du skill : seuls les skills nouveaux ou modifiés coûtent |
+| `route-eval.ts` | Mesure du routeur (`plugins/skillmaster/hooks/lib/router.ts`) : 52 prompts de référence et un jeu de contrôle de 24 prompts écrit après le réglage. Justesse des indices, couverture, indices de trop, temps |
 | `rank.ts` | Classement comparatif d'un pack par Sonnet : 3 tirages, stack et exclusions, avantage au tenant (2 changements au plus) |
 | `usage.ts` | Usage réel d'Amdy, en local seulement : `node collector/usage.ts` écrit `docs/local/usage-amdy.json` (ignoré par git). Sert au calibrage, jamais à la bibliothèque publique |
 | `calibrate.ts` | Calibrage local par l'usage : les skills les plus utilisés devraient finir en haut de leur pack |

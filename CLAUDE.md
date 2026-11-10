@@ -17,7 +17,7 @@ Amdy utilise Claude Code pour tous ses projets : sites web, apps iOS, montage vi
    Dans les deux cas, l'outil affiche :
    - la **sélection recommandée** pour le type de projet détecté sur le moment (8 skills maximum), avec une **liste d'ajouts possibles**. Chaque skill y est présenté par son `resume_fr`, une phrase de 15 mots au plus : « ce qu'il fait → ce qu'il améliore » ;
    - un **conseil modèle et effort** : par exemple « Opus 5.5 · xhigh · ultracode ON », avec une phrase qui explique pourquoi. Il est affiché seulement : Amdy tape lui-même `/model` ou `/effort`.
-3. **Il propose, Amdy valide, au moins une fois.** Rien ne s'installe ou ne se change sans accord. Cet accord peut être donné une fois pour toutes par le réglage `mode` (V2, décision du 2026-11-05) ; le mode par défaut reste la proposition. Toutes les commandes passent sous le préfixe `/sm` : `/sm check`, `/sm install`, `/sm clean`, `/sm status`, `/sm prompt`, et `/sm radar` en V2.
+3. **Il propose, Amdy valide, au moins une fois.** Rien ne s'installe ou ne se change sans accord. Cet accord peut être donné une fois pour toutes par le réglage `mode` (V2, décision du 2026-11-05) ; le mode par défaut reste la proposition. Toutes les commandes passent sous le préfixe `/sm` : `/sm check`, `/sm install`, `/sm clean`, `/sm status`, `/sm prompt`, `/sm routeur`, et `/sm radar` en V2.
 
 ## Principes non négociables
 
@@ -242,6 +242,13 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **PLG-11 est réel** : le prompt système et la description d'un outil restent figés après la première requête. Tout ce qui arrive ensuite passe par `context`.
   - Correctif dans le plugin 0.2.5 : l'outil `mcp__skillmaster__skill` est enregistré dès le démarrage, sans `enum` ; quand la liste des skills chargés change, le prompt suivant la porte dans son `context`.
   - Reste à vérifier dans le panneau VS Code : l'affichage de la ligne `$.ui.log`.
+- 2026-11-10 : **V2, lot 3 : le routeur** (plugin 0.3.0).
+  - **Table des intentions** : `library/intents.json`, écrite par Haiku (`collector/intents.ts`, étape du tour du lundi, cache par empreinte). Pour chaque skill de pack : une phrase neutre (notre texte, jamais celui de l'auteur) et 8 à 14 expressions en français et en anglais. Premier passage : 160 skills, 0,15 $ en équivalent, sur l'abonnement d'Amdy. Elle est dans `library/` et non dans `library/index/`, que sm.ts et le site lisent comme des packs.
+  - **Recherche** : BM25 sur place, sans réseau (`hooks/lib/router.ts`, code pur). Réserve = pack du dossier (ou du prompt dans un dossier sans type) + Méthode, sans les skills à question, la liste « jamais », les ignorés et ceux que la session a déjà. Un indice si le meilleur score atteint 8, deux skills quand les deux premiers sont au coude à coude, rien s'il y en a trois, et rien sous 15 mots.
+  - **Mesure** (`collector/route-eval.ts`) : 98 % d'indices justes et aucun indice de trop sur 52 prompts de référence, qui ont servi au réglage. Sur 24 prompts de contrôle écrits ensuite : 91 % d'indices justes et 91 % de couverture, les deux erreurs dans le pack vidéo. Environ 0,1 ms par prompt.
+  - **Réglage `mode`** : `proposer` par défaut (la V1, routeur éteint), `ombre` (la V1, plus une trace locale de ce que le routeur aurait signalé) et `auto`. En `auto` : ni panneau ni dialogue, un socle de 3 skills dans le prompt système (les deux premiers de la tête sans question, puis Méthode), un indice dans le `context` avec la ligne « → SKILLMASTER : … », et l'outil qui télécharge un skill de la réserve à son premier appel, seulement s'il passe sans question.
+  - **Traces locales** : `~/.cache/skillmaster/routeur/<date>-<session>.json` (route, lu, retenu, ignore, avec les 300 premiers caractères du prompt), résumées par `/sm routeur`. Rien ne quitte la machine.
+  - **Suite** : Amdy passe en `ombre` chez lui. On relit 50 décisions ensemble, et on passe en `auto` si au moins 70 % sont justes et si la grande majorité des prompts sans signal restent sans indice.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard

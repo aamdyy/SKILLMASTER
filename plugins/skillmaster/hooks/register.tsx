@@ -1,12 +1,13 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
-import type { SkillmasterCharge, SkillmasterItem, SkillmasterProposition } from '../types'
+import type { SkillmasterCharge, SkillmasterItem, SkillmasterProposition, SkillmasterRouteur, SkillmasterTrace } from '../types'
 import { advise, chooseRule, modelId, type ModelRules, type Reglage } from './lib/advice'
 import { ANNEXES_MAX, groupAnnexes, nearest } from './lib/annexes'
 import { detect, detectFiles, detectWords, isNewProject, type Detection, type DetectionRules, type Reader } from './lib/detect'
 import { buildPack, parseNumbers, type IndexSkill, type Overrides, type PackIndex } from './lib/library'
 import { num, panelLines } from './lib/panel'
+import { buildIndex, METHODE, reserve, route, socle, type Intent, type ReservePack, type RouteIndex, type RouteSkill } from './lib/router'
 import { findWords } from './lib/words'
 
 // Le conseiller SKILLMASTER (phase 2). Il propose le pack du type de projet détecté et un réglage
@@ -44,8 +45,11 @@ const ultracode = atom({ plugin: 'skillmaster', key: 'ultracode' } as const, nul
 // description d'un outil restent figés après la première requête (vérifié le 2026-11-10, V2 lot 3,
 // étape 0) : le prompt suivant porte donc la liste à jour dans son `context`, que Claude lit.
 const annonce = atom({ plugin: 'skillmaster', key: 'annonce' } as const, false)
+const VIDE: SkillmasterRouteur = { tours: 0, indiques: [], attente: null, lus: [], retenus: [], fichiers: [], traces: [] }
+const routeur = atom({ plugin: 'skillmaster', key: 'routeur' } as const, VIDE)
 
 type Mode = 'session' | 'projet'
+type ModeRouteur = 'proposer' | 'ombre' | 'auto'
 type Origine = 'prompt' | 'nouveau' | 'check'
 type Choix =
   | { action: 'rien' | 'coupe' | 'reprendre' | 'non-place' }
@@ -519,7 +523,8 @@ function reloadSkills($: EngineInterface) {
 }
 
 async function maybePropose($: EngineInterface, options: Options, text: string, hasAttachments: boolean) {
-  if (!options.auto || (await read($, dejaPropose))) return null
+  // En mode auto, pas de dialogue : le socle et les indices du routeur en tiennent lieu.
+  if (!options.auto || modeRouteur === 'auto' || (await read($, dejaPropose))) return null
   const root = await $.session.root()
   if (await $.store.get(`coupe:${root}`)) return null
   const isArmed = await read($, arme)
@@ -557,7 +562,7 @@ async function maybePropose($: EngineInterface, options: Options, text: string, 
 async function maybeNewProject($: EngineInterface, options: Options) {
   if (isNewChecked) return
   isNewChecked = true
-  if (!options.auto || (await read($, dejaPropose))) return
+  if (!options.auto || modeRouteur === 'auto' || (await read($, dejaPropose))) return
   const root = await $.session.root()
   if ((await $.store.get(`coupe:${root}`)) || !(await isNewProject(reader($), root))) return
   const p = await propositionDuDossier($, true)
@@ -570,6 +575,194 @@ async function maybeNewProject($: EngineInterface, options: Options) {
   const done = await load($, choix.items, choix.mode, root)
   await addEtat($, done.lignes)
   if (done.reload) reloadSkills($)
+}
+
+
+// ── Le routeur (V2, lot 3) ──────────────────────────────────────────────────────────────────────────
+// À chaque prompt, sur place et sans réseau : le skill de la réserve qui correspond à la demande, ou rien
+// (hooks/lib/router.ts). En mode auto, l'indice part dans le `context` du prompt, que Claude lit et que
+// l'utilisateur ne voit pas, et une ligne « → SKILLMASTER : … » le signale. En mode ombre, rien n'est
+// envoyé : la décision est seulement notée. Les traces restent sur la machine, dans
+// ~/.cache/skillmaster/routeur/<date>-<session>.json.
+let modeRouteur: ModeRouteur = 'proposer'
+let reserveCache: { key: string; types: string[]; skills: RouteSkill[]; index: RouteIndex; socle: RouteSkill[] } | undefined
+
+// Les skills que la session a déjà, d'où qu'ils viennent (Claude Code, réglages, plugins) : ni indice ni socle.
+async function presentSkills($: EngineInterface) {
+  try {
+    const usage = await $.session.usage({ breakdown: 'summary' })
+    return (usage.context.breakdown?.skills?.skillFrontmatter ?? []).map(skill => skill.name)
+  } catch {
+    return []
+  }
+}
+
+async function reserveFor($: EngineInterface, promptTypes: readonly string[] = []) {
+  if (syncing) await Promise.race([syncing, $.clock.sleep(3_000)])
+  const where = await paths($)
+  const root = await $.session.root()
+  const rules = await readRules($)
+  const fromFolder = rules ? (await detectFiles(reader($), root, rules)).types : []
+  // Un dossier sans type (nouveau projet) : les types que le prompt désigne.
+  const types = [...new Set([...(fromFolder.length ? fromFolder : promptTypes).filter(type => type !== METHODE), METHODE])]
+  const key = `${root}|${await libraryDate($)}|${types.join(',')}`
+  if (reserveCache?.key === key) return reserveCache
+  const packs: ReservePack[] = []
+  for (const type of types) {
+    const pack = await readJson<ReservePack | null>($, `${where.library}/index/${type}.json`, null)
+    if (pack) packs.push(pack)
+  }
+  const { skills: intents = {} } = await readJson<{ skills?: Record<string, Intent> }>($, `${where.library}/intents.json`, {})
+  const overrides = await readJson<Overrides>($, `${where.library}/overrides.json`, {})
+  const ignores = ((await $.store.get('ignores')) as string[] | undefined) ?? []
+  const skills = reserve(packs, intents, new Set([...(overrides.jamais ?? []), ...ignores, ...(await presentSkills($))]))
+  reserveCache = { key, types, skills, index: buildIndex(skills), socle: socle(packs, skills) }
+  return reserveCache
+}
+
+async function tracesFile($: EngineInterface) {
+  const dir = `${(await paths($)).home}/.cache/skillmaster/routeur`
+  const id = (await $.session.id()).slice(0, 8)
+  return { dir, file: `${dir}/${new Date().toISOString().slice(0, 10)}-${id}.json` }
+}
+let tracesDir = ''
+async function trace($: EngineInterface, one: Omit<SkillmasterTrace, 'at' | 'mode' | 'tour'>) {
+  const state = await update($, routeur, r => ({ ...r, traces: [...r.traces, { at: new Date().toISOString(), mode: modeRouteur, tour: r.tours, ...one }].slice(-500) }))
+  try {
+    const { dir, file } = await tracesFile($)
+    if (tracesDir !== dir) {
+      await $.process.run(['mkdir', '-p', dir])
+      tracesDir = dir
+    }
+    await $.fs.write(file, `${JSON.stringify({ racine: await $.session.root(), traces: state.traces }, null, 1)}\n`)
+  } catch (error) {
+    $.ui.log(`SKILLMASTER : trace du routeur impossible (${String(error)})`, { to: 'debug' })
+  }
+}
+
+// L'indice du prompt précédent, pas lu avant ce prompt-ci : « ignore ».
+async function closePending($: EngineInterface) {
+  const r = await read($, routeur)
+  if (!r.attente) return
+  const unread = r.attente.noms.filter(nom => !r.lus.includes(nom))
+  await update($, routeur, one => ({ ...one, attente: null }))
+  if (unread.length === r.attente.noms.length) await trace($, { evenement: 'ignore', noms: unread })
+}
+
+function hintText(chosen: RouteSkill[]) {
+  const named = chosen.map(skill => `« ${skill.nom} » (${skill.intent.neutre})`).join(', ou ')
+  return [
+    `Indice de SKILLMASTER, à ignorer s'il ne concerne pas la demande : pour cette demande, le skill ${named} semble utile.`,
+    `Il n'est pas installé : lis son SKILL.md avec l'outil ${TOOL} (nom : "${chosen[0]!.nom}") avant de commencer, puis suis-le s'il convient.`,
+  ].join(' ')
+}
+
+async function withHint<E extends { text: string; context?: readonly string[] }>($: EngineInterface, e: E): Promise<E> {
+  if (modeRouteur === 'proposer') return e
+  await closePending($)
+  const state = await update($, routeur, r => ({ ...r, tours: r.tours + 1 }))
+  const rules = await readRules($)
+  const promptTypes = rules ? detectWords(e.text, rules).types : []
+  const res = await reserveFor($, promptTypes)
+  const loaded = (await read($, charges)).map(skill => skill.nom)
+  // Rien deux fois dans la conversation : ni un skill déjà signalé, ni un skill déjà chargé ou au socle.
+  const exclude = new Set([...state.indiques, ...loaded, ...(modeRouteur === 'auto' ? res.socle.map(skill => skill.nom) : [])])
+  const result = route(res.index, e.text, { files: state.fichiers, exclude })
+  await trace($, { evenement: 'route', raison: result.raison, noms: result.choix.map(one => one.nom), candidats: result.candidats, mots: result.mots, types: res.types, prompt: e.text.slice(0, 300) })
+  if (result.raison !== 'indice') return e
+  const chosen = result.choix.map(one => res.skills.find(skill => skill.id === one.id)).filter((skill): skill is RouteSkill => !!skill)
+  if (!chosen.length) return e
+  await update($, routeur, r => ({ ...r, indiques: [...r.indiques, ...chosen.map(skill => skill.nom)], attente: { noms: chosen.map(skill => skill.nom), tour: r.tours } }))
+  if (modeRouteur === 'ombre') {
+    $.ui.log(`SKILLMASTER (ombre) : aurait signalé ${chosen.map(skill => skill.nom).join(', ')}`, { to: 'debug' })
+    return e
+  }
+  $.ui.log(`→ SKILLMASTER : ${chosen.map(skill => skill.nom).join(', ')}`)
+  return { ...e, context: [...(e.context ?? []), hintText(chosen)] }
+}
+
+// En mode auto, l'outil sert aussi la réserve : le skill est téléchargé à son premier appel (sm.ts fetch,
+// même scan), et seulement s'il passe sans question.
+async function fromReserve($: EngineInterface, nom: unknown): Promise<SkillmasterCharge | string | null> {
+  if (modeRouteur !== 'auto' || typeof nom !== 'string') return null
+  const res = await reserveFor($)
+  const skill = res.skills.find(one => one.nom === nom || one.id === nom)
+  if (!skill) return null
+  let fetched: Fetched | undefined
+  $.ui.status(`SKILLMASTER · préparation de ${skill.nom}…`)
+  try {
+    fetched = (await sm<{ skills: Fetched[] }>($, ['fetch', skill.id], 300_000)).skills[0]
+  } catch (error) {
+    return `téléchargement impossible (${String(error)})`
+  } finally {
+    $.ui.status(undefined)
+  }
+  if (!fetched || fetched.decision !== 'une_ligne' || !fetched.dossier || !SAFE_NAME.test(fetched.nom)) {
+    return fetched?.decision === 'indisponible' ? `indisponible (${fetched.erreur ?? 'raison inconnue'})` : `pas chargé sans ton accord (${fetched ? mainRisk(fetched) || fetched.decision : 'réponse vide'}) : /sm check pour le voir`
+  }
+  const charge: SkillmasterCharge = { id: skill.id, nom: fetched.nom, resume: oneLine(skill.intent.neutre), dossier: fetched.dossier, source: fetched.source ?? 'bibliotheque', sha: fetched.sha_epingle ?? null }
+  await update($, charges, list => [...list.filter(one => one.id !== charge.id), charge])
+  return charge
+}
+
+// Chaque skill servi : « lu » la première fois, « retenu » s'il resert plus tard (relu ou une annexe).
+async function noteRead($: EngineInterface, nom: string) {
+  if (modeRouteur === 'proposer') return
+  const r = await read($, routeur)
+  const socleNoms = modeRouteur === 'auto' ? (reserveCache?.socle ?? []).map(skill => skill.nom) : []
+  const source = r.indiques.includes(nom) ? 'indice' : socleNoms.includes(nom) ? 'socle' : 'charge'
+  if (!r.lus.includes(nom)) {
+    await update($, routeur, one => ({ ...one, lus: [...one.lus, nom] }))
+    await trace($, { evenement: 'lu', noms: [nom], source })
+  } else if (!r.retenus.includes(nom)) {
+    await update($, routeur, one => ({ ...one, retenus: [...one.retenus, nom] }))
+    await trace($, { evenement: 'retenu', noms: [nom], source })
+  }
+}
+
+// Les fichiers touchés dans la session : leur extension pèse un peu dans la recherche.
+async function touch($: EngineInterface, path: unknown) {
+  if (modeRouteur === 'proposer' || typeof path !== 'string') return
+  await update($, routeur, r => ({ ...r, fichiers: [...r.fichiers.filter(one => one !== path), path].slice(-8) }))
+}
+
+function socleText(list: RouteSkill[]) {
+  return [
+    '# Skills SKILLMASTER pour ce projet',
+    `Ces skills ne sont pas installés. Quand la tâche correspond à l'un d'eux, lis son SKILL.md avec l'outil ${TOOL} (champ nom), puis suis-le comme un skill installé. En cours de conversation, SKILLMASTER peut en signaler d'autres pour une demande précise.`,
+    ...list.map(skill => `- ${skill.nom} : ${skill.intent.neutre}`),
+  ].join('\n')
+}
+
+async function routerReport($: EngineInterface) {
+  const res = await reserveFor($)
+  const r = await read($, routeur)
+  const { dir } = await tracesFile($)
+  const totals = { route: 0, indice: 0, court: 0, aucun: 0, incertain: 0, lu: 0, retenu: 0, ignore: 0 }
+  let files = 0
+  for (const entry of await $.fs.list(dir).catch(() => [])) {
+    if (!entry.name.endsWith('.json')) continue
+    files++
+    const { traces = [] } = await readJson<{ traces?: SkillmasterTrace[] }>($, `${dir}/${entry.name}`, {})
+    for (const one of traces) {
+      if (one.evenement === 'route') {
+        totals.route++
+        if (one.raison) totals[one.raison]++
+      } else totals[one.evenement]++
+    }
+  }
+  const mode = { proposer: 'proposer (routeur éteint)', ombre: 'ombre (il note, sans rien envoyer)', auto: 'auto (indices envoyés)' }[modeRouteur]
+  const last = r.traces.filter(one => one.evenement === 'route').slice(-5)
+  return [
+    '**SKILLMASTER · routeur**',
+    `- Mode : ${mode} · à changer dans /config, champ Mode`,
+    `- Réserve : ${res.skills.length} skills sans question (${res.types.join(' + ')}), hors skills déjà présents`,
+    ...(modeRouteur === 'auto' ? [`- Socle : ${res.socle.map(skill => skill.nom).join(', ') || 'aucun'}`] : []),
+    `- Cette conversation : ${r.tours} prompts, signalés : ${r.indiques.join(', ') || 'aucun'}, lus : ${r.lus.join(', ') || 'aucun'}`,
+    ...last.map(one => `  · ${one.raison}${one.noms?.length ? ` ${one.noms.join(', ')}` : ''} · « ${(one.prompt ?? '').slice(0, 50)}… »`),
+    `- Toutes les traces (${files} conversations) : ${totals.route} prompts, ${totals.indice} indices, ${totals.court} trop courts, ${totals.aucun} sans skill proche, ${totals.incertain} incertains · ${totals.lu} lus, ${totals.retenu} retenus, ${totals.ignore} ignorés`,
+    `- Traces : ${dir} (elles ne quittent pas la machine)`,
+  ].join('\n')
 }
 
 async function check($: EngineInterface, args: string[]) {
@@ -705,6 +898,7 @@ async function status($: EngineInterface, options: Options) {
     `- Session : ${session.length ? `${session.map(skill => skill.nom).join(', ')} (outil ${TOOL})` : 'aucun skill chargé'}`,
     `- Projet : ${projet.length ? `${projet.map(skill => skill.nom).join(', ')} (.claude/skills/)` : 'aucun skill posé par SKILLMASTER'}`,
     `- Ignorés : ${ignores.join(', ') || 'aucun'} (/sm check ignorer|retablir <nom>)`,
+    `- Routeur : mode ${modeRouteur}${modeRouteur === 'proposer' ? ' (éteint)' : ''} · /sm routeur pour le détail`,
     skills ? `- Budget des skills : ${skills.includedSkills} sur ${skills.totalSkills} listés, ${skills.tokens} tokens de contexte` : '- Budget des skills : indisponible',
     `- Réglage vu : ${seen ? `${seen.modele} · effort ${seen.effort ?? '?'}` : `${await $.session.model().catch(() => '?')} (aucun tour encore)`}`,
     ...(kept ? [`- Prompt retenu : « ${kept.slice(0, 60)}${kept.length > 60 ? '…' : ''} » (/sm prompt le remet dans ta saisie)`] : []),
@@ -728,27 +922,31 @@ async function smCommand($: EngineInterface, raw: string, options: Options) {
       $.clock.after(200, () => void fillText($, prompt))
       return { text: 'SKILLMASTER : ton prompt revient dans ta saisie.' }
     }
+    case 'routeur':
+      return { text: await routerReport($) }
     case 'rate':
       return { text: '/sm rate arrivera en phase 4.' }
     default:
-      return { text: 'Usage : /sm check [ignorer|retablir <nom>…] · /sm install <nom>… · /sm clean · /sm status · /sm prompt' }
+      return { text: 'Usage : /sm check [ignorer|retablir <nom>…] · /sm install <nom>… · /sm clean · /sm status · /sm routeur · /sm prompt' }
   }
 }
 
-type Options = { auto: boolean; seuil: number; mots: readonly string[] }
+type Options = { auto: boolean; seuil: number; mots: readonly string[]; mode: ModeRouteur }
 
 export const register: Register = (on, raw) => {
   const options: Options = {
     auto: raw.auto !== false,
     seuil: typeof raw.seuil === 'number' ? raw.seuil : 400,
     mots: Array.isArray(raw.mots) ? raw.mots : [],
+    mode: raw.mode === 'ombre' || raw.mode === 'auto' ? raw.mode : 'proposer',
   }
+  modeRouteur = options.mode
 
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'sm',
       description: 'SKILLMASTER : skills du projet et conseil modèle (check, install, clean, status)',
-      argumentHint: 'check | install <nom>… | clean | status',
+      argumentHint: 'check | install <nom>… | clean | status | routeur',
     })
     await registerTool($)
     if (e.surface) {
@@ -774,6 +972,8 @@ export const register: Register = (on, raw) => {
       await update($, arme, () => false)
       // Nouvelle conversation : son prompt système partira vide de skills, rien à annoncer.
       await update($, annonce, () => false)
+      await closePending($).catch(() => {})
+      await update($, routeur, () => VIDE)
       if ((await read($, charges)).length) {
         await update($, charges, () => [])
         await registerTool($)
@@ -797,7 +997,7 @@ export const register: Register = (on, raw) => {
     // Le prompt retenu est parti : sa copie de secours n'a plus lieu d'être.
     const kept = await parked($)
     if (kept !== null && same(e.text, kept)) await $.store.delete(await parkedKey($))
-    if (e.turnId !== undefined || e.wait) return next(await withAnnounce($, e))
+    if (e.turnId !== undefined || e.wait) return next(await withHint($, await withAnnounce($, e)))
 
     let held: Awaited<ReturnType<typeof maybePropose>> = null
     try {
@@ -805,7 +1005,7 @@ export const register: Register = (on, raw) => {
     } catch (error) {
       $.ui.log(`SKILLMASTER : ${String(error)} ; ton prompt part tel quel.`)
     }
-    if (!held) return next(await withAnnounce($, e))
+    if (!held) return next(await withHint($, await withAnnounce($, e)))
     held.after()
     return { drop: held.drop }
   }).catch(($, e, next) => next(e))
@@ -823,8 +1023,14 @@ export const register: Register = (on, raw) => {
   on('tool.call', { tool: TOOL }, async ($, e) => {
     const { nom, fichier } = e as unknown as { nom?: unknown; fichier?: unknown }
     const list = await read($, charges)
-    const skill = list.find(one => one.nom === nom || one.id === nom)
-    if (!skill) return { deny: `SKILLMASTER : « ${String(nom)} » n'est pas chargé. Skills chargés : ${list.map(one => one.nom).join(', ') || 'aucun'}.` }
+    let skill = list.find(one => one.nom === nom || one.id === nom)
+    if (!skill) {
+      const found = await fromReserve($, nom)
+      if (typeof found === 'string') return { deny: `SKILLMASTER : ${String(nom)} ${found}.` }
+      if (!found) return { deny: `SKILLMASTER : « ${String(nom)} » n'est pas chargé. Skills chargés : ${list.map(one => one.nom).join(', ') || 'aucun'}.` }
+      skill = found
+    }
+    await noteRead($, skill.nom).catch(() => {})
     const base = (await $.fs.stat(skill.dossier, { resolve: true }).catch(() => null))?.realPath
     if (!base) return { deny: `SKILLMASTER : le dossier de ${skill.nom} a disparu (${skill.dossier}). Relance /sm check.` }
 
@@ -874,13 +1080,31 @@ export const register: Register = (on, raw) => {
   on('prompt.compose', async ($, e, next) => {
     const composed = await next(e)
     const list = await read($, charges)
-    if (!list.length || !e.tools.includes(TOOL)) return composed
+    if (!e.tools.includes(TOOL)) return composed
+    // Mode auto : le socle, listé dès la première requête (le prompt système reste figé ensuite).
+    const base = modeRouteur === 'auto' ? (await reserveFor($)).socle.filter(skill => !list.some(one => one.id === skill.id)) : []
+    const extra = base.length ? [{ id: 'skillmaster:socle', text: socleText(base), scope: 'session' as const }] : []
+    if (!list.length) return extra.length ? { sections: [...composed.sections, ...extra] } : composed
     const text = [
       '# Skills chargés par SKILLMASTER',
       `L'utilisateur a chargé ces skills pour la session ; ils ne sont pas installés. Avant une tâche qui correspond à l'un d'eux, lis son SKILL.md avec l'outil ${TOOL} (champ nom), puis suis-le comme un skill installé.`,
       ...list.map(skill => `- ${skill.nom}${skill.resume ? ` : ${skill.resume}` : ''}`),
     ].join('\n')
-    return { sections: [...composed.sections, { id: 'skillmaster:skills', text, scope: 'session' as const }] }
+    return { sections: [...composed.sections, ...extra, { id: 'skillmaster:skills', text, scope: 'session' as const }] }
+  }).catch(($, e, next) => next(e))
+
+  // Les fichiers lus ou écrits, pour le routeur (leur extension seulement compte).
+  on('tool.call', { tool: 'Read' }, async ($, e, next) => {
+    void touch($, e.file_path).catch(() => {})
+    return next(e)
+  }).catch(($, e, next) => next(e))
+  on('tool.call', { tool: 'Edit' }, async ($, e, next) => {
+    void touch($, e.file_path).catch(() => {})
+    return next(e)
+  }).catch(($, e, next) => next(e))
+  on('tool.call', { tool: 'Write' }, async ($, e, next) => {
+    void touch($, e.file_path).catch(() => {})
+    return next(e)
   }).catch(($, e, next) => next(e))
 
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {

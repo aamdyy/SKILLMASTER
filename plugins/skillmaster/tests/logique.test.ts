@@ -6,6 +6,7 @@ import { groupAnnexes, nearest } from '../hooks/lib/annexes'
 import { detect, detectFiles, detectWords, isNewProject, type DetectionRules, type Entry, type Reader } from '../hooks/lib/detect'
 import { buildPack, gain, parseNumbers, type PackIndex } from '../hooks/lib/library'
 import { panelLines } from '../hooks/lib/panel'
+import { buildIndex, isQuiet, reserve, route, socle, tokens, type RouteSkill } from '../hooks/lib/router'
 import { findWords } from '../hooks/lib/words'
 
 // Un disque en mémoire : chemin → contenu (un dossier se déduit des chemins).
@@ -233,4 +234,57 @@ test('annexes : un chemin deviné reçoit les fichiers qui partagent ses mots', 
   expect(nearest('guides/motion/motion.md', GUIDES)).toEqual(['guides/ui-behaviors/motion.md'])
   expect(nearest('guides/animation/animation.md', GUIDES).slice(0, 2)).toEqual(['guides/css/animate-to-intrinsic-sizes.md', 'guides/ui-behaviors/animate-element-entry-exit.md'])
   expect(nearest('zzz/qqq.md', GUIDES)).toEqual([])
+})
+
+const rs = (nom: string, fr: string[], en: string[] = []): RouteSkill => ({ id: `o/${nom}`, nom, type: 'site-web', intent: { nom, neutre: nom, fr, en } })
+const SKILLS = [
+  rs('gsap', ['animation au scroll', 'parallaxe', 'timeline gsap', 'gsap'], ['scroll animation']),
+  rs('seo', ['référencement', 'balises meta', 'sitemap', 'données structurées']),
+  rs('a11y', ['accessibilité', 'contraste', 'lecteur d’écran', 'navigation au clavier']),
+  rs('form', ['formulaire de contact', 'validation de formulaire']),
+  // Remplissage : une vraie réserve compte 20 à 40 skills, et le seuil est réglé à cette échelle.
+  ...['swift', 'kotlin', 'pandas', 'remotion', 'supabase', 'stripe', 'docker', 'graphql', 'redis', 'figma', 'jest', 'vite', 'tailwind', 'prisma', 'expo', 'xcode'].map(word => rs(word, [`${word} avancé`, `config ${word}`, word])),
+]
+const LONG_SCROLL = "Ajoute une animation au scroll sur les cartes de la page d'accueil, avec un léger effet de parallaxe sur les images du haut."
+
+test('routeur : mots sans accents ni pluriel, mots vides et mots génériques retirés', () => {
+  expect(tokens('Les Animations du Héros')).toEqual(['animati', 'hero'])
+  expect(tokens('ajoute une page au site')).toEqual([])
+})
+
+test('routeur : un indice quand une expression du skill est dans le prompt, rien sinon', () => {
+  const index = buildIndex(SKILLS)
+  const hit = route(index, LONG_SCROLL)
+  expect(hit.raison).toBe('indice')
+  expect(hit.choix.map(one => one.nom)).toEqual(['gsap'])
+  const none = route(index, "Écris trois paragraphes pour la section à propos, sur l'histoire de l'atelier, avec un ton chaleureux mais sobre.")
+  expect(none.raison).toBe('aucun')
+  expect(none.choix).toEqual([])
+})
+
+test('routeur : un prompt de moins de 15 mots ne reçoit pas d’indice, un skill exclu non plus', () => {
+  const index = buildIndex(SKILLS)
+  expect(route(index, 'animation au scroll avec parallaxe').raison).toBe('court')
+  expect(route(index, LONG_SCROLL, { exclude: new Set(['gsap']) }).choix).toEqual([])
+})
+
+test('routeur : deux skills au coude à coude sont proposés ensemble', () => {
+  const index = buildIndex(SKILLS)
+  const both = route(index, "Fais un audit du référencement et de l'accessibilité de la page d'accueil : balises meta, sitemap, contraste et navigation au clavier.")
+  expect(both.raison).toBe('indice')
+  expect(both.choix.map(one => one.nom).sort()).toEqual(['a11y', 'seo'])
+})
+
+test('routeur : la réserve écarte les skills à question, la liste « jamais » et ceux déjà présents ; le socle prend la tête puis Méthode', () => {
+  const e = (nom: string, risque_max: string | null, editeur_confiance = false) => ({ id: `o/${nom}`, nom, risque_max, editeur_confiance })
+  expect([isQuiet(e('x', null)), isQuiet(e('x', 'moyen')), isQuiet(e('x', 'eleve')), isQuiet(e('x', 'eleve', true)), isQuiet(e('x', 'critique', true))]).toEqual([true, true, false, true, false])
+  const packs = [
+    { type: 'site-web', recommandes: [e('gsap', 'eleve'), e('seo', null), e('a11y', 'info')], ajouts: [e('form', null)] },
+    { type: 'methode', recommandes: [e('debug', null)], ajouts: [] },
+  ]
+  const intents = Object.fromEntries(['gsap', 'seo', 'a11y', 'form', 'debug'].map(nom => [`o/${nom}`, { nom, neutre: nom, fr: [nom], en: [] }]))
+  const skills = reserve(packs, intents, new Set(['form']))
+  expect(skills.map(one => one.nom)).toEqual(['seo', 'a11y', 'debug'])
+  expect(socle(packs, skills).map(one => one.nom)).toEqual(['seo', 'a11y', 'debug'])
+  expect(socle([packs[1]!], reserve([packs[1]!], intents)).map(one => one.nom)).toEqual(['debug'])
 })

@@ -1,12 +1,19 @@
 {
   "name": "skillmaster",
-  "version": "0.2.5",
-  "description": "SKILLMASTER : propose les skills du pack de ton projet et le réglage modèle/effort, puis les charge pour la session sur accord. Commande /sm (check, install, clean, status).",
+  "version": "0.3.0",
+  "description": "SKILLMASTER : propose les skills du pack de ton projet et le réglage modèle/effort, puis les charge pour la session sur accord ; en mode auto, signale le bon skill à chaque prompt. Commande /sm (check, install, clean, status, routeur).",
   "author": { "name": "Amdy Bouviala" },
   "license": "MIT",
   "repository": "https://github.com/aamdyy/SKILLMASTER",
   "types": "./types/index.d.ts",
   "userConfig": {
+    "mode": {
+      "type": "string",
+      "options": ["proposer", "ombre", "auto"],
+      "title": "Mode",
+      "description": "proposer : le panneau propose le pack, rien sans ton accord. ombre : pareil, et le routeur note en local le skill qu'il aurait signalé à chaque prompt, sans rien envoyer. auto : sans dialogue, quelques skills listés dès le début et un indice quand un prompt en appelle un.",
+      "default": "proposer"
+    },
     "auto": {
       "type": "boolean",
       "title": "Proposition automatique",

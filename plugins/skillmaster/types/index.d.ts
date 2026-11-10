@@ -57,6 +57,36 @@ export type SkillmasterCharge = {
   sha: string | null
 }
 
+// Une trace du routeur (V2, lot 3), gardée en local dans ~/.cache/skillmaster/routeur/ :
+// route (décision prise à un prompt), lu (un skill servi pour la première fois), retenu (le même skill
+// resservi plus tard : relu ou une annexe), ignore (un indice donné, pas lu avant le prompt suivant).
+export type SkillmasterTrace = {
+  at: string
+  evenement: 'route' | 'lu' | 'retenu' | 'ignore'
+  mode: 'proposer' | 'ombre' | 'auto'
+  tour: number
+  raison?: 'indice' | 'court' | 'aucun' | 'incertain'
+  noms?: string[]
+  candidats?: { nom: string; score: number }[]
+  mots?: number
+  types?: string[]
+  // D'où venait le skill lu : un indice, le socle, ou un chargement par le panneau.
+  source?: 'indice' | 'socle' | 'charge'
+  // Le début du prompt (300 caractères), pour relire les décisions ; ne quitte jamais la machine.
+  prompt?: string
+}
+
+// L'état du routeur pour la conversation en cours.
+export type SkillmasterRouteur = {
+  tours: number
+  indiques: string[]
+  attente: { noms: string[]; tour: number } | null
+  lus: string[]
+  retenus: string[]
+  fichiers: string[]
+  traces: SkillmasterTrace[]
+}
+
 declare module 'claude-code' {
   interface PluginState {
     skillmaster: {
@@ -68,6 +98,7 @@ declare module 'claude-code' {
       ultracode: boolean | null
       // La liste des skills chargés a changé : le prochain prompt la porte dans son context (PLG-11).
       annonce: boolean
+      routeur: SkillmasterRouteur
     }
   }
 }
