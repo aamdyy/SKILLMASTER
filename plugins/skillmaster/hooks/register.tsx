@@ -40,6 +40,10 @@ const dejaPropose = atom({ plugin: 'skillmaster', key: 'dejaPropose' } as const,
 const arme = atom({ plugin: 'skillmaster', key: 'arme' } as const, false)
 const reglage = atom({ plugin: 'skillmaster', key: 'reglage' } as const, null)
 const ultracode = atom({ plugin: 'skillmaster', key: 'ultracode' } as const, null)
+// PLG-11 : la liste des skills chargés a changé depuis la dernière annonce. Le prompt système et la
+// description d'un outil restent figés après la première requête (vérifié le 2026-11-10, V2 lot 3,
+// étape 0) : le prompt suivant porte donc la liste à jour dans son `context`, que Claude lit.
+const annonce = atom({ plugin: 'skillmaster', key: 'annonce' } as const, false)
 
 type Mode = 'session' | 'projet'
 type Origine = 'prompt' | 'nouveau' | 'check'
@@ -374,6 +378,7 @@ async function load($: EngineInterface, items: SkillmasterItem[], mode: Mode, ro
       .map(skill => ({ id: skill.id, nom: skill.nom, resume: oneLine(byId.get(skill.id)?.resume ?? null), dossier: skill.dossier!, source: skill.source ?? 'bibliotheque', sha: skill.sha_epingle ?? null }))
     if (added.length) {
       await update($, charges, list => [...list.filter(one => !added.some(other => other.id === one.id)), ...added])
+      await update($, annonce, () => true)
       await registerTool($)
       lignes.unshift(`✓ chargés pour la session : ${names} (outil skillmaster)`)
     }
@@ -425,22 +430,22 @@ async function trash($: EngineInterface, path: string, name: string) {
   return target
 }
 
+// L'outil est enregistré dès le démarrage et n'a pas d'enum : un skill chargé en cours de route doit
+// rester appelable, alors que le schéma vu par Claude ne change plus après la première requête.
+// Le nom est vérifié à l'appel, contre la liste des skills chargés.
 async function registerTool($: EngineInterface) {
   const list = await read($, charges)
-  if (!list.length) {
-    await $.tool.register({ name: 'skill', description: 'SKILLMASTER : aucun skill chargé pour cette session.', isDeferred: true })
-    return
-  }
   await $.tool.register({
     name: 'skill',
     description: [
       "Skills chargés par SKILLMASTER pour cette session, sans rien installer. Quand la tâche correspond à l'un d'eux, appelle cet outil avec son `nom` pour lire son SKILL.md, puis suis-le comme un skill installé. Avec `fichier` (chemin relatif), l'outil lit une annexe du même dossier quand le SKILL.md y renvoie ; avec un dossier, il en donne la liste. Après une compaction, relis le SKILL.md d'un skill qui sert encore.",
+      list.length ? 'Chargés au moment où cet outil a été décrit :' : "Aucun skill chargé pour l'instant : la liste arrive dans la conversation quand l'utilisateur en charge.",
       ...list.map(skill => `- ${skill.nom}${skill.resume ? ` : ${skill.resume}` : ''}`),
     ].join('\n'),
     inputSchema: {
       type: 'object',
       properties: {
-        nom: { type: 'string', enum: list.map(skill => skill.nom), description: 'Le nom du skill.' },
+        nom: { type: 'string', description: 'Le nom du skill, tel que SKILLMASTER l’a annoncé.' },
         fichier: { type: 'string', description: "Chemin relatif d'une annexe du skill (par exemple references/guide.md), ou d'un dossier pour en avoir la liste. Absent : le SKILL.md et la liste des annexes." },
       },
       required: ['nom'],
@@ -448,6 +453,21 @@ async function registerTool($: EngineInterface) {
     },
     isDeferred: false,
   })
+}
+
+// La liste à jour, telle qu'elle part dans le `context` du prompt suivant (PLG-11).
+function announceText(list: SkillmasterCharge[]) {
+  if (!list.length) return `SKILLMASTER : plus aucun skill n'est chargé pour cette session. N'appelle plus l'outil ${TOOL}.`
+  return [
+    '# Skills chargés par SKILLMASTER (liste à jour)',
+    `L'utilisateur a chargé ces skills pour la session ; ils ne sont pas installés. Avant une tâche qui correspond à l'un d'eux, lis son SKILL.md avec l'outil ${TOOL} (champ nom), puis suis-le comme un skill installé. Cette liste remplace toute liste précédente.`,
+    ...list.map(skill => `- ${skill.nom}${skill.resume ? ` : ${skill.resume}` : ''}`),
+  ].join('\n')
+}
+async function withAnnounce<E extends { context?: readonly string[] }>($: EngineInterface, e: E): Promise<E> {
+  if (!(await read($, annonce))) return e
+  await update($, annonce, () => false)
+  return { ...e, context: [...(e.context ?? []), announceText(await read($, charges))] }
 }
 
 // Les annexes d'un skill (ou d'un de ses dossiers), chemins relatifs au skill, 4 niveaux au plus.
@@ -641,6 +661,7 @@ async function clean($: EngineInterface) {
   const fromSession = picked.filter(entry => entry.kind === 'session')
   if (fromSession.length) {
     await update($, charges, list => list.filter(skill => !fromSession.some(entry => entry.id === skill.id)))
+    await update($, annonce, () => true)
     await registerTool($)
     lignes.push(`✓ retirés de la session : ${fromSession.map(entry => entry.nom).join(', ')}`)
   }
@@ -729,7 +750,7 @@ export const register: Register = (on, raw) => {
       description: 'SKILLMASTER : skills du projet et conseil modèle (check, install, clean, status)',
       argumentHint: 'check | install <nom>… | clean | status',
     })
-    if ((await read($, charges)).length) await registerTool($)
+    await registerTool($)
     if (e.surface) {
       startSync($)
       $.clock.after(800, () => void maybeNewProject($, options).catch(error => $.ui.log(`SKILLMASTER : ${String(error)}`, { to: 'debug' })))
@@ -751,6 +772,8 @@ export const register: Register = (on, raw) => {
     if (e.reason === 'clear') {
       await update($, dejaPropose, () => false)
       await update($, arme, () => false)
+      // Nouvelle conversation : son prompt système partira vide de skills, rien à annoncer.
+      await update($, annonce, () => false)
       if ((await read($, charges)).length) {
         await update($, charges, () => [])
         await registerTool($)
@@ -774,7 +797,7 @@ export const register: Register = (on, raw) => {
     // Le prompt retenu est parti : sa copie de secours n'a plus lieu d'être.
     const kept = await parked($)
     if (kept !== null && same(e.text, kept)) await $.store.delete(await parkedKey($))
-    if (e.turnId !== undefined || e.wait) return next(e)
+    if (e.turnId !== undefined || e.wait) return next(await withAnnounce($, e))
 
     let held: Awaited<ReturnType<typeof maybePropose>> = null
     try {
@@ -782,7 +805,7 @@ export const register: Register = (on, raw) => {
     } catch (error) {
       $.ui.log(`SKILLMASTER : ${String(error)} ; ton prompt part tel quel.`)
     }
-    if (!held) return next(e)
+    if (!held) return next(await withAnnounce($, e))
     held.after()
     return { drop: held.drop }
   }).catch(($, e, next) => next(e))

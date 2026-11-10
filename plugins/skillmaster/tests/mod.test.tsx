@@ -37,7 +37,7 @@ function world(on: On, answers: string[], options: { fetchFails?: boolean } = {}
   mock.store(on)
   mock.env(on, { HOME })
   const clock = mock.clock(on)
-  const seen = { fills: [] as string[], asked: [] as string[], fetches: 0, tools: [] as { description: string }[], closed: 0, submitted: [] as string[] }
+  const seen = { fills: [] as string[], asked: [] as string[], fetches: 0, tools: [] as { description: string }[], closed: 0, submitted: [] as string[], contexts: [] as (readonly string[] | undefined)[] }
   const files: Record<string, string> = {
     [`${ROOT}/package.json`]: JSON.stringify({ dependencies: { next: '15' } }),
     [`${ROOT}/CLAUDE.md`]: '# projet',
@@ -114,7 +114,8 @@ function world(on: On, answers: string[], options: { fetchFails?: boolean } = {}
   })
   on('prompt.submit', (_, e) => {
     seen.submitted.push(e.text)
-    return { text: e.text }
+    seen.contexts.push(e.context)
+    return { text: e.text, ...(e.context ? { context: e.context } : {}) }
   })
   on('command.run', (_, e) => ({ text: `/${e.command} lancé` }))
   on('tool.call', { tool: 'AskUserQuestion' }, (_, e) => {
@@ -237,7 +238,7 @@ test('/clear vide l’outil, et /sm prompt rend le prompt retenu, même après /
   expect(seen.fills).toEqual([LONG])
   await $.command.run(command('clear', ''))
   await $.session.end({ reason: 'clear', sessionId: 's', resume: {} } as never)
-  expect(seen.tools.at(-1)?.description).toBe('SKILLMASTER : aucun skill chargé pour cette session.')
+  expect(seen.tools.at(-1)?.description).toContain("Aucun skill chargé pour l'instant")
   await $.command.run(command('sm', 'prompt'))
   await clock.advance(300)
   expect(seen.fills).toEqual([LONG, LONG])
@@ -298,4 +299,29 @@ test('le panneau B se dessine sur le terminal et dans VS Code', async ($, on) =>
     expect((await narrow.find({ type: 'Text', text: /^améliore a$/ }))?.text).toBe('améliore a')
     await narrow.unmount()
   }
+})
+
+test('PLG-11 : des skills chargés après le premier prompt sont annoncés dans le context du prompt suivant, une seule fois', async ($, on) => {
+  const { clock, seen } = world(on, [SESSION, 'Tout charger'])
+  await start($, clock)
+  // L'outil existe dès le démarrage, sans enum : un skill chargé plus tard reste appelable.
+  expect(seen.tools[0]?.description).toContain("Aucun skill chargé pour l'instant")
+
+  // Un premier prompt court part normalement : le prompt système est désormais figé.
+  expect(await $.prompt.submit(typed('bonjour'))).toEqual({ text: 'bonjour' })
+  await $.command.run(command('sm', 'check'))
+  await clock.advance(300)
+
+  const next = await $.prompt.submit(typed('Ajoute un formulaire'))
+  expect(next.text).toBe('Ajoute un formulaire')
+  const announced = (next.context ?? []).join('\n')
+  expect(announced).toContain('Skills chargés par SKILLMASTER (liste à jour)')
+  expect(announced).toContain('- a : fait a → améliore a')
+  expect(announced).toContain('- b : fait b → améliore b')
+
+  // Une seule annonce par changement ; l'outil sert bien un skill chargé en cours de route.
+  expect((await $.prompt.submit(typed('Et le style ?'))).context).toBeUndefined()
+  const read = await $.tool.call({ tool: 'mcp__skillmaster__skill', nom: 'a' } as never)
+  expect(JSON.stringify(read)).toContain('# Skill A')
+
 })

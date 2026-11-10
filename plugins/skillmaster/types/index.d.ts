@@ -66,6 +66,8 @@ declare module 'claude-code' {
       arme: boolean
       reglage: { modele: string; effort: string | null } | null
       ultracode: boolean | null
+      // La liste des skills chargés a changé : le prochain prompt la porte dans son context (PLG-11).
+      annonce: boolean
     }
   }
 }

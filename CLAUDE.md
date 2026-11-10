@@ -237,6 +237,11 @@ Livrable de la phase 0 : un court rapport « ce qui est faisable / pas faisable 
   - **`/sm rate` passe en réserve :** les signaux locaux d'abord. Le statut public ne dépend pas de l'usage : `nouveau` pendant 4 semaines, puis `valide` (note ≥ 6) ou `faible` ; `archive` est durable ; `en_test` n'est plus utilisé.
   - **Garde-fous avant publication** (`collector/regles.ts`) : le tour échoue si le catalogue perd plus de 10 %, si plus de 20 % des dépôts en tête manquent, si plus de 5 % des skills n'ont pas de verdict, ou au-delà de 6 $. Un jugement raté garde le verdict et la version d'avant. Une tête de pack ne tombe sur un verdict neuf qu'après un second tirage.
   - **Plafond de changements :** 2 décisions de Sonnet par pack et par tour, écartés compris. Un skill disparu est remplacé en plus, et un sortant ne revient pas dans le même tour.
+- 2026-11-10 : **V2, lot 3, étape 0 faite** (mod de test `experiments/sm-router-smoke/`, résultats : `docs/local/v2-lot3-etape0-resultats.md`).
+  - Un `context` attaché à un prompt tardif arrive à Claude, un outil au nom libre enregistré au démarrage est appelé en cours de route, un refus dans `tool.call` vaut aussi dans les sous-agents, et `$.session.usage` donne les skills déjà présents par source (`built-in`, `syncedSkills`, `plugin`).
+  - **PLG-11 est réel** : le prompt système et la description d'un outil restent figés après la première requête. Tout ce qui arrive ensuite passe par `context`.
+  - Correctif dans le plugin 0.2.5 : l'outil `mcp__skillmaster__skill` est enregistré dès le démarrage, sans `enum` ; quand la liste des skills chargés change, le prompt suivant la porte dans son `context`.
+  - Reste à vérifier dans le panneau VS Code : l'affichage de la ligne `$.ui.log`.
 - Les changements faits sur la machine d'Amdy (réglages, sauvegardes, ménage) sont tenus dans `docs/local/journal-machine.md`. `docs/local/` n'est pas versionné.
 
 ## Idées pour plus tard
