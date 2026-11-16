@@ -1,6 +1,6 @@
 {
   "type": "site-web",
-  "genere_le": "2026-11-09T14:23:54.589Z",
+  "genere_le": "2026-11-16T14:07:40.714Z",
   "version_juge": "v3",
   "regles": "finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus, sauf éditeurs de confiance et exceptions ; épinglages et exclusions dans library/overrides.json",
   "tenants_de": "tour précédent",
@@ -11,19 +11,19 @@
     "awslabs/agent-plugins/plugins/deploy-on-aws/skills/elastic-beanstalk",
     "bencium/bencium-marketplace/bencium-controlled-ux-designer/skills/bencium-controlled-ux-designer",
     "chromedevtools/chrome-devtools-mcp/skills/a11y-debugging",
-    "cloudai-x/threejs-skills/skills/threejs-asset-pipeline",
     "cloudai-x/threejs-skills/skills/threejs-react-three-fiber",
-    "cloudflare/skills/skills/turnstile-spin",
     "dotnet/skills/plugins/dotnet-blazor/skills/collect-user-input",
+    "emilkowalski/skills/skills/ask-sonner",
+    "expo/skills/plugins/expo/skills/eas-hosting",
+    "googlechrome/modern-web-guidance/skills/chrome-extensions",
     "googlechrome/modern-web-guidance/skills/modern-web-guidance",
     "greensock/gsap-skills/skills/gsap-react",
     "henkisdabro/wookstar-claude-plugins/plugins/react-best-practices/skills/react-best-practices",
     "huggingface/skills/skills/huggingface-gradio",
     "jeffallan/claude-skills/skills/react-expert",
-    "microsoft/skills/.github/skills/applicationinsights-web-ts",
     "molauu/svg-character-animator/svg-character-animator",
+    "plugin87/ux-ui-agent-skills/.claude/skills/design-code",
     "sangrokjung/claude-forge/skills/cache-components",
-    "simon-he95/markstream-vue/.agents/skills/markstream-react",
     "software-mansion-labs/skills/skills/typegpu",
     "supabase/agent-skills/skills/supabase",
     "textura-agency/next16-claude-starter/.claude/skills/mobile-device-qa",
@@ -36,33 +36,33 @@
   "ecartes": [
     {
       "nom": "collect-user-input",
-      "raison": "Blazor/.NET, absent de sa stack"
+      "raison": "Blazor/.NET, absent de sa stack."
     },
     {
       "nom": "elastic-beanstalk",
-      "raison": "Déploiement AWS Elastic Beanstalk, hors stack (Cloudflare)"
+      "raison": "Spécifique à AWS Elastic Beanstalk, hors stack."
     },
     {
       "nom": "amplify-workflow",
-      "raison": "AWS Amplify, hors stack ; cible aussi Vue/Angular"
+      "raison": "Spécifique à AWS Amplify, hors stack."
     },
     {
       "nom": "vercel-optimize",
-      "raison": "Centré sur Vercel et Nuxt/SvelteKit, hors stack (Cloudflare)"
+      "raison": "Spécifique à la plateforme Vercel, hors stack (Cloudflare)."
     },
     {
-      "nom": "applicationinsights-web-ts",
-      "raison": "Azure Application Insights, service cloud hors stack"
+      "nom": "chrome-extensions",
+      "raison": "Extensions Chrome, hors sujet pour un site web."
     },
     {
       "nom": "huggingface-gradio",
-      "raison": "Gradio est une interface Python de démos ML, pas un site web"
+      "raison": "Gradio, hors sujet pour un site web."
     }
   ],
   "stabilite": {
     "tirages": 3,
-    "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "La tête du pack reste les skills web généralistes (API web modernes, performance React/Next, accessibilité) qui servent à tout site, avant les skills de niche."
+    "meme_composition_sans_tenants": true,
+    "raison_tirage_1": "La tête du pack reste les skills React/Next.js et web moderne (performance, API à jour, accessibilité), qui couvrent directement un site codé depuis Figma."
   },
   "recommandes": [
     {
@@ -83,14 +83,14 @@
       "id": "googlechrome/modern-web-guidance/skills/modern-web-guidance",
       "nom": "modern-web-guidance",
       "repo": "GoogleChrome/modern-web-guidance",
-      "resume_fr": "cherche les bonnes pratiques web actuelles avant chaque interface → évite les API obsolètes",
-      "note": 9,
+      "resume_fr": "te fait consulter les bonnes pratiques web modernes avant chaque interface → évite les API obsolètes",
+      "note": 8,
       "pertinence": 8,
-      "score_pack": 8.6,
-      "note_juge": 9,
+      "score_pack": 8,
+      "note_juge": 8,
       "modele": "haiku",
       "risque_max": "moyen",
-      "raison": "Skill officiel Google, ciblé web moderne, avec API récentes, statuts Baseline et fallbacks concrets. Ton impératif (« Do NOT skip ») et liste de déclencheurs très large retiennent la note."
+      "raison": "Guides riches et à jour (Baseline, fallbacks, pièges réels, commandes exactes). Déclenchement très large et ton « MANDATORY », liste de triggers ouverte (« etc. »). Annexes en partie tronquées."
     },
     {
       "id": "vercel-labs/agent-skills/skills/react-best-practices",
@@ -148,14 +148,14 @@
       "id": "agricidaniel/claude-seo/skills/seo-drift",
       "nom": "seo-drift",
       "repo": "AgriciDaniel/claude-seo",
-      "resume_fr": "compare tes balises SEO à une référence → repère vite ce qui casse après chaque déploiement",
-      "note": 7,
+      "resume_fr": "compare tes balises SEO après chaque déploiement → détecte les régressions avant qu'elles coûtent cher",
+      "note": 9,
       "pertinence": 4,
-      "score_pack": 5.8,
-      "note_juge": 7,
+      "score_pack": 7,
+      "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement précis et périmètre net. Règles de comparaison concrètes, mais peu de savoir-faire spécifique à Claude Code. Annexe tronquée, et plusieurs scripts référencés ne sont pas fournis. Pas de risque nouveau."
+      "raison": "Déclencheurs précis, 17 règles à seuils et sévérités, commandes et stockage SQLite décrits. Note limitée par une annexe tronquée, des scripts non fournis et un contenu de règles incomplet."
     },
     {
       "id": "textura-agency/next16-claude-starter/.claude/skills/mobile-device-qa",
@@ -186,17 +186,17 @@
       "raison": "Déclenchement clair et sujet net. Mais le skill ne contient que la procédure : les règles sont téléchargées à chaque exécution depuis la branche main, sans version figée. Peu de savoir-faire local, pas de licence."
     },
     {
-      "id": "agricidaniel/claude-seo/skills/seo-agentic",
-      "nom": "seo-agentic",
-      "repo": "AgriciDaniel/claude-seo",
-      "resume_fr": "audite la capacité des agents IA à naviguer → sites utilisables par ChatGPT, Gemini et Claude",
-      "note": 10,
-      "pertinence": 4,
-      "score_pack": 7.6,
-      "note_juge": 10,
+      "id": "jeffallan/claude-skills/skills/nextjs-developer",
+      "nom": "nextjs-developer",
+      "repo": "Jeffallan/claude-skills",
+      "resume_fr": "configure App Router, Server Components et Server Actions → apps Next.js plus rapides, mieux référencées",
+      "note": 7,
+      "pertinence": 8,
+      "score_pack": 7.4,
+      "note_juge": 7,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Skill de mainteneur, ciblé, avec périmètre et exclusions nets, commandes exactes, règles testables et dates de vérification. Annexes tronquées et références manquantes limitent la vérification."
+      "raison": "Déclenchement et périmètre précis. Valeur limitée : connaissances Next.js de base, et API datées (params non asynchrones, cache fetch par défaut, useFormState, experimental_useOptimistic). Annexe server-components absente."
     },
     {
       "id": "vercel-labs/agent-skills/skills/react-view-transitions",
@@ -225,19 +225,6 @@
       "raison": "Skill précis et bien ciblé sur les API récentes de Cache Components, avec exemples et messages d'erreur. Note amputée : application « proactive » trop large, annexes tronquées, dépôt tiers non officiel."
     },
     {
-      "id": "cloudflare/skills/skills/turnstile-spin",
-      "nom": "turnstile-spin",
-      "repo": "cloudflare/skills",
-      "resume_fr": "installe Turnstile côté front et back, avec vérification serveur → moins de bots sur tes formulaires",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill officiel Cloudflare, ciblé, avec commandes exactes, garde-fous (hostnames, secrets, action) et code siteverify vérifiable. Note limitée par la troncature du SKILL.md et la complexité du wizard."
-    },
-    {
       "id": "supabase/agent-skills/skills/supabase",
       "nom": "supabase",
       "repo": "supabase/agent-skills",
@@ -249,19 +236,6 @@
       "modele": "haiku",
       "risque_max": null,
       "raison": "Skill officiel ciblé, avec pièges de sécurité Supabase précis, exemples SQL et gotchas CLI. Note bridée par la version incohérente (metadata 0.1.2 vs changelog 0.1.9) et les renvois vers des docs externes."
-    },
-    {
-      "id": "cloudai-x/threejs-skills/skills/threejs-react-three-fiber",
-      "nom": "threejs-react-three-fiber",
-      "repo": "CloudAI-X/threejs-skills",
-      "resume_fr": "construit des scènes three.js en JSX React → scènes 3D React plus simples à maintenir",
-      "note": 9,
-      "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": null,
-      "raison": "Déclenchement précis et contenu très spécifique (pièges de fiber 9.8, drei 10.7, disposal, dpr adaptatif, Html). Note amputée par la troncature à 24 000 caractères sur 29 928 ; confiance basse."
     },
     {
       "id": "henkisdabro/wookstar-claude-plugins/plugins/react-best-practices/skills/react-best-practices",
@@ -277,6 +251,19 @@
       "raison": "Déclenchement précis avec exclusions explicites. Overrides utiles (React Compiler, Cache Components Next 16) et exemples de code. Qualité amoindrie : plusieurs règles de l'index (famille server-*, quelques rerender-*) n'ont pas de fichier fourni."
     },
     {
+      "id": "emilkowalski/skills/skills/ask-sonner",
+      "nom": "ask-sonner",
+      "repo": "emilkowalski/skills",
+      "resume_fr": "guide Sonner, de l'installation au dépannage → évite les toasts invisibles, doublons et styles perdus",
+      "note": 10,
+      "pertinence": 6,
+      "score_pack": 8.4,
+      "note_juge": 10,
+      "modele": "haiku",
+      "risque_max": null,
+      "raison": "Déclenchement précis avec symptômes, pièges réels (Toaster unique, StrictMode, Shadow DOM, z-index), API fidèle à l'annexe, commandes et exemples testables. Léger défaut : réponse d'accueil imposée et sortie stylée."
+    },
+    {
       "id": "jeffallan/claude-skills/skills/react-expert",
       "nom": "react-expert",
       "repo": "Jeffallan/claude-skills",
@@ -290,17 +277,30 @@
       "raison": "Skill de mainteneur, ciblé et concret, avec exemples de code et déclencheurs clairs. Valeur surtout générique pour Claude. Annexe de tests absente, deux annexes tronquées, incohérences mineures (use server dans un fichier client)."
     },
     {
-      "id": "cloudai-x/threejs-skills/skills/threejs-asset-pipeline",
-      "nom": "threejs-asset-pipeline",
+      "id": "cloudai-x/threejs-skills/skills/threejs-react-three-fiber",
+      "nom": "threejs-react-three-fiber",
       "repo": "CloudAI-X/threejs-skills",
-      "resume_fr": "compresse les modèles 3D glTF pour three.js → chargement web plus léger et rapide",
+      "resume_fr": "construit des scènes three.js en JSX React → scènes 3D React plus simples à maintenir",
       "note": 9,
       "pertinence": 6,
       "score_pack": 7.8,
       "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement précis et pièges réels (erreurs de loaders, ordre Draco en dernier, KTX2 detectSupport). Commandes concrètes pour three r186. Note qualité réduite : commandes npx non épinglées, versions non vérifiables ici."
+      "raison": "Déclenchement précis et contenu très spécifique (pièges de fiber 9.8, drei 10.7, disposal, dpr adaptatif, Html). Note amputée par la troncature à 24 000 caractères sur 29 928 ; confiance basse."
+    },
+    {
+      "id": "expo/skills/plugins/expo/skills/eas-hosting",
+      "nom": "eas-hosting",
+      "repo": "expo/skills",
+      "resume_fr": "déploie ton site Expo et ses routes API → mises en production et previews par PR",
+      "note": 8,
+      "pertinence": 8,
+      "score_pack": 8,
+      "note_juge": 8,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Skill officiel Expo, déclenchement précis et commandes concrètes. Périmètre mêlé (rédaction d'API routes générique, déploiement EAS). Quelques passages génériques, durée d'exécution non sourcée, section feedback à commande npx externe."
     },
     {
       "id": "molauu/svg-character-animator/svg-character-animator",
@@ -316,17 +316,17 @@
       "raison": "Déclenchement précis et savoir-faire réel : stratégie TRANSFORM/MORPH par chemin, normalisation, gestion des orphelins et de l'interruption. Lecture partielle seulement (SKILL.md tronqué), d'où confiance moyenne."
     },
     {
-      "id": "simon-he95/markstream-vue/.agents/skills/markstream-react",
-      "nom": "markstream-react",
-      "repo": "Simon-He95/markstream-vue",
-      "resume_fr": "branche markstream-react dans React ou Next → rendu markdown en streaming sans erreurs SSR",
-      "note": 9,
+      "id": "software-mansion-labs/skills/skills/typegpu",
+      "nom": "typegpu",
+      "repo": "software-mansion-labs/skills",
+      "resume_fr": "écrit shaders et buffers WebGPU en TypeScript typé → évite les erreurs CPU/GPU",
+      "note": 10,
       "pertinence": 6,
-      "score_pack": 7.8,
-      "note_juge": 9,
+      "score_pack": 8.4,
+      "note_juge": 10,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Déclenchement précis et périmètre net. API concrète (smoothStreaming, fade, htmlPolicy, streamingComponents) avec des pièges utiles. Rédigé pour Codex, package beta, docs citées absentes : qualité 1."
+      "raison": "Skill de Software Mansion, mainteneur de TypeGPU, ciblé sur la version 0.12. Déclenchement net avec exclusions, règles et pièges précis (types, encodeurs, slots). Plusieurs annexes absentes ou tronquées."
     }
   ]
 }

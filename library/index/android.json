@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-11-09T14:26:42.077Z",
+  "genere_le": "2026-11-16T14:10:57.609Z",
   "type": "android",
   "bareme": "b2",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -159,10 +159,10 @@
       "repo": "rcosteira79/android-skills",
       "chemin_skill": "plugins/android-skills/skills/android-debugging",
       "skill_md": "plugins/android-skills/skills/android-debugging/SKILL.md",
-      "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
-      "empreinte": "4ed1bb87f47380494f935553d182ff8319556a8e71903e6bc770929351c19863",
+      "sha_epingle": "fa39ae26f224fac45b32280f66ac839ae57b4c64",
+      "empreinte": "00a131963e2a384888fe2fbd584ea06d70f55034356b37229aa40e5e6531cb39",
       "licence": "MIT",
-      "resume_fr": "décode ANR, R8 et fuites mémoire Android → trouve la cause racine avant tout correctif",
+      "resume_fr": "analyse crashs, ANR et régressions Android avant tout correctif → évite de corriger des symptômes",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
@@ -171,6 +171,23 @@
     }
   ],
   "ajouts": [
+    {
+      "id": "rcosteira79/android-skills/plugins/android-skills/skills/compose",
+      "nom": "compose",
+      "place": "ajout",
+      "repo": "rcosteira79/android-skills",
+      "chemin_skill": "plugins/android-skills/skills/compose",
+      "skill_md": "plugins/android-skills/skills/compose/SKILL.md",
+      "sha_epingle": "fa39ae26f224fac45b32280f66ac839ae57b4c64",
+      "empreinte": "0aaaa3e62f548086ea44e9a71cab685f94bb4b4e662c6db2f362a24bac3ae705",
+      "licence": "MIT",
+      "resume_fr": "guide Compose et Compose Multiplatform sur état, navigation et performance → interfaces plus rapides et correctes",
+      "note": 10,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
     {
       "id": "skydoves/compose-performance-skills/audit/auditing-compose-performance",
       "nom": "auditing-compose-performance",
@@ -183,23 +200,6 @@
       "licence": "Apache-2.0",
       "resume_fr": "te fait mesurer avant de corriger → gains de fluidité prouvés par des chiffres",
       "note": 10,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "rcosteira79/android-skills/plugins/android-skills/skills/android-testing",
-      "nom": "android-testing",
-      "place": "ajout",
-      "repo": "rcosteira79/android-skills",
-      "chemin_skill": "plugins/android-skills/skills/android-testing",
-      "skill_md": "plugins/android-skills/skills/android-testing/SKILL.md",
-      "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
-      "empreinte": "ed763aced19a0e15cf5592c0a8eec88c828fadb231c3b7b67510baf180d306ad",
-      "licence": "MIT",
-      "resume_fr": "impose des tests rouges avant tout code Android → évite les pièges Compose et KMP",
-      "note": 9,
       "editeur_confiance": false,
       "risque_max": null,
       "risque_max_projet": null,
@@ -239,6 +239,23 @@
           "code": "Les exemples A2UI et AGSL montrent du contenu généré par agent ou des shaders dynamiques : sans garde-fous explicites dans le skill, un développeur pourrait exposer des actions privilégiées."
         }
       ]
+    },
+    {
+      "id": "rcosteira79/android-skills/plugins/android-skills/skills/coil-compose",
+      "nom": "coil-compose",
+      "place": "ajout",
+      "repo": "rcosteira79/android-skills",
+      "chemin_skill": "plugins/android-skills/skills/coil-compose",
+      "skill_md": "plugins/android-skills/skills/coil-compose/SKILL.md",
+      "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
+      "empreinte": "095d1c2ed0fba39a443763a2033ee1924b3607dbdabb688f553e8d79a6ae6de7",
+      "licence": "MIT",
+      "resume_fr": "guide Coil 3 en Compose KMP → évite les OOM et saccades dans les listes",
+      "note": 10,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
     },
     {
       "id": "hamen/compose_skill/skills/jetpack-compose-audit",
@@ -284,6 +301,23 @@
       ]
     },
     {
+      "id": "chrisbanes/skills/skills/compose-animations",
+      "nom": "compose-animations",
+      "place": "ajout",
+      "repo": "chrisbanes/skills",
+      "chemin_skill": "skills/compose-animations",
+      "skill_md": "skills/compose-animations/SKILL.md",
+      "sha_epingle": "72628aea92c9081df0ba96600f24af3f07f4a87a",
+      "empreinte": "64da0022947f049fac543aaf42271b9d7fb9182c6b24e095ea62fae54d7ab387",
+      "licence": "Apache-2.0",
+      "resume_fr": "choisit la plus simple API d'animation Compose → évite les contenus fantômes après sortie",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": null,
+      "risque_max_projet": null,
+      "risques": []
+    },
+    {
       "id": "meet-miyani/compose-skill/skills/compose-feature",
       "nom": "compose-feature",
       "place": "ajout",
@@ -307,40 +341,6 @@
           "detail": "scripts/new-feature.sh"
         }
       ]
-    },
-    {
-      "id": "chrisbanes/skills/skills/compose-animations",
-      "nom": "compose-animations",
-      "place": "ajout",
-      "repo": "chrisbanes/skills",
-      "chemin_skill": "skills/compose-animations",
-      "skill_md": "skills/compose-animations/SKILL.md",
-      "sha_epingle": "72628aea92c9081df0ba96600f24af3f07f4a87a",
-      "empreinte": "64da0022947f049fac543aaf42271b9d7fb9182c6b24e095ea62fae54d7ab387",
-      "licence": "Apache-2.0",
-      "resume_fr": "choisit la plus simple API d'animation Compose → évite les contenus fantômes après sortie",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
-    },
-    {
-      "id": "rcosteira79/android-skills/plugins/android-skills/skills/coil-compose",
-      "nom": "coil-compose",
-      "place": "ajout",
-      "repo": "rcosteira79/android-skills",
-      "chemin_skill": "plugins/android-skills/skills/coil-compose",
-      "skill_md": "plugins/android-skills/skills/coil-compose/SKILL.md",
-      "sha_epingle": "0f9af5ae88e7041cc3f901975237aedb1bd0edf6",
-      "empreinte": "095d1c2ed0fba39a443763a2033ee1924b3607dbdabb688f553e8d79a6ae6de7",
-      "licence": "MIT",
-      "resume_fr": "guide Coil 3 en Compose KMP → évite les OOM et saccades dans les listes",
-      "note": 10,
-      "editeur_confiance": false,
-      "risque_max": null,
-      "risque_max_projet": null,
-      "risques": []
     },
     {
       "id": "skydoves/compose-performance-skills/measurement/generating-baseline-profiles",
@@ -422,16 +422,16 @@
       ]
     },
     {
-      "id": "cometchat/cometchat-skills/skills/cometchat-android-v6-compose-components",
-      "nom": "cometchat-android-v6-compose-components",
+      "id": "cometchat/cometchat-skills/skills/cometchat-android-v6-compose-customization",
+      "nom": "cometchat-android-v6-compose-customization",
       "place": "ajout",
       "repo": "cometchat/cometchat-skills",
-      "chemin_skill": "skills/cometchat-android-v6-compose-components",
-      "skill_md": "skills/cometchat-android-v6-compose-components/SKILL.md",
-      "sha_epingle": "8652f1ea41d12e5058123db1e4e6babef9c918f1",
-      "empreinte": "1ff97f26cf5a100e14a9b34317809ddc25147bbc94d12c8c8a0cfb33b45ce57a",
+      "chemin_skill": "skills/cometchat-android-v6-compose-customization",
+      "skill_md": "skills/cometchat-android-v6-compose-customization/SKILL.md",
+      "sha_epingle": "1156a8e5fd6cad24c5875ddda73f7da57622d7b2",
+      "empreinte": "472aaa91318481a9a8dbc58145e19554a2672ec62e2c08e66ca8f9566baf3024",
       "licence": "MIT",
-      "resume_fr": "liste les composables CometChat Compose et leurs slots → évite d'inventer un composant inexistant",
+      "resume_fr": "applique tes couleurs et le mode sombre au chat Compose → interface cohérente avec ta marque",
       "note": 9,
       "editeur_confiance": false,
       "risque_max": null,

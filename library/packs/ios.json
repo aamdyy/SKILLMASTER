@@ -1,10 +1,10 @@
 {
   "type": "ios",
-  "genere_le": "2026-11-09T14:24:12.160Z",
+  "genere_le": "2026-11-16T14:07:40.717Z",
   "version_juge": "v3",
   "regles": "finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus, sauf éditeurs de confiance et exceptions ; épinglages et exclusions dans library/overrides.json",
   "tenants_de": "tour précédent",
-  "reclasse": true,
+  "reclasse": false,
   "finalistes": [
     "apollographql/skills/skills/apollo-ios",
     "avdlee/swift-concurrency-agent-skill/skills/swift-concurrency",
@@ -35,9 +35,8 @@
   "changements": [],
   "ecartes": [],
   "stabilite": {
-    "tirages": 3,
-    "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "Le pack est mené par la traduction Figma↔SwiftUI, puis par la revue SwiftUI moderne et la concurrence Swift, qui servent à tout projet iOS."
+    "tirages": 0,
+    "note": "classement Sonnet indisponible pour ce pack"
   },
   "recommandes": [
     {

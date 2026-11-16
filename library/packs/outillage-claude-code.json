@@ -1,6 +1,6 @@
 {
   "type": "outillage-claude-code",
-  "genere_le": "2026-11-09T14:26:15.838Z",
+  "genere_le": "2026-11-16T14:10:30.144Z",
   "version_juge": "v3",
   "regles": "finale de 25 au plus : épinglés, tenants, puis les meilleurs au score qualité × poids + pertinence × poids avec une pertinence ≥ 6 ; Sonnet range la finale en 3 tirages, écarte les technos hors stack, et applique l’avantage au tenant (2 changements au plus, retenus à la majorité des tirages) ; type principal unique ; les 5 à 8 premiers avec une note du juge ≥ 6 (ajouts : ≥ 5) ; type confirmé par le juge ET la détection ; ni Expo ni React Native dans ios et android ; pas de risque critique ; pas de choix visuels autonomes pour les types à écrans ; 2 skills par dépôt au plus, sauf éditeurs de confiance et exceptions ; épinglages et exclusions dans library/overrides.json",
   "tenants_de": "tour précédent",
@@ -20,83 +20,53 @@
     "anthropics/skills/skills/skill-creator",
     "cherryhq/cherry-studio/.agents/skills/gh-pr-review",
     "chromedevtools/chrome-devtools-mcp/skills/troubleshooting",
+    "code-yeongyu/oh-my-openagent/packages/shared-skills/skills/coding-agent-sessions",
     "eigenwise/atomic-agents/claude-plugin/atomic-agents/skills/troubleshoot",
     "epicgames/unreal-engine-skills-for-claude-code-plugin/skills/create-toolset",
     "github/awesome-copilot/skills/dotnet-mcp-builder",
+    "henkisdabro/wookstar-claude-plugins/plugins/google-analytics/skills/google-analytics",
+    "juliusbrussee/caveman/skills/caveman-compress",
     "juliusbrussee/caveman/skills/caveman-learn",
     "kajisho5/ffmpeg-skill/.claude/skills/mcp-server-design",
     "mattpocock/skills/skills/engineering/code-review",
-    "nanocoai/nanoclaw/.claude/skills/add-cursor",
-    "neondatabase/agent-skills/skills/neon",
     "nvidia/skillspector/skills/skill-inspector",
-    "topoteretes/cognee/.agents/skills/cognee-integrations",
-    "virgiliojr94/book-to-skill/book-to-skill"
+    "topoteretes/cognee/.agents/skills/cognee-integrations"
   ],
-  "changements": [
-    {
-      "entrant": "build-mcp-server",
-      "sortant": "constraint-driven-development",
-      "raison": "plus éligible pour ce type ou absent de la sélection",
-      "entrant_id": "anthropics/claude-plugins-official/plugins/mcp-server-dev/skills/build-mcp-server",
-      "sortant_id": "addyosmani/agent-skills/skills/constraint-driven-development"
-    },
-    {
-      "entrant": "agent-development",
-      "sortant": "optimize-loop",
-      "raison": "plus éligible pour ce type ou absent de la sélection",
-      "entrant_id": "anthropics/claude-plugins-official/plugins/plugin-dev/skills/agent-development",
-      "sortant_id": "gaasher/agent-loop-skills/loops/optimize-loop"
-    },
-    {
-      "entrant": "plugin-structure",
-      "sortant": "rossark-motion-skill",
-      "raison": "plus éligible pour ce type ou absent de la sélection",
-      "entrant_id": "anthropics/claude-plugins-official/plugins/plugin-dev/skills/plugin-structure",
-      "sortant_id": "rossark0/rossark-motion-skill/rossark-motion-skill"
-    }
-  ],
+  "changements": [],
   "ecartes": [
     {
+      "nom": "google-analytics",
+      "raison": "Spécifique à GA4 et à l'export BigQuery (entrepôt cloud absent)."
+    },
+    {
       "nom": "dotnet-mcp-builder",
-      "raison": "C#/.NET, absent de sa stack"
+      "raison": "C#/.NET, absent de sa stack."
     },
     {
       "nom": "create-toolset",
-      "raison": "Spécifique à Unreal Engine, hors stack"
-    },
-    {
-      "nom": "neon",
-      "raison": "Backend cloud Neon, hors stack (Supabase utilisé)"
-    },
-    {
-      "nom": "gh-pr-review",
-      "raison": "Revue propre au dépôt Cherry Studio"
-    },
-    {
-      "nom": "troubleshoot",
-      "raison": "Limité au framework Atomic Agents"
-    },
-    {
-      "nom": "add-cursor",
-      "raison": "Spécifique à NanoClaw et Cursor"
+      "raison": "Spécifique à Unreal Engine, hors stack."
     },
     {
       "nom": "cognee-integrations",
-      "raison": "Spécifique à cognee, avec bases hors stack"
+      "raison": "Propre à cognee, avec bases et connecteurs hors stack."
+    },
+    {
+      "nom": "troubleshoot",
+      "raison": "Ne vaut que pour le framework Atomic Agents."
     },
     {
       "nom": "cookbook-audit",
-      "raison": "Réservé aux notebooks du Cookbook Anthropic"
+      "raison": "Réservé aux notebooks du Cookbook Anthropic."
     },
     {
-      "nom": "troubleshooting",
-      "raison": "Réservé à Chrome DevTools MCP"
+      "nom": "gh-pr-review",
+      "raison": "Règles propres au dépôt Cherry Studio."
     }
   ],
   "stabilite": {
     "tirages": 3,
     "meme_composition_sans_tenants": false,
-    "raison_tirage_1": "Les tenants généralistes (création et test de skills, revue de code, MCP en Python/TypeScript) restent en tête, et aucun challenger n'est nettement meilleur."
+    "raison_tirage_1": "Les tenants généralistes (création de skills, relecture de code, outillage MCP et plugins Claude Code) restent en tête, car aucun challenger n'est nettement meilleur."
   },
   "recommandes": [
     {
@@ -209,14 +179,14 @@
       "id": "kajisho5/ffmpeg-skill/.claude/skills/mcp-server-design",
       "nom": "building-python-mcp-servers",
       "repo": "kajisho5/ffmpeg-skill",
-      "resume_fr": "construit des serveurs MCP Python robustes et testables → moins de pannes côté client LLM",
+      "resume_fr": "construit des serveurs MCP Python fiables avec FastMCP → évite erreurs opaques et blocages du serveur",
       "note": 8,
       "pertinence": 6,
       "score_pack": 7.2,
       "note_juge": 8,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Pièges réels et précis (dates YAML, starvation de l'event loop, double enregistrement, sampling), checklist testable. Qualité réduite par incohérences : nom de skill différent du chemin, note spécifique au dépôt, Path non importé."
+      "raison": "Pièges réels et concrets (stdout ignoré sur code non nul, collision server.py/server/, blocage de l'event loop, sampling). Périmètre un peu large et exemples incomplets (imports manquants, _validate non défini)."
     },
     {
       "id": "anthropics/claude-plugins-official/plugins/plugin-dev/skills/mcp-integration",
@@ -229,7 +199,7 @@
       "note_juge": 9,
       "modele": "haiku",
       "risque_max": null,
-      "raison": "Sujet net et déclenchement précis, avec exemples JSON et convention de nommage des outils utiles. Pénalisé par une contradiction (démarrage auto vs connexion à la demande), des affirmations douteuses (HTTP GET de découverte) et des annexes tronquées."
+      "raison": "Skill officiel ciblé sur les plugins Claude Code, avec conventions précises (nommage mcp__plugin_…, allowed-tools) et exemples JSON. Note tirée vers le bas par des contradictions (démarrage auto vs lazy loading) et des conseils génériques."
     },
     {
       "id": "anthropics/claude-plugins-official/plugins/hookify/skills/writing-rules",
@@ -284,6 +254,45 @@
       "raison": "Skill officiel ciblé, déclenchement précis, pièges réels (CSP, bundle inliné, plafond de payload). Note réduite pour exemples innerHTML non échappés, affirmations non vérifiables et annexes tronquées."
     },
     {
+      "id": "code-yeongyu/oh-my-openagent/packages/shared-skills/skills/coding-agent-sessions",
+      "nom": "coding-agent-sessions",
+      "repo": "code-yeongyu/oh-my-openagent",
+      "resume_fr": "retrouve les sessions passées de Codex, Claude, OpenCode → évite de répondre de mémoire",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et commandes exactes. Chemins de stockage par plateforme très spécifiques, savoir-faire réel. Annexe all-platforms tronquée et scripts non fournis : qualité ramenée à 1."
+    },
+    {
+      "id": "chromedevtools/chrome-devtools-mcp/skills/troubleshooting",
+      "nom": "troubleshooting",
+      "repo": "ChromeDevTools/chrome-devtools-mcp",
+      "resume_fr": "diagnostique les échecs de connexion Chrome DevTools MCP → retrouve la cause sans tâtonner",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis et erreurs réelles de chrome-devtools-mcp (DevToolsActivePort, autoConnect, read-only). Mélange de clients (Gemini, Codex, Claude Desktop) et dépendance à des URLs externes à relire. Note 9."
+    },
+    {
+      "id": "juliusbrussee/caveman/skills/caveman-compress",
+      "nom": "caveman-compress",
+      "repo": "JuliusBrussee/caveman",
+      "resume_fr": "compresse tes fichiers mémoire en caveman, envoyés au modèle → réduit les tokens d'entrée",
+      "note": 9,
+      "pertinence": 4,
+      "score_pack": 7,
+      "note_juge": 9,
+      "modele": "haiku",
+      "risque_max": "moyen",
+      "raison": "Déclenchement précis (/caveman-compress avec chemin), pièges réels bien traités (sauvegarde hors arborescence, refus des secrets, blocs de code préservés). Retrait d'un point : annexes README et SECURITY tronquées."
+    },
+    {
       "id": "anthropics/claude-plugins-official/plugins/champion-kit/skills/routines",
       "nom": "routines",
       "repo": "anthropics/claude-plugins-official",
@@ -321,45 +330,6 @@
       "modele": "haiku",
       "risque_max": "eleve",
       "raison": "Sujet net et déclenchement précis. Commandes concrètes et détails utiles (hash pinning, MCP03, ATLAS). Qualité réduite : outil non épinglé (@latest), scripts/agent.py non fourni et non vérifiable."
-    },
-    {
-      "id": "openai/codex-plugin-cc/plugins/codex/skills/gpt-5-4-prompting",
-      "nom": "gpt-5-4-prompting",
-      "repo": "openai/codex-plugin-cc",
-      "resume_fr": "écrit des prompts Codex structurés en blocs XML → réponses plus ciblées et vérifiables",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Déclenchement précis et blocs XML concrets, testables. Valeur surtout générique (contrats de sortie, vérification) ; utile au plugin Codex pour Claude Code. Aucun défaut de forme ni annexe manquante."
-    },
-    {
-      "id": "nanocoai/nanoclaw/.claude/skills/add-atomic-chat-tool",
-      "nom": "add-atomic-chat-tool",
-      "repo": "nanocoai/nanoclaw",
-      "resume_fr": "expose les modèles locaux d'Atomic Chat à l'agent → réduit les coûts d'API",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Skill d'intégration précis : étapes, commandes exactes, points d'enregistrement, tests et annexe de retrait. Note limitée par les fichiers copiés (code, tests) non fournis et un bloc partagé couplé à d'autres skills."
-    },
-    {
-      "id": "nanocoai/nanoclaw/.claude/skills/add-codex",
-      "nom": "add-codex",
-      "repo": "nanocoai/nanoclaw",
-      "resume_fr": "ajoute Codex comme agent complet, aux côtés de Claude → clés API jamais exposées au conteneur",
-      "note": 9,
-      "pertinence": 4,
-      "score_pack": 7,
-      "note_juge": 9,
-      "modele": "haiku",
-      "risque_max": "moyen",
-      "raison": "Description précise et commandes exactes, savoir-faire spécifique à NanoClaw (barrels, manifeste CLI, coffre). Note limitée par le code du payload non fourni et des références non vérifiables (docs, gateway, version épinglée)."
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-11-09T14:26:42.079Z",
+  "genere_le": "2026-11-16T14:10:57.613Z",
   "type": "outillage-claude-code",
   "bareme": "b2",
   "note": "Index léger pour skill-master : les skills de ce pack seulement. Le détail complet est dans library/skills.json.",
@@ -259,10 +259,10 @@
       "repo": "kajisho5/ffmpeg-skill",
       "chemin_skill": ".claude/skills/mcp-server-design",
       "skill_md": ".claude/skills/mcp-server-design/SKILL.md",
-      "sha_epingle": "6e42a79247909659b3d80833120b272fb5e46aba",
-      "empreinte": "3938a82d4df8577e2302e4e5cdd9c1867fc30b155569770424ab5c5dfd771429",
+      "sha_epingle": "f1c97cbffeac71b8fdfca2f790ceb00db3bcce65",
+      "empreinte": "c2fa516f96b03c8d3654dd24ae063cc1781caca7bfbf352d7fe773a65b30929e",
       "licence": "MIT",
-      "resume_fr": "construit des serveurs MCP Python robustes et testables → moins de pannes côté client LLM",
+      "resume_fr": "construit des serveurs MCP Python fiables avec FastMCP → évite erreurs opaques et blocages du serveur",
       "note": 8,
       "editeur_confiance": false,
       "risque_max": null,
@@ -276,8 +276,8 @@
       "repo": "anthropics/claude-plugins-official",
       "chemin_skill": "plugins/plugin-dev/skills/mcp-integration",
       "skill_md": "plugins/plugin-dev/skills/mcp-integration/SKILL.md",
-      "sha_epingle": "0412be76f50ab4f4f8abff3753efa9269fbbca5b",
-      "empreinte": "c8a5fbd9a5941fe67b730f18bf9f9e9f9d8e3d265a71bcf379486b630e8bebef",
+      "sha_epingle": "b5b01ac4f889fec0c4c6bb89f27ca7c8574473f6",
+      "empreinte": "9019d325e27db1c6475ea3e7ebda6ed4408fdf1109d41dd795bfc5458df24fd3",
       "licence": "Apache-2.0",
       "resume_fr": "connecte des services externes via MCP → outils structurés disponibles directement dans Claude Code",
       "note": 9,
@@ -407,6 +407,115 @@
           "source": "juge",
           "categorie": "autre",
           "code": "Les exemples rendent des données de contacts via innerHTML sans échappement : risque de XSS si les données proviennent de tiers, et le skill sert ce motif de référence."
+        }
+      ]
+    },
+    {
+      "id": "code-yeongyu/oh-my-openagent/packages/shared-skills/skills/coding-agent-sessions",
+      "nom": "coding-agent-sessions",
+      "place": "ajout",
+      "repo": "code-yeongyu/oh-my-openagent",
+      "chemin_skill": "packages/shared-skills/skills/coding-agent-sessions",
+      "skill_md": "packages/shared-skills/skills/coding-agent-sessions/SKILL.md",
+      "sha_epingle": "dba00eb69cc082572c495e90c6a04fd0eb4f2be6",
+      "empreinte": "7cf0fb16d3cb864cd37bd260713b9691ecd9a5208a0bdc2b036d6c0817c11c80",
+      "licence": "NOASSERTION",
+      "resume_fr": "retrouve les sessions passées de Codex, Claude, OpenCode → évite de répondre de mémoire",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/agent_sessions/aside_scanner.py, scripts/agent_sessions/cli.py, scripts/agent_sessions/file_scanners.py, script…"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "scripts/agent_sessions/__init__.py, scripts/agent_sessions/claude.py, scripts/agent_sessions/codex.py, scripts/agent_se…"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "consigne",
+          "code": "Les transcrits locaux peuvent contenir des secrets (clés, tokens, identifiants) qui seraient lus et renvoyés dans le contexte du modèle ou dans les sorties JSON"
+        }
+      ]
+    },
+    {
+      "id": "chromedevtools/chrome-devtools-mcp/skills/troubleshooting",
+      "nom": "troubleshooting",
+      "place": "ajout",
+      "repo": "ChromeDevTools/chrome-devtools-mcp",
+      "chemin_skill": "skills/troubleshooting",
+      "skill_md": "skills/troubleshooting/SKILL.md",
+      "sha_epingle": "7e10c08d30172f4a9d0dba64fa21890afebed09a",
+      "empreinte": "61c96d70a7fc241c7bb1b09212d58144c7c0385373e81a2712253d3142df049d",
+      "licence": "Apache-2.0",
+      "resume_fr": "diagnostique les échecs de connexion Chrome DevTools MCP → retrouve la cause sans tâtonner",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "moyen",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "donnees",
+          "code": "Demande de lire ~/.claude.json et d'autres fichiers de configuration utilisateur, qui peuvent contenir des jetons : l'agent devrait ne pas recopier leur contenu dans la conversation sans l'accord de …"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Lance `npx chrome-devtools-mcp@latest` sans version épinglée, donc exécution de code npm distant ; et `NODE_DEBUG=*` peut journaliser des données sensibles."
+        }
+      ]
+    },
+    {
+      "id": "juliusbrussee/caveman/skills/caveman-compress",
+      "nom": "caveman-compress",
+      "place": "ajout",
+      "repo": "JuliusBrussee/caveman",
+      "chemin_skill": "skills/caveman-compress",
+      "skill_md": "skills/caveman-compress/SKILL.md",
+      "sha_epingle": "9b243662ff98d392bc0a95b865a554583d71be75",
+      "empreinte": "f68bbffc1a2a65725240f845ec2a8faeb225679c64948645c60ef1d1000dca69",
+      "licence": "Apache-2.0",
+      "resume_fr": "compresse tes fichiers mémoire en caveman, envoyés au modèle → réduit les tokens d'entrée",
+      "note": 9,
+      "editeur_confiance": false,
+      "risque_max": "moyen",
+      "risque_max_projet": "eleve",
+      "risques": [
+        {
+          "gravite": "moyen",
+          "source": "scan",
+          "code": "accès à des secrets locaux (script scripts/compress.py)"
+        },
+        {
+          "gravite": "moyen",
+          "gravite_projet": "eleve",
+          "source": "scan",
+          "code": "scripts lancés par le SKILL.md ou une annexe",
+          "detail": "scripts/__main__.py, scripts/benchmark.py, scripts/compress.py"
+        },
+        {
+          "gravite": "info",
+          "source": "scan",
+          "code": "scripts embarqués, que rien ne lance",
+          "detail": "scripts/__init__.py, scripts/cli.py, scripts/detect.py, scripts/validate.py"
+        },
+        {
+          "gravite": "moyen",
+          "source": "juge",
+          "categorie": "reseau",
+          "code": "Le contenu complet du fichier est envoyé au fournisseur de modèle choisi (Claude, OpenAI-compatible, opencode) ; avec openai-compat sur un endpoint http non local, le fichier et la clé partent en cla…"
         }
       ]
     },
@@ -546,92 +655,6 @@
           "source": "juge",
           "categorie": "reseau",
           "code": "Les sondes SSRF envoient des requêtes à des cibles sensibles (IMDS, file:///etc/passwd) via les outils du serveur ; mal utilisées, elles peuvent exposer des données locales"
-        }
-      ]
-    },
-    {
-      "id": "openai/codex-plugin-cc/plugins/codex/skills/gpt-5-4-prompting",
-      "nom": "gpt-5-4-prompting",
-      "place": "ajout",
-      "repo": "openai/codex-plugin-cc",
-      "chemin_skill": "plugins/codex/skills/gpt-5-4-prompting",
-      "skill_md": "plugins/codex/skills/gpt-5-4-prompting/SKILL.md",
-      "sha_epingle": "db52e28f4d9ded852ab3942cea316258ae4ef346",
-      "empreinte": "b3de1a7d23ed4b09d14082b9a7ccc1546a7e335cdc8c9aef7f324204ad52b88c",
-      "licence": "Apache-2.0",
-      "resume_fr": "écrit des prompts Codex structurés en blocs XML → réponses plus ciblées et vérifiables",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "moyen",
-      "risque_max_projet": "moyen",
-      "risques": [
-        {
-          "gravite": "moyen",
-          "source": "juge",
-          "categorie": "consigne",
-          "code": "Les recettes de diagnostic et de correctif tournent par défaut en mode écriture (write mode) sauf demande explicite de lecture seule : une tâche de simple diagnostic peut modifier le dépôt"
-        }
-      ]
-    },
-    {
-      "id": "nanocoai/nanoclaw/.claude/skills/add-atomic-chat-tool",
-      "nom": "add-atomic-chat-tool",
-      "place": "ajout",
-      "repo": "nanocoai/nanoclaw",
-      "chemin_skill": ".claude/skills/add-atomic-chat-tool",
-      "skill_md": ".claude/skills/add-atomic-chat-tool/SKILL.md",
-      "sha_epingle": "bdfb2f1df70cfa49b7141bb59ec886dbacfbc366",
-      "empreinte": "75a559b4ac2141548e3721086fdef197fb7585aefa7f90593f502e2ec1653d07",
-      "licence": "MIT",
-      "resume_fr": "expose les modèles locaux d'Atomic Chat à l'agent → réduit les coûts d'API",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "moyen",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "moyen",
-          "gravite_projet": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md ou une annexe",
-          "detail": "atomic-chat-env.ts, atomic-chat-mcp-stdio.ts, atomic-chat-registration.test.ts, atomic-chat-wiring.test.ts"
-        },
-        {
-          "gravite": "moyen",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "ATOMIC_CHAT_API_KEY, si défini, est transmis dans le conteneur de l'agent ; ATOMIC_CHAT_HOST pointant vers un hôte distant enverrait les prompts à un tiers."
-        }
-      ]
-    },
-    {
-      "id": "nanocoai/nanoclaw/.claude/skills/add-codex",
-      "nom": "add-codex",
-      "place": "ajout",
-      "repo": "nanocoai/nanoclaw",
-      "chemin_skill": ".claude/skills/add-codex",
-      "skill_md": ".claude/skills/add-codex/SKILL.md",
-      "sha_epingle": "bdfb2f1df70cfa49b7141bb59ec886dbacfbc366",
-      "empreinte": "f29e929375f13a18936557fe9aedb4ba0638262b7441796c64f526f689d002b8",
-      "licence": "MIT",
-      "resume_fr": "ajoute Codex comme agent complet, aux côtés de Claude → clés API jamais exposées au conteneur",
-      "note": 9,
-      "editeur_confiance": false,
-      "risque_max": "moyen",
-      "risque_max_projet": "eleve",
-      "risques": [
-        {
-          "gravite": "moyen",
-          "gravite_projet": "eleve",
-          "source": "scan",
-          "code": "scripts lancés par le SKILL.md ou une annexe",
-          "detail": "payload/container/agent-runner/src/provider-contracts/codex.ts, payload/container/agent-runner/src/providers/codex-app-…"
-        },
-        {
-          "gravite": "moyen",
-          "source": "juge",
-          "categorie": "reseau",
-          "code": "Installation d'un paquet npm global (@openai/codex) exécuté dans le conteneur, avec des identifiants ChatGPT ou OpenAI transitant par la gateway d'identifiants."
         }
       ]
     }
